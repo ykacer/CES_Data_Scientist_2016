@@ -2,12 +2,6 @@
 
 rm *.log*
 
-: <<'COMMENT'
-
-echo "\n********************************"
-echo   "*** EXERCISES ELEVAGE LAPINS ***"
-echo   "********************************"
-
 if [ ! -d data/ ]
 then
 	mkdir data
@@ -25,9 +19,14 @@ xterm -e "mongod --dbpath data/db --verbose --logpath mongod_tp.log" &
 
 sleep 1 # wait for server connection
 
+echo "\n********************************"
+echo   "*** EXERCISES ELEVAGE LAPINS ***"
+echo   "********************************"
+
 # deal with elevage database
 echo -e "\n*** launch mongo client for elevage database"
 mongo lapins.js # --shell
+
 
 echo "\n***************************************"
 echo   "*** EXERCISES EARTHQUAKES JSON FILE ***"
@@ -36,13 +35,15 @@ echo   "***************************************"
 # deal with earthquakes database
 echo -e "\n*** import earthquakes database"
 mongoimport -d geodb --type json -c earthquakes --file earthquakes_big.geojson
+
+sleep 1 # wait for importing json file
+
 echo -e "\n*** launch mongo client for earthquakes database"
 mongo earthquakes.js
 
 echo -e "\n*** kill all mongod process"
 killall mongod
 
-# replication 1 master - various slaves
 echo -e "\n*******************************************"
 echo -e   "* REPLICATION ONE MASTER - VARIOUS SLAVES *"
 echo -e   "*******************************************"
@@ -229,7 +230,6 @@ echo -e "\n*** kill all mongod process"
 killall mongod
 sleep 3 # wait for ending all mongod process
 
-COMMENT
 
 echo -e "\n*********************"
 echo -e  "*** PARTITIONNING ***"
