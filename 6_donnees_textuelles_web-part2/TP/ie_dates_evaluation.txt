@@ -1,0 +1,23 @@
+1980s	hasDate	January 1, 1980 
+Monday	hasDate	 13 January 2009
+Saddam Hussein	hasDate	July 16 1979 
+Maharaji	hasDate	 10 December 1957
+Charlotte Brontë	hasDate	April 21, 1816 
+Charles Dickens	hasDate	February 7, 1812 
+Lady Jane Grey	hasDate	October 12, 1537 
+September 11 attacks	hasDate	September 11, 2001 
+Louis XIV of France	hasDate	 14 May 1643
+Elizabeth I of England	hasDate	November 17, 1558 
+Leon Trotsky	hasDate	November 7 , 1879 
+Viktor Yanukovych	hasDate	 31 December 2004
+George VI of the United Kingdom	hasDate	 11 December 1936
+September 11	hasDate	September 11, 2001 
+John Wilkes Booth	hasDate	April 14 1865 
+Pope John Paul II	hasDate	May 18, 1920 
+Salvador Allende	hasDate	November 3, 1970 
+La Liga Filipina	hasDate	July 3, 1982 
+Pope Benedict XVI	hasDate	April 16, 1927 
+Pope John Paul I	hasDate	October 17, 1912 
+
+Total number of matches : 1250
+Precision = 100%
