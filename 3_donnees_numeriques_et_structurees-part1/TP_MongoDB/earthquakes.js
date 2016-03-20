@@ -80,3 +80,7 @@ db.earthquakes.find({
 			}
 		}
 	}).forEach( function(doc) {print(tojson(doc))} ); 
+
+print("\n*** le nombre de tremblements de terre en Californie");
+var nt = db.earthquakes.find({"properties.place" : { $regex : /.*california.*/i } }).count();
+print(nt);
