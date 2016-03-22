@@ -13,7 +13,7 @@ Credit to Telecom-Paristech, See [CES Data Scientist-Telecom ParisTech](https://
 ### Introduction à l'apprentissage statistique
 
 part1 :
- * cours-ces-1-intro.pdf (credit to *Florence d'Alché*).
+ * cours-ces-1-intro.pdf (credit to [*Florence d'Alché*](http://perso.telecom-paristech.fr/~fdalche/Site/index.html)).
 
 keywords : features classification, cost function, empirical risk, bayesian classifier, bias/variance compromise.
  * Papers/
@@ -25,7 +25,7 @@ Some introductive papers to Machine Learning.
 TP_intro_python_ml_digits.v3.ipynb : K-neighrest-neighboors on MNIST digits dataset using **scikit-learn**, cross validation, confusion matrix.
 
 part2 :
- * COURS2.pdf (credit to *Stephan Clemençon*)
+ * COURS2.pdf (credit to [*Stephan Clemençon*](http://perso.telecom-paristech.fr/~clemenco/Home.html))
 
 keywords : basic algorithms for classification (Logistic Regression, Linear Discriminant Analysis, Perceptron, Partitionning algorithms, Decision Tree), model complexity, model selection (penalization, cross validation, bootstrap).
  * Papers/
@@ -68,7 +68,7 @@ Big Data Project with NoSQL DB.pdf : exercises for MongoDB project.
 
 mongodb_1_data_integration.js : javascript to import .csv data to be reformated in **MongoDB** collections.
 
-mongodb__2_data_queries.js : run queries using aggregate method of MongoDB.
+mongodb_2_data_queries.js : run queries using aggregate method of MongoDB.
 
 run_mongo.sh : bash file to run javascripts for MongoDB.
 
@@ -84,7 +84,7 @@ report.pdf : report that resume results and compare time execution between Mongo
 
 part1 :
 
- * [Motivation and Knowledge Representation](https://suchanek.name/work/teaching/ces2016/01_motknow/0.svg)
+ * [Motivation and Knowledge Representation](https://suchanek.name/work/teaching/ces2016/01_motknow/0.svg) (credit to [*Fabian Suchanek*](https://suchanek.name/))
 
  * [Named Entity Recognition](https://suchanek.name/work/teaching/athens2015/03_ner/0.svg)
 
