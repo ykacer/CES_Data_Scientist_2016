@@ -9,4 +9,5 @@ then
 	unzip data/annotations.zip -d data
 fi
 
+xmlstarlet sel -T -t -m /Trans/Episode/Section/Turn -v "concat(@startTime,';',@endTime,';',@speaker)" -n data/06-11-22.trs > data/speakers.csv
 
