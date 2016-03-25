@@ -43,7 +43,7 @@ do
 	then
 		rm -rf data/${i}_class
 	fi
-	mkdir ${i}_class # create directory for each label and binary_label possible values to store corresponding images
+	mkdir data/${i}_class # create directory for each label and binary_label possible values to store corresponding images
 done
 
 if [ -e data/labels.csv ]
@@ -67,56 +67,56 @@ do
 				"M")
 					label=2
 					binary_label=0
-					cp $image 02_class
-					cp $image 00_class
+					cp $image data/02_class
+					cp $image data/00_class
 					;;
 				"A")
 					label=3
 					binary_label=0
-					cp $image 03_class
-					cp $image 00_class
+					cp $image data/03_class
+					cp $image data/00_class
 					;;
 				"B")
 					label=4
 					binary_label=0
-					cp $image 04_class
-					cp $image 00_class
+					cp $image data/04_class
+					cp $image data/00_class
 					;;
 				"C")
 					label=5
 					binary_label=0
-					cp $image 05_class
-					cp $image 00_class
+					cp $image data/05_class
+					cp $image data/00_class
 					;;
 				"D")
 					label=6
 					binary_label=0
-					cp $image 06_class
-					cp $image 00_class
+					cp $image data/06_class
+					cp $image data/00_class
 					;;
 				"MULTI")
 					label=7
 					binary_label=1
-					cp $image 07_class
-					cp $image 01_class
+					cp $image data/07_class
+					cp $image data/01_class
 					;;
 				"ALL")
 					label=8
 					binary_label=1
-					cp $image 08_class
-					cp $image 01_class
+					cp $image data/08_class
+					cp $image data/01_class
 					;;
 				"INTRO")
 					label=9
 					binary_label="NaN"
-					cp $image 09_class
-					cp $image NaN_class
+					cp $image data/09_class
+					cp $image data/NaN_class
 					;;
 				"CREDITS")
 					label=10
 					binary_label="NaN"
-					cp $image 10_class
-					cp $image NaN_class
+					cp $image data/10_class
+					cp $image data/NaN_class
 					;;
 				*)
 					echo "Warning : unknown speaker"
