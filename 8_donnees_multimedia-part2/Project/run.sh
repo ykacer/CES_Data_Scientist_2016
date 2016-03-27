@@ -20,6 +20,9 @@ fi
 xmlstarlet sel -T -t -m /Trans/Episode/Section/Turn -v "concat(@speaker,';',@startTime,';',@endTime)" -n data/06-11-22.trs > data/speakers.csv
 sed -i "1ispeaker;startTime;endTime" data/speakers.csv
 
+# extract jpeg images from data/06-11-22.mp4 using mplayer, jpeg are put into folder data/
+# mplayer -vo jpeg:outdir=data -sstep 60 "data/06-11-22.mp4"
+
 # loop over jpeg images, and mark them with their label. Possible label values are :
 # 2 for speaker M on the screen
 # 3 	"	A	"
