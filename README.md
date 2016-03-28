@@ -108,3 +108,25 @@ ie_types.py : python script to extract the type of each article
 
 ie_types_evaluation.txt : containing the first 20 types found and the manually measured precision on the first 20 types found.
 
+## Donnees multimedia
+
+part 1 :
+
+ * audio-analysis-lecture_2016.pdf (credit to [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/)).
+
+keywords : audio content analysis, short-term analysis, spectral analysis (DFT,DCT) and spectrogram, MFCC features extracion, temporal integration.
+
+ * test.py 
+
+small python script to get hands on scipy.fftpack module analyzing small wav audio files
+
+ * *.wav
+	
+short audio samples taken from [*www.spirit-science.fr*](http://www.spirit-science.fr/doc_musique/Sensation-sonore.html)
+
+part 2 :
+
+ * Project/
+
+run.sh: download a mp4 video 06-11-22.mp4 of a debate from swiss TV, and a related annotation file 06-11-22.trs. Then, the video is cut into jpeg images, each frame is labelled using annotation file, see labels.csv created (take time...xmlstarlet is needed)
+ 
