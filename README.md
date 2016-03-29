@@ -114,7 +114,7 @@ part 1 :
 
  * audio-analysis-lecture_2016.pdf (credit to [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/)).
 
-keywords : audio content analysis, short-term analysis, spectral analysis (DFT,DCT) and spectrogram, MFCC features extracion, temporal integration.
+keywords : audio content analysis, short-term analysis, spectral analysis (DFT,DCT) and spectrogram, MFCC features extraction, temporal integration.
 
  * test.py 
 
@@ -130,3 +130,16 @@ part 2 :
 
 run.sh: download a mp4 video 06-11-22.mp4 of a debate from swiss TV, and a related annotation file 06-11-22.trs. Then, the video is cut into jpeg images, each frame is labelled using annotation file, see labels.csv created (take time...xmlstarlet is needed)
  
+## Apprentissage supervisé
+
+part 1:
+
+ * apprentissage_classique.pdf (credit to [*Joseph Salmon*](http://www.josephsalmon.eu/))
+
+keywords : Linear Discriminant Analysis, Quadratic Discriminant Analysis, Naive Bayesian classifier, Logistic Regression, K-Neighrest Neighboors.
+
+ * ClassifieurNaif.ipynb : LDA, QDA, Naive Gaussian Bayes, Logistic regression, KNN on IRIS dataset using *scikit learn*
+
+ * module5_source.py : hand crafted module imported for plotting
+
+ * module5_source.pyc : compiled module
