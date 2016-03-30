@@ -12,10 +12,11 @@ Credit to Telecom-Paristech, See [CES Data Scientist-Telecom ParisTech](https://
 
 ### Introduction à l'apprentissage statistique
 
-part1 :
+#### part1 :
  * cours-ces-1-intro.pdf (credit to [*Florence d'Alché*](http://perso.telecom-paristech.fr/~fdalche/Site/index.html)).
 
 keywords : features classification, cost function, empirical risk, bayesian classifier, bias/variance compromise.
+
  * Papers/
 
 Some introductive papers to Machine Learning.
@@ -23,10 +24,11 @@ Some introductive papers to Machine Learning.
  * Exercises/ 
 - TP_intro_python_ml_digits.v3.ipynb : K-neighrest-neighboors on MNIST digits dataset using **scikit-learn**, cross validation, confusion matrix.
 
-part2 :
+#### part2 :
  * COURS2.pdf (credit to [*Stephan Clemençon*](http://perso.telecom-paristech.fr/~clemenco/Home.html))
 
 keywords : basic algorithms for classification (Logistic Regression, Linear Discriminant Analysis, Perceptron, Partitionning algorithms, Decision Tree), model complexity, model selection (penalization, cross validation, bootstrap).
+
  * Papers/
 
 Some introductive papers to Machine Learning.
@@ -36,7 +38,7 @@ Some introductive papers to Machine Learning.
 
 ### Données numériques et structurées
 
-part1 :
+#### part1 :
  * TelecomParisTechCours1-NoSQL.pdf (credit to [*Raja Chiky*](http://perso.isep.fr/rchiky/nosql/))
 
  * TelecomParisTechCours2-NoSQL.pdf
@@ -52,7 +54,7 @@ part1 :
 - earthquakes_big.geojson : earthquakes database.
 - run.sh : bash file to import data, run above javascripts files and test master/slave replication and sharding database with MongoDB.
 
-part2 :
+#### part2 :
  * Project/
 - Big Data Project with NoSQL DB.pdf : exercises for MongoDB project.
 - mongodb_1_data_integration.js : javascript to import .csv data to be reformated in **MongoDB** collections.
@@ -65,13 +67,13 @@ part2 :
 
 ### Données textuelles et web
 
-part1 :
+#### part1 :
 
  * [Motivation and Knowledge Representation](https://suchanek.name/work/teaching/ces2016/01_motknow/0.svg) (credit to [*Fabian Suchanek*](https://suchanek.name/))
 
  * [Named Entity Recognition](https://suchanek.name/work/teaching/athens2015/03_ner/0.svg)
 
-part2 :
+#### part2 :
 
  * [Disambiguation](https://suchanek.name/work/teaching/athens2015/05_disambiguation/0.svg)
 
@@ -88,28 +90,30 @@ part2 :
 
 ## Donnees multimedia
 
-part 1 :
+#### part 1 :
 
- * audio-analysis-lecture_2016.pdf (credit to [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/)).
+ * audio/
+- audio-analysis-lecture_2016.pdf (credit to [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/)) : keywords : audio content analysis, short-term analysis, spectral analysis (DFT,DCT) and spectrogram, MFCC features extraction, temporal integration.
+- test.py : small python script to get hands on **scipy.fftpack** module analyzing small wav audio files
+- wav/ : short audio samples taken from [*www.spirit-science.fr*](http://www.spirit-science.fr/doc_musique/Sensation-sonore.html)
 
-keywords : audio content analysis, short-term analysis, spectral analysis (DFT,DCT) and spectrogram, MFCC features extraction, temporal integration.
+ * image/ (credit to [*Michelle Roux*](http://perso.telecom-paristech.fr/~mroux/))
+- bcontours-ds.pdf 
+- Donnees Multimedia - Images et Video.pdf
+- introtdi-ds [Mode de compatibilité].pdf
+- sift [Mode de compatibilité].pdf
+- calibrage-ds.pdf
+- formes-ds.pdf 
+- notebooks/ : some python notebook files for advanced tutorials on optimization and algebra operations using scipy (credit to [*Alexandre Chamfort*](http://alexandre.gramfort.net/index.fr.html) and [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/))
 
- * test.py 
-
-small python script to get hands on scipy.fftpack module analyzing small wav audio files
-
- * *.wav
-
-short audio samples taken from [*www.spirit-science.fr*](http://www.spirit-science.fr/doc_musique/Sensation-sonore.html)
-
-part 2 :
+#### part 2 :
 
  * Project/
 - run.sh: download a mp4 video 06-11-22.mp4 of a debate from swiss TV, and a related annotation file 06-11-22.trs. Then, the video is cut into jpeg images, each frame is labelled using annotation file, see labels.csv created (take time...xmlstarlet is needed)
  
 ## Apprentissage supervisé
 
-part 1:
+#### part 1:
 
  * apprentissage_classique.pdf (credit to [*Joseph Salmon*](http://www.josephsalmon.eu/))
 
@@ -120,7 +124,7 @@ keywords : Linear Discriminant Analysis, Quadratic Discriminant Analysis, Naive 
 - module5_source.py : hand crafted module imported for plotting
 - module5_source.pyc : compiled module
 
-part 2:
+#### part 2:
 
  * cours_arbres_selection_modele.pdf (credit to [*Aurélien Bellet*](http://researchers.lille.inria.fr/abellet/))
 
