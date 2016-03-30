@@ -115,11 +115,10 @@ part 1:
 
 keywords : Linear Discriminant Analysis, Quadratic Discriminant Analysis, Naive Bayesian classifier, Logistic Regression, K-Neighrest Neighboors.
 
- * ClassifieurNaif.ipynb : LDA, QDA, Naive Gaussian Bayes, Logistic regression, KNN on IRIS dataset using **scikit learn**
-
- * module5_source.py : hand crafted module imported for plotting
-
- * module5_source.pyc : compiled module
+ * tp_classifiers/
+- ClassifieurNaif.ipynb : LDA, QDA, Naive Gaussian Bayes, Logistic regression, KNN on IRIS dataset using **scikit learn**
+- module5_source.py : hand crafted module imported for plotting
+- module5_source.pyc : compiled module
 
 part 2:
 
