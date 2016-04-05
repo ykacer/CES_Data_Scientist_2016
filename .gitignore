@@ -1,14 +1,14 @@
-1_introduction_apprentissage_statistique-part1/Exercises/correction/*
-2_introduction_apprentissage_statistique-part2/Exercises/correction/*
-/4_donnees_numeriques_et_structurees/Project/*.tar.gz
-/4_donnees_numeriques_et_structurees/Project/*.zip
-/4_donnees_numeriques_et_structurees/Project/data/
-/4_donnees_numeriques_et_structurees-part2/Project/*.tar.gz
-/4_donnees_numeriques_et_structurees-part2/Project/*.zip
-/4_donnees_numeriques_et_structurees-part2/Project/data/
-/3_donnees_numeriques_et_structurees-part1/TP_MongoDB/data/
-/3_donnees_numeriques_et_structurees-part1/TP_MongoDB/correction
-/3_donnees_numeriques_et_structurees-part1/TP_MongoDB/*.log*
-/8_donnees_multimedia-part2/Project/data/
-9_apprentissage_supervise-part2/tp_learning_curve/correction
+01_introduction_apprentissage_statistique-part1/Exercises/correction/*
+02_introduction_apprentissage_statistique-part2/Exercises/correction/*
+04_donnees_numeriques_et_structurees/Project/*.tar.gz
+04_donnees_numeriques_et_structurees/Project/*.zip
+04_donnees_numeriques_et_structurees/Project/data/
+04_donnees_numeriques_et_structurees-part2/Project/*.tar.gz
+04_donnees_numeriques_et_structurees-part2/Project/*.zip
+04_donnees_numeriques_et_structurees-part2/Project/data/
+03_donnees_numeriques_et_structurees-part1/TP_MongoDB/data/
+03_donnees_numeriques_et_structurees-part1/TP_MongoDB/correction
+03_donnees_numeriques_et_structurees-part1/TP_MongoDB/*.log*
+08_donnees_multimedia-part2/Project/data/
+09_apprentissage_supervise-part2/tp_learning_curve/correction
 
