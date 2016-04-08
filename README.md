@@ -97,7 +97,7 @@ Some introductive papers to Machine Learning.
 - test.py : small python script to get hands on **scipy.fftpack** module analyzing small wav audio files
 - wav/ : short audio samples taken from [*www.spirit-science.fr*](http://www.spirit-science.fr/doc_musique/Sensation-sonore.html)
 
- * image/ (credit to [*Michelle Roux*](http://perso.telecom-paristech.fr/~mroux/))
+ * image/ (credit to [*Michel Roux*](http://perso.telecom-paristech.fr/~mroux/))
 - bcontours-ds.pdf 
 - Donnees Multimedia - Images et Video.pdf
 - introtdi-ds [Mode de compatibilité].pdf
@@ -135,3 +135,18 @@ keywords : decision tree, CART algorithm, entropy, regression tree, regularizati
 - tp_learning_curve.ipynb : python code for exercises
 - learning_curve.py : function using module learning_curve from scikit-learn
 - learning_curve.pyc : compiled module
+
+
+## introduction à l'apprentissage profond
+
+#### part 1:
+
+ * 1_cours_nnet_basics.pdf (credit to [*Alex Allauzen*](https://perso.limsi.fr/allauzen/webpages/pmwiki.php))
+
+keywords : 
+
+#### part 2:
+
+ * 2_cours_nnet_basics.pdf (credit to [*Alex Allauzen*](https://perso.limsi.fr/allauzen/webpages/pmwiki.php))
+
+keywords :
