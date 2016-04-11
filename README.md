@@ -141,12 +141,16 @@ keywords : decision tree, CART algorithm, entropy, regression tree, regularizati
 
 #### part 1:
 
- * 1_cours_nnet_basics.pdf (credit to [*Alex Allauzen*](https://perso.limsi.fr/allauzen/webpages/pmwiki.php))
+ * 1_cours_nnet_basics.pdf (credit to [*Alexandre Allauzen*](https://perso.limsi.fr/allauzen/webpages/pmwiki.php))
 
-keywords : 
+keywords : feed-forward neural networks, gradient back propagation, activation function, loss function
+
+ * 2_cours_nnet_basics.pdf (credit to [*Alexandre Allauzen*](https://perso.limsi.fr/allauzen/webpages/pmwiki.php))
+
+keywords : Regularization and dropout, vanishing gradient and Rectified Linear Unit
+ * lab_mnist/ (credti to [*Gaetan Marceau-Caron*](http://gmarceaucaron.github.io/))
+- telecom.odp : lab queries
+- train_mnist.lua : **Lua** file that runs a 400x400x10 neural network on 60000 28x28 handwritten mnist images using **Torch**. Apply 'nn' module for a sequential network, and 'optim' module for gradient back propagation solver. Apply 'nn.Dropout' function for regularization.
 
 #### part 2:
 
- * 2_cours_nnet_basics.pdf (credit to [*Alex Allauzen*](https://perso.limsi.fr/allauzen/webpages/pmwiki.php))
-
-keywords :
