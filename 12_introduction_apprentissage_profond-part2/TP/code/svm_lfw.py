@@ -19,6 +19,7 @@ import pylab as pl
 from sklearn.cross_validation import train_test_split
 from sklearn.datasets import fetch_lfw_people
 from sklearn.svm import SVC
+from sklearn import grid_search
 
 ####################################################################
 # Download the data (if not already on disk); load it as numpy arrays
@@ -71,12 +72,40 @@ y_train, y_test = y[train_idx], y[test_idx]
 images_train, images_test = images[train_idx,:,:,:], images[test_idx,:,:,:]
 
 ####################################################################
-# Quantitative evaluation of the model quality on the test set
-print "Fitting the classifier to the training set"
-t0 = time()
-clf = SVC(kernel='linear', C=1.0)
-clf = clf.fit(X_train, y_train)
+scores_training = []
+scores_test = []
+N = np.linspace(20,X.shape[0],10)
+for n in N:
+    # Quantitative evaluation of the model quality on the test set
+    print "\n* Fitting the classifier to the training set with ",n," elements"
+    t0 = time()
+    #clf = SVC(kernel='linear', C=1.0)
+    #clf = clf.fit(X_train, y_train)
+    param_grid = {'C': np.logspace(-8,7,16)} # search from 10^-5 to 10^5
+    clf_svc_grid = grid_search.GridSearchCV(SVC(kernel='linear'), param_grid,cv=5)
+    clf_svc_grid.fit(X_train[:n,:],y_train[:n])
+    param_best = clf_svc_grid.best_params_['C']
+    scores = [x[1] for x in clf_svc_grid.grid_scores_]
+    errors = 1 - np.asarray(scores)
+    print "*** regularization parameter list : ",clf_svc_grid.param_grid['C']
+    print "*** corresponding errors : ",errors
+    print "*** best regularization parameter : ",param_best
+    print "*** done in %0.3fs" % (time() - t0)
 
+    scores_training.append(clf_svc_grid.best_estimator_.score(X_train[:n,:],y_train[:n]))
+    scores_test.append(clf_svc_grid.best_estimator_.score(X_test,y_test))
+
+fig = pl.figure()
+pl.grid()
+pl.plot(N, scores_training, 'o-', color="g",label="training score")
+pl.legend(loc="best")
+pl.xlabel('number of elements')
+pl.ylabel('score')
+pl.legend()
+pl.title('SVC')
+pl.show()
+
+clf = clf_svc_grid.best_estimator_ # take the estimator with best C regularization parameter
 print "Predicting the people names on the testing set"
 t0 = time()
 y_pred = clf.predict(X_test)
