@@ -156,4 +156,4 @@ keywords : Regularization and dropout, vanishing gradient and Rectified Linear U
 
  * cours-svm.pdf (credit to [*Aurelien Bellet*](http://researchers.lille.inria.fr/abellet/))
 
-keywords : margin maximization for linearly separable case, slackness for non-linearly separable case, non-linear case and kernel trick, regression case. 
+keywords : margin maximization for linearly separable case, slackness for linearly non-separable case, non-linear case and kernel trick, regression case. 
