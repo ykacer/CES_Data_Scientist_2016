@@ -9,6 +9,7 @@ require 'optim'
 require 'nn'
 require 'cutorch'
 require 'cunn'
+require 'gnuplot'
 
 -- If you want to try the Riemannian algorithms:
 -- uncommment the following "require ...",
@@ -61,8 +62,7 @@ classes = {'0','1','2','3','4','5','6','7','8','9'}
 
 -- This matrix records the current confusion across classes
 confusion = optim.ConfusionMatrix(classes)
-trainLogger = optim.Logger('train.log')
-testLogger = optim.Logger('test.log')
+logger = optim.Logger('train.log')
 timeLogger = optim.Logger('time.log')
 
 trainSet = torch.Tensor(nTrain,mnistDataset.data:size(2),mnistDataset.data:size(3))
@@ -145,6 +145,7 @@ function train()
 
 	  -- Definition of the evaluation function (closure)
 	  local feval = function(x)
+		 collectgarbage()
 		 --print(parameters:size())
 		 --print(x:size()) 
 		 if parameters~=x then
@@ -195,7 +196,7 @@ for i = 1,opt.maxEpoch do
 	  confusion:add(trainPred[i],trainSetLabel[i])
    end
    print(confusion)
-   trainLogger:add{['% mean class error (train set)'] = 100*(1-confusion.totalValid)}
+   mean_train_error = 100*(1-confusion.totalValid)
    print(" + Train loss " .. trainLoss)-- .. totalLost/trainPred:size(1))
 
    confusion:zero()
@@ -205,27 +206,24 @@ for i = 1,opt.maxEpoch do
 	  confusion:add(validPred[i],validSetLabel[i])
    end
    print(confusion)
-   testLogger:add{['% mean class error (test set)'] = 100*(1-confusion.totalValid)} 
+   mean_test_error = 100*(1-confusion.totalValid)
    print(" + Valid loss " .. validLoss)
 
+   logger:add{['% mean class error (train set)'] = mean_train_error,['% mean class error (test set)'] = mean_test_error}
    ------------------------------
    -- complete here, if necessary
    ------------------------------
-   if validLoss<prevLoss then
-	if opt.saveModel and i==opt.maxEpoch then
-		local filename = paths.concat('model', 'mnist_epoch_' .. i .. '.net')
-		os.execute('mkdir -p ' .. sys.dirname(filename))
-        	-- if paths.filep(filename) then
-			-- os.execute('mv ' .. filename .. ' ' .. filename .. '.old')
-		torch.save(filename,model)
-		print('<trainer> saving network to ' .. filename)
-	end
+   if opt.saveModel and i==opt.maxEpoch then
+	local filename = paths.concat('model', 'mnist_epoch_' .. i .. '.net')
+	os.execute('mkdir -p ' .. sys.dirname(filename))
+       	-- if paths.filep(filename) then
+		-- os.execute('mv ' .. filename .. ' ' .. filename .. '.old')
+	torch.save(filename,model)
+	print('<trainer> saving network to ' .. filename)
    end
    if opt.plot then
-	trainLogger:style{['% mean class error (train set)'] = '-'}
-	testLogger:style{['% mean class error (test set)'] = '-'}
-	trainLogger:plot()
-	testLogger:plot()
+	logger:style{['% mean class error (train set)'] = '-',['% mean class error (test set)'] = '-'}
+	logger:plot()
    end
    prevLoss = validLoss
    if opt.dropout then
@@ -236,3 +234,16 @@ end
 tend = sys.clock()
 print('total time : ' .. tend-tbegin .. 's')
 timeLogger:add{['total time (s) : '] = tend-tbegin} 
+
+ytrain = torch.Tensor(logger.symbols['% mean class error (train set)'])
+ytest = torch.Tensor(logger.symbols['% mean class error (test set)'])
+print(ytrain)
+print(ytest+100)
+--gnuplot.plotflush()
+gnuplot.grid(true)
+gnuplot.title('London average temperature')
+--gnuplot.raw([[plot '-' lt rgb 'yellow', '-' lt rgb 'red'
+--			            e]])
+gnuplot.raw([[set style line 15 lc rgb '#00ad31' lw 5]])
+gnuplot.raw([[set style line 2 lc rgb '#0042ad' lw 1]])
+gnuplot.plot({'mean train error',torch.range(1,3),ytrain},{'mean test error',torch.range(1,3),ytest+100})
