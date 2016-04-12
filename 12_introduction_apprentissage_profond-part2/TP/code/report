@@ -1,0 +1,23 @@
+1.1. cas separable et lineaire :
+le trait plein est la droite (hyperplan) separatrice.
+les 2 traits pointillées représentent les deux droites de vaste marge.
+En augmentant progressivement le paramètre de régularisation C, de 0.1 à 10000, rien ne change (ni la droite séparatrice ni les droites de vaste marge), cela est du au fait que l'algorithme de minimisation (SGD) trouvent des pramètres de violations de 0 pour chaque xi (cas séparable) donc comme C est multiplié par ces paramètres de violation, il n'a pas d'influence. On obtient 100% de classification.
+
+1.2 cas separable et non-linéaire gaussien 
+En prenant un gamma de 0.1 et un C de 10, on obtient 100% de precision, en revanche, au vu de la complexité de la frontière, on constate qu'il y a surapprentissage (le .py calcule un score de training et non un score de validation, ce derner serait mauvais ici). 
+Palier à un  problème de surapprentissage, revient à augmenter la paramètre de régularisation C : faisons le passer à 100 puis 1000 mais cela ne change rien.
+Au final, on arrive à remédier à ce surapprentissage en faisant passer gamma de 0.1 à 0.01, et mieux encore à 0.001 ou 0.00001
+conclusion : le paramètre ed régularisation seul ne suffit pas à éviter le surapprentissage
+
+1.3 ajout d'un point
+Si on ajoute un point dans son camp, hors de la marge, rien ne change (qu'on soit dans le cas linéaire ou gaussien) car seul les points sur la marge participe à la définition du classieur (son alpha est nul).
+Si on rajoute un point dans la marge, svm redéfinit ses marges et le point devient cette fois un point support (alpha non nul)
+Idem si on ajoute un point dans le camp adverse, mais cette fois le cas linéaire ne peut séparer les points (la précision passe de 100% à 97%). Par contre le cas gaussien, est bien adapté pour cette situation (la précision reste de 100%)
+
+1.4 cas multimodal
+La svm linéaire ne peut séparer un tel cas, un C de 10 permet à quelques vecteurs de violer la marge, on a une précision de 87%. En revanche, le cas non-linéaire gaussien se prête bien à cette situation (précision de 100%)
+
+1.5 cas disproportionné
+On voit que dans un cas où une classe est sous représentée, le classifieur SVM linéaire sépare mal les données pour un C faible (0.0006), uniquement celles de la classe sous représentée. 
+En effet, dans un tel cas, les données sous représentés ont peu d'impact sur le terme d'attache, ce terme ayant déjà une faible impact avec un C faible : les données sous représentées ont donc doublement peu d'impact. Prendre un C de 0.1 donne déjà plus d'importance au terme d'attache, et donc une meilleure classification.
+En mettant le paramètre weight_class à 'balanced' qui donne une importance inversement proportionnelle au nombre de données pour chaque classe, on voit que le classifieur sépare bien la classe minoritaire, tout en gardant un C de 0.0006!
