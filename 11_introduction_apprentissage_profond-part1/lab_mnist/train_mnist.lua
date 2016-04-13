@@ -197,7 +197,7 @@ for i = 1,opt.maxEpoch do
    end
    print(confusion)
    mean_train_error = 100*(1-confusion.totalValid)
-   print(" + Train loss " .. trainLoss)-- .. totalLost/trainPred:size(1))
+   print(" + Train loss " .. trainLoss)
 
    confusion:zero()
    local validPred = model:forward(validSet)
@@ -235,15 +235,18 @@ tend = sys.clock()
 print('total time : ' .. tend-tbegin .. 's')
 timeLogger:add{['total time (s) : '] = tend-tbegin} 
 
+--[[
 ytrain = torch.Tensor(logger.symbols['% mean class error (train set)'])
 ytest = torch.Tensor(logger.symbols['% mean class error (test set)'])
 print(ytrain)
 print(ytest+100)
---gnuplot.plotflush()
 gnuplot.grid(true)
-gnuplot.title('London average temperature')
---gnuplot.raw([[plot '-' lt rgb 'yellow', '-' lt rgb 'red'
---			            e]])
-gnuplot.raw([[set style line 15 lc rgb '#00ad31' lw 5]])
-gnuplot.raw([[set style line 2 lc rgb '#0042ad' lw 1]])
-gnuplot.plot({'mean train error',torch.range(1,3),ytrain},{'mean test error',torch.range(1,3),ytest+100})
+gnuplot.raw("set title 'euuuuhh ... le titre?'")
+gnuplot.raw("set style line 15 lc rgb '#00ad31' lw 5")
+gnuplot.raw("set style line 2 lc rgb '#0042ad' lw 1")
+gnuplot.raw("set label 1 'foo'")
+gnuplot.raw("set label 2 'foo'")
+gnuplot.raw("set xlabel 'ben... x!'")
+
+gnuplot.plot({'mean train error',torch.range(1,3),ytrain,'+'},{'mean test error',torch.range(1,3),ytest+100,'-'})
+]]--
