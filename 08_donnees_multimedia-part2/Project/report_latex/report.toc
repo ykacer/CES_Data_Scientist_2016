@@ -1,0 +1,5 @@
+\select@language {french}
+\contentsline {chapter}{Introduction}{i}
+\contentsline {chapter}{\numberline {1}Images exploit\IeC {\'e}es}{1}
+\contentsline {section}{\numberline {1.1}Corpus et labelisation}{1}
+\contentsline {section}{\numberline {1.2}Classification binaire}{3}

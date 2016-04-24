@@ -1,0 +1,180 @@
+\documentclass{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{graphicx} 
+
+
+\title{Classification d'images télévisées}
+\author{\textsc{Farhad} - \textsc{Heybati}\\
+\textsc{Youcef} - \textsc{Kacer}\\
+\textsc{Martin} - \textsc{Provost}}
+\date{9 May 2016}
+
+\begin{document}
+ 
+\maketitle
+
+\tableofcontents
+
+\frontmatter
+\chapter{Introduction}
+Ce document présente plusieurs méthodes d'extraction d'informations à partir d'images issues d'un débat télévisé.
+Cela afin d'en effectuer une classificatin binaire en `gros plan` ou `plan large`.
+Nous proposons dans un premier chapître de présenter les images exploitées, et les deux classes qui nous intéressent.
+Dans une seconde partie, nous presentons les méthodes d'extraction d'informations utilisées.
+Puis dans une troisième partie, les résultats obtenus.
+
+\mainmatter
+\chapter{Images exploitées}
+\section{Corpus et labelisation}
+Nous allons exploités un total de 2351 images prises à partir de la vidéo d'un débat télévisé.
+Nous avons exploité le fichier de transcription au format .trs associé à cette vidéo, cela afin d'extraire les différents classes, et attribuer à chaque image sa classe.
+En effet, le fichier de transcription fournit un total de 9 classes :
+
+\begin{description} % listes descriptives
+
+\item[M :] La présentatrice est à l'image seul
+\item[A :] La première intervenante est à l'image seule
+\item[B :] La seconde intervenante est à l'image seule
+\item[C :] Le premier intervenant est à l'image seule
+\item[D :] Le second intervenant est à l'image seule
+\item[ALL :] Les 5 personnes sont à l'écran
+\item[MULTI :] Entre 2 et 4 personnes sont à l'écran
+\item[INTRO :] Reportage d'introduction à l'écran
+\item[CREDITS :] Générique d'emission à l'écran
+
+\end{description}
+
+Par ailleurs, le fichier de transcription donne à chaque intervalle de temps, ce qui est à l'écran à travers ces classes. Moyennant, une conversion du fichier au format xml, on peut obtenir
+le tableau suivant :
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\begin{bf}classe\end{bf} & \begin{bf}debut (s)\end{bf} & \begin{bf}fin (s)\end{bf} \\
+\hline
+CREDITS	& 0 & 11.36 \\
+\hline
+INTRO   & 11.36	& 84.64 \\
+\hline
+M	& 84.64	& 95.12 \\
+\hline
+ALL	& 95.12	& 103.2 \\
+\hline
+A	& 103.2	& 112.2 \\
+\hline
+M	& 112.2	& 115.24 \\
+\hline
+\vdots & \vdots &\vdots \\
+\hline
+M	& 2334.12 & 2340 \\
+\hline
+ALL	& 2340 & 2340.76 \\
+\hline
+CREDITS	& 2340.76 & 2349.72 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Table de correspondance classes/intervalle de temps}
+\label{Table correspondance classe/temps}
+\end{table}
+\clearpage
+
+Les 2351 images étant prises à une seconde d'intervalle tout le long de la vidéo, on peut automatiquement labélisé celles ci via la table de
+correspondance \ref{Table correspondance classe/temps} vue en \pageref{Table correspondance classe/temps}.
+Ci-après, nous présentons quelques images pour chacune des 9 classes :
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{../data/00000089.jpg}
+\includegraphics[scale=0.3]{../data/00000159.jpg}
+\includegraphics[scale=0.3]{../data/00000176.jpg}
+\end{center}
+\caption{image de classe M}
+\label{classeM}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{../data/00000105.jpg}
+\includegraphics[scale=0.3]{../data/00000106.jpg}
+\includegraphics[scale=0.3]{../data/00000107.jpg}
+\end{center}
+\caption{image de classe A}
+\label{classeA}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{../data/00000147.jpg}
+\includegraphics[scale=0.3]{../data/00000148.jpg}
+\includegraphics[scale=0.3]{../data/00000149.jpg}
+\end{center}
+\caption{image de classe B}
+\label{classeB}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{../data/00000165.jpg}
+\includegraphics[scale=0.3]{../data/00000166.jpg}
+\includegraphics[scale=0.3]{../data/00000167.jpg}
+\end{center}
+\caption{image de classe C}
+\label{classeC}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{../data/00000288.jpg}
+\includegraphics[scale=0.3]{../data/00000289.jpg}
+\includegraphics[scale=0.3]{../data/00000290.jpg}
+\end{center}
+\caption{image de classe D}
+\label{classeD}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{../data/00000179.jpg}
+\includegraphics[scale=0.3]{../data/00000203.jpg}
+\includegraphics[scale=0.3]{../data/00000239.jpg}
+\end{center}
+\caption{image de classe ALL}
+\label{classeALL}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{../data/00000213.jpg}
+\includegraphics[scale=0.3]{../data/00000251.jpg}
+\includegraphics[scale=0.3]{../data/00000310.jpg}
+\end{center}
+\caption{image de classe MULTI}
+\label{classeMULTI}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{../data/00000013.jpg}
+\includegraphics[scale=0.3]{../data/00000024.jpg}
+\includegraphics[scale=0.3]{../data/00000041.jpg}
+\end{center}
+\caption{image de classe INTRO}
+\label{classeINTRO}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.3]{../data/00002344.jpg}
+\includegraphics[scale=0.3]{../data/00002348.jpg}
+\includegraphics[scale=0.3]{../data/00002350.jpg}
+\end{center}
+\caption{image de classe CREDITS}
+\label{classeCREDITS}
+\end{figure}
+
+
+\end{document}
