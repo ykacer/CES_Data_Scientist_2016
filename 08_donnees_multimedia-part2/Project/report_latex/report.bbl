@@ -1,0 +1,18 @@
+\begin{thebibliography}{Lev13}
+
+\bibitem[DT05]{hog}
+Navneet Dalal and Bill Triggs.
+\newblock Histograms of oriented gradients for human detection.
+\newblock {\em cvpr}, jun 2005.
+
+\bibitem[Ess16]{ref}
+Slim Essid.
+\newblock Resources, 2016.
+\newblock www.perso.telecom-paristech.fr/~essid/.
+
+\bibitem[Lev13]{hog2}
+Gil Levi.
+\newblock A short introduction to descriptors, aug 2013.
+\newblock https://gilscvblog.com.
+
+\end{thebibliography}

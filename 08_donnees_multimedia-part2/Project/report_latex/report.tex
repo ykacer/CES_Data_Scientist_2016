@@ -21,7 +21,7 @@
 \frontmatter
 \chapter{Introduction}
 Ce document présente plusieurs méthodes d'extraction d'informations à partir d'images issues d'un débat télévisé.
-Cela afin d'en effectuer une classificatin binaire en `gros plan` ou `plan large`.
+Cela afin d'en effectuer une classification binaire en `gros plan` ou `plan large`.
 Nous proposons dans un premier chapître de présenter les images exploitées, et les deux classes qui nous intéressent.
 Dans une seconde partie, nous presentons les méthodes d'extraction d'informations utilisées.
 Puis dans une troisième partie, les résultats obtenus.
@@ -29,21 +29,21 @@ Puis dans une troisième partie, les résultats obtenus.
 \mainmatter
 \chapter{Images exploitées}
 \section{Corpus et labelisation}
-Nous allons exploités un total de 2351 images prises à partir de la vidéo d'un débat télévisé.
-Nous avons exploité le fichier de transcription au format .trs associé à cette vidéo, cela afin d'extraire les différents classes, et attribuer à chaque image sa classe.
+Nous allons exploités un total de 2351 images prises à partir de la vidéo d'un débat télévisé \cite{ref} .
+Nous avons exploité le fichier de transcription au format .trs \cite{ref} associé à cette vidéo, cela afin d'extraire les différents classes, et attribuer à chaque image sa classe.
 En effet, le fichier de transcription fournit un total de 9 classes :
 
 \begin{description} % listes descriptives
 
-\item[M :] La présentatrice est à l'image seul
-\item[A :] La première intervenante est à l'image seule
-\item[B :] La seconde intervenante est à l'image seule
-\item[C :] Le premier intervenant est à l'image seule
-\item[D :] Le second intervenant est à l'image seule
-\item[ALL :] Les 5 personnes sont à l'écran
-\item[MULTI :] Entre 2 et 4 personnes sont à l'écran
-\item[INTRO :] Reportage d'introduction à l'écran
-\item[CREDITS :] Générique d'emission à l'écran
+\item[$M$ :] La présentatrice est seule à l'écran
+\item[$A$ :] La première intervenante est seule à l'écran
+\item[$B$ :] La seconde intervenante est seule à l'écran
+\item[$C$ :] Le premier intervenant est seul à l'écran
+\item[$D$ :] Le second intervenant est seul à l'écran
+\item[$ALL$ :] Les 5 personnes sont à l'écran
+\item[$MULTI$ :] Entre 2 et 4 personnes sont à l'écran
+\item[$INTRO$ :] Reportage d'introduction à l'écran
+\item[$CREDITS$ :] Générique d'emission à l'écran
 
 \end{description}
 
@@ -56,25 +56,25 @@ le tableau suivant :
 \hline
 \begin{bf}classe\end{bf} & \begin{bf}debut (s)\end{bf} & \begin{bf}fin (s)\end{bf} \\
 \hline
-CREDITS	& 0 & 11.36 \\
+$CREDITS$	& 0 & 11.36 \\
 \hline
-INTRO   & 11.36	& 84.64 \\
+$INTRO$   & 11.36	& 84.64 \\
 \hline
-M	& 84.64	& 95.12 \\
+$M$	& 84.64	& 95.12 \\
 \hline
-ALL	& 95.12	& 103.2 \\
+$ALL$	& 95.12	& 103.2 \\
 \hline
-A	& 103.2	& 112.2 \\
+$A$	& 103.2	& 112.2 \\
 \hline
-M	& 112.2	& 115.24 \\
+$M$	& 112.2	& 115.24 \\
 \hline
 \vdots & \vdots &\vdots \\
 \hline
-M	& 2334.12 & 2340 \\
+$M$	& 2334.12 & 2340 \\
 \hline
-ALL	& 2340 & 2340.76 \\
+$ALL$	& 2340 & 2340.76 \\
 \hline
-CREDITS	& 2340.76 & 2349.72 \\
+$CREDITS$	& 2340.76 & 2349.72 \\
 \hline
 \end{tabular}
 \end{center}
@@ -92,77 +92,77 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 \includegraphics[scale=0.3]{../data/00000159.jpg}
 \includegraphics[scale=0.3]{../data/00000176.jpg}
 \end{center}
-\caption{image de classe M}
+\caption{image de classe $M$}
 \label{classeM}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../data/00000105.jpg}
 \includegraphics[scale=0.3]{../data/00000106.jpg}
 \includegraphics[scale=0.3]{../data/00000107.jpg}
 \end{center}
-\caption{image de classe A}
+\caption{image de classe $A$}
 \label{classeA}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../data/00000147.jpg}
 \includegraphics[scale=0.3]{../data/00000148.jpg}
 \includegraphics[scale=0.3]{../data/00000149.jpg}
 \end{center}
-\caption{image de classe B}
+\caption{image de classe $B$}
 \label{classeB}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../data/00000165.jpg}
 \includegraphics[scale=0.3]{../data/00000166.jpg}
 \includegraphics[scale=0.3]{../data/00000167.jpg}
 \end{center}
-\caption{image de classe C}
+\caption{image de classe $C$}
 \label{classeC}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../data/00000288.jpg}
 \includegraphics[scale=0.3]{../data/00000289.jpg}
 \includegraphics[scale=0.3]{../data/00000290.jpg}
 \end{center}
-\caption{image de classe D}
+\caption{image de classe $D$}
 \label{classeD}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../data/00000179.jpg}
 \includegraphics[scale=0.3]{../data/00000203.jpg}
 \includegraphics[scale=0.3]{../data/00000239.jpg}
 \end{center}
-\caption{image de classe ALL}
+\caption{image de classe $ALL$}
 \label{classeALL}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../data/00000213.jpg}
 \includegraphics[scale=0.3]{../data/00000251.jpg}
 \includegraphics[scale=0.3]{../data/00000310.jpg}
 \end{center}
-\caption{image de classe MULTI}
+\caption{image de classe $MULTI$}
 \label{classeMULTI}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{../data/00000013.jpg}
 \includegraphics[scale=0.3]{../data/00000024.jpg}
 \includegraphics[scale=0.3]{../data/00000041.jpg}
 \end{center}
-\caption{image de classe INTRO}
+\caption{image de classe $INTRO$}
 \label{classeINTRO}
 \end{figure}
 
@@ -172,7 +172,7 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 \includegraphics[scale=0.3]{../data/00002348.jpg}
 \includegraphics[scale=0.3]{../data/00002350.jpg}
 \end{center}
-\caption{image de classe CREDITS}
+\caption{image de classe $CREDITS$}
 \label{classeCREDITS}
 \end{figure}
 
@@ -180,16 +180,16 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 
 Par la suite, nous allons nous resteindre à seulement deux classes définies comme suit :
 \begin{description} % listes descriptives
-\item[G :] `Gros plan` (une seule personne est à l'ecran)
-\item[L :] 'Plan large (au moins deux personnes sont à l'écran)
+\item[$G$ :] `Gros plan` (une seule personne est à l'ecran)
+\item[$L$ :] 'Plan large (au moins deux personnes sont à l'écran)
 \end{description}
 
 
 Les classes $G$ et $L$ peuvent s'exprimer en fonction des 9 classes comme suit :
 
 \begin{description} % listes descriptives
-\item[G :] M | A | B | C | D
-\item[L :] ALL | MULTI
+\item[$G$ :] $M$ | $A$ | $B$ | $C$ | $D$
+\item[$L$ :] $ALL$ | $MULTI$
 \end{description}
 
 
@@ -203,7 +203,7 @@ Nous avons donc deux classes d'images $G$ et $L$ dont voici plusieurs exemples :
 \includegraphics[scale=0.2]{../data/00000165.jpg}
 \includegraphics[scale=0.2]{../data/00000288.jpg}
 \end{center}
-\caption{image de classe G (gros plan)}
+\caption{image de classe $G$ (gros plan)}
 \label{classeG}
 \end{figure}
 
@@ -215,8 +215,44 @@ Nous avons donc deux classes d'images $G$ et $L$ dont voici plusieurs exemples :
 \includegraphics[scale=0.2]{../data/00000474.jpg}
 \includegraphics[scale=0.2]{../data/00000625.jpg}
 \end{center}
-\caption{image de classe L (large plan)}
+\caption{image de classe $L$ (large plan)}
 \label{classeL}
+\end{figure}
+
+Par la suite, nous allons expliciter différentes manières d'extraire de l'information afin de pouvoir discriminer les images de classe $G$
+, des images de classe $L$.
+
+\chapter{Extraction d'information}
+\section{Extraction de contours}
+\section{Extraction de teinte}
+\section{Histogramme orienté du gradient}
+
+Cette méthode consiste à extraire l'information local de contours. Sa première utilisation a consisté en 
+la détection de piétons \cite{hog}. Pour une image donné, le vecteur descripteur des $HOG$ est la concaténation
+d'histogrammes de l'amplitude du gradient (en fonction de l'orientation) pris sur un découpage de l'image:
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{hog.jpg}
+\end{center}
+\caption{construction d'un histogramme orienté du gradient \cite{hog2}}
+\label{hog}
+\end{figure}
+
+On peut espérer que ces descripteurs s'adaptent bien à notre problème. En effet, les epaules des intervenants à gauche 
+et à droite de l'image sont des contours descriminants pour la classe $G$ (gros plan). D'autre part, les gros plans ont fond uniforme, 
+ce qui donnera beaucoup de gradient nul, et donc un descripteur \begin{itshape}sparse\end{itshape}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{hog_exemple.jpg}
+\includegraphics[scale=0.3]{hog_exemple_contour.jpg}
+\includegraphics[scale=0.3]{hog_exemple_gradient.jpg}
+\includegraphics[scale=0.3]{hog_exemple2.jpg}
+\includegraphics[scale=0.3]{hog_exemple2_contour.jpg}
+\includegraphics[scale=0.3]{hog_exemple2_gradient.jpg}
+\end{center}
+\caption{histogramme orienté du gradient pour les gros plans (classe $G$)}
+\label{hog_classeG}
 \end{figure}
 
 \backmatter
@@ -224,5 +260,8 @@ Nous avons donc deux classes d'images $G$ et $L$ dont voici plusieurs exemples :
 \listoftables
 
 \listoffigures
+
+\bibliographystyle{alpha}
+\bibliography{biblio}
 
 \end{document}

@@ -3,3 +3,7 @@
 \contentsline {chapter}{\numberline {1}Images exploit\IeC {\'e}es}{1}
 \contentsline {section}{\numberline {1.1}Corpus et labelisation}{1}
 \contentsline {section}{\numberline {1.2}Classification binaire}{3}
+\contentsline {chapter}{\numberline {2}Extraction d'information}{7}
+\contentsline {section}{\numberline {2.1}Extraction de contours}{7}
+\contentsline {section}{\numberline {2.2}Extraction de teinte}{7}
+\contentsline {section}{\numberline {2.3}Histogramme orient\IeC {\'e} du gradient}{7}

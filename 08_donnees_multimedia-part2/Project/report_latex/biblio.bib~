@@ -1,0 +1,64 @@
+Pour author, les noms et prénoms sont séparés par une vigule, et les différents auteurs par AND
+
+@Article
+{hog,
+	author={Dalal, Navneet AND Triggs, Bill},
+	journal={cvpr},
+	title={Histograms of Oriented Gradients for Human Detection},
+	year={2005},
+	month={jun},
+	notes={sympathique}
+}
+
+@misc
+{hog2,
+	author={Levi, Gil},
+	title={A short introduction to descriptors},
+	month={aug},
+	year={2013},
+	note={https://gilscvblog.com}
+}
+
+@misc
+{ref,
+	author={Essid, Slim},
+	title={Resources},
+	year={2016},
+	note={www.perso.telecom-paristech.fr/~essid/}
+}
+
+
+@book
+{ref2,
+	author={Dupont, Fernand},
+	title={Les choux farcis},
+	publisher={Un gros éditeur},
+	year={2004}
+}
+
+@manual
+{ref3,
+	title={Réparer son vaisseau},
+	author={Dupont, Nestor},
+	year={2009},
+	organization={L'Alliance}
+}
+
+@phdthesis
+{ref5,
+	title={La belle thèse},
+	author={Barbu, Monsieur},
+	school={Université},
+	year={2002}
+}
+
+@unpublished
+{ref6,
+	author={Mauvais, Monsieur},
+	title={Mon roman inachevé},
+	note={il est chouette mon roman},
+	year={2000},
+	month={feb}
+}
+
+
