@@ -7,3 +7,9 @@
 \contentsline {section}{\numberline {2.1}Extraction de contours}{7}
 \contentsline {section}{\numberline {2.2}Extraction de teinte}{7}
 \contentsline {section}{\numberline {2.3}Histogramme orient\IeC {\'e} du gradient}{7}
+\contentsline {section}{\numberline {2.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{7}
+\contentsline {chapter}{\numberline {3}R\IeC {\'e}sultats}{9}
+\contentsline {section}{\numberline {3.1}Extraction de contours}{9}
+\contentsline {section}{\numberline {3.2}Extraction de teinte}{9}
+\contentsline {section}{\numberline {3.3}Histogramme orient\IeC {\'e} du gradient}{9}
+\contentsline {section}{\numberline {3.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{9}

@@ -1,4 +1,10 @@
-\begin{thebibliography}{Lev13}
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{DDS{\etalchar{+}}09}
+
+\bibitem[DDS{\etalchar{+}}09]{imagenet_cvpr09}
+J.~Deng, W.~Dong, R.~Socher, L.-J. Li, K.~Li, and L.~Fei-Fei.
+\newblock {ImageNet: A Large-Scale Hierarchical Image Database}.
+\newblock In {\em CVPR09}, 2009.
 
 \bibitem[DT05]{hog}
 Navneet Dalal and Bill Triggs.
@@ -14,5 +20,23 @@ Slim Essid.
 Gil Levi.
 \newblock A short introduction to descriptors, aug 2013.
 \newblock https://gilscvblog.com.
+
+\bibitem[SEZ{\etalchar{+}}13]{DBLP:journals/corr/SermanetEZMFL13}
+Pierre Sermanet, David Eigen, Xiang Zhang, Micha{\"{e}}l Mathieu, Rob Fergus,
+  and Yann LeCun.
+\newblock Overfeat: Integrated recognition, localization and detection using
+  convolutional networks.
+\newblock {\em CoRR}, abs/1312.6229, 2013.
+
+\bibitem[SEZ{\etalchar{+}}14]{overfeat}
+Pierre Sermanet, David Eigen, Xiang Zhang, Micha{\"{e}}l Mathieu, Rob Fergus,
+  and Yann LeCun.
+\newblock Overfeat code source, 2014.
+\newblock https://github.com/sermanet/OverFeat.
+
+\bibitem[YCBL14]{DBLP:journals/corr/YosinskiCBL14}
+Jason Yosinski, Jeff Clune, Yoshua Bengio, and Hod Lipson.
+\newblock How transferable are features in deep neural networks?
+\newblock {\em CoRR}, abs/1411.1792, 2014.
 
 \end{thebibliography}
