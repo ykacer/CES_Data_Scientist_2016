@@ -1,15 +1,15 @@
 \select@language {french}
-\contentsline {chapter}{Introduction}{i}
-\contentsline {chapter}{\numberline {1}Images exploit\IeC {\'e}es}{1}
-\contentsline {section}{\numberline {1.1}Corpus et labelisation}{1}
-\contentsline {section}{\numberline {1.2}Classification binaire}{3}
-\contentsline {chapter}{\numberline {2}Extraction d'information}{7}
-\contentsline {section}{\numberline {2.1}Extraction de contours}{7}
-\contentsline {section}{\numberline {2.2}Extraction de teinte}{7}
-\contentsline {section}{\numberline {2.3}Histogramme orient\IeC {\'e} du gradient}{7}
-\contentsline {section}{\numberline {2.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{7}
-\contentsline {chapter}{\numberline {3}R\IeC {\'e}sultats}{9}
-\contentsline {section}{\numberline {3.1}Extraction de contours}{9}
-\contentsline {section}{\numberline {3.2}Extraction de teinte}{9}
-\contentsline {section}{\numberline {3.3}Histogramme orient\IeC {\'e} du gradient}{9}
-\contentsline {section}{\numberline {3.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{9}
+\contentsline {chapter}{Introduction}{i}{chapter*.2}
+\contentsline {chapter}{\numberline {1}Images exploit\IeC {\'e}es}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Corpus et labelisation}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}Classification binaire}{3}{section.1.2}
+\contentsline {chapter}{\numberline {2}Extraction d'information}{7}{chapter.2}
+\contentsline {section}{\numberline {2.1}Extraction de contours}{7}{section.2.1}
+\contentsline {section}{\numberline {2.2}Extraction de teinte}{7}{section.2.2}
+\contentsline {section}{\numberline {2.3}Histogramme orient\IeC {\'e} du gradient}{7}{section.2.3}
+\contentsline {section}{\numberline {2.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{7}{section.2.4}
+\contentsline {chapter}{\numberline {3}R\IeC {\'e}sultats}{11}{chapter.3}
+\contentsline {section}{\numberline {3.1}Extraction de contours}{11}{section.3.1}
+\contentsline {section}{\numberline {3.2}Extraction de teinte}{11}{section.3.2}
+\contentsline {section}{\numberline {3.3}Histogramme orient\IeC {\'e} du gradient}{11}{section.3.3}
+\contentsline {section}{\numberline {3.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{11}{section.3.4}

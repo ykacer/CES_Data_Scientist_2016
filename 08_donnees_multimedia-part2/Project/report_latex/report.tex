@@ -4,8 +4,8 @@
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
 \usepackage{graphicx} 
-
-
+\usepackage{fancyref}
+\usepackage{hyperref}
 
 \title{Classification d'images télévisées}
 \author{\textsc{Farhad} - \textsc{Heybati}\\
@@ -49,8 +49,8 @@ En effet, le fichier de transcription fournit un total de 9 classes : \\
 
 \end{description}
 
-Par ailleurs, le fichier de transcription donne à chaque intervalle de temps, ce qui est à l'écran parmi les classes citées plus-haut. Moyennant, une conversion du fichier au format xml, on peut obtenir
-le tableau suivant :
+Par ailleurs, le fichier de transcription donne à chaque intervalle de temps, ce qui est à l'écran parmi les classes citées plus-haut. 
+Moyennant une conversion du fichier au format xml, on peut obtenir le tableau suivant :
 
 \begin{table}[H]
 \begin{center}
@@ -85,14 +85,15 @@ $CREDITS$	& 2340.76 & 2349.72 \\
 \end{table}
 \clearpage
 
-Les 2351 images étant prises à une seconde d'intervalle tout le long de la vidéo, on peut automatiquement labélisé celles ci via la table de
+Les 2351 images étant prises à une seconde d'intervalle tout le long de la vidéo, on peut automatiquement labéliser celles ci via la table de
 correspondance \ref{Table correspondance classe/temps}.
-Ci-après, nous présentons quelques images pour chacune des 9 classes :
+Ci-après, nous présentons quelques images pour chacune des 9 classes (Cf. figures \ref{classeM},\ref{classeA},\ref{classeB},\ref{classeC},\ref{classeD},
+\ref{classeALL},\ref{classeMULTI},\ref{classeINTRO},\ref{classeCREDITS}).
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00000089.jpg}
-\includegraphics[scale=0.3]{../data/00000159.jpg}
-\includegraphics[scale=0.3]{../data/00000176.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000089.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000159.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000176.jpg}
 \end{center}
 \caption{image de classe $M$}
 \label{classeM}
@@ -100,9 +101,9 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00000105.jpg}
-\includegraphics[scale=0.3]{../data/00000106.jpg}
-\includegraphics[scale=0.3]{../data/00000107.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000105.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000106.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000107.jpg}
 \end{center}
 \caption{image de classe $A$}
 \label{classeA}
@@ -110,9 +111,9 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00000147.jpg}
-\includegraphics[scale=0.3]{../data/00000148.jpg}
-\includegraphics[scale=0.3]{../data/00000149.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000147.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000148.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000149.jpg}
 \end{center}
 \caption{image de classe $B$}
 \label{classeB}
@@ -120,9 +121,9 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00000165.jpg}
-\includegraphics[scale=0.3]{../data/00000166.jpg}
-\includegraphics[scale=0.3]{../data/00000167.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000165.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000166.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000167.jpg}
 \end{center}
 \caption{image de classe $C$}
 \label{classeC}
@@ -130,9 +131,9 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00000288.jpg}
-\includegraphics[scale=0.3]{../data/00000289.jpg}
-\includegraphics[scale=0.3]{../data/00000290.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000288.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000289.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000290.jpg}
 \end{center}
 \caption{image de classe $D$}
 \label{classeD}
@@ -140,9 +141,9 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00000179.jpg}
-\includegraphics[scale=0.3]{../data/00000203.jpg}
-\includegraphics[scale=0.3]{../data/00000239.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000179.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000203.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000239.jpg}
 \end{center}
 \caption{image de classe $ALL$}
 \label{classeALL}
@@ -150,9 +151,9 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00000213.jpg}
-\includegraphics[scale=0.3]{../data/00000251.jpg}
-\includegraphics[scale=0.3]{../data/00000310.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000213.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000251.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000310.jpg}
 \end{center}
 \caption{image de classe $MULTI$}
 \label{classeMULTI}
@@ -160,19 +161,19 @@ Ci-après, nous présentons quelques images pour chacune des 9 classes :
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00000013.jpg}
-\includegraphics[scale=0.3]{../data/00000024.jpg}
-\includegraphics[scale=0.3]{../data/00000041.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000013.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000024.jpg}
+\includegraphics[scale=0.3]{../data/frames/00000041.jpg}
 \end{center}
 \caption{image de classe $INTRO$}
 \label{classeINTRO}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.3]{../data/00002344.jpg}
-\includegraphics[scale=0.3]{../data/00002348.jpg}
-\includegraphics[scale=0.3]{../data/00002350.jpg}
+\includegraphics[scale=0.3]{../data/frames/00002344.jpg}
+\includegraphics[scale=0.3]{../data/frames/00002348.jpg}
+\includegraphics[scale=0.3]{../data/frames/00002350.jpg}
 \end{center}
 \caption{image de classe $CREDITS$}
 \label{classeCREDITS}
@@ -195,15 +196,16 @@ Les classes $G$ et $L$ peuvent s'exprimer en fonction des 9 classes comme suit :
 \end{description}
 
 
-Nous avons donc deux classes d'images $G$ et $L$ dont voici plusieurs exemples :\\
+Nous avons donc deux classes d'images $G$ et $L$ (respectivement 1491 et 761 images) (Cf. figures \ref{classeG} et
+\ref{classeL}) \\
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{../data/00000089.jpg}
-\includegraphics[scale=0.2]{../data/00000105.jpg}
-\includegraphics[scale=0.2]{../data/00000147.jpg}
-\includegraphics[scale=0.2]{../data/00000165.jpg}
-\includegraphics[scale=0.2]{../data/00000288.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000089.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000105.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000147.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000165.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000288.jpg}
 \end{center}
 \caption{image de classe $G$ (gros plan)}
 \label{classeG}
@@ -211,11 +213,11 @@ Nous avons donc deux classes d'images $G$ et $L$ dont voici plusieurs exemples :
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{../data/00000336.jpg}
-\includegraphics[scale=0.2]{../data/00000394.jpg}
-\includegraphics[scale=0.2]{../data/00000458.jpg}
-\includegraphics[scale=0.2]{../data/00000474.jpg}
-\includegraphics[scale=0.2]{../data/00000625.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000336.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000394.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000458.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000474.jpg}
+\includegraphics[scale=0.2]{../data/frames/00000625.jpg}
 \end{center}
 \caption{image de classe $L$ (large plan)}
 \label{classeL}
@@ -229,20 +231,24 @@ Par la suite, nous allons expliciter différentes manières d'extraire de l'info
 \section{Extraction de teinte}
 \section{Histogramme orienté du gradient}
 
-Cette méthode consiste à extraire l'information local de contours. Sa première utilisation a consisté en 
-la détection de piétons \cite{hog}. Pour une image donné, le vecteur descripteur des \begin{itshape}HOG\end{itshape} est la concaténation
-d'histogrammes de l'amplitude du gradient (en fonction de l'orientation) pris sur un découpage de l'image:
+Cette méthode consiste à extraire l'information local de contours. Historiquement, sa première utilisation a consisté en 
+la détection de piétons \cite{hog}. Pour une image donnée, le vecteur descripteur des \begin{itshape}HOG\end{itshape} est la concaténation
+d'histogrammes de l'amplitude du gradient (en fonction de son orientation). Chaque histogramme est pris sur un carré de l'image
+appelé \og cellule \fg{}. L'ensemble des cellules quadrille entièrement l'image avec un eventuel recouvrement.\\
+Ces histogrammes sont ensuite normalisés en intensité par paquet de cellules adjacentes (appelés \og block \fg{}) afin d'obtenir des descripteurs 
+invariants au changement local d'illumination (Cf. figure \ref{hog}).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.5]{hog.jpg}
 \end{center}
-\caption{construction d'un histogramme orienté du gradient \cite{hog2}}
+\caption{Construction d'un histogramme orienté du gradient \cite{hog2}}
 \label{hog}
 \end{figure}
 
 On peut espérer que ces descripteurs s'adaptent bien à notre problème. En effet, les epaules des intervenants à gauche 
-et à droite de l'image sont des contours descriminants pour la classe $G$ (gros plan). D'autre part, les gros plans ont fond uniforme, 
-ce qui donnera beaucoup de gradient nul, et donc un descripteur \begin{itshape}sparse\end{itshape}
+et à droite de l'image, ainsi que leur visage, sont des contours descriminants pour la classe $G$ (gros plan)
+(Cf. figure \ref{hog_classeG}). D'autre part, les gros plans ont un fond uniforme, 
+ce qui donnera beaucoup de gradient nul, et donc un descripteur \begin{itshape}sparse\end{itshape} pour la classe $G$ (gros plan).
 
 \begin{figure}[H]
 \begin{center}
@@ -253,33 +259,119 @@ ce qui donnera beaucoup de gradient nul, et donc un descripteur \begin{itshape}s
 \includegraphics[scale=0.3]{hog_exemple2_contour.jpg}
 \includegraphics[scale=0.3]{hog_exemple2_gradient.jpg}
 \end{center}
-\caption{histogramme orienté du gradient pour les gros plans (classe $G$)}
+\caption{Histogramme orienté du gradient pour les gros plans (classe $G$)}
 \label{hog_classeG}
 \end{figure}
 
 \section{Reseaux de neurones à convolution pré-entrainé}
 
 Cette méthode consiste à extraire les descripteurs produits par un réseau de neurones à convolution déjà entrainé.
-En effet, en récupérant la sortie de l'avant-dernière couche, on obtient la transformation finale haut-niveau de l'image, avant la couche de classification.
-Cette technique est connu sous le nom de \begin{itshape}Transfer Learning\end{itshape} \cite{DBLP:journals/corr/YosinskiCBL14} et a fait ses preuves dans 
-le cas de réseaux de neurones entrainé sur la base d'images \begin{itshape}ImageNet\end{itshape} \cite{imagenet_cvpr09}.
-Cette base de près de 10 millins d'images, contient une multitude de classes (animaux,ustensiles,humains,...) organisé hiérarchiquement, et on peut espérer que les gros plans
-(classe $G$) correspondent à l'une des ses classes,et de même pour les images plan large (classe $L$), de telle sorte qu'on puisse ensuite séparer les descripteurs via un classifieur
- supervisé.
+En effet, en récupérant la sortie de l'avant-dernière couche, on obtient la transformation finale haut-niveau de l'image, 
+avant la couche de classification.
+Cette technique est connue sous le nom de \begin{itshape}Transfer Learning\end{itshape} \cite{DBLP:journals/corr/YosinskiCBL14} 
+et a fait ses preuves dans le cas de réseaux de neurones entrainé sur la base 
+d'images \begin{itshape}ImageNet\end{itshape} \cite{imagenet_cvpr09}.
+Cette base de près de 10 millins d'images, contient une multitude de classes (animaux,ustensiles,humains,...) organisées hiérarchiquement, 
+et on peut espérer que les gros plans (classe $G$) correspondent à l'une de ces classes,et de même pour les images plan 
+large (classe $L$), de telle sorte qu'on puisse ensuite séparer les descripteurs via un classifieur 
+supervisé.
 
 \chapter{Résultats}
 \section{Extraction de contours}
 \section{Extraction de teinte}
 \section{Histogramme orienté du gradient}
-Nous avons extrait les descripteurs \begin{itshape}HOG\end{itshape} pour chacune des images de classe $G$ et $L$, en utilisant une fenêtre glissante de taille $32x32$ avec un overlap. Puis, nous 
-leur avons appliquer différent classifieurs supervisés. Nous avons découpé le set de descripteurs en deux sous-ensembles représentant 70\% du total pour l'entrainement, 
-30\% pour le test. Les resultats de classification sont illustrés dans la table.
+Nous avons extrait les descripteurs \begin{itshape}HOG\end{itshape} pour chacune des images de classe $G$ et $L$, en utilisant 
+une cellule de taille 32x32 (sans recouvrement) de sorte à récupérer les formes des épaules et du visage, et non les details 
+plus petits liés au port de lunettes par exemple. Pour la normalisation, nous l'avons effectué par groupe de carré à 4 cellules (avec
+recouvrement) afin de tenir compte du fait qu'au sein des gros plans, les intervenants peuvent être légèrement décalés.
+Puis, nous avons appliquer à ces descripteurs, différent classifieurs supervisés. 
+Nous avons découpé le set de descripteurs en deux sous-ensembles représentant 70\% du total pour l'entrainement, 
+30\% pour le test. Les resultats de classification sont illustrés dans la table \ref{Table_resultats_hog}.\\
+Les classifieurs utilisés sont ceux de la librairie \begin{itshape}Scikit-Learn\end{itshape}, implémentés dans le script 
+\begin{itshape}Python\end{itshape} tiré de \cite{scikit_bench}, que nous avons adaptés.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+\begin{bf}classifieur\end{bf}& \begin{bf}score de test\end{bf} & \begin{bf}temps de training (s)\end{bf} & \begin{bf}temps de test (s)\end{bf} \\
+\hline
+Ridge Classifier & 1.0 & 0.130 & 0.027\\
+\hline
+Perceptron & 1.0 & 0.219 & 0.028\\
+\hline
+Passive-Aggressive & 1.0 & 0.352 & 0.024\\
+\hline
+kNN & 0.998 & 0.221 & 2.875\\
+\hline
+Random forest & 1.0 & 1.321 & 0.012\\
+\hline
+linear SVM - L2 penalty & 1.0 & 0.197 & 0.024\\
+\hline
+SGDClassifier - L2 penalty & 1.0 & 0.202 & 0.024\\
+\hline
+linear SVM - L1 penalty & 1.0 & 0.283 & 0.024\\
+\hline
+SGDClassifier - L1 penalty & 1.0 & 0.634 & 0.024\\
+\hline
+SGDClassifier - ElasticNet penalty & 1.0 & 0.721 & 0.024\\
+\hline
+NearestCentroid & 0.996 & 0.049 & 0.028\\
+\hline
+SVM & 0.998 & 0.446 & 0.203\\
+\hline
+linear SVM - L1 penalty - dual=False & 1.0 & 0.238 & 0.003\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Résultats de classification supervisée sur les descripteurs $HOG$}
+\label{Table_resultats_hog}
+\end{table}
+
 \section{Reseaux de neurones à convolution pré-entrainé}
 Nous avons utilisé le code \begin{itshape}Overfeat\end{itshape} \cite{DBLP:journals/corr/SermanetEZMFL13}, récupéré par clonage du dépôt 
 Github correspondant \cite{overfeat}, pré-entrainé sur la base \begin{itshape}ImageNet\end{itshape} \cite{imagenet_cvpr09}.
 Nous avons extrait les descripteurs pour chacune des images de classe $G$ et $L$ pour leur appliquer différent classifieurs
- supervisés. Nous avons découpé le set de descripteurs en deux sous-ensembles s 70\% du total pour l'entrainement, 30\% pour le test.
- Les resultats de classification sont illustrés dans la table.
+ supervisés. Nous avons découpé le set de descripteurs en deux sous-ensembles 70\% du total pour l'entrainement, 30\% pour le test.
+ Les resultats de classification sont illustrés dans la table \ref{Table_resultats_overfeat}.
+ 
+\begin{table}
+\begin{center}
+\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+\begin{bf}classifieur\end{bf}& \begin{bf}score de test\end{bf} & \begin{bf}temps de training (s)\end{bf} & \begin{bf}temps de test (s)\end{bf} \\
+\hline
+Ridge Classifier & 1.0 & 0.762 & 0.152\\
+\hline
+Perceptron & 0.998 & 1.515 & 0.155\\
+\hline
+Passive-Aggressive & 1.0 & 1.852 & 0.150\\
+\hline
+kNN & 0.998 & 1.456 & 16.77\\
+\hline
+Random forest & 0.998 & 3.851 & 0.024\\
+\hline
+linear SVM - L2 penalty & 1.0 & 1.105 & 0.149\\
+\hline
+SGDClassifier - L2 penalty & 0.998 & 1.156 & 0.153\\
+\hline
+linear SVM - L1 penalty & 1.0 & 1.220 & 0.149\\
+\hline
+SGDClassifier - L1 penalty & 1.0 & 5.581 & 0.149\\
+\hline
+SGDClassifier - ElasticNet penalty & 1.0 & 6.062 & 0.151\\
+\hline
+NearestCentroid	& 0.987 & 0.302 & 0.221\\
+\hline
+SVM & 1.0 & 3.508 & 1.591\\
+\hline
+linear SVM - L1 penalty - dual=False & 1.0 & 1.150 & 0.011\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Résultats de classification supervisée sur les descripteurs $Overfeat$}
+\label{Table_resultats_overfeat}
+\end{table}
 
 \backmatter
 

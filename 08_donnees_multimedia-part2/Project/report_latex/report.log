@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.3)  24 APR 2016 22:24
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.18)  25 APR 2016 16:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **report.tex
 (./report.tex
 LaTeX2e <2011/06/27>
-Babel <3.9h> and hyphenation patterns for 78 languages loaded.
+Babel <3.9h> and hyphenation patterns for 28 languages loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
 Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo
@@ -305,6 +305,130 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen106
 \Gin@req@width=\dimen107
 )
+(/usr/share/texlive/texmf-dist/tex/latex/fancyref/fancyref.sty
+Package: fancyref 1999/02/03 v0.9c Fancy cross-referencing
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/varioref.sty
+Package: varioref 2011/10/02 v1.4z package for extended references (FMi)
+\c@vrcnt=\count93
+))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
+
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
+Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
+Package hobsub Info: Skipping package `infwarerr' (already loaded).
+Package hobsub Info: Skipping package `ltxcmds' (already loaded).
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+Package: intcalc 2007/09/27 v1.1 Expandable calculations with integers (HO)
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
+Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
+)
+Package: bitset 2011/01/30 v1.1 Handle bit-vector datatype (HO)
+Package: uniquecounter 2011/01/30 v1.2 Provide unlimited unique counter (HO)
+)
+Package hobsub Info: Skipping package `hobsub' (already loaded).
+Package: letltxmacro 2010/09/02 v1.4 Let assignment for LaTeX macros (HO)
+Package: hopatch 2012/05/28 v1.2 Wrapper for package hooks (HO)
+Package: xcolor-patch 2011/01/30 xcolor patch
+Package: atveryend 2011/06/30 v1.8 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
+Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
+Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
+Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
+Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+)
+\@linkdim=\dimen108
+\Hy@linkcounter=\count94
+\Hy@pagecounter=\count95
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+\Hy@SavedSpaceFactor=\count96
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+)
+Package hyperref Info: Hyper figures OFF on input line 4443.
+Package hyperref Info: Link nesting OFF on input line 4448.
+Package hyperref Info: Hyper index ON on input line 4451.
+Package hyperref Info: Plain pages OFF on input line 4458.
+Package hyperref Info: Backreferencing OFF on input line 4463.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4688.
+\c@Hy@tempcnt=\count97
+
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 5041.
+\XeTeXLinkMargin=\dimen109
+\Fld@menulength=\count98
+\Field@Width=\dimen110
+\Fld@charsize=\dimen111
+Package hyperref Info: Hyper figures OFF on input line 6295.
+Package hyperref Info: Link nesting OFF on input line 6300.
+Package hyperref Info: Hyper index ON on input line 6303.
+Package hyperref Info: backreferencing OFF on input line 6310.
+Package hyperref Info: Link coloring OFF on input line 6315.
+Package hyperref Info: Link coloring with OCG OFF on input line 6320.
+Package hyperref Info: PDF/A mode OFF on input line 6325.
+LaTeX Info: Redefining \ref on input line 6365.
+LaTeX Info: Redefining \pageref on input line 6369.
+\Hy@abspage=\count99
+\c@Item=\count100
+\c@Hfootnote=\count101
+)
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
+\Fld@listcount=\count102
+\c@bookmark@seq@number=\count103
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+82.
+)
+\Hy@SectionHShift=\skip46
+)
 (./report.aux)
 \openout1 = `report.aux'.
 
@@ -320,61 +444,30 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
 LaTeX Info: Redefining \degres on input line 16.
 LaTeX Info: Redefining \dots on input line 16.
 LaTeX Info: Redefining \up on input line 16.
  (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count93
-\scratchdimen=\dimen108
+\scratchcounter=\count104
+\scratchdimen=\dimen112
 \scratchbox=\box26
-\nofMPsegments=\count94
-\nofMParguments=\count95
+\nofMPsegments=\count105
+\nofMParguments=\count106
 \everyMPshowfont=\toks17
-\MPscratchCnt=\count96
-\MPscratchDim=\dimen109
-\MPnumerator=\count97
-\makeMPintoPDFobject=\count98
+\MPscratchCnt=\count107
+\MPscratchDim=\dimen113
+\MPnumerator=\count108
+\makeMPintoPDFobject=\count109
 \everyMPtoPDFconversion=\toks18
-) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
-Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
-Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-)
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
-)
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-)
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
-
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
-Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
-))
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
-
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
-Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
-
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
-Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-)))
+)
 Package grfext Info: Graphics extension search list:
 (grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
 G,.JBIG2,.JB2,.eps]
@@ -384,14 +477,34 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 18.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 18.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 18.
+\AtBeginShipoutBox=\box27
+Package hyperref Info: Link coloring OFF on input line 16.
 
-[1
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
+)
+\c@section@level=\count110
+LaTeX Info: Redefining \Ref on input line 513.
+)
+LaTeX Info: Redefining \ref on input line 16.
+LaTeX Info: Redefining \pageref on input line 16.
+LaTeX Info: Redefining \nameref on input line 16.
+
+(./report.out) (./report.out)
+\@outlinefile=\write3
+\openout3 = `report.out'.
+
+LaTeX Info: Redefining \Ref on input line 16.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 19.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 19.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 19.
+ [1
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2
@@ -402,11 +515,10 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 4.
 )
-\tf@toc=\write3
-\openout3 = `report.toc'.
+\tf@toc=\write4
+\openout4 = `report.toc'.
 
-
-[3] [4
+ [3] [4
 
 ] [1
 
@@ -424,407 +536,496 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--49
 
  []
 
-[1
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.86 \clearpage
+                [1
 
-] [2] <../data/00000089.jpg, id=39, 321.2pt x 243.43579pt>
-File: ../data/00000089.jpg Graphic file (type jpg)
+]pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.86 \clearpage
+                [2]
+<../data/frames/00000089.jpg, id=132, 321.2pt x 243.43579pt>
+File: ../data/frames/00000089.jpg Graphic file (type jpg)
 
-<use ../data/00000089.jpg>
-Package pdftex.def Info: ../data/00000089.jpg used on input line 93.
+<use ../data/frames/00000089.jpg>
+Package pdftex.def Info: ../data/frames/00000089.jpg used on input line 94.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000159.jpg, id=40, 321.2pt x 243.43579pt>
-File: ../data/00000159.jpg Graphic file (type jpg)
+<../data/frames/00000159.jpg, id=133, 321.2pt x 243.43579pt>
+File: ../data/frames/00000159.jpg Graphic file (type jpg)
 
-<use ../data/00000159.jpg>
-Package pdftex.def Info: ../data/00000159.jpg used on input line 94.
+<use ../data/frames/00000159.jpg>
+Package pdftex.def Info: ../data/frames/00000159.jpg used on input line 95.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000176.jpg, id=41, 321.2pt x 243.43579pt>
-File: ../data/00000176.jpg Graphic file (type jpg)
+<../data/frames/00000176.jpg, id=134, 321.2pt x 243.43579pt>
+File: ../data/frames/00000176.jpg Graphic file (type jpg)
 
-<use ../data/00000176.jpg>
-Package pdftex.def Info: ../data/00000176.jpg used on input line 95.
+<use ../data/frames/00000176.jpg>
+Package pdftex.def Info: ../data/frames/00000176.jpg used on input line 96.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000105.jpg, id=42, 321.2pt x 243.43579pt>
-File: ../data/00000105.jpg Graphic file (type jpg)
+<../data/frames/00000105.jpg, id=135, 321.2pt x 243.43579pt>
+File: ../data/frames/00000105.jpg Graphic file (type jpg)
 
-<use ../data/00000105.jpg>
-Package pdftex.def Info: ../data/00000105.jpg used on input line 103.
+<use ../data/frames/00000105.jpg>
+Package pdftex.def Info: ../data/frames/00000105.jpg used on input line 104.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000106.jpg, id=43, 321.2pt x 243.43579pt>
-File: ../data/00000106.jpg Graphic file (type jpg)
+<../data/frames/00000106.jpg, id=136, 321.2pt x 243.43579pt>
+File: ../data/frames/00000106.jpg Graphic file (type jpg)
 
-<use ../data/00000106.jpg>
-Package pdftex.def Info: ../data/00000106.jpg used on input line 104.
+<use ../data/frames/00000106.jpg>
+Package pdftex.def Info: ../data/frames/00000106.jpg used on input line 105.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000107.jpg, id=44, 321.2pt x 243.43579pt>
-File: ../data/00000107.jpg Graphic file (type jpg)
+<../data/frames/00000107.jpg, id=137, 321.2pt x 243.43579pt>
+File: ../data/frames/00000107.jpg Graphic file (type jpg)
 
-<use ../data/00000107.jpg>
-Package pdftex.def Info: ../data/00000107.jpg used on input line 105.
+<use ../data/frames/00000107.jpg>
+Package pdftex.def Info: ../data/frames/00000107.jpg used on input line 106.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000147.jpg, id=45, 321.2pt x 243.43579pt>
-File: ../data/00000147.jpg Graphic file (type jpg)
+<../data/frames/00000147.jpg, id=138, 321.2pt x 243.43579pt>
+File: ../data/frames/00000147.jpg Graphic file (type jpg)
 
-<use ../data/00000147.jpg>
-Package pdftex.def Info: ../data/00000147.jpg used on input line 113.
+<use ../data/frames/00000147.jpg>
+Package pdftex.def Info: ../data/frames/00000147.jpg used on input line 114.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000148.jpg, id=46, 321.2pt x 243.43579pt>
-File: ../data/00000148.jpg Graphic file (type jpg)
+<../data/frames/00000148.jpg, id=139, 321.2pt x 243.43579pt>
+File: ../data/frames/00000148.jpg Graphic file (type jpg)
 
-<use ../data/00000148.jpg>
-Package pdftex.def Info: ../data/00000148.jpg used on input line 114.
+<use ../data/frames/00000148.jpg>
+Package pdftex.def Info: ../data/frames/00000148.jpg used on input line 115.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000149.jpg, id=47, 321.2pt x 243.43579pt>
-File: ../data/00000149.jpg Graphic file (type jpg)
+<../data/frames/00000149.jpg, id=140, 321.2pt x 243.43579pt>
+File: ../data/frames/00000149.jpg Graphic file (type jpg)
 
-<use ../data/00000149.jpg>
-Package pdftex.def Info: ../data/00000149.jpg used on input line 115.
+<use ../data/frames/00000149.jpg>
+Package pdftex.def Info: ../data/frames/00000149.jpg used on input line 116.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000165.jpg, id=48, 321.2pt x 243.43579pt>
-File: ../data/00000165.jpg Graphic file (type jpg)
+<../data/frames/00000165.jpg, id=141, 321.2pt x 243.43579pt>
+File: ../data/frames/00000165.jpg Graphic file (type jpg)
 
-<use ../data/00000165.jpg>
-Package pdftex.def Info: ../data/00000165.jpg used on input line 123.
+<use ../data/frames/00000165.jpg>
+Package pdftex.def Info: ../data/frames/00000165.jpg used on input line 124.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000166.jpg, id=49, 321.2pt x 243.43579pt>
-File: ../data/00000166.jpg Graphic file (type jpg)
+<../data/frames/00000166.jpg, id=142, 321.2pt x 243.43579pt>
+File: ../data/frames/00000166.jpg Graphic file (type jpg)
 
-<use ../data/00000166.jpg>
-Package pdftex.def Info: ../data/00000166.jpg used on input line 124.
+<use ../data/frames/00000166.jpg>
+Package pdftex.def Info: ../data/frames/00000166.jpg used on input line 125.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000167.jpg, id=50, 321.2pt x 243.43579pt>
-File: ../data/00000167.jpg Graphic file (type jpg)
+<../data/frames/00000167.jpg, id=143, 321.2pt x 243.43579pt>
+File: ../data/frames/00000167.jpg Graphic file (type jpg)
 
-<use ../data/00000167.jpg>
-Package pdftex.def Info: ../data/00000167.jpg used on input line 125.
+<use ../data/frames/00000167.jpg>
+Package pdftex.def Info: ../data/frames/00000167.jpg used on input line 126.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000288.jpg, id=51, 321.2pt x 243.43579pt>
-File: ../data/00000288.jpg Graphic file (type jpg)
+<../data/frames/00000288.jpg, id=144, 321.2pt x 243.43579pt>
+File: ../data/frames/00000288.jpg Graphic file (type jpg)
 
-<use ../data/00000288.jpg>
-Package pdftex.def Info: ../data/00000288.jpg used on input line 133.
+<use ../data/frames/00000288.jpg>
+Package pdftex.def Info: ../data/frames/00000288.jpg used on input line 134.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000289.jpg, id=52, 321.2pt x 243.43579pt>
-File: ../data/00000289.jpg Graphic file (type jpg)
+<../data/frames/00000289.jpg, id=145, 321.2pt x 243.43579pt>
+File: ../data/frames/00000289.jpg Graphic file (type jpg)
 
-<use ../data/00000289.jpg>
-Package pdftex.def Info: ../data/00000289.jpg used on input line 134.
+<use ../data/frames/00000289.jpg>
+Package pdftex.def Info: ../data/frames/00000289.jpg used on input line 135.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000290.jpg, id=53, 321.2pt x 243.43579pt>
-File: ../data/00000290.jpg Graphic file (type jpg)
+<../data/frames/00000290.jpg, id=146, 321.2pt x 243.43579pt>
+File: ../data/frames/00000290.jpg Graphic file (type jpg)
 
-<use ../data/00000290.jpg>
-Package pdftex.def Info: ../data/00000290.jpg used on input line 135.
+<use ../data/frames/00000290.jpg>
+Package pdftex.def Info: ../data/frames/00000290.jpg used on input line 136.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000179.jpg, id=54, 321.2pt x 243.43579pt>
-File: ../data/00000179.jpg Graphic file (type jpg)
+<../data/frames/00000179.jpg, id=147, 321.2pt x 243.43579pt>
+File: ../data/frames/00000179.jpg Graphic file (type jpg)
 
-<use ../data/00000179.jpg>
-Package pdftex.def Info: ../data/00000179.jpg used on input line 143.
+<use ../data/frames/00000179.jpg>
+Package pdftex.def Info: ../data/frames/00000179.jpg used on input line 144.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000203.jpg, id=55, 321.2pt x 243.43579pt>
-File: ../data/00000203.jpg Graphic file (type jpg)
+<../data/frames/00000203.jpg, id=148, 321.2pt x 243.43579pt>
+File: ../data/frames/00000203.jpg Graphic file (type jpg)
 
-<use ../data/00000203.jpg>
-Package pdftex.def Info: ../data/00000203.jpg used on input line 144.
+<use ../data/frames/00000203.jpg>
+Package pdftex.def Info: ../data/frames/00000203.jpg used on input line 145.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000239.jpg, id=56, 321.2pt x 243.43579pt>
-File: ../data/00000239.jpg Graphic file (type jpg)
+<../data/frames/00000239.jpg, id=149, 321.2pt x 243.43579pt>
+File: ../data/frames/00000239.jpg Graphic file (type jpg)
 
-<use ../data/00000239.jpg>
-Package pdftex.def Info: ../data/00000239.jpg used on input line 145.
+<use ../data/frames/00000239.jpg>
+Package pdftex.def Info: ../data/frames/00000239.jpg used on input line 146.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000213.jpg, id=57, 321.2pt x 243.43579pt>
-File: ../data/00000213.jpg Graphic file (type jpg)
+<../data/frames/00000213.jpg, id=150, 321.2pt x 243.43579pt>
+File: ../data/frames/00000213.jpg Graphic file (type jpg)
 
-<use ../data/00000213.jpg>
-Package pdftex.def Info: ../data/00000213.jpg used on input line 153.
+<use ../data/frames/00000213.jpg>
+Package pdftex.def Info: ../data/frames/00000213.jpg used on input line 154.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000251.jpg, id=58, 321.2pt x 243.43579pt>
-File: ../data/00000251.jpg Graphic file (type jpg)
+<../data/frames/00000251.jpg, id=151, 321.2pt x 243.43579pt>
+File: ../data/frames/00000251.jpg Graphic file (type jpg)
 
-<use ../data/00000251.jpg>
-Package pdftex.def Info: ../data/00000251.jpg used on input line 154.
+<use ../data/frames/00000251.jpg>
+Package pdftex.def Info: ../data/frames/00000251.jpg used on input line 155.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000310.jpg, id=59, 321.2pt x 243.43579pt>
-File: ../data/00000310.jpg Graphic file (type jpg)
+<../data/frames/00000310.jpg, id=152, 321.2pt x 243.43579pt>
+File: ../data/frames/00000310.jpg Graphic file (type jpg)
 
-<use ../data/00000310.jpg>
-Package pdftex.def Info: ../data/00000310.jpg used on input line 155.
+<use ../data/frames/00000310.jpg>
+Package pdftex.def Info: ../data/frames/00000310.jpg used on input line 156.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000013.jpg, id=60, 321.2pt x 243.43579pt>
-File: ../data/00000013.jpg Graphic file (type jpg)
+<../data/frames/00000013.jpg, id=153, 321.2pt x 243.43579pt>
+File: ../data/frames/00000013.jpg Graphic file (type jpg)
 
-<use ../data/00000013.jpg>
-Package pdftex.def Info: ../data/00000013.jpg used on input line 163.
+<use ../data/frames/00000013.jpg>
+Package pdftex.def Info: ../data/frames/00000013.jpg used on input line 164.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000024.jpg, id=61, 321.2pt x 243.43579pt>
-File: ../data/00000024.jpg Graphic file (type jpg)
+<../data/frames/00000024.jpg, id=154, 321.2pt x 243.43579pt>
+File: ../data/frames/00000024.jpg Graphic file (type jpg)
 
-<use ../data/00000024.jpg>
-Package pdftex.def Info: ../data/00000024.jpg used on input line 164.
+<use ../data/frames/00000024.jpg>
+Package pdftex.def Info: ../data/frames/00000024.jpg used on input line 165.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00000041.jpg, id=62, 321.2pt x 243.43579pt>
-File: ../data/00000041.jpg Graphic file (type jpg)
+<../data/frames/00000041.jpg, id=155, 321.2pt x 243.43579pt>
+File: ../data/frames/00000041.jpg Graphic file (type jpg)
 
-<use ../data/00000041.jpg>
-Package pdftex.def Info: ../data/00000041.jpg used on input line 165.
+<use ../data/frames/00000041.jpg>
+Package pdftex.def Info: ../data/frames/00000041.jpg used on input line 166.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00002344.jpg, id=63, 321.2pt x 243.43579pt>
-File: ../data/00002344.jpg Graphic file (type jpg)
+<../data/frames/00002344.jpg, id=156, 321.2pt x 243.43579pt>
+File: ../data/frames/00002344.jpg Graphic file (type jpg)
 
-<use ../data/00002344.jpg>
-Package pdftex.def Info: ../data/00002344.jpg used on input line 173.
+<use ../data/frames/00002344.jpg>
+Package pdftex.def Info: ../data/frames/00002344.jpg used on input line 174.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00002348.jpg, id=64, 321.2pt x 243.43579pt>
-File: ../data/00002348.jpg Graphic file (type jpg)
+<../data/frames/00002348.jpg, id=157, 321.2pt x 243.43579pt>
+File: ../data/frames/00002348.jpg Graphic file (type jpg)
 
-<use ../data/00002348.jpg>
-Package pdftex.def Info: ../data/00002348.jpg used on input line 174.
+<use ../data/frames/00002348.jpg>
+Package pdftex.def Info: ../data/frames/00002348.jpg used on input line 175.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/00002350.jpg, id=65, 321.2pt x 243.43579pt>
-File: ../data/00002350.jpg Graphic file (type jpg)
+<../data/frames/00002350.jpg, id=158, 321.2pt x 243.43579pt>
+File: ../data/frames/00002350.jpg Graphic file (type jpg)
 
-<use ../data/00002350.jpg>
-Package pdftex.def Info: ../data/00002350.jpg used on input line 175.
+<use ../data/frames/00002350.jpg>
+Package pdftex.def Info: ../data/frames/00002350.jpg used on input line 176.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 183--184
+Underfull \hbox (badness 10000) in paragraph at lines 184--185
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 186--187
+Underfull \hbox (badness 10000) in paragraph at lines 187--188
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 190--191
+Underfull \hbox (badness 10000) in paragraph at lines 191--192
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 194--195
+Underfull \hbox (badness 10000) in paragraph at lines 195--196
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 198--199
+Underfull \hbox (badness 10000) in paragraph at lines 199--201
 
  []
 
-File: ../data/00000089.jpg Graphic file (type jpg)
-<use ../data/00000089.jpg>
-Package pdftex.def Info: ../data/00000089.jpg used on input line 202.
+File: ../data/frames/00000089.jpg Graphic file (type jpg)
+<use ../data/frames/00000089.jpg>
+Package pdftex.def Info: ../data/frames/00000089.jpg used on input line 204.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-File: ../data/00000105.jpg Graphic file (type jpg)
- <use ../data/00000105.jpg>
-Package pdftex.def Info: ../data/00000105.jpg used on input line 203.
+File: ../data/frames/00000105.jpg Graphic file (type jpg)
+ <use ../data/frames/00000105.jpg>
+Package pdftex.def Info: ../data/frames/00000105.jpg used on input line 205.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-File: ../data/00000147.jpg Graphic file (type jpg)
+File: ../data/frames/00000147.jpg Graphic file (type jpg)
 
-<use ../data/00000147.jpg>
-Package pdftex.def Info: ../data/00000147.jpg used on input line 204.
+<use ../data/frames/00000147.jpg>
+Package pdftex.def Info: ../data/frames/00000147.jpg used on input line 206.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-File: ../data/00000165.jpg Graphic file (type jpg)
- <use ../data/00000165.jpg>
-Package pdftex.def Info: ../data/00000165.jpg used on input line 205.
+File: ../data/frames/00000165.jpg Graphic file (type jpg)
+ <use ../data/frames/00000165.jpg>
+Package pdftex.def Info: ../data/frames/00000165.jpg used on input line 207.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-File: ../data/00000288.jpg Graphic file (type jpg)
+File: ../data/frames/00000288.jpg Graphic file (type jpg)
 
-<use ../data/00000288.jpg>
-Package pdftex.def Info: ../data/00000288.jpg used on input line 206.
-(pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-
-<../data/00000336.jpg, id=66, 321.2pt x 243.43579pt>
-File: ../data/00000336.jpg Graphic file (type jpg)
-
-<use ../data/00000336.jpg>
-Package pdftex.def Info: ../data/00000336.jpg used on input line 214.
+<use ../data/frames/00000288.jpg>
+Package pdftex.def Info: ../data/frames/00000288.jpg used on input line 208.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 
-<../data/00000394.jpg, id=67, 321.2pt x 243.43579pt>
-File: ../data/00000394.jpg Graphic file (type jpg)
+<../data/frames/00000336.jpg, id=161, 321.2pt x 243.43579pt>
+File: ../data/frames/00000336.jpg Graphic file (type jpg)
 
-<use ../data/00000394.jpg>
-Package pdftex.def Info: ../data/00000394.jpg used on input line 215.
+<use ../data/frames/00000336.jpg>
+Package pdftex.def Info: ../data/frames/00000336.jpg used on input line 216.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 
-<../data/00000458.jpg, id=68, 321.2pt x 243.43579pt>
-File: ../data/00000458.jpg Graphic file (type jpg)
+<../data/frames/00000394.jpg, id=162, 321.2pt x 243.43579pt>
+File: ../data/frames/00000394.jpg Graphic file (type jpg)
 
-<use ../data/00000458.jpg>
-Package pdftex.def Info: ../data/00000458.jpg used on input line 216.
+<use ../data/frames/00000394.jpg>
+Package pdftex.def Info: ../data/frames/00000394.jpg used on input line 217.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 
-<../data/00000474.jpg, id=69, 321.2pt x 243.43579pt>
-File: ../data/00000474.jpg Graphic file (type jpg)
+<../data/frames/00000458.jpg, id=163, 321.2pt x 243.43579pt>
+File: ../data/frames/00000458.jpg Graphic file (type jpg)
 
-<use ../data/00000474.jpg>
-Package pdftex.def Info: ../data/00000474.jpg used on input line 217.
+<use ../data/frames/00000458.jpg>
+Package pdftex.def Info: ../data/frames/00000458.jpg used on input line 218.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 
-<../data/00000625.jpg, id=70, 321.2pt x 243.43579pt>
-File: ../data/00000625.jpg Graphic file (type jpg)
+<../data/frames/00000474.jpg, id=164, 321.2pt x 243.43579pt>
+File: ../data/frames/00000474.jpg Graphic file (type jpg)
 
-<use ../data/00000625.jpg>
-Package pdftex.def Info: ../data/00000625.jpg used on input line 218.
+<use ../data/frames/00000474.jpg>
+Package pdftex.def Info: ../data/frames/00000474.jpg used on input line 219.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
- [3
 
-] [4 <../data/00000089.jpg> <../data/00000159.jpg> <../data/00000176.jpg> <../d
-ata/00000105.jpg> <../data/00000106.jpg> <../data/00000107.jpg> <../data/000001
-47.jpg> <../data/00000148.jpg> <../data/00000149.jpg> <../data/00000165.jpg> <.
-./data/00000166.jpg> <../data/00000167.jpg>]
-[5 <../data/00000288.jpg> <../data/00000289.jpg> <../data/00000290.jpg> <../dat
-a/00000179.jpg> <../data/00000203.jpg> <../data/00000239.jpg> <../data/00000213
-.jpg> <../data/00000251.jpg> <../data/00000310.jpg> <../data/00000013.jpg> <../
-data/00000024.jpg> <../data/00000041.jpg>] [6 <../data/00002344.jpg> <../data/0
-0002348.jpg> <../data/00002350.jpg> <../data/00000336.jpg> <../data/00000394.jp
-g> <../data/00000458.jpg> <../data/00000474.jpg> <../data/00000625.jpg>]
+<../data/frames/00000625.jpg, id=165, 321.2pt x 243.43579pt>
+File: ../data/frames/00000625.jpg Graphic file (type jpg)
+
+<use ../data/frames/00000625.jpg>
+Package pdftex.def Info: ../data/frames/00000625.jpg used on input line 220.
+(pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
+pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.229 \chapter
+              {Extraction d'information} [3
+
+]pdfTeX warning (ext4): destination with the same identifier (name{page.4}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.229 \chapter
+              {Extraction d'information} [4 <../data/frames/00000089.jpg> <../d
+ata/frames/00000159.jpg> <../data/frames/00000176.jpg> <../data/frames/00000105
+.jpg> <../data/frames/00000106.jpg> <../data/frames/00000107.jpg> <../data/fram
+es/00000147.jpg> <../data/frames/00000148.jpg> <../data/frames/00000149.jpg> <.
+./data/frames/00000165.jpg> <../data/frames/00000166.jpg> <../data/frames/00000
+167.jpg>] [5 <../data/frames/00000288.jpg> <../data/frames/00000289.jpg> <../da
+ta/frames/00000290.jpg> <../data/frames/00000179.jpg> <../data/frames/00000203.
+jpg> <../data/frames/00000239.jpg> <../data/frames/00000213.jpg> <../data/frame
+s/00000251.jpg> <../data/frames/00000310.jpg> <../data/frames/00000013.jpg> <..
+/data/frames/00000024.jpg> <../data/frames/00000041.jpg>] [6 <../data/frames/00
+002344.jpg> <../data/frames/00002348.jpg> <../data/frames/00002350.jpg> <../dat
+a/frames/00000336.jpg> <../data/frames/00000394.jpg> <../data/frames/00000458.j
+pg> <../data/frames/00000474.jpg> <../data/frames/00000625.jpg>]
 Chapitre 2.
-<hog.jpg, id=83, 563.85657pt x 217.5628pt>
+<hog.jpg, id=194, 563.85657pt x 217.5628pt>
 File: hog.jpg Graphic file (type jpg)
  <use hog.jpg>
-Package pdftex.def Info: hog.jpg used on input line 237.
+Package pdftex.def Info: hog.jpg used on input line 242.
 (pdftex.def)             Requested size: 281.9276pt x 108.78113pt.
 
-<hog_exemple.jpg, id=84, 321.2pt x 243.43579pt>
+<hog_exemple.jpg, id=197, 321.2pt x 243.43579pt>
 File: hog_exemple.jpg Graphic file (type jpg)
  <use hog_exemple.jpg>
-Package pdftex.def Info: hog_exemple.jpg used on input line 249.
+Package pdftex.def Info: hog_exemple.jpg used on input line 255.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple_contour.jpg, id=85, 321.2pt x 243.43579pt>
+<hog_exemple_contour.jpg, id=198, 321.2pt x 243.43579pt>
 File: hog_exemple_contour.jpg Graphic file (type jpg)
 
 <use hog_exemple_contour.jpg>
-Package pdftex.def Info: hog_exemple_contour.jpg used on input line 250.
+Package pdftex.def Info: hog_exemple_contour.jpg used on input line 256.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple_gradient.jpg, id=86, 321.2pt x 243.43579pt>
+<hog_exemple_gradient.jpg, id=199, 321.2pt x 243.43579pt>
 File: hog_exemple_gradient.jpg Graphic file (type jpg)
 
 <use hog_exemple_gradient.jpg>
-Package pdftex.def Info: hog_exemple_gradient.jpg used on input line 251.
+Package pdftex.def Info: hog_exemple_gradient.jpg used on input line 257.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple2.jpg, id=87, 321.2pt x 243.43579pt>
+<hog_exemple2.jpg, id=200, 321.2pt x 243.43579pt>
 File: hog_exemple2.jpg Graphic file (type jpg)
  <use hog_exemple2.jpg>
-Package pdftex.def Info: hog_exemple2.jpg used on input line 252.
+Package pdftex.def Info: hog_exemple2.jpg used on input line 258.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple2_contour.jpg, id=88, 321.2pt x 243.43579pt>
+<hog_exemple2_contour.jpg, id=201, 321.2pt x 243.43579pt>
 File: hog_exemple2_contour.jpg Graphic file (type jpg)
 
 <use hog_exemple2_contour.jpg>
-Package pdftex.def Info: hog_exemple2_contour.jpg used on input line 253.
+Package pdftex.def Info: hog_exemple2_contour.jpg used on input line 259.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple2_gradient.jpg, id=89, 321.2pt x 243.43579pt>
+<hog_exemple2_gradient.jpg, id=202, 321.2pt x 243.43579pt>
 File: hog_exemple2_gradient.jpg Graphic file (type jpg)
 
 <use hog_exemple2_gradient.jpg>
-Package pdftex.def Info: hog_exemple2_gradient.jpg used on input line 254.
+Package pdftex.def Info: hog_exemple2_gradient.jpg used on input line 260.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-Overfull \hbox (15.24637pt too wide) in paragraph at lines 260--260
+Overfull \hbox (15.24637pt too wide) in paragraph at lines 266--266
 []\T1/cmr/bx/n/14.4 Reseaux de neu-rones à convo-lu-tion pré-entrainé 
+ []
+
+
+Overfull \hbox (11.24634pt too wide) in paragraph at lines 268--278
+\T1/cmr/m/n/10 mil-lins d'images, contient une mul-ti-tude de classes (ani-maux
+,ustensiles,humains,...)
  []
 
 [7
 
-] [8 <./hog.jpg> <./hog_exemple.jpg> <./hog_exemple_contour.jpg> <./hog_exemple
-_gradient.jpg> <./hog_exemple2.jpg> <./hog_exemple2_contour.jpg> <./hog_exemple
-2_gradient.jpg>]
+] [8] [9 <./hog.jpg> <./hog_exemple.jpg> <./hog_exemple_contour.jpg> <./hog_exe
+mple_gradient.jpg> <./hog_exemple2.jpg> <./hog_exemple2_contour.jpg> <./hog_exe
+mple2_gradient.jpg>] [10
+
+]
 Chapitre 3.
 
-Overfull \hbox (15.24637pt too wide) in paragraph at lines 277--277
+Underfull \hbox (badness 10000) in paragraph at lines 297--297
+[]\T1/cmr/bx/n/10 score de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 297--297
+[]\T1/cmr/bx/n/10 temps de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 297--298
+[]\T1/cmr/bx/n/10 temps de
+ []
+
+
+Underfull \hbox (badness 4001) in paragraph at lines 323--323
+[]\T1/cmr/m/n/10 linear SVM - L1 pe-nalty -
+ []
+
+
+Overfull \hbox (15.98029pt too wide) in paragraph at lines 295--326
+ [] 
+ []
+
+
+Overfull \hbox (15.24637pt too wide) in paragraph at lines 331--331
 []\T1/cmr/bx/n/14.4 Reseaux de neu-rones à convo-lu-tion pré-entrainé 
  []
 
-[9
 
-] [10
-
-] (./report.lot)
-\tf@lot=\write4
-\openout4 = `report.lot'.
-
- [11
-
-] [12
-
-] (./report.lof)
-\tf@lof=\write5
-\openout5 = `report.lof'.
-
- (./report.bbl [13] [14
-
-]
-Underfull \hbox (badness 3271) in paragraph at lines 20--23
-[]\T1/cmr/m/n/10 Gil Levi.  A short in-tro-duc-tion to des-crip-tors, aug 2013.
-
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
+[]\T1/cmr/bx/n/10 score de
  []
 
 
-Underfull \hbox (badness 1418) in paragraph at lines 38--41
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
+[]\T1/cmr/bx/n/10 temps de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 342--343
+[]\T1/cmr/bx/n/10 temps de
+ []
+
+
+Underfull \hbox (badness 4001) in paragraph at lines 368--368
+[]\T1/cmr/m/n/10 linear SVM - L1 pe-nalty -
+ []
+
+
+Overfull \hbox (15.98029pt too wide) in paragraph at lines 340--371
+ [] 
+ []
+
+[11] [12] (./report.lot)
+\tf@lot=\write5
+\openout5 = `report.lot'.
+
+ [13
+
+
+] [14
+
+] (./report.lof)
+\tf@lof=\write6
+\openout6 = `report.lof'.
+
+ (./report.bbl [15] [16
+
+]
+Underfull \hbox (badness 1320) in paragraph at lines 39--42
 []\T1/cmr/m/n/10 Jason Yo-sinski, Jeff Clune, Yo-shua Ben-gio, and Hod Lip-son.
 
  []
 
-) [15] (./report.aux) ) 
+)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 385.
+ [17]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 385.
+ (./report.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 385.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 385.
+Package rerunfilecheck Info: File `report.out' has not changed.
+(rerunfilecheck)             Checksum: 99FD5E73994633E7EB8AE645152C67D3;980.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 385.
+ ) 
 Here is how much of TeX's memory you used:
- 3032 strings out of 493304
- 41852 string characters out of 6139872
- 107083 words of memory out of 5000000
- 6403 multiletter control sequences out of 15000+600000
+ 6849 strings out of 494442
+ 100808 string characters out of 6165313
+ 198414 words of memory out of 5000000
+ 9916 multiletter control sequences out of 15000+600000
  16939 words of font info for 37 fonts, out of 8000000 for 9000
- 957 hyphenation exceptions out of 8191
- 37i,9n,23p,232b,264s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.e
-nc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf/
-fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/c
-m-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2074.pfb
-></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/f
-onts/type1/public/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/type1/public/cm
--super/sfcc1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fo
-nts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-
-super/sfsl1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
-Output written on report.pdf (21 pages, 787822 bytes).
+ 350 hyphenation exceptions out of 8191
+ 29i,9n,30p,239b,396s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{cite.DBLP\\penalty\040\\@M\040\040:journals/corr/
+SermanetEZMFL13} has been referenced but does not exist, replaced by a fixed on
+e
+
+pdfTeX warning (dest): name{cite.DBLP\\penalty\040\\@M\040\040:journals/corr/Yo
+sinskiCBL14} has been referenced but does not exist, replaced by a fixed one
+
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf/fonts/type1/publ
+ic/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440
+.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2074.pfb></usr/share/tex
+mf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/publi
+c/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1200.
+pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texm
+f/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public
+/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1000.p
+fb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on report.pdf (23 pages, 791799 bytes).
 PDF statistics:
- 168 PDF objects out of 1000 (max. 8388607)
- 91 compressed objects within 1 object stream
- 0 named destinations out of 1000 (max. 500000)
- 196 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 352 PDF objects out of 1000 (max. 8388607)
+ 272 compressed objects within 3 object streams
+ 64 named destinations out of 1000 (max. 500000)
+ 308 words of extra memory for PDF output out of 10000 (max. 10000000)
 

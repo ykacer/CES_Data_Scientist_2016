@@ -1,5 +1,5 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
-\begin{thebibliography}{DDS{\etalchar{+}}09}
+\begin{thebibliography}{PGBB14}
 
 \bibitem[DDS{\etalchar{+}}09]{imagenet_cvpr09}
 J.~Deng, W.~Dong, R.~Socher, L.-J. Li, K.~Li, and L.~Fei-Fei.
@@ -14,12 +14,14 @@ Navneet Dalal and Bill Triggs.
 \bibitem[Ess16]{ref}
 Slim Essid.
 \newblock Resources, 2016.
-\newblock www.perso.telecom-paristech.fr/~essid/.
 
 \bibitem[Lev13]{hog2}
 Gil Levi.
 \newblock A short introduction to descriptors, aug 2013.
-\newblock https://gilscvblog.com.
+
+\bibitem[PGBB14]{scikit_bench}
+Peter Prettenhofer, Olivier Grisel, Mathieu Blondel, and Lars Buitinck.
+\newblock Classification of text documents using sparse features, 2014.
 
 \bibitem[SEZ{\etalchar{+}}13]{DBLP:journals/corr/SermanetEZMFL13}
 Pierre Sermanet, David Eigen, Xiang Zhang, Micha{\"{e}}l Mathieu, Rob Fergus,
@@ -32,7 +34,6 @@ Pierre Sermanet, David Eigen, Xiang Zhang, Micha{\"{e}}l Mathieu, Rob Fergus,
 Pierre Sermanet, David Eigen, Xiang Zhang, Micha{\"{e}}l Mathieu, Rob Fergus,
   and Yann LeCun.
 \newblock Overfeat code source, 2014.
-\newblock https://github.com/sermanet/OverFeat.
 
 \bibitem[YCBL14]{DBLP:journals/corr/YosinskiCBL14}
 Jason Yosinski, Jeff Clune, Yoshua Bengio, and Hod Lipson.
