@@ -35,6 +35,12 @@ Pierre Sermanet, David Eigen, Xiang Zhang, Micha{\"{e}}l Mathieu, Rob Fergus,
   and Yann LeCun.
 \newblock Overfeat code source, 2014.
 
+\bibitem[Wik16]{wiki:hsv}
+Wikipédia.
+\newblock Teinte saturation valeur --- wikipédia{,} l'encyclopédie libre,
+  2016.
+\newblock [En ligne; Page disponible le 30-avril-2016].
+
 \bibitem[YCBL14]{DBLP:journals/corr/YosinskiCBL14}
 Jason Yosinski, Jeff Clune, Yoshua Bengio, and Hod Lipson.
 \newblock How transferable are features in deep neural networks?

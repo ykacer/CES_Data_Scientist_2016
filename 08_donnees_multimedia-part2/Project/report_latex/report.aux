@@ -33,6 +33,7 @@
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {1.1}Corpus et labelisation}{1}{section.1.1}}
+\newlabel{labelisation}{{1.1}{1}{Corpus et labelisation}{section.1.1}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1.1}{\ignorespaces Table de correspondance classes/intervalle de temps}}{2}{table.1.1}}
 \newlabel{Table correspondance classe/temps}{{1.1}{2}{Table de correspondance classes/intervalle de temps}{table.1.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {1.2}Classification binaire}{3}{section.1.2}}
@@ -58,21 +59,29 @@
 \newlabel{classeG}{{1.10}{6}{image de classe $G$ (gros plan)}{figure.1.10}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1.11}{\ignorespaces image de classe $L$ (large plan)}}{6}{figure.1.11}}
 \newlabel{classeL}{{1.11}{6}{image de classe $L$ (large plan)}{figure.1.11}{}}
+\citation{wiki:hsv}
 \citation{hog}
 \citation{hog2}
-\citation{DBLP:journals/corr/YosinskiCBL14}
-\citation{imagenet_cvpr09}
 \@writefile{toc}{\contentsline {chapter}{\numberline {2}Extraction d'information}{7}{chapter.2}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {2.1}Extraction de contours}{7}{section.2.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {2.2}Extraction de teinte}{7}{section.2.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}Histogramme orient\IeC {\'e} du gradient}{7}{section.2.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{7}{section.2.4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Construction d'un histogramme orient\IeC {\'e} du gradient \cite  {hog2}}}{9}{figure.2.1}}
-\newlabel{hog}{{2.1}{9}{Construction d'un histogramme orienté du gradient \cite {hog2}}{figure.2.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Histogramme orient\IeC {\'e} du gradient pour les gros plans (classe $G$)}}{9}{figure.2.2}}
-\newlabel{hog_classeG}{{2.2}{9}{Histogramme orienté du gradient pour les gros plans (classe $G$)}{figure.2.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}D\IeC {\'e}finition}{7}{subsection.2.2.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Choix de la variable explicative}{7}{subsection.2.2.2}}
+\newlabel{hue_frontiere}{{2.2.2}{7}{Choix de la variable explicative}{subsection.2.2.2}{}}
+\citation{DBLP:journals/corr/YosinskiCBL14}
+\citation{imagenet_cvpr09}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Histogramme orient\IeC {\'e} du gradient}{8}{section.2.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{8}{section.2.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Illustration $HSV$ \cite  {wiki:hsv}}}{9}{figure.2.1}}
+\newlabel{HSV}{{2.1}{9}{Illustration $HSV$ \cite {wiki:hsv}}{figure.2.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Histogramme des moyennes de saturation}}{9}{figure.2.2}}
+\newlabel{hue_histo}{{2.2}{9}{Histogramme des moyennes de saturation}{figure.2.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces Construction d'un histogramme orient\IeC {\'e} du gradient \cite  {hog2}}}{9}{figure.2.3}}
+\newlabel{hog}{{2.3}{9}{Construction d'un histogramme orienté du gradient \cite {hog2}}{figure.2.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.4}{\ignorespaces Histogramme orient\IeC {\'e} du gradient pour les gros plans (classe $G$)}}{10}{figure.2.4}}
+\newlabel{hog_classeG}{{2.4}{10}{Histogramme orienté du gradient pour les gros plans (classe $G$)}{figure.2.4}{}}
 \citation{scikit_bench}
 \citation{DBLP:journals/corr/SermanetEZMFL13}
 \citation{overfeat}
@@ -83,11 +92,14 @@
 \@writefile{toc}{\contentsline {section}{\numberline {3.1}Extraction de contours}{11}{section.3.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}Extraction de teinte}{11}{section.3.2}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.3}Histogramme orient\IeC {\'e} du gradient}{11}{section.3.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{11}{section.3.4}}
-\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les descripteurs $HOG$}}{12}{table.3.1}}
-\newlabel{Table_resultats_hog}{{3.1}{12}{Résultats de classification supervisée sur les descripteurs $HOG$}{table.3.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les descripteurs $Overfeat$}}{12}{table.3.2}}
-\newlabel{Table_resultats_overfeat}{{3.2}{12}{Résultats de classification supervisée sur les descripteurs $Overfeat$}{table.3.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les moyennes de saturation}}{12}{table.3.1}}
+\newlabel{Table_resultats_hue}{{3.1}{12}{Résultats de classification supervisée sur les moyennes de saturation}{table.3.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les descripteurs $HOG$}}{12}{table.3.2}}
+\newlabel{Table_resultats_hog}{{3.2}{12}{Résultats de classification supervisée sur les descripteurs $HOG$}{table.3.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.3}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les descripteurs $Overfeat$}}{13}{table.3.3}}
+\newlabel{Table_resultats_overfeat}{{3.3}{13}{Résultats de classification supervisée sur les descripteurs $Overfeat$}{table.3.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Reseaux de neurones \IeC {\`a} convolution pr\IeC {\'e}-entrain\IeC {\'e}}{13}{section.3.4}}
+\citation{wiki:hsv}
 \citation{hog2}
 \bibstyle{alpha}
 \bibdata{biblio}
@@ -98,4 +110,5 @@
 \bibcite{scikit_bench}{PGBB14}
 \bibcite{DBLP:journals/corr/SermanetEZMFL13}{SEZ{$^{+}$}13}
 \bibcite{overfeat}{SEZ{$^{+}$}14}
+\bibcite{wiki:hsv}{Wik16}
 \bibcite{DBLP:journals/corr/YosinskiCBL14}{YCBL14}

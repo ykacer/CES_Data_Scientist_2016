@@ -14,14 +14,14 @@ Pour author, les noms et prénoms sont séparés par une vigule, et les différe
 	title={A short introduction to descriptors},
 	month={aug},
 	year={2013},
-	note={https://gilscvblog.com}
+	url={https://gilscvblog.com}
 }
 
 @misc{ref,
 	author={Essid, Slim},
 	title={Resources},
 	year={2016},
-	note={www.perso.telecom-paristech.fr/~essid/}
+	url={www.perso.telecom-paristech.fr/~essid/}
 }
 
 @article{DBLP:journals/corr/YosinskiCBL14,
@@ -59,6 +59,21 @@ Pour author, les noms et prénoms sont séparés par une vigule, et les différe
 	author={Pierre Sermanet and David Eigen and Xiang Zhang and Micha{\"{e}}l Mathieu and Rob Fergus and Yann LeCun},
 	title={Overfeat code source},
 	year={2014},
-	note={https://github.com/sermanet/OverFeat}
+	url={https://github.com/sermanet/OverFeat}
 }
 
+@misc{scikit_bench,
+	author={Prettenhofer, Peter AND Grisel, Olivier AND Blondel, Mathieu AND Buitinck, Lars},
+	title={Classification of text documents using sparse features},
+	year={2014},
+	url={https://scikit-learn.org/stable/auto_examples/text/document_classification_20newsgroups.htm}
+}
+
+@misc{
+wiki:hsv,
+	author = "Wikipédia",
+	title = "Teinte Saturation Valeur --- Wikipédia{,} l'encyclopédie libre",
+	year = "2016",
+	url = "http://fr.wikipedia.org/w/index.php?title=Teinte_Saturation_Valeur&oldid=125696736",
+	note = "[En ligne; Page disponible le 30-avril-2016]"
+}

@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.18)  25 APR 2016 16:09
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.3)  30 APR 2016 17:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **report.tex
 (./report.tex
 LaTeX2e <2011/06/27>
-Babel <3.9h> and hyphenation patterns for 28 languages loaded.
+Babel <3.9h> and hyphenation patterns for 78 languages loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
 Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo
@@ -548,194 +548,193 @@ l.86 \clearpage
 <to be read again> 
                    \relax 
 l.86 \clearpage
-                [2]
-<../data/frames/00000089.jpg, id=132, 321.2pt x 243.43579pt>
-File: ../data/frames/00000089.jpg Graphic file (type jpg)
+                [2] <../data/00000089.jpg, id=142, 321.2pt x 243.43579pt>
+File: ../data/00000089.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000089.jpg>
-Package pdftex.def Info: ../data/frames/00000089.jpg used on input line 94.
+<use ../data/00000089.jpg>
+Package pdftex.def Info: ../data/00000089.jpg used on input line 94.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000159.jpg, id=133, 321.2pt x 243.43579pt>
-File: ../data/frames/00000159.jpg Graphic file (type jpg)
+<../data/00000159.jpg, id=143, 321.2pt x 243.43579pt>
+File: ../data/00000159.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000159.jpg>
-Package pdftex.def Info: ../data/frames/00000159.jpg used on input line 95.
+<use ../data/00000159.jpg>
+Package pdftex.def Info: ../data/00000159.jpg used on input line 95.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000176.jpg, id=134, 321.2pt x 243.43579pt>
-File: ../data/frames/00000176.jpg Graphic file (type jpg)
+<../data/00000176.jpg, id=144, 321.2pt x 243.43579pt>
+File: ../data/00000176.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000176.jpg>
-Package pdftex.def Info: ../data/frames/00000176.jpg used on input line 96.
+<use ../data/00000176.jpg>
+Package pdftex.def Info: ../data/00000176.jpg used on input line 96.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000105.jpg, id=135, 321.2pt x 243.43579pt>
-File: ../data/frames/00000105.jpg Graphic file (type jpg)
+<../data/00000105.jpg, id=145, 321.2pt x 243.43579pt>
+File: ../data/00000105.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000105.jpg>
-Package pdftex.def Info: ../data/frames/00000105.jpg used on input line 104.
+<use ../data/00000105.jpg>
+Package pdftex.def Info: ../data/00000105.jpg used on input line 104.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000106.jpg, id=136, 321.2pt x 243.43579pt>
-File: ../data/frames/00000106.jpg Graphic file (type jpg)
+<../data/00000106.jpg, id=146, 321.2pt x 243.43579pt>
+File: ../data/00000106.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000106.jpg>
-Package pdftex.def Info: ../data/frames/00000106.jpg used on input line 105.
+<use ../data/00000106.jpg>
+Package pdftex.def Info: ../data/00000106.jpg used on input line 105.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000107.jpg, id=137, 321.2pt x 243.43579pt>
-File: ../data/frames/00000107.jpg Graphic file (type jpg)
+<../data/00000107.jpg, id=147, 321.2pt x 243.43579pt>
+File: ../data/00000107.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000107.jpg>
-Package pdftex.def Info: ../data/frames/00000107.jpg used on input line 106.
+<use ../data/00000107.jpg>
+Package pdftex.def Info: ../data/00000107.jpg used on input line 106.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000147.jpg, id=138, 321.2pt x 243.43579pt>
-File: ../data/frames/00000147.jpg Graphic file (type jpg)
+<../data/00000147.jpg, id=148, 321.2pt x 243.43579pt>
+File: ../data/00000147.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000147.jpg>
-Package pdftex.def Info: ../data/frames/00000147.jpg used on input line 114.
+<use ../data/00000147.jpg>
+Package pdftex.def Info: ../data/00000147.jpg used on input line 114.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000148.jpg, id=139, 321.2pt x 243.43579pt>
-File: ../data/frames/00000148.jpg Graphic file (type jpg)
+<../data/00000148.jpg, id=149, 321.2pt x 243.43579pt>
+File: ../data/00000148.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000148.jpg>
-Package pdftex.def Info: ../data/frames/00000148.jpg used on input line 115.
+<use ../data/00000148.jpg>
+Package pdftex.def Info: ../data/00000148.jpg used on input line 115.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000149.jpg, id=140, 321.2pt x 243.43579pt>
-File: ../data/frames/00000149.jpg Graphic file (type jpg)
+<../data/00000149.jpg, id=150, 321.2pt x 243.43579pt>
+File: ../data/00000149.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000149.jpg>
-Package pdftex.def Info: ../data/frames/00000149.jpg used on input line 116.
+<use ../data/00000149.jpg>
+Package pdftex.def Info: ../data/00000149.jpg used on input line 116.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000165.jpg, id=141, 321.2pt x 243.43579pt>
-File: ../data/frames/00000165.jpg Graphic file (type jpg)
+<../data/00000165.jpg, id=151, 321.2pt x 243.43579pt>
+File: ../data/00000165.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000165.jpg>
-Package pdftex.def Info: ../data/frames/00000165.jpg used on input line 124.
+<use ../data/00000165.jpg>
+Package pdftex.def Info: ../data/00000165.jpg used on input line 124.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000166.jpg, id=142, 321.2pt x 243.43579pt>
-File: ../data/frames/00000166.jpg Graphic file (type jpg)
+<../data/00000166.jpg, id=152, 321.2pt x 243.43579pt>
+File: ../data/00000166.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000166.jpg>
-Package pdftex.def Info: ../data/frames/00000166.jpg used on input line 125.
+<use ../data/00000166.jpg>
+Package pdftex.def Info: ../data/00000166.jpg used on input line 125.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000167.jpg, id=143, 321.2pt x 243.43579pt>
-File: ../data/frames/00000167.jpg Graphic file (type jpg)
+<../data/00000167.jpg, id=153, 321.2pt x 243.43579pt>
+File: ../data/00000167.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000167.jpg>
-Package pdftex.def Info: ../data/frames/00000167.jpg used on input line 126.
+<use ../data/00000167.jpg>
+Package pdftex.def Info: ../data/00000167.jpg used on input line 126.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000288.jpg, id=144, 321.2pt x 243.43579pt>
-File: ../data/frames/00000288.jpg Graphic file (type jpg)
+<../data/00000288.jpg, id=154, 321.2pt x 243.43579pt>
+File: ../data/00000288.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000288.jpg>
-Package pdftex.def Info: ../data/frames/00000288.jpg used on input line 134.
+<use ../data/00000288.jpg>
+Package pdftex.def Info: ../data/00000288.jpg used on input line 134.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000289.jpg, id=145, 321.2pt x 243.43579pt>
-File: ../data/frames/00000289.jpg Graphic file (type jpg)
+<../data/00000289.jpg, id=155, 321.2pt x 243.43579pt>
+File: ../data/00000289.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000289.jpg>
-Package pdftex.def Info: ../data/frames/00000289.jpg used on input line 135.
+<use ../data/00000289.jpg>
+Package pdftex.def Info: ../data/00000289.jpg used on input line 135.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000290.jpg, id=146, 321.2pt x 243.43579pt>
-File: ../data/frames/00000290.jpg Graphic file (type jpg)
+<../data/00000290.jpg, id=156, 321.2pt x 243.43579pt>
+File: ../data/00000290.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000290.jpg>
-Package pdftex.def Info: ../data/frames/00000290.jpg used on input line 136.
+<use ../data/00000290.jpg>
+Package pdftex.def Info: ../data/00000290.jpg used on input line 136.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000179.jpg, id=147, 321.2pt x 243.43579pt>
-File: ../data/frames/00000179.jpg Graphic file (type jpg)
+<../data/00000179.jpg, id=157, 321.2pt x 243.43579pt>
+File: ../data/00000179.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000179.jpg>
-Package pdftex.def Info: ../data/frames/00000179.jpg used on input line 144.
+<use ../data/00000179.jpg>
+Package pdftex.def Info: ../data/00000179.jpg used on input line 144.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000203.jpg, id=148, 321.2pt x 243.43579pt>
-File: ../data/frames/00000203.jpg Graphic file (type jpg)
+<../data/00000203.jpg, id=158, 321.2pt x 243.43579pt>
+File: ../data/00000203.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000203.jpg>
-Package pdftex.def Info: ../data/frames/00000203.jpg used on input line 145.
+<use ../data/00000203.jpg>
+Package pdftex.def Info: ../data/00000203.jpg used on input line 145.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000239.jpg, id=149, 321.2pt x 243.43579pt>
-File: ../data/frames/00000239.jpg Graphic file (type jpg)
+<../data/00000239.jpg, id=159, 321.2pt x 243.43579pt>
+File: ../data/00000239.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000239.jpg>
-Package pdftex.def Info: ../data/frames/00000239.jpg used on input line 146.
+<use ../data/00000239.jpg>
+Package pdftex.def Info: ../data/00000239.jpg used on input line 146.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000213.jpg, id=150, 321.2pt x 243.43579pt>
-File: ../data/frames/00000213.jpg Graphic file (type jpg)
+<../data/00000213.jpg, id=160, 321.2pt x 243.43579pt>
+File: ../data/00000213.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000213.jpg>
-Package pdftex.def Info: ../data/frames/00000213.jpg used on input line 154.
+<use ../data/00000213.jpg>
+Package pdftex.def Info: ../data/00000213.jpg used on input line 154.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000251.jpg, id=151, 321.2pt x 243.43579pt>
-File: ../data/frames/00000251.jpg Graphic file (type jpg)
+<../data/00000251.jpg, id=161, 321.2pt x 243.43579pt>
+File: ../data/00000251.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000251.jpg>
-Package pdftex.def Info: ../data/frames/00000251.jpg used on input line 155.
+<use ../data/00000251.jpg>
+Package pdftex.def Info: ../data/00000251.jpg used on input line 155.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000310.jpg, id=152, 321.2pt x 243.43579pt>
-File: ../data/frames/00000310.jpg Graphic file (type jpg)
+<../data/00000310.jpg, id=162, 321.2pt x 243.43579pt>
+File: ../data/00000310.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000310.jpg>
-Package pdftex.def Info: ../data/frames/00000310.jpg used on input line 156.
+<use ../data/00000310.jpg>
+Package pdftex.def Info: ../data/00000310.jpg used on input line 156.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000013.jpg, id=153, 321.2pt x 243.43579pt>
-File: ../data/frames/00000013.jpg Graphic file (type jpg)
+<../data/00000013.jpg, id=163, 321.2pt x 243.43579pt>
+File: ../data/00000013.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000013.jpg>
-Package pdftex.def Info: ../data/frames/00000013.jpg used on input line 164.
+<use ../data/00000013.jpg>
+Package pdftex.def Info: ../data/00000013.jpg used on input line 164.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000024.jpg, id=154, 321.2pt x 243.43579pt>
-File: ../data/frames/00000024.jpg Graphic file (type jpg)
+<../data/00000024.jpg, id=164, 321.2pt x 243.43579pt>
+File: ../data/00000024.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000024.jpg>
-Package pdftex.def Info: ../data/frames/00000024.jpg used on input line 165.
+<use ../data/00000024.jpg>
+Package pdftex.def Info: ../data/00000024.jpg used on input line 165.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00000041.jpg, id=155, 321.2pt x 243.43579pt>
-File: ../data/frames/00000041.jpg Graphic file (type jpg)
+<../data/00000041.jpg, id=165, 321.2pt x 243.43579pt>
+File: ../data/00000041.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000041.jpg>
-Package pdftex.def Info: ../data/frames/00000041.jpg used on input line 166.
+<use ../data/00000041.jpg>
+Package pdftex.def Info: ../data/00000041.jpg used on input line 166.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00002344.jpg, id=156, 321.2pt x 243.43579pt>
-File: ../data/frames/00002344.jpg Graphic file (type jpg)
+<../data/00002344.jpg, id=166, 321.2pt x 243.43579pt>
+File: ../data/00002344.jpg Graphic file (type jpg)
 
-<use ../data/frames/00002344.jpg>
-Package pdftex.def Info: ../data/frames/00002344.jpg used on input line 174.
+<use ../data/00002344.jpg>
+Package pdftex.def Info: ../data/00002344.jpg used on input line 174.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00002348.jpg, id=157, 321.2pt x 243.43579pt>
-File: ../data/frames/00002348.jpg Graphic file (type jpg)
+<../data/00002348.jpg, id=167, 321.2pt x 243.43579pt>
+File: ../data/00002348.jpg Graphic file (type jpg)
 
-<use ../data/frames/00002348.jpg>
-Package pdftex.def Info: ../data/frames/00002348.jpg used on input line 175.
+<use ../data/00002348.jpg>
+Package pdftex.def Info: ../data/00002348.jpg used on input line 175.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<../data/frames/00002350.jpg, id=158, 321.2pt x 243.43579pt>
-File: ../data/frames/00002350.jpg Graphic file (type jpg)
+<../data/00002350.jpg, id=168, 321.2pt x 243.43579pt>
+File: ../data/00002350.jpg Graphic file (type jpg)
 
-<use ../data/frames/00002350.jpg>
-Package pdftex.def Info: ../data/frames/00002350.jpg used on input line 176.
+<use ../data/00002350.jpg>
+Package pdftex.def Info: ../data/00002350.jpg used on input line 176.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 184--185
@@ -762,62 +761,62 @@ Underfull \hbox (badness 10000) in paragraph at lines 199--201
 
  []
 
-File: ../data/frames/00000089.jpg Graphic file (type jpg)
-<use ../data/frames/00000089.jpg>
-Package pdftex.def Info: ../data/frames/00000089.jpg used on input line 204.
+File: ../data/00000089.jpg Graphic file (type jpg)
+<use ../data/00000089.jpg>
+Package pdftex.def Info: ../data/00000089.jpg used on input line 204.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-File: ../data/frames/00000105.jpg Graphic file (type jpg)
- <use ../data/frames/00000105.jpg>
-Package pdftex.def Info: ../data/frames/00000105.jpg used on input line 205.
+File: ../data/00000105.jpg Graphic file (type jpg)
+ <use ../data/00000105.jpg>
+Package pdftex.def Info: ../data/00000105.jpg used on input line 205.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-File: ../data/frames/00000147.jpg Graphic file (type jpg)
+File: ../data/00000147.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000147.jpg>
-Package pdftex.def Info: ../data/frames/00000147.jpg used on input line 206.
+<use ../data/00000147.jpg>
+Package pdftex.def Info: ../data/00000147.jpg used on input line 206.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-File: ../data/frames/00000165.jpg Graphic file (type jpg)
- <use ../data/frames/00000165.jpg>
-Package pdftex.def Info: ../data/frames/00000165.jpg used on input line 207.
+File: ../data/00000165.jpg Graphic file (type jpg)
+ <use ../data/00000165.jpg>
+Package pdftex.def Info: ../data/00000165.jpg used on input line 207.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-File: ../data/frames/00000288.jpg Graphic file (type jpg)
+File: ../data/00000288.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000288.jpg>
-Package pdftex.def Info: ../data/frames/00000288.jpg used on input line 208.
-(pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
-
-<../data/frames/00000336.jpg, id=161, 321.2pt x 243.43579pt>
-File: ../data/frames/00000336.jpg Graphic file (type jpg)
-
-<use ../data/frames/00000336.jpg>
-Package pdftex.def Info: ../data/frames/00000336.jpg used on input line 216.
+<use ../data/00000288.jpg>
+Package pdftex.def Info: ../data/00000288.jpg used on input line 208.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 
-<../data/frames/00000394.jpg, id=162, 321.2pt x 243.43579pt>
-File: ../data/frames/00000394.jpg Graphic file (type jpg)
+<../data/00000336.jpg, id=171, 321.2pt x 243.43579pt>
+File: ../data/00000336.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000394.jpg>
-Package pdftex.def Info: ../data/frames/00000394.jpg used on input line 217.
+<use ../data/00000336.jpg>
+Package pdftex.def Info: ../data/00000336.jpg used on input line 216.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 
-<../data/frames/00000458.jpg, id=163, 321.2pt x 243.43579pt>
-File: ../data/frames/00000458.jpg Graphic file (type jpg)
+<../data/00000394.jpg, id=172, 321.2pt x 243.43579pt>
+File: ../data/00000394.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000458.jpg>
-Package pdftex.def Info: ../data/frames/00000458.jpg used on input line 218.
+<use ../data/00000394.jpg>
+Package pdftex.def Info: ../data/00000394.jpg used on input line 217.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 
-<../data/frames/00000474.jpg, id=164, 321.2pt x 243.43579pt>
-File: ../data/frames/00000474.jpg Graphic file (type jpg)
+<../data/00000458.jpg, id=173, 321.2pt x 243.43579pt>
+File: ../data/00000458.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000474.jpg>
-Package pdftex.def Info: ../data/frames/00000474.jpg used on input line 219.
+<use ../data/00000458.jpg>
+Package pdftex.def Info: ../data/00000458.jpg used on input line 218.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 
-<../data/frames/00000625.jpg, id=165, 321.2pt x 243.43579pt>
-File: ../data/frames/00000625.jpg Graphic file (type jpg)
+<../data/00000474.jpg, id=174, 321.2pt x 243.43579pt>
+File: ../data/00000474.jpg Graphic file (type jpg)
 
-<use ../data/frames/00000625.jpg>
-Package pdftex.def Info: ../data/frames/00000625.jpg used on input line 220.
+<use ../data/00000474.jpg>
+Package pdftex.def Info: ../data/00000474.jpg used on input line 219.
+(pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
+
+<../data/00000625.jpg, id=175, 321.2pt x 243.43579pt>
+File: ../data/00000625.jpg Graphic file (type jpg)
+
+<use ../data/00000625.jpg>
+Package pdftex.def Info: ../data/00000625.jpg used on input line 220.
 (pdftex.def)             Requested size: 64.23886pt x 48.6863pt.
 pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
 been already used, duplicate ignored
@@ -831,182 +830,220 @@ l.229 \chapter
 <to be read again> 
                    \relax 
 l.229 \chapter
-              {Extraction d'information} [4 <../data/frames/00000089.jpg> <../d
-ata/frames/00000159.jpg> <../data/frames/00000176.jpg> <../data/frames/00000105
-.jpg> <../data/frames/00000106.jpg> <../data/frames/00000107.jpg> <../data/fram
-es/00000147.jpg> <../data/frames/00000148.jpg> <../data/frames/00000149.jpg> <.
-./data/frames/00000165.jpg> <../data/frames/00000166.jpg> <../data/frames/00000
-167.jpg>] [5 <../data/frames/00000288.jpg> <../data/frames/00000289.jpg> <../da
-ta/frames/00000290.jpg> <../data/frames/00000179.jpg> <../data/frames/00000203.
-jpg> <../data/frames/00000239.jpg> <../data/frames/00000213.jpg> <../data/frame
-s/00000251.jpg> <../data/frames/00000310.jpg> <../data/frames/00000013.jpg> <..
-/data/frames/00000024.jpg> <../data/frames/00000041.jpg>] [6 <../data/frames/00
-002344.jpg> <../data/frames/00002348.jpg> <../data/frames/00002350.jpg> <../dat
-a/frames/00000336.jpg> <../data/frames/00000394.jpg> <../data/frames/00000458.j
-pg> <../data/frames/00000474.jpg> <../data/frames/00000625.jpg>]
+              {Extraction d'information} [4 <../data/00000089.jpg> <../data/000
+00159.jpg> <../data/00000176.jpg> <../data/00000105.jpg> <../data/00000106.jpg>
+ <../data/00000107.jpg> <../data/00000147.jpg> <../data/00000148.jpg> <../data/
+00000149.jpg> <../data/00000165.jpg> <../data/00000166.jpg> <../data/00000167.j
+pg>] [5 <../data/00000288.jpg> <../data/00000289.jpg> <../data/00000290.jpg> <.
+./data/00000179.jpg> <../data/00000203.jpg> <../data/00000239.jpg> <../data/000
+00213.jpg> <../data/00000251.jpg> <../data/00000310.jpg> <../data/00000013.jpg>
+ <../data/00000024.jpg> <../data/00000041.jpg>] [6 <../data/00002344.jpg> <../d
+ata/00002348.jpg> <../data/00002350.jpg> <../data/00000336.jpg> <../data/000003
+94.jpg> <../data/00000458.jpg> <../data/00000474.jpg> <../data/00000625.jpg>]
 Chapitre 2.
-<hog.jpg, id=194, 563.85657pt x 217.5628pt>
+<hue.jpg, id=203, 250.9375pt x 200.75pt>
+File: hue.jpg Graphic file (type jpg)
+ <use hue.jpg>
+Package pdftex.def Info: hue.jpg used on input line 236.
+(pdftex.def)             Requested size: 125.46843pt x 100.37474pt.
+
+<hue_histogramme.jpg, id=207, 578.16pt x 431.4519pt>
+File: hue_histogramme.jpg Graphic file (type jpg)
+ <use hue_histogramme.jpg>
+Package pdftex.def Info: hue_histogramme.jpg used on input line 261.
+(pdftex.def)             Requested size: 289.07928pt x 215.72542pt.
+
+<hog.jpg, id=210, 563.85657pt x 217.5628pt>
 File: hog.jpg Graphic file (type jpg)
  <use hog.jpg>
-Package pdftex.def Info: hog.jpg used on input line 242.
+Package pdftex.def Info: hog.jpg used on input line 281.
 (pdftex.def)             Requested size: 281.9276pt x 108.78113pt.
+ [7
 
-<hog_exemple.jpg, id=197, 321.2pt x 243.43579pt>
+]
+<hog_exemple.jpg, id=221, 321.2pt x 243.43579pt>
 File: hog_exemple.jpg Graphic file (type jpg)
  <use hog_exemple.jpg>
-Package pdftex.def Info: hog_exemple.jpg used on input line 255.
+Package pdftex.def Info: hog_exemple.jpg used on input line 294.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple_contour.jpg, id=198, 321.2pt x 243.43579pt>
+<hog_exemple_contour.jpg, id=222, 321.2pt x 243.43579pt>
 File: hog_exemple_contour.jpg Graphic file (type jpg)
 
 <use hog_exemple_contour.jpg>
-Package pdftex.def Info: hog_exemple_contour.jpg used on input line 256.
+Package pdftex.def Info: hog_exemple_contour.jpg used on input line 295.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple_gradient.jpg, id=199, 321.2pt x 243.43579pt>
+<hog_exemple_gradient.jpg, id=223, 321.2pt x 243.43579pt>
 File: hog_exemple_gradient.jpg Graphic file (type jpg)
 
 <use hog_exemple_gradient.jpg>
-Package pdftex.def Info: hog_exemple_gradient.jpg used on input line 257.
+Package pdftex.def Info: hog_exemple_gradient.jpg used on input line 296.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple2.jpg, id=200, 321.2pt x 243.43579pt>
+<hog_exemple2.jpg, id=224, 321.2pt x 243.43579pt>
 File: hog_exemple2.jpg Graphic file (type jpg)
  <use hog_exemple2.jpg>
-Package pdftex.def Info: hog_exemple2.jpg used on input line 258.
+Package pdftex.def Info: hog_exemple2.jpg used on input line 297.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple2_contour.jpg, id=201, 321.2pt x 243.43579pt>
+<hog_exemple2_contour.jpg, id=225, 321.2pt x 243.43579pt>
 File: hog_exemple2_contour.jpg Graphic file (type jpg)
 
 <use hog_exemple2_contour.jpg>
-Package pdftex.def Info: hog_exemple2_contour.jpg used on input line 259.
+Package pdftex.def Info: hog_exemple2_contour.jpg used on input line 298.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-<hog_exemple2_gradient.jpg, id=202, 321.2pt x 243.43579pt>
+<hog_exemple2_gradient.jpg, id=226, 321.2pt x 243.43579pt>
 File: hog_exemple2_gradient.jpg Graphic file (type jpg)
 
 <use hog_exemple2_gradient.jpg>
-Package pdftex.def Info: hog_exemple2_gradient.jpg used on input line 260.
+Package pdftex.def Info: hog_exemple2_gradient.jpg used on input line 299.
 (pdftex.def)             Requested size: 96.36073pt x 73.0313pt.
 
-Overfull \hbox (15.24637pt too wide) in paragraph at lines 266--266
+Overfull \hbox (15.24637pt too wide) in paragraph at lines 305--305
 []\T1/cmr/bx/n/14.4 Reseaux de neu-rones à convo-lu-tion pré-entrainé 
  []
 
 
-Overfull \hbox (11.24634pt too wide) in paragraph at lines 268--278
+Overfull \hbox (11.24634pt too wide) in paragraph at lines 307--317
 \T1/cmr/m/n/10 mil-lins d'images, contient une mul-ti-tude de classes (ani-maux
 ,ustensiles,humains,...)
  []
 
-[7
-
-] [8] [9 <./hog.jpg> <./hog_exemple.jpg> <./hog_exemple_contour.jpg> <./hog_exe
-mple_gradient.jpg> <./hog_exemple2.jpg> <./hog_exemple2_contour.jpg> <./hog_exe
-mple2_gradient.jpg>] [10
-
-]
+[8] [9 <./hue.jpg> <./hue_histogramme.jpg> <./hog.jpg>] [10 <./hog_exemple.jpg>
+ <./hog_exemple_contour.jpg> <./hog_exemple_gradient.jpg> <./hog_exemple2.jpg> 
+<./hog_exemple2_contour.jpg> <./hog_exemple2_gradient.jpg>]
 Chapitre 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 297--297
+Underfull \hbox (badness 10000) in paragraph at lines 331--331
 []\T1/cmr/bx/n/10 score de
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 297--297
+Underfull \hbox (badness 10000) in paragraph at lines 331--331
 []\T1/cmr/bx/n/10 temps de
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 297--298
+Underfull \hbox (badness 10000) in paragraph at lines 331--332
 []\T1/cmr/bx/n/10 temps de
  []
 
 
-Underfull \hbox (badness 4001) in paragraph at lines 323--323
+Underfull \hbox (badness 4001) in paragraph at lines 357--357
 []\T1/cmr/m/n/10 linear SVM - L1 pe-nalty -
  []
 
 
-Overfull \hbox (15.98029pt too wide) in paragraph at lines 295--326
+Overfull \hbox (15.98029pt too wide) in paragraph at lines 329--360
  [] 
  []
 
 
-Overfull \hbox (15.24637pt too wide) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 380--380
+[]\T1/cmr/bx/n/10 score de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 380--380
+[]\T1/cmr/bx/n/10 temps de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 380--381
+[]\T1/cmr/bx/n/10 temps de
+ []
+
+
+Underfull \hbox (badness 4001) in paragraph at lines 406--406
+[]\T1/cmr/m/n/10 linear SVM - L1 pe-nalty -
+ []
+
+
+Overfull \hbox (15.98029pt too wide) in paragraph at lines 378--409
+ [] 
+ []
+
+
+Overfull \hbox (15.24637pt too wide) in paragraph at lines 414--414
 []\T1/cmr/bx/n/14.4 Reseaux de neu-rones à convo-lu-tion pré-entrainé 
  []
 
+[11
 
-Underfull \hbox (badness 10000) in paragraph at lines 342--342
+] [12]
+Underfull \hbox (badness 10000) in paragraph at lines 425--425
 []\T1/cmr/bx/n/10 score de
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 342--342
+Underfull \hbox (badness 10000) in paragraph at lines 425--425
 []\T1/cmr/bx/n/10 temps de
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 342--343
+Underfull \hbox (badness 10000) in paragraph at lines 425--426
 []\T1/cmr/bx/n/10 temps de
  []
 
 
-Underfull \hbox (badness 4001) in paragraph at lines 368--368
+Underfull \hbox (badness 4001) in paragraph at lines 451--451
 []\T1/cmr/m/n/10 linear SVM - L1 pe-nalty -
  []
 
 
-Overfull \hbox (15.98029pt too wide) in paragraph at lines 340--371
+Overfull \hbox (15.98029pt too wide) in paragraph at lines 423--454
  [] 
  []
 
-[11] [12] (./report.lot)
+[13] [14
+
+] (./report.lot)
 \tf@lot=\write5
 \openout5 = `report.lot'.
 
- [13
+ [15
 
-
-] [14
+] [16
 
 ] (./report.lof)
 \tf@lof=\write6
 \openout6 = `report.lof'.
 
- (./report.bbl [15] [16
+ (./report.bbl [17] [18
 
 ]
-Underfull \hbox (badness 1320) in paragraph at lines 39--42
+Underfull \hbox (badness 1320) in paragraph at lines 45--48
 []\T1/cmr/m/n/10 Jason Yo-sinski, Jeff Clune, Yo-shua Ben-gio, and Hod Lip-son.
 
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 385.
- [17]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 385.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 468.
+ [19]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 468.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 385.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 385.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 468.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 468.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 99FD5E73994633E7EB8AE645152C67D3;980.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 385.
+(rerunfilecheck)             Checksum: 127FEE8B0BE24E237634C0633010308E;1133.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 468.
  ) 
 Here is how much of TeX's memory you used:
- 6849 strings out of 494442
- 100808 string characters out of 6165313
- 198414 words of memory out of 5000000
- 9916 multiletter control sequences out of 15000+600000
- 16939 words of font info for 37 fonts, out of 8000000 for 9000
- 350 hyphenation exceptions out of 8191
- 29i,9n,30p,239b,396s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 6881 strings out of 493304
+ 100369 string characters out of 6139872
+ 202703 words of memory out of 5000000
+ 10144 multiletter control sequences out of 15000+600000
+ 17715 words of font info for 38 fonts, out of 8000000 for 9000
+ 957 hyphenation exceptions out of 8191
+ 29i,9n,30p,251b,396s stack positions out of 5000i,500n,10000p,200000b,80000s
 pdfTeX warning (dest): name{cite.DBLP\\penalty\040\\@M\040\040:journals/corr/
 SermanetEZMFL13} has been referenced but does not exist, replaced by a fixed on
 e
+
+pdfTeX warning (dest): name{cite.wiki\\penalty\040\\@M\040\040:hsv} has been re
+ferenced but does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{cite.DBLP\\penalty\040\\@M\040\040:journals/corr/Yo
 sinskiCBL14} has been referenced but does not exist, replaced by a fixed one
@@ -1014,18 +1051,19 @@ sinskiCBL14} has been referenced but does not exist, replaced by a fixed one
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texlive/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf/fonts/type1/publ
-ic/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440
-.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2074.pfb></usr/share/tex
-mf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/publi
-c/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1200.
-pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texm
-f/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public
-/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1000.p
-fb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb>
-Output written on report.pdf (23 pages, 791799 bytes).
+ic/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200
+.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/tex
+mf/fonts/type1/public/cm-super/sfbx2074.pfb></usr/share/texmf/fonts/type1/publi
+c/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1000.
+pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texm
+f/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public
+/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.p
+fb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1000.pfb></usr/share/texmf
+/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on report.pdf (25 pages, 902385 bytes).
 PDF statistics:
- 352 PDF objects out of 1000 (max. 8388607)
- 272 compressed objects within 3 object streams
- 64 named destinations out of 1000 (max. 500000)
- 308 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 398 PDF objects out of 1000 (max. 8388607)
+ 310 compressed objects within 4 object streams
+ 73 named destinations out of 1000 (max. 500000)
+ 334 words of extra memory for PDF output out of 10000 (max. 10000000)
 

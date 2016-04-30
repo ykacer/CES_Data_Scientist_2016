@@ -4,5 +4,6 @@
 \contentsline {table}{\numberline {1.1}{\ignorespaces Table de correspondance classes/intervalle de temps}}{2}{table.1.1}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les descripteurs $HOG$}}{12}{table.3.1}
-\contentsline {table}{\numberline {3.2}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les descripteurs $Overfeat$}}{12}{table.3.2}
+\contentsline {table}{\numberline {3.1}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les moyennes de saturation}}{12}{table.3.1}
+\contentsline {table}{\numberline {3.2}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les descripteurs $HOG$}}{12}{table.3.2}
+\contentsline {table}{\numberline {3.3}{\ignorespaces R\IeC {\'e}sultats de classification supervis\IeC {\'e}e sur les descripteurs $Overfeat$}}{13}{table.3.3}
