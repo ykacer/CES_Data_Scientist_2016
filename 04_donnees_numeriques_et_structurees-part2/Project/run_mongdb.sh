@@ -1,8 +1,6 @@
 #!/bin/bash
 
 
-# connect to localhost mongodb server
-xterm -e "mongod --dbpath data/db" &
 
 # get enernoc data
 if [ ! -d data ]
@@ -20,6 +18,11 @@ then
 		sed -i -e 's/\r/\n/g' $conso_csv
 	done
 fi
+
+# connect to localhost mongodb server
+xterm -e "mongod --dbpath data/db" &
+
+sleep 5
 
 # import site data into mongodb collection 
 if [ ! -d data/db ]
