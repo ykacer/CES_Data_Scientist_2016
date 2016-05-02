@@ -77,7 +77,8 @@ def compute_inertia_centroids(X, labels):
     inertia = 0
     for i,l in enumerate(k_list):
         centroids[i,:] = np.mean(X[labels==l,:],axis=0) 
-        inertia = inertia + np.linalg.norm(X[labels==l,:]-centroids[i,:])
+        inertia = inertia + np.linalg.norm(X[labels!=l,:]-centroids[i,:])
+    inertia = 0.5*np.sum(spatial.distance.cdist(centroids,np.roll(centroids,1,axis=0)))
     return inertia, centroids
 
 

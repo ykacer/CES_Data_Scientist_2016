@@ -6,7 +6,7 @@ n_samples = 300
 np.random.seed(0)
 means = np.array([[0,0],[20,20]])
 #C1 = np.array([[0., -0.7], [3.5, .7]])
-C1 = np.array([[0., -3], [2, -1]])
+C1 = np.array([[-2.0, 2.0], [2, -1.0]])
 C2 = np.array([[1., 0.], [0., 1.]])
 X = np.r_[np.dot(np.random.randn(n_samples, 2), C1) + means[0,:],
         np.dot(np.random.randn(n_samples, 2),C2) + means[1,:]]
