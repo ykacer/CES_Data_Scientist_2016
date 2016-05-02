@@ -137,7 +137,7 @@ keywords : decision tree, CART algorithm, entropy, regression tree, regularizati
 - learning_curve.pyc : compiled module
 
 
-## introduction à l'apprentissage profond
+## Introduction à l'apprentissage profond
 
 #### part 1:
 
@@ -157,3 +157,23 @@ keywords : Regularization and dropout, vanishing gradient and Rectified Linear U
  * cours-svm.pdf (credit to [*Aurelien Bellet*](http://researchers.lille.inria.fr/abellet/))
 
 keywords : margin maximization for linearly separable case, slackness for linearly non-separable case, non-linear case and kernel trick, regression case. 
+
+## Apprentissage non supervisé
+
+#### part 1:
+
+ * clustering-2016.pdf (credit to [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/) and [*Florence d'Alché*](http://perso.telecom-paristech.fr/~fdalche/Site/index.html)) 
+
+keywords : K-means algorithm, Gaussian Mixture Model, Expectation-Maximization algorithm for solving GMM,
+
+ * PCA_NMF.pdf (credit to [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/) and [*Alexey Ozerov*](http://www.irisa.fr/metiss/ozerov/)) 
+
+ * cours_ica.pdf (credit to [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/) and [*Cédric Févotte*](http://www.unice.fr/cfevotte/)) 
+
+ * TP/TP_ML_clustering.pdf : exercises queries
+
+ * TP/TP_clustering_kmeans.py : re-code kmeans algorithm in Python and compare with **scikit-learn** implementation for simple data example
+
+ * TP/TP_clustering_gmm.py : perform mixture gaussian with **scikit-learn** for simple data generation
+
+ * TP/TP_clustering_image.py : perform kmeans segmentation for differents number of clusters.
