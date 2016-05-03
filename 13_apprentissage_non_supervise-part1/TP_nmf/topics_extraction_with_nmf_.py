@@ -21,7 +21,7 @@ categories = ['rec.sport.baseball','comp.graphics', 'comp.sys.mac.hardware',
               'talk.religion.misc']
 
 print "Loading dataset and extracting TF-IDF features..."
-dataset = datasets.fetch_20newsgroups(data_home='d:/data/text/', shuffle=True,
+dataset = datasets.fetch_20newsgroups(data_home='/tmp/', shuffle=True,
                                       categories=categories, random_state=1)
 
 vectorizer = text.CountVectorizer(max_df=0.95, max_features=n_features, stop_words='english')
