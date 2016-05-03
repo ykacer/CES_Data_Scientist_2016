@@ -13,7 +13,7 @@ print "Loading 20 newsgroups dataset for categories:"
 print categories
 
 dataset = fetch_20newsgroups(subset='all', categories=categories,
-                             data_home='../trash',
+                             data_home='/tmp/',
                              shuffle=True, random_state=42)
 
 print "%d documents" % len(dataset.data)
