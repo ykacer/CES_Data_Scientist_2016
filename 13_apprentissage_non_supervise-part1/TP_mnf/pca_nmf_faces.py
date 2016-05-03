@@ -5,7 +5,7 @@
 
 from time import time
 from numpy.random import RandomState
-import pylab as pl
+import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn.datasets import fetch_olivetti_faces
@@ -32,10 +32,10 @@ print "Dataset consists of %d faces" % n_samples
 print "********************************"
 
 def plot_gallery(title, images,n_col,n_row):
-    pl.figure(figsize=(2. * n_col, 2.26 * n_row))
-    pl.suptitle(title, size=16)
+    plt.figure(figsize=(2. * n_col, 2.26 * n_row))
+    plt.suptitle(title, size=16)
     for i, comp in enumerate(images):
-        pl.subplot(n_row, n_col, i + 1)
+        plt.subplot(n_row, n_col, i + 1)
         
         comp = comp.reshape(image_shape)
         vmax = comp.max()
@@ -45,18 +45,18 @@ def plot_gallery(title, images,n_col,n_row):
             yz, xz = dmy            
         comp[comp<0] = 0
 
-        pl.imshow(comp, cmap=pl.cm.gray, vmax=vmax, vmin=vmin)
+        plt.imshow(comp, cmap=plt.cm.gray, vmax=vmax, vmin=vmin)
         #print "vmax: %f, vmin: %f" % (vmax, vmin)
         #print comp
         
         if len(dmy[0])>0:
-            pl.plot( xz, yz, 'r,', hold=True)
+            plt.plot( xz, yz, 'r,', hold=True)
             print len(dmy[0]), "negative-valued pixels"
                   
-        pl.xticks(())
-        pl.yticks(())
+        plt.xticks(())
+        plt.yticks(())
         
-    pl.subplots_adjust(0.01, 0.05, 0.99, 0.93, 0.04, 0.)
+    plt.subplots_adjust(0.01, 0.05, 0.99, 0.93, 0.04, 0.)
     
 # Plot a sample of the input data
 plot_gallery("First centered Olivetti faces", faces_centered[:25],5,5)
@@ -124,14 +124,15 @@ for i,n_components in enumerate(n_components_list):
 	components_ = estimator.components_
 	plot_gallery('%s - Train time %.1fs' % (name, train_time),
 	components_[:n_components],n_components/5,5)
-	# pl.show()
+	# plt.show()
 
-pl.clf()
-pl.title('Scores depending on number of components')
-pl.ylabel('score (%)')
-pl.xlabel('number of components')
-pl.plot(n_components_list,100*scores_pca,'g',label='PCA')
-pl.plot(n_components_list,100*scores_nmf,'b',label='NMF')
-pl.legend()
-pl.savefig('pca_nmf_faces_scores.png')
-#pl.show()
+plt.clf()
+plt.title('Scores depending on number of components')
+plt.ylabel('score (%)')
+plt.xlabel('number of components')
+plt.plot(n_components_list,100*scores_pca,'g',label='PCA')
+plt.plot(n_components_list,100*scores_nmf,'b',label='NMF')
+plt.subplots_adjust(left=0.2,right=0.8)
+plt.legend()
+plt.savefig('pca_nmf_faces_scores.png',format='png')
+#plt.show()
