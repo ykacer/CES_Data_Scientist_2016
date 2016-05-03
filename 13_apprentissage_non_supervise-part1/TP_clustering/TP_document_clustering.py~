@@ -5,7 +5,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import MiniBatchKMeans
 
 # Load some categories from the training set
-categories = ['alt.atheism','comp.graphics']
+#categories = ['alt.atheism','comp.graphics']
+#categories = ['comp.graphics']
+categories = ['alt.atheism']
 
 print "Loading 20 newsgroups dataset for categories:"
 print categories
@@ -20,7 +22,8 @@ print "%d categories" % len(dataset.target_names)
 # Print the content of a message
 print dataset.data[0]
 labels = dataset.target
-true_k = np.unique(labels).shape[0]
+#true_k = np.unique(labels).shape[0]
+true_k=2
 print "Extracting features from the training set using a sparse vectorizer"
 t0 = time()
 vectorizer = TfidfVectorizer(max_df=0.5, max_features=10000,
@@ -31,7 +34,7 @@ print "n_samples: %d, n_features: %d" % X.shape
 
 
 # Do the actual clustering with online K-Means
-km = MiniBatchKMeans(k=true_k, init='k-means++', n_init=1,
+km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1,
                      init_size=1000, batch_size=500, verbose=1)
 
 print "Clustering sparse data with %s" % km
@@ -42,7 +45,6 @@ print "done in %0.3fs" % (time() - t0)
 # Look at terms that are the most present in each class
 feature_names = vectorizer.get_feature_names()
 n_top_words = 10
-
 for k, centroid in enumerate(km.cluster_centers_):
     print "Cluster #%d:" % k
     print " ".join([feature_names[i]
