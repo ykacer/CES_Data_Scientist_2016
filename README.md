@@ -170,10 +170,24 @@ keywords : K-means algorithm, Gaussian Mixture Model, Expectation-Maximization a
 
  * cours_ica.pdf (credit to [*Slim Essid*](http://perso.telecom-paristech.fr/~essid/) and [*Cédric Févotte*](http://www.unice.fr/cfevotte/)) 
 
- * TP/TP_ML_clustering.pdf : exercises queries
+ * TP_clustering/TP_ML_clustering.pdf : exercises queries
 
- * TP/TP_clustering_kmeans.py : re-code kmeans algorithm in Python and compare with **scikit-learn** implementation for simple data example
+ * TP_clustering/TP_clustering_kmeans.py : re-code kmeans algorithm in Python and compare with **scikit-learn** implementation for simple data example
 
- * TP/TP_clustering_gmm.py : perform mixture gaussian with **scikit-learn** for simple data generation
+ * TP_clustering/TP_clustering_gmm.py : perform mixture gaussian with **scikit-learn** for simple data generation
 
- * TP/TP_clustering_image.py : perform kmeans segmentation for differents number of clusters.
+ * TP_clustering/TP_clustering_image.py : perform kmeans segmentation for differents number of clusters on *Grey_scale_optical_illusion.png* image
+
+ * TP_clustering/TP_document_clustering.py : performs Kmeans clustering on the 20 newsgroups text dataset
+
+ * TP_nmf/TP_pca_nmf.pdf : exercises queries
+
+ * TP_nmf/pca_nmf_faces.py : performs pca and mnf on Olivetti faces dataset (credit to *AT&T Laboratories Cambridge*), for different number of reduction components. For
+each number of components, a cross-validation is performed using Linear Discriminant Analysis, resulting scores are plotted as results.
+
+ * TP_nmf/topics_extraction_with_nmf_.py : performs reduction on the 20 newsgroups text dataset to extract topics
+
+ * TP_nmf/ica_audio.py : performs a 2-audio-sources separation using ICA
+
+ * TP_nmf/snd/ : contains sound wav files using for ICA
+
