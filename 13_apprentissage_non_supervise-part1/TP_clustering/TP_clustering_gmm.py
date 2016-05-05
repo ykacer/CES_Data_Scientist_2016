@@ -17,6 +17,10 @@ print X.shape
 clf = mixture.GMM(n_components=2, covariance_type='full',n_iter=1000)
 clf.fit(X)
 labels = clf.predict(X)
+print "bic : "
+print clf.bic(X)
+print "aic : "
+print clf.aic(X)
 
 print "Estimated means : "
 print clf.means_
