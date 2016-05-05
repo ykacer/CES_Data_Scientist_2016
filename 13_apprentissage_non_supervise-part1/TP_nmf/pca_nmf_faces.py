@@ -59,7 +59,7 @@ def plot_gallery(title, images,n_col,n_row):
     plt.subplots_adjust(0.01, 0.05, 0.99, 0.93, 0.04, 0.)
     
 # Plot a sample of the input data
-plot_gallery("First centered Olivetti faces", faces_centered[:25],5,5)
+#plot_gallery("First centered Olivetti faces", faces_centered[:25],5,5)
 
 # -- Decomposition methods -----------------------------------------------------
 labels = dataset.target
@@ -107,6 +107,12 @@ for i,n_components in enumerate(n_components_list):
 		X_test = data[test_index,:]
 		y_test = labels[test_index]
 		X_train_reduced = estimator.fit_transform(X_train) 
+                if shortname == 'pca':
+                    print "----- noise variance : ",estimator.noise_variance_
+                    print "----- percentage of explained variance for each component : ",estimator.explained_variance_ratio_
+                    print "----- percentage total of explained variance : ",np.sum(estimator.explained_variance_ratio_)
+                if shortname == 'nmf':
+                    print "----- error reconstruction : ",estimator.reconstruction_err_
 		X_test_reduced = estimator.transform(X_test) 
 		clf_lda = LinearDiscriminantAnalysis()
 		clf_lda.fit(X_train_reduced,y_train)
@@ -122,8 +128,7 @@ for i,n_components in enumerate(n_components_list):
 	print "--- done in %0.3fs" % train_time
 	 
 	components_ = estimator.components_
-	plot_gallery('%s - Train time %.1fs' % (name, train_time),
-	components_[:n_components],n_components/5,5)
+	#plot_gallery('%s - Train time %.1fs' % (name, train_time),components_[:n_components],n_components/5,5)
 	# plt.show()
 
 plt.clf()

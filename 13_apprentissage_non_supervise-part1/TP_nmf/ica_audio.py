@@ -43,15 +43,19 @@ X = S.dot(A)
 x = np.zeros(2*nsmp)
 x[::2] = X[:,0]
 x[1::2] = X[:,1]
+print S.shape
+print X.shape
+print x.shape
 wavwrite('./snd/mix.wav', x, nchannels=2)
 
 # -- ICA source separation -----------------------------------------------------
-...
+#...
 
 # Visualise sources
-...
+#...
 
 # Write audio sources
-...
+#...
+
 
 
