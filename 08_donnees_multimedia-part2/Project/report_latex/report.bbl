@@ -1,6 +1,11 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
 \begin{thebibliography}{PGBB14}
 
+\bibitem[Bra00]{opencv_library}
+G.~Bradski.
+\newblock {The OpenCV Library}.
+\newblock {\em Dr. Dobb's Journal of Software Tools}, 2000.
+
 \bibitem[DDS{\etalchar{+}}09]{imagenet_cvpr09}
 J.~Deng, W.~Dong, R.~Socher, L.-J. Li, K.~Li, and L.~Fei-Fei.
 \newblock {ImageNet: A Large-Scale Hierarchical Image Database}.

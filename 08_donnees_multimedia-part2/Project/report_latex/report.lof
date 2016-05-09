@@ -13,8 +13,12 @@
 \contentsline {figure}{\numberline {1.10}{\ignorespaces image de classe $G$ (gros plan)}}{6}{figure.1.10}
 \contentsline {figure}{\numberline {1.11}{\ignorespaces image de classe $L$ (large plan)}}{6}{figure.1.11}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Illustration $HSV$ \cite {wiki:hsv}}}{9}{figure.2.1}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Histogramme des moyennes de saturation}}{9}{figure.2.2}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Construction d'un histogramme orient\IeC {\'e} du gradient \cite {hog2}}}{9}{figure.2.3}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Histogramme orient\IeC {\'e} du gradient pour les gros plans (classe $G$)}}{10}{figure.2.4}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Illustration $HSV$ \cite {wiki:hsv}}}{10}{figure.2.1}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Histogramme des moyennes de saturation}}{10}{figure.2.2}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Construction d'un histogramme orient\IeC {\'e} du gradient \cite {hog2}}}{10}{figure.2.3}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Histogramme orient\IeC {\'e} du gradient pour les gros plans (classe $G$)}}{11}{figure.2.4}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Contouring sur des images de classe $G$ avec l'option CHAIN\_APPRO\_NONE}}{16}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Contouring sur des images de classe $L$ avec l'option CHAIN\_APPRO\_NONE}}{16}{figure.3.2}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Contouring sur des images de classe $G$ avec l'option CHAIN\_APPRO\_SIMPLE}}{17}{figure.3.3}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Contouring sur des images de classe $L$ avec l'option CHAIN\_APPRO\_SIMPLE}}{17}{figure.3.4}
