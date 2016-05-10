@@ -230,7 +230,7 @@ Par la suite, nous allons expliciter différentes manières d'extraire de l'info
 \section{Extraction de contours}
 
 Cette méthode consiste à déterminer le nombre de contours détecté par des algorithmes de traitement
-d'image contenu dans OpenCV, et d'en déduire si l'image est un \og gros plan \fg{} ou un \og large plan \fg{}.\\
+d'image contenu dans \begin{itshape}OpenCV\end{itshape}\cite{opencv_library}, et d'en déduire si l'image est un \og gros plan \fg{} ou un \og large plan \fg{}.\\
 Nous effectuons 2 passes sur chaque image avec des paramétrages d'algorithmes différents afin de
 produire 2 variables par image.\\
 Dans chaque passe nous ajoutons un flou Gaussien à l'image afin d'atténuer les petits détails comme les
@@ -241,10 +241,10 @@ Et enfin, on execute la fonction ($\mathrm{cv::findContours}$) avec une option d
 La première passe extrait les contours avec l'option \begin{itshape}CHAIN\_APPRO\_NONE\end{itshape}. 
 La seconde passe extrait les contours avec l'option \begin{itshape}CHAIN\_APPROX\_SIMPLE\end{itshape}. 
 
-Les 2 informations du nombre de contours sont stockées ensuite dans un DataFrame pour pouvoir
-connaitre le meilleur classifieur qui va ''apprendre``; comment déterminer si une image est un gros plan ou un
-plan large.
-\section{Extraction de teinte}
+Les 2 informations du nombre de contours sont stockées ensuite dans un DataFrame comme descripteur
+destiné à être classifié de manière supervisée.
+
+\section{Extraction de saturation}
 \subsection{Définition}
 Hue, Saturation, Value ou HSV est un modèle qui représente la couleur (H) en fonction de la saturation (S) en gris et la luminosité (V) (Cf. figure \ref{HSV}).
 \begin{figure}[H]
@@ -271,6 +271,7 @@ qui varie entre le noir et le blanc.
 Nous sommes partis de l’hypothèse que les images en \og gros plan \fg{} sont plutôt gris et donc une saturation en couleur plus faible que les images en \og large plan \fg{}.\\
 La réalisation d’un histogramme sur la moyenne de saturation (Cf. Figure \ref{hue_histo}), portant sur la totalité des images, nous a permis d’identifier deux classes de type Gaussien pour modéliser nos 2 classes
 qui sont les images de type \og gros plan \fg{} et les images de type \og large plan \fg{}\\
+Nous présentons le code Python d'extraction de saturation et sa classification en annnexe.
 \label{hue_frontiere}
 \begin{figure}[H]
 \begin{center}
@@ -326,7 +327,7 @@ avant la couche de classification.
 Cette technique est connue sous le nom de \begin{itshape}Transfer Learning\end{itshape} \cite{DBLP:journals/corr/YosinskiCBL14} 
 et a fait ses preuves dans le cas de réseaux de neurones entrainé sur la base 
 d'images \begin{itshape}ImageNet\end{itshape} \cite{imagenet_cvpr09}.
-Cette base de près de 10 millins d'images, contient une multitude de classes (animaux,ustensiles,humains,...) organisées hiérarchiquement, 
+Cette base de près de 10 millions d'images, contient une multitude de classes (animaux,ustensiles,humains,...) organisées hiérarchiquement, 
 et on peut espérer que les gros plans (classe $G$) correspondent à l'une de ces classes,et de même pour les images plan 
 large (classe $L$), de telle sorte qu'on puisse ensuite séparer les descripteurs via un classifieur 
 supervisé.
@@ -334,51 +335,66 @@ supervisé.
 \chapter{Résultats}
 \section{Extraction de contours}
 Pour expliquer le résultat de l’extraction de contours, voici quelques exemples d'images où les contours ont été tracés avec 
-la fonction ($\mathrm{cv::drawContours}$).\\
+la fonction $\mathrm{cv::drawContours}$.
 
 La figure \ref{contouringG1} montrent deux exemples de contouring sur des images \og gros plan \fg{} (classe $G$), appliqué
-avec l'option CHAIN\_APPRO\_NONE\\
+avec l'option \begin{itshape}CHAIN\_APPRO\_NONE\end{itshape} (première passe)
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.5]{contouring_exemple1_classeG_passe1.png}
 \includegraphics[scale=0.5]{contouring_exemple2_classeG_passe1.png}
 \end{center}
-\caption{contouring sur des images de classe $G$ avec l'option CHAIN\_APPRO\_NONE}
+\caption{Contouring sur des images de classe $G$ avec l'option CHAIN\_APPRO\_NONE}
 \label{contouringG1}
 \end{figure}
 
 La figure \ref{contouringL1} montrent deux exemples de contouring sur des images \og large plan \fg{} (classe $L$), appliqué
-avec l'option CHAIN\_APPRO\_NONE\\
+avec l'option \begin{itshape}CHAIN\_APPRO\_NONE\end{itshape} (première passe)
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.5]{contouring_exemple1_classeL_passe1.png}
 \includegraphics[scale=0.5]{contouring_exemple2_classeL_passe1.png}
 \end{center}
-\caption{contouring sur des images de classe $L$ avec l'option CHAIN\_APPRO\_NONE}
+\caption{Contouring sur des images de classe $L$ avec l'option CHAIN\_APPRO\_NONE}
 \label{contouringL1}
 \end{figure}
 
-La figure \ref{contouringG2} montrent deux exemples de contouring sur des images \og gros plan \fg{} (classe $G$).\\
+Il y a plus de contours dans les images \og large plan \fg{} car le décor du plateau TV est composé de beaucoup de détails.
+Cela permet de bien différencier les gros plans des plans larges mais pour quelques cas le nombre de 
+contours ne suffit pas.\\
+Pour remédier à cela, nous avons mis en place la seconde passe et dont voici les résultats pour les mêmes 
+images : 
+
+La figure \ref{contouringG2} montre deux exemples de contouring sur des images \og gros plan \fg{} (classe $G$), appliqué
+avec l'option \begin{itshape}CHAIN\_APPRO\_SIMPLE\end{itshape} (seconde passe).
+
+La figure \ref{contouringL2} montre deux 
+exemples de contouring sur des images \og large plan \fg{} (classe $L$), appliqué avec 
+l'option \begin{itshape}CHAIN\_APPRO\_SIMPLE\end{itshape}\\
+
+
+Le nombre de contours à beaucoup augmenté par rapport à la première passe, ce qui va permettre de différencier encore mieux 
+les types de plans : en effet, on note ici un très grand nombre de contours dans le décor et sur les personnages, ce qui nous permet de 
+mieux discriminer les plans larges.
+Le bandeau du bas est plus détaillé en termes de contours que pour la première passe.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.5]{contouring_exemple1_classeG_passe2.png}
 \includegraphics[scale=0.5]{contouring_exemple2_classeG_passe2.png}
 \end{center}
-\caption{contouring sur des images de classe $G$ avec l'option CHAIN\_APPRO\_SIMPLE}
+\caption{Contouring sur des images de classe $G$ avec l'option CHAIN\_APPRO\_SIMPLE}
 \label{contouringG2}
 \end{figure}
-
-La figure \ref{contouringL2} montrent deux exemples de contouring sur des images \og large plan \fg{} (classe $L$).\\
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.5]{contouring_exemple1_classeL_passe2.png}
 \includegraphics[scale=0.5]{contouring_exemple2_classeL_passe2.png}
 \end{center}
-\caption{contouring sur des images de classe $L$ avec l'option CHAIN\_APPRO\_SIMPLE}
+\caption{Contouring sur des images de classe $L$ avec l'option CHAIN\_APPRO\_SIMPLE}
 \label{contouringL2}
 \end{figure}
 
@@ -525,6 +541,97 @@ linear SVM - L1 penalty - dual=False & 1.0 & 1.150 & 0.011\\
 \caption{Résultats de classification supervisée sur les descripteurs $Overfeat$}
 \label{Table_resultats_overfeat}
 \end{table}
+\clearpage
+
+\appendix
+\chapter{Code Python pour l'extraction de saturation et sa classification}
+\begin{verbatim}
+import numpy as np
+import cv2
+import os
+import matplotlib.pyplot as plt
+import shutil
+import pandas as pd
+
+saturation = []
+path='c:/tmp/images_debat/'
+dirs = os.listdir(path)
+file_valid='c:/tmp/labels.csv'
+# This would print all the files and directories
+for file in dirs:
+    if file.endswith((".jpg")):
+        colorImage = cv2.imread(path+file)
+        #print ('Traitement du fichier : ',path+file)
+        rows, cols, nbChannels = colorImage.shape
+
+        b,g,r = cv2.split(colorImage)
+        colorImage=cv2.merge([r,g,b])
+        color = ('b','g','r')
+        clorImageHSV=cv2.cvtColor(colorImage, cv2.COLOR_BGR2HSV)
+        h,s,v=cv2.split(clorImageHSV)
+        sm=np.mean(s)
+        saturation.append(sm)
+        #if file == '00000108.jpg' or file == '00000110.jpg' or file == '00000147.jpg':
+            #print ('saturation pour le fichier 108 - 110 -147:')
+            #print sm
+
+globalMean = np.mean(saturation)
+print ('Moyenne globale:')
+print globalMean
+#print saturation
+plt.hist(saturation, range = (35, 85), bins = 30, color = 'yellow',
+            edgecolor = 'red')
+plt.xlabel('Moyenne de la saturation')
+plt.ylabel('nombre images')
+plt.title('Histogramme saturation')
+#hist=np.histogram(saturation)
+#plt.bar(hist)
+plt.show()
+copyPathGrosPlan='c:/tmp/GrosPlan/'
+copyPathLargePlan='c:/tmp/LargePlan/'
+classif=pd.DataFrame(columns=('file_name', 'label'))
+classif_multi=pd.DataFrame(columns=('file_name', 'sm'))
+line = 0;
+for file1 in dirs:
+    if file1.endswith((".jpg")):
+        colorImage = cv2.imread(path+file1)
+        rows, cols, nbChannels = colorImage.shape
+
+        r,g,b = cv2.split(colorImage)
+        colorImage=cv2.merge([r,g,b])
+        color = ('b','g','r')
+        clorImageHSV=cv2.cvtColor(colorImage, cv2.COLOR_BGR2HSV)
+        h,s,v=cv2.split(clorImageHSV)
+        sm=np.mean(s)
+        classif_multi.loc[line]=(file1,sm)
+        #Gros plan
+        if  sm <= (globalMean):
+             classif.loc[line]=(file1,-1.)            
+        #Large plan
+        else:
+            classif.loc[line]=(file1,1.)            
+        
+        line = line+1
+
+classif.sort_values(['file_name'])
+#print classif            
+#Open the labelled file
+labelfile = open(file_valid)
+label_img = pd.read_csv(labelfile,sep=';', names=['file_name', 'label'],header=0,dtype={'label': float})
+label_img.sort_values(['file_name'])
+#print label_img
+
+correct_predict = pd.merge(classif, label_img, on=['file_name', 'label'], how='inner')
+#print len(correct_predict)
+#print len(label_img)
+print ('Resultat :', (float(len(correct_predict))/float(len(label_img)))*100.)
+#print classif_multi
+#print label_img
+label_img_mrg = pd.merge(classif_multi, label_img, on=['file_name'], how='inner')
+label_img_mrg = label_img_mrg.drop('file_name', 1)
+#print label_img_mrg
+label_img_mrg.to_csv('C:\perso\TP\Son-Image\classif_multi.csv', sep=';', encoding='utf-8')
+\end{verbatim}
 
 \backmatter
 
