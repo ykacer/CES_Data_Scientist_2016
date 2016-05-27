@@ -191,3 +191,49 @@ each number of components, a cross-validation is performed using Linear Discrimi
 
  * TP_nmf/snd/ : contains sound wav files using for ICA
 
+## Réseaux bayesiens et Chaines de Markov
+
+#### part 1
+ * BN-CES-2016.pdf : (Credit to [*Pierre-Henri Wuillemin*](http://www-desir.lip6.fr/~phw/)) 
+
+keywords : graphical model, D-separation, inference, model selection, supervised learning, **Agrum** libray for Bayesian Netwotk simulation
+
+ * TP/01-Probabilités.ipynb
+
+ * TP/02-CPTdeterministe.ipynb
+
+ * TP/03-Modélisation1.ipynb
+
+ * TP/04-Modélisation2.ipynb
+
+ * TP/05-Modélisation3.ipynb
+
+ * TP/06-ModelSelection.ipynb
+
+ * TP/07-ClassificationSupervise.ipynb
+
+ * TP/08-dynamicBN.ipynb
+
+ * TP/fra_l1_app.csv
+
+ * TP/fra_l1_test.csv
+
+ * TP/livretA_10000.csv
+
+#### part 2
+ * HMM_ces_2016_distri.pptx.pdf : (Credit to [*Laurence Likforman-Sulem*](http://perso.telecom-paristech.fr/~lauli/))
+
+keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carlo generation, observation likelihood (Viterbi, Forward-Backward algorithms), prediction, learning (Baum-Welch algorithm)
+
+ * TP/texte_TP_chaines_2016.pdf : exercises with Python using Markov Model for texts and using Hidden Markov Model for images
+
+ * TP/HMM_text.ipynb : ipython notebook dealing with Markov-Model-Monte-Carlo simultation for font, word and phrase generation
+
+ * TP/bigramenglish.txt : Markov Model for english font
+
+ * TP/bigramfrench.txt : Markov Model for french font
+
+ * TP/dictionnaire.txt : dictionary for correspondance between fonts and Markov Model matrix
+
+ * TP/data_txt_compact : data for Hidden Markov Model with images
+
