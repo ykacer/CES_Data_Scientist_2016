@@ -255,7 +255,7 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
 
  * TP/tp.pdf : some queries to create a search engine for local mini wikipedia using HBase (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
 
- * TP/wiki_crawler.py : crawl localhost simple wikipedia using **scrapy** library and **happyBase*, to create an HBase table
+ * TP/wiki_crawler.py : crawl localhost simple wikipedia using **scrapy** and **happyBase** python libraries, to create an HBase table
 
  * TP/wiki_indexation.py : create an Hbase table containing inverted index from previous wikipedia crawling
 
