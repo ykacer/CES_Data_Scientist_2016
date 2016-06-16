@@ -88,7 +88,7 @@ Some introductive papers to Machine Learning.
 - ie_types.py : python script to extract the type of each article
 - ie_types_evaluation.txt : containing the first 20 types found and the manually measured precision on the first 20 types found.
 
-## Donnees multimedia
+### Donnees multimedia
 
 #### part 1 :
 
@@ -111,7 +111,7 @@ Some introductive papers to Machine Learning.
  * Project/
 - run.sh: download a mp4 video 06-11-22.mp4 of a debate from swiss TV, and a related annotation file 06-11-22.trs. Then, the video is cut into jpeg images, each frame is labelled using annotation file, see labels.csv created (take time...xmlstarlet is needed)
  
-## Apprentissage supervisé
+### Apprentissage supervisé
 
 #### part 1:
 
@@ -137,7 +137,7 @@ keywords : decision tree, CART algorithm, entropy, regression tree, regularizati
 - learning_curve.pyc : compiled module
 
 
-## Introduction à l'apprentissage profond
+### Introduction à l'apprentissage profond
 
 #### part 1:
 
@@ -158,7 +158,7 @@ keywords : Regularization and dropout, vanishing gradient and Rectified Linear U
 
 keywords : margin maximization for linearly separable case, slackness for linearly non-separable case, non-linear case and kernel trick, regression case. 
 
-## Apprentissage non supervisé
+### Apprentissage non supervisé
 
 #### part 1:
 
@@ -191,7 +191,7 @@ each number of components, a cross-validation is performed using Linear Discrimi
 
  * TP_nmf/snd/ : contains sound wav files using for ICA
 
-## Réseaux bayesiens et Chaines de Markov
+### Réseaux bayesiens et Chaines de Markov
 
 #### part 1
  * BN-CES-2016.pdf : (Credit to [*Pierre-Henri Wuillemin*](http://www-desir.lip6.fr/~phw/)) 
@@ -236,4 +236,26 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
  * TP/dictionnaire.txt : dictionary for correspondance between fonts and Markov Model matrix
 
  * TP/data_txt_compact : data for Hidden Markov Model with images
+
+### Stockage distribué
+
+#### part 1
+
+ * distributed_storage.pdf : (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * gfs.pdf : (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * inverted_index.pdf : (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * slides.pdf : (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+#### part 2
+
+ * search.pdf : (Credit to *Quentin Lobbé*)
+ 
+ * TP/wiki_crawler.py : crawl localhost simple wikipedia using **scrapy** library and **happyBase*, to create an HBASE table
+
+ * TP/wiki_indexation.py : create an HBASE table containing inverted index from previous wikipedia crawling
+
+ * TP/wiki_request.py : perform a search engine using  previous inverted index
 
