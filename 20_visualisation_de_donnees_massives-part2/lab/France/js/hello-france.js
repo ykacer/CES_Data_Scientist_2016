@@ -2,6 +2,8 @@ var w = 600;
 var h = 600;
 var dataset = []
 var svg = d3.select("body").append("svg").attr("width",w).attr("height",h);
+var p = d3.select("body").append("p").style("position","absolute");
+var c = d3.hsl(0,0,0);
 
 d3.tsv("data/france.tsv").row(function (d,i) {
 	return {
@@ -20,37 +22,48 @@ d3.tsv("data/france.tsv").row(function (d,i) {
 		console.log("Last row : ", rows[rows.length-1])
 		console.log("42nd row : ", rows[42])
 	}
+
 	x = d3.scale.linear().domain(d3.extent(rows, function(row) { return row.longitude; })).range([0, w]);
+	
 	y = d3.scale.linear().domain(d3.extent(rows, function(row) { return row.latitude; })).range([h, 0]);
+	
+	dens = d3.scale.linear().domain(d3.extent(rows, function(row) { return row.densite; })).range([0, 1]);
+	
+	popu = d3.scale.linear().domain(d3.extent(rows, function(row) { return row.population; })).range([0, 1]);
+
 	dataset = rows;
+	
 	draw();
 });
 
-
-
 function draw() {
-	svg.selectAll("rect")
+	//svg.selectAll("rect")
+	//	.data(dataset)
+	//	.enter()
+	//	.append("rect")
+	//	.attr("width",function(d) {return 50*popu(d.population)})
+	//	.attr("height",function(d) {return 50*popu(d.population)})
+	//	.attr("x",function(d) { return x(d.longitude) })
+	//	.attr("y",function(d) { return y(d.latitude) })
+	//	.attr("fill",function(d) { return  d3.hsl(60*dens(d.densite),100,0.5).toString() })
+	//	.on("mouseover",handleMouseOver)
+	//	.on("mouseout",handleMouseOut);
+	svg.selectAll("circle")
 		.data(dataset)
 		.enter()
-		.append("rect")
-		.attr("width",1)
-		.attr("height",1)
-		.attr("x",function(d) { return x(d.longitude) })
-		.attr("y",function(d) { return y(d.latitude) })
+		.append("circle")
+		.attr("cx", function(d) { return x(d.longitude)})
+		.attr("cy", function(d) { return y(d.latitude) })
+		.attr("r" , function(d) { return 50*popu(d.population)})
+		.style("stroke",function(d) { return  d3.hsl(60+180*dens(d.densite),100,0.5).toString() })
+		.style("fill", "none")
 		.on("mouseover",handleMouseOver)
 		.on("mouseout",handleMouseOut);
 }
 
-function handleMouseOver(d,i) {	
-	d3.select(this).attr({});
-	svg.append("text").attr({
-		id: "t"+"-"+i,
-		x : function() { return x(d.longitude); },
-		y : function() { return y(d.latitude); }
-		})
-	.text(function() {
-		return d.place ;
-	})
+function handleMouseOver(d) {	
+	p.style("top", d3.select(this).attr("y")).style("left",d3.select(this).attr("x"));
+	p.text("commune : "+d.place).append("p").text("population : "+d.population).append("p").text("densité : "+d.densite)
 }
 
 function handleMouseOut(d, i) {
