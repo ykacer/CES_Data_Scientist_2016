@@ -263,3 +263,38 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
 
  * stop_words.txt : a list of english stop words used to remove unrelevant words.
 
+### Calcul distribué
+
+#### part 1
+
+ * distrcomp.pdf : (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+Distributed computing, software architecture, time response models.
+
+ * sldistcomp.pdf : (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+map, shuffle and reduce functions. MapReduce cluster, MapReduce interfaces (Java, Pig Latin), MapReduce limitations, other paradigms (Hive, Storm, Spark, Giraph)
+
+ * example_mapreduce/WordCount.py : python script implementing map and reduce functions for couting word
+
+ * example_mapreduce/WordCountDriver.py : python script that run map/reduce on text file using **hadoopy** 
+
+ * example_spark/spark.py : python script that counts words using **pyspark**
+
+ * TP/tp.pdf : Exercises queries that implements inverted index on mini wikipedia using **Spark**
+
+ * TP/bashrc : export some environment paths to use Spark 
+
+### part 2
+
+ * spark.pdf 
+
+ * storm.pdf
+
+ * giraph.pdf
+
+ * SAMOA-CES.pdf
+
+ * BigData-DataScience.pdf
+
+
