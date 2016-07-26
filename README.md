@@ -263,38 +263,70 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
 
  * stop_words.txt : a list of english stop words used to remove unrelevant words.
 
+### Data Visualisation
+
+#### part 1
+
+ * 1—Intro.pdf : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+ * 2—Data, Marks, Implantations.pdf : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+ * 3—Tasks & Interaction.pdf : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+ * 4—Perception.pdf : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+ * 7—Tufte's Principles.pdf part 1 : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+#### part 2
+
+ * lab/France/data/france.tsv : file containing population information for different french regions
+
+ * lab/France/js/hello-france.js : javascript to call D3 functions for french population visualization
+
+ * lab/France/js/D3 : **D3** library for visualisation
+
+ * lab/France/index.html : html file including hello-france.js file for visualization
+ 
+ * lab/France/README.txt : information on which and how french population characteristics are visualized
+
 ### Calcul distribué
 
 #### part 1
 
- * distrcomp.pdf : (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
-
-Distributed computing, software architecture, time response models.
-
- * sldistcomp.pdf : (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
-
-map, shuffle and reduce functions. MapReduce cluster, MapReduce interfaces (Java, Pig Latin), MapReduce limitations, other paradigms (Hive, Storm, Spark, Giraph)
-
  * example_mapreduce/WordCount.py : python script implementing map and reduce functions for couting word
 
- * example_mapreduce/WordCountDriver.py : python script that run map/reduce on text file using **hadoopy** 
+ * example_mapreduce/WordCountDriver.py : put Alice.txt (Alice in Wonderlands book) in HDFS system, run hadoopy mapreduce using **hadoopy** and map/reduce classes defined into WordCount.py, in order to count words ocurrences (results is recorded on HDFS)
 
- * example_spark/spark.py : python script that counts words using **pyspark**
+ * example_mapreduce/WordCount.py : python implementation of map and reduce classes
 
- * TP/tp.pdf : Exercises queries that implements inverted index on mini wikipedia using **Spark**
+ * example_spark/spark.py : count Alice.txt word occurences using **pysark** (Map and reduceByKey methods on RDD)
 
- * TP/bashrc : export some environment paths to use Spark 
+ * alice.txt : txt fiel containing full text for "Alice in Wonderlands"
 
-### part 2
+ * TP/tp.pdf : queries for use of MapReduce and Spark on simple wiki hbase table, to create an inverted index
 
- * spark.pdf 
+ * TP/bashrc : linux config files that export some necessary hadoop jar
 
- * storm.pdf
+ * TP/TP_MapReduce/1_wikiFromHBaseToHdfs.py : file that tranforms simple wiki hbase table (see TP/wiki_crawler.py in "Stockage Distribué" module) into HDFS file using **hadoopy**
 
- * giraph.pdf
+ * TP/TP_MapReduce/2_wikiIndexMapReduce.py : file that runs hadoop MapReduce using **hadoopy** in order to create an index using HDFS file created just above. Store this index into HDFS
 
- * SAMOA-CES.pdf
+ * TP/TP_MapReduce/3_wikiIndexMapReduceToHBase.py  : file that puts index HDFS file into an hbase table using **hadoopy**
 
- * BigData-DataScience.pdf
+ * TP/TP_MapReduce/WordCount.py : file that implements map/reduce classes used to compute index
 
+ * TP/TP_spark/1_wikiFromHBaseToHdfs.py : file that tranforms simple wiki hbase table (see TP/wiki_crawler.py in "Stockage Distribué" module) into HDFS file using **hadoopy**
 
+ * TP/TP_spark/2_spark.py : file that uses **pyspark** to perform map/reduce to create index. Then put created index into HDFS.
+
+#### part 2
+
+ * BigData-DataScience.pdf : presentation of some Big Data frameworks (Credit to [*Albert Bifet*](http://albertbifet.com/))
+
+ * giraph.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * SAMOA-CES.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * spark.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * storm.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
