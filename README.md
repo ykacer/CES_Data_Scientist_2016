@@ -263,3 +263,28 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
 
  * stop_words.txt : a list of english stop words used to remove unrelevant words.
 
+### Data Visualisation
+
+#### part 1
+
+ * 1—Intro.pdf : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+ * 2—Data, Marks, Implantations.pdf : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+ * 3—Tasks & Interaction.pdf : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+ * 4—Perception.pdf : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+ * 7—Tufte's Principles.pdf part 1 : (Credit to [*James Eagan*](http://perso.telecom-paristech.fr/~eagan/index-en))
+
+#### part 2
+
+ * lab/France/data/france.tsv : file containing population information for different french regions
+
+ * lab/France/js/hello-france.js : javascript to call D3 functions for french population visualization
+
+ * lab/France/js/D3 : **D3** library for visualisation
+
+ * lab/France/index.html : html file including hello-france.js file for visualization
+ 
+ * lab/France/README.txt : information on which and how french population characteristics are visualized
