@@ -288,3 +288,47 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
  * lab/France/index.html : html file including hello-france.js file for visualization
  
  * lab/France/README.txt : information on which and how french population characteristics are visualized
+
+### Calcul distribué
+
+#### part 1
+
+ * distrcomp.pdf/sldistcomp.pdf : basics on distributed computing (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * example_mapreduce/WordCountDriver.py : put Alice.txt (Alice in Wonderlands book) in HDFS system, run hadoopy mapreduce using **hadoopy** and map/reduce classes defined into WordCount.py, in order to count words ocurrences (results is recorded on HDFS)
+
+ * example_mapreduce/WordCount.py : python implementation of map and reduce classes
+
+ * example_spark/spark.py : count Alice.txt word occurences using **pysark** (Map and reduceByKey methods on RDD)
+
+ * alice.txt : txt fiel containing full text for "Alice in Wonderlands"
+
+ * TP/tp.pdf : queries for use of MapReduce and Spark on simple wiki hbase table, to create an inverted index
+
+ * TP/bashrc : linux config files that export some necessary hadoop jar
+
+ * TP/TP_MapReduce/1_wikiFromHBaseToHdfs.py : file that tranforms simple wiki hbase table (see TP/wiki_crawler.py in "Stockage Distribué" module) into HDFS file using **hadoopy**
+
+ * TP/TP_MapReduce/2_wikiIndexMapReduce.py : file that runs hadoop MapReduce using **hadoopy** in order to create an index using HDFS file created just above. Store this index into HDFS
+
+ * TP/TP_MapReduce/3_wikiIndexMapReduceToHBase.py  : file that puts index HDFS file into an hbase table using **hadoopy**
+
+ * TP/TP_MapReduce/WordCount.py : file that implements map/reduce classes used to compute index
+
+ * TP/TP_spark/1_wikiFromHBaseToHdfs.py : file that tranforms simple wiki hbase table (see TP/wiki_crawler.py in "Stockage Distribué" module) into HDFS file using **hadoopy**
+
+ * TP/TP_spark/2_spark.py : file that uses **pyspark** to perform map/reduce to create index. Then put created index into HDFS.
+
+#### part 2
+
+ * BigData-DataScience.pdf : presentation of some Big Data frameworks (Credit to [*Albert Bifet*](http://albertbifet.com/))
+
+ * giraph.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * SAMOA-CES.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * spark.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+ * storm.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+
