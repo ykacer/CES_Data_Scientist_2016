@@ -4,23 +4,23 @@ import sys
 import happybase
 import numpy as np
 
-hdfs_path = 'wiki.seq.tb'
-local_path = 'wiki.seq.tb.local'
+hdfs_path = 'simplewikiFromHbase'
+local_path = 'simlewikiFromHbaseLocal'
 if hadoopy.exists(hdfs_path):
     hadoopy.rmr("-skipTrash %s"%hdfs_path)
 
-connection = happybase.Connection('localhost')
+connection = happybase.Connection('localhost','9090')
 
-if 'wiki' not in connection.tables():
-    sys.exit("Error : no wiki table found")
+if 'simplewiki' not in connection.tables():
+    sys.exit("Error : no simplewiki table found")
 else:
-    print "OK : wiki table found"
-    table_wiki = connection.table('wiki')
+    print "OK : simplewiki table found"
+    table_wiki = connection.table('simplewiki')
 
 NdocsMax = 30000
 def read_hbase(table_hbase):
     for key,data in table_hbase.scan(limit=NdocsMax):
-        yield key.decode('utf-8'),data['cf:body'].decode('utf-8')
+        yield key.decode('utf-8'),data['wiki:text'].decode('utf-8')
 
 #def read_local_dir(local_path):
 #    for fn in os.listdir(local_path):
@@ -34,7 +34,7 @@ def main():
     if os.path.isfile(local_path):
         print "deleting "+local_path
         os.remove(local_path)
-    os.system('hadoop fs -copyToLocal wiki.seq.tb '+local_path)
+    os.system('hadoop fs -copyToLocal '+hdfs_path+' '+local_path)
 
 if __name__ == '__main__':
     main()
