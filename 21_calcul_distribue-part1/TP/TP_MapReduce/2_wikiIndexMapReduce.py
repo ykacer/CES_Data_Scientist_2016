@@ -4,8 +4,8 @@ import sys
 import happybase
 import numpy as np
 
-hdfs_path = 'wiki.seq.tb'
-hdfs_output = 'indexWikiFromMapReduce.seq.tb'
+hdfs_path = 'simplewikiFromHbase'
+hdfs_output = 'indexwikiFromMapReduce'
 
 def main():
     if hadoopy.exists(hdfs_output):
