@@ -7,10 +7,10 @@ import numpy as np
 import hadoopy
 
 #input_path="hdfs://localhost:9000/alice.txt"
-input_hdfs_path="hdfs://localhost:9000/user/user/wiki.seq.tb"
-output_hdfs_path='hdfs://localhost:9000/user/user/indewWikiFromSpark.seq.tb'
+input_hdfs_path="hdfs://localhost:9000/user/user/simplewikiFromHbase"
+output_hdfs_path='hdfs://localhost:9000/user/user/indewWikiFromSpark'
 
-words_stop = [line.rstrip('\n') for line in open('stop_words.txt')]
+words_stop = [line.rstrip('\n') for line in open('../stop_words.txt')]
 words_stop.append('')
 
 sc=SparkContext()
