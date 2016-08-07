@@ -7,18 +7,18 @@ from stemming.porter2 import stem
 import numpy as np
 import happybase
 
-words_stop = [line.rstrip('\n') for line in open('stop_words.txt')]
+words_stop = [line.rstrip('\n') for line in open('../stop_words.txt')]
 words_stop.append('')
 
 sc=SparkContext()
 
 hbaseConfig={"hbase.mapreduce.inputtable":"wiki","hbase.mapreduce.scan.columns":"cf:body"}
 table_rdd=sc.newAPIHadoopRDD("org.apache.hadoop.hbase.mapreduce.TableInputFormat","org.apache.hadoop.hbase.io.ImmutableBytesWritable","org.apache.hadoop.hbase.client.Result",keyConverter="org.apache.spark.examples.pythonconverters.ImmutableBytesWritableToStringConverter",valueConverter="org.apache.spark.examples.pythonconverters.HBaseResultToStringConverter",conf=hbaseConfig)
-for (key,data) in table_rdd.takeSample(True,3):
-    print "--------------url:"
-    print key.decode('utf-8')
-    print "---------------text:"
-    print data.decode('utf-8')
+#for (key,data) in table_rdd.takeSample(True,3):
+#    print "--------------url:"
+#    print key.decode('utf-8')
+#    print "---------------text:"
+#    print data.decode('utf-8')
 
 splitText = table_rdd.map(lambda (url,text):(url,[stem(word.group().lower()) for word in re.finditer(r"\w+",text,re.UNICODE) if word.group().lower() not in words_stop]))
 
@@ -28,10 +28,10 @@ tfWordAsKey = tf.flatMap(lambda (url,tf):[(word,[(url,tf[word])])for word in tf]
 
 tfidf = tfWordAsKey.map(lambda (word,tfList):(word,[(url,tf*np.log10(27474.0/len(tfList))) for (url,tf) in tfList]))
 
-A = tfidf.takeSample(True,5)
-print A
+#A = tfidf.takeSample(True,5)
+#print A
 
-connection = happybase.Connection('localhost')
+connection = happybase.Connection('localhost','9090')
 
 if 'indexWikiFromSpark' in connection.tables():
     connection.delete_table('indexWikiFromSpark',True)
