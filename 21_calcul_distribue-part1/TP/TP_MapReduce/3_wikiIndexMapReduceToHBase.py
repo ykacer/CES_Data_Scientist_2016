@@ -4,9 +4,9 @@ import sys
 import happybase
 import numpy as np
 
-hdfs_index = 'indexWikiFromMapReduce.seq.tb'
+hdfs_index = 'indexWikiFromMapReduce'
 
-connection = happybase.Connection('localhost')
+connection = happybase.Connection('localhost','9090')
 
 if 'indexWikiFromMapReduce' in connection.tables():
     connection.delete_table('indexWikiFromMapReduce',True)

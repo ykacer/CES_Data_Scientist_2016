@@ -10,7 +10,7 @@ hdfs_output = 'indexwikiFromMapReduce'
 def main():
     if hadoopy.exists(hdfs_output):
         hadoopy.rmr("-skipTrash %s"%hdfs_output)
-    hadoopy.launch(hdfs_path,hdfs_output,'WordCount.py',files=['stop_words.txt'])
+    hadoopy.launch(hdfs_path,hdfs_output,'WordCount.py',files=['../stop_words.txt'])
     #word_counts = dict(hadoopy.readtb(hdfs_output))
     #for word in word_counts:
     #    print word
