@@ -1,7 +1,7 @@
 #TP MapReduce/Spark
 
 
-## Creation d'un index inversé à partir de crawling d'un repertoire Wikipedia minimale, accessible en localhost via un serveur Apache.
+## Creation d'un index inversé à partir du crawling d'un repertoire Wikipedia minimale, accessible en localhost via un serveur Apache.
 
 Bonjour Pierre,
 
