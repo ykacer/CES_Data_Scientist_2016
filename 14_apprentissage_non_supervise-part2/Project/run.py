@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import izip
-from sklearn.decomposition import PCA
+from sklearn.decomposition import NMF
 
 def cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not):
     h,w,c = image.shape
@@ -42,6 +42,7 @@ for file_mask in list_mask:
     file_image = glob.glob(file_mask[:-6]+'.*')[0]
     image = cv2.imread(file_image)
     mask = cv2.imread(file_mask)
+    h,w,c = image.shape
     patchs,list_patchs_x,list_patchs_y = cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not)
     nmf = NMF(n_components=3)
     nmf.fit(patchs.transpose())
@@ -50,8 +51,8 @@ for file_mask in list_mask:
     image_result = np.zeros((h,w,c))
     X,Y = np.meshgrid(list_patchs_x,list_patchs_y)
     for n,(j,i) in enumerate(izip(Y.flatten(),Y.flatten())):
-        image_result[j:j+roi_size_y,i+i+roi_size_x] = ind[n]
-    plt.figure()
+        image_result[j:j+roi_size_y,i:i+roi_size_x] = ind[n]
+    f = plt.figure()
     f.add_subplot(1,3,1)
     plt.imshow(image)
     f.add_subplot(1,3,2)
