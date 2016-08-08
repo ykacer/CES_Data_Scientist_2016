@@ -8,7 +8,7 @@ import hadoopy
 
 #input_path="hdfs://localhost:9000/alice.txt"
 input_hdfs_path="hdfs://localhost:9000/user/user/simplewikiFromHbase"
-output_hdfs_path='hdfs://localhost:9000/user/user/indewWikiFromSpark'
+output_hdfs_path='hdfs://localhost:9000/user/user/indexwikiFromSpark'
 
 words_stop = [line.rstrip('\n') for line in open('../stop_words.txt')]
 words_stop.append('')

@@ -33,10 +33,10 @@ tfidf = tfWordAsKey.map(lambda (word,tfList):(word,[(url,tf*np.log10(27474.0/len
 
 connection = happybase.Connection('localhost','9090')
 
-if 'indexWikiFromSpark' in connection.tables():
-    connection.delete_table('indexWikiFromSpark',True)
-    connection.create_table('indexWikiFromSpark',{'wiki':{}})
-    table_index = connection.table('indexWikiFromMSpark')
+if 'indexwikiFromSpark2' in connection.tables():
+    connection.delete_table('indexwikiFromSpark2',True)
+    connection.create_table('indexwikiFromSpark2',{'wiki':{}})
+    table_index = connection.table('indexwikiFromSpark2')
 
 tfidf.foreachpartition((word,data) => table_index.put(word.encode('utf-8'),{"wiki:"+url:str(tfidf).encode('utf-8')}) for url,tfidf in data)
 

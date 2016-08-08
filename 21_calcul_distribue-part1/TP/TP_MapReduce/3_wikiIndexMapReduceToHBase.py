@@ -4,14 +4,14 @@ import sys
 import happybase
 import numpy as np
 
-hdfs_index = 'indexWikiFromMapReduce'
+hdfs_index = 'indexwikiFromMapReduce'
 
 connection = happybase.Connection('localhost','9090')
 
-if 'indexWikiFromMapReduce' in connection.tables():
-    connection.delete_table('indexWikiFromMapReduce',True)
-connection.create_table('indexWikiFromMapReduce',{'wiki':{}})
-table_index = connection.table('indexWikiFromMapReduce')
+if 'indexwikiFromMapReduce' in connection.tables():
+    connection.delete_table('indexwikiFromMapReduce',True)
+connection.create_table('indexwikiFromMapReduce',{'wiki':{}})
+table_index = connection.table('indexwikiFromMapReduce')
 
 
 def main():
