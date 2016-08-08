@@ -7,10 +7,7 @@ if os.path.exists('data_papers') == False:
     os.mkdir('data_papers')
     if os.path.exists('dataset_segmentation.rar') == False:
         os.system('wget https://archive.ics.uci.edu/ml/machine-learning-databases/00306/dataset_segmentation.rar')
-    else:
-        os.system('cd data_papers')
-        os.system('unrar e ../dataset_segmentation.rar')
-        os.system('cd ..')
+    os.system('unrar e dataset_segmentation.rar data_papers')
 
 list_mask = glob.glob('data_papers/*_m.*')
 for file_mask in list_mask:
