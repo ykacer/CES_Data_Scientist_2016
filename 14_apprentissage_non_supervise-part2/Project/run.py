@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from itertools import izip
 from sklearn.decomposition import NMF
+from sklearn.cluster import KMeans
 
 def cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not):
     h,w,c = image.shape
@@ -32,8 +33,8 @@ if os.path.exists('data_papers') == False:
     os.system('unrar e dataset_segmentation.rar data_papers')
 
 list_mask = glob.glob('data_papers/*_m.*')
-roi_size_x = 50
-roi_size_y = 50
+roi_size_x = 80
+roi_size_y = 80
 overlap_x = 0
 overlap_y = 0
 flatten_or_not = True
@@ -44,20 +45,22 @@ for file_mask in list_mask:
     mask = cv2.imread(file_mask)
     h,w,c = image.shape
     patchs,list_patchs_x,list_patchs_y = cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not)
-    nmf = NMF(n_components=3)
-    nmf.fit(patchs.transpose())
-    patchs_transformed = nmf.transform(patchs.transpose())
-    ind = np.argmax(patchs_transformed,axis=1)
+    #nmf = NMF(n_components=3)
+    #nmf.fit(patchs.transpose())
+    #patchs_transformed = nmf.transform(patchs.transpose())
+    #ind = np.argmax(patchs_transformed,axis=1)
+    km = KMeans(n_clusters=3)
+    ind = km.fit_predict(patchs.transpose())
     image_result = np.zeros((h,w,c))
-    X,Y = np.meshgrid(list_patchs_x,list_patchs_y)
-    for n,(j,i) in enumerate(izip(Y.flatten(),Y.flatten())):
-        image_result[j:j+roi_size_y,i:i+roi_size_x] = ind[n]
+    Y,X = np.meshgrid(list_patchs_y,list_patchs_x)
+    for n,(j,i) in enumerate(izip(Y.flatten(),X.flatten())):
+        image_result[j:j+roi_size_y-1,i:i+roi_size_x-1] = ind[n]
     f = plt.figure()
     f.add_subplot(1,3,1)
     plt.imshow(image)
     f.add_subplot(1,3,2)
     plt.imshow(mask)
     f.add_subplot(1,3,3)
-    plt.imshow(image_result)
+    plt.imshow(image_result*50)
     plt.show()
 
