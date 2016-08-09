@@ -38,29 +38,35 @@ roi_size_y = 80
 overlap_x = 0
 overlap_y = 0
 flatten_or_not = True
-
+color_mapping = {0:[255,0,0],1:[255,255,255],2:[0,0,255]}
 for file_mask in list_mask:
     file_image = glob.glob(file_mask[:-6]+'.*')[0]
     image = cv2.imread(file_image)
     mask = cv2.imread(file_mask)
+    mask = mask[:,:,::-1]
     h,w,c = image.shape
     patchs,list_patchs_x,list_patchs_y = cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not)
-    #nmf = NMF(n_components=3)
-    #nmf.fit(patchs.transpose())
-    #patchs_transformed = nmf.transform(patchs.transpose())
-    #ind = np.argmax(patchs_transformed,axis=1)
-    km = KMeans(n_clusters=3)
-    ind = km.fit_predict(patchs.transpose())
+    nmf = NMF(n_components=3)
+    nmf.fit(patchs.transpose())
+    patchs_transformed = nmf.transform(patchs.transpose())
+    ind = np.argmax(patchs_transformed,axis=1)
+    sorted_labels = np.argsort([np.sum(ind==0),np.sum(ind==1),np.sum(ind==2)])
+    color_mapping[sorted_labels[0]] = [0,0,255]
+    color_mapping[sorted_labels[1]] = [255,0,0]
+    color_mapping[sorted_labels[2]] = [255,255,255]
+    #km = KMeans(n_clusters=3)
+    #ind = km.fit_predict(patchs.transpose())
     image_result = np.zeros((h,w,c))
     Y,X = np.meshgrid(list_patchs_y,list_patchs_x)
     for n,(j,i) in enumerate(izip(Y.flatten(),X.flatten())):
-        image_result[j:j+roi_size_y-1,i:i+roi_size_x-1] = ind[n]
+        image_result[j:j+roi_size_y,i:i+roi_size_x,:] = color_mapping[ind[n]]
     f = plt.figure()
     f.add_subplot(1,3,1)
     plt.imshow(image)
     f.add_subplot(1,3,2)
     plt.imshow(mask)
     f.add_subplot(1,3,3)
-    plt.imshow(image_result*50)
+    plt.imshow(image_result.astype(np.uint8))
     plt.show()
+    f.savefig(file_mask[:-6]+'_res.png', dpi=f.dpi)
 
