@@ -76,8 +76,8 @@ roi_size_y = 128/resizing_factor
 overlap_x = 0/resizing_factor
 overlap_y = 0/resizing_factor
 
-prediction = []
-ground_truth = []
+prediction = np.asarray([])
+ground_truth = np.asarray([])
 
 precision = np.zeros(3)
 recall = np.zeros(3)
@@ -111,20 +111,16 @@ for file_mask in list_mask:
     image_result = 255*np.ones((h,w,c))
     for n,(j,i) in enumerate(izip(list_patchs_y,list_patchs_x)):
         image_result[j:j+roi_size_y,i:i+roi_size_x,:] = color_mapping[ind[n]]
-    H,W = np.meshgrid(np.arange(h),np.arange(w))
-    for (j,i) in izip(H.flatten(),W.flatten()):
-        if np.array_equal(mask[j,i,:],[255,0,0]):
-            ground_truth.append(0)
-        elif np.array_equal(mask[j,i,:],[0,0,255]):
-            ground_truth.append(1)
-        else:
-            ground_truth.append(2)
-        if np.array_equal(image_result[j,i,:],[255,0,0]):
-            prediction.append(0)
-        elif np.array_equal(image_result[j,i,:],[0,0,255]):
-            prediction.append(1)
-        else:
-            prediction.append(2)
+    ground_truth_ = np.zeros((h,w))
+    ground_truth_ = ground_truth_ + np.where(np.sum(mask-[0,0,255],axis=2)==0,1,0)
+    ground_truth_ = ground_truth_ + np.where(np.logical_and(np.sum(mask-[0,0,255],axis=2)!=0,np.sum(mask-[255,0,0],axis=2)!=0),2,0)
+    prediction_ = np.zeros((h,w))
+    prediction_ = prediction_ + np.where(np.sum(image_result-[0,0,255],axis=2)==0,1,0)
+    prediction_ = prediction_ + np.where(np.logical_and(np.sum(image_result-[0,0,255],axis=2)!=0,np.sum(image_result-[255,0,0],axis=2)!=0),2,0)
+    ground_truth = np.append(ground_truth,ground_truth_) 
+    print ground_truth.shape
+    prediction = np.append(prediction,prediction_) 
+    print prediction.shape
     f = plt.figure()
     f.add_subplot(1,4,1)
     plt.imshow(image)
@@ -134,7 +130,7 @@ for file_mask in list_mask:
     plt.imshow(mask)
     f.add_subplot(1,4,4)
     plt.imshow(image_result.astype(np.uint8))
-    plt.show()
+    #plt.show()
     f.savefig(file_mask[:-6]+'_res.png', dpi=f.dpi)
 for cl in [0,1,2]:
     true_positive = np.sum(np.where(prediction==cl,1,0)==np.where(ground_truth==cl,1,0)) 
