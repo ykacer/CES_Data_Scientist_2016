@@ -19,12 +19,10 @@ def cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,ma
 )
     for n,(j,i) in enumerate(izip(Y.flatten(),X.flatten())):
 	background = np.unique(mask[j:j+roi_size_y,i:i+roi_size_x])
-        print "background : ",background
-	if background.size==1:
-	    if background ==0:
-                patchs = np.append(patchs,image[j:j+roi_size_y,i:i+roi_size_x,:].flatten().astype(np.uint8)[np.newaxis,:], axis=0)
-                list_patchs_y = np.append(list_patchs_y,j)
-                list_patchs_x = np.append(list_patchs_x,i)
+        if 0 in background:
+            patchs = np.append(patchs,image[j:j+roi_size_y,i:i+roi_size_x,:].flatten().astype(np.uint8)[np.newaxis,:], axis=0)
+            list_patchs_y = np.append(list_patchs_y,j)
+            list_patchs_x = np.append(list_patchs_x,i)
     patchs = patchs.transpose()
     nb_patchs = patchs.shape[1]
     if flatten_or_not == False:
@@ -71,12 +69,18 @@ if os.path.exists('data_papers') == False:
 
 list_mask = glob.glob('data_papers/*_m.*')
 flatten_or_not = False
-color_mapping = {0:[255,0,0],1:[255,255,255],2:[0,0,255]}
+color_mapping = {0:[255,0,0],1:[0,0,255],2:[255,255,255]}
 resizing_factor = 4
-roi_size_x = 80/resizing_factor
-roi_size_y = 80/resizing_factor
+roi_size_x = 128/resizing_factor
+roi_size_y = 128/resizing_factor
 overlap_x = 0/resizing_factor
 overlap_y = 0/resizing_factor
+
+prediction = []
+ground_truth = []
+
+precision = np.zeros(3)
+recall = np.zeros(3)
 
 for file_mask in list_mask:
     file_image = glob.glob(file_mask[:-6]+'.*')[0]
@@ -84,35 +88,43 @@ for file_mask in list_mask:
     image = cv2.resize(image,(image.shape[1]/resizing_factor,image.shape[0]/resizing_factor))
     print "processing "+file_image+"..."
     gray = cv2.GaussianBlur(cv2.cvtColor(image,cv2.COLOR_RGB2GRAY),(5,5),0)
-    ret,binary = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    #ret,binary = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    ret,binary = cv2.threshold(gray,220,255,cv2.THRESH_BINARY)
     mask = cv2.imread(file_mask)
     mask = cv2.resize(mask,(mask.shape[1]/resizing_factor,mask.shape[0]/resizing_factor))
     mask = mask[:,:,::-1]
     h,w,c = image.shape
     patchs,list_patchs_x,list_patchs_y = cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,binary)
-    print patchs.shape
-    print list_patchs_y[-1]
-    print image.shape[0]
-    print list_patchs_x[-1]
-    print image.shape[1]
-    patchs_preprocessed = descr_hog(patchs)
-    print patchs_preprocessed.shape
+    patchs_preprocessed = np.vstack((descr_rgb(patchs),descr_hog(patchs)))
     #### NMF
     #nmf = NMF(n_components=3)
-    #nmf.fit(patchs.transpose())
-    #patchs_transformed = nmf.transform(patchs_preprocessed.transpose())
+    #patchs_transformed = nmf.fit_transform(patchs_preprocessed.transpose())
     #ind = np.argmax(patchs_transformed,axis=1)
     #### KMEANS
-    km = KMeans(n_clusters=3)
+    km = KMeans(n_clusters=2)#3)
     ind = km.fit_predict(patchs_preprocessed.transpose())
     
-    sorted_labels = np.argsort([np.sum(ind==0),np.sum(ind==1),np.sum(ind==2)])
+    sorted_labels = np.argsort([np.sum(ind==0),np.sum(ind==1)])#,np.sum(ind==2)])
     color_mapping[sorted_labels[0]] = [255,0,0]
     color_mapping[sorted_labels[1]] = [0,0,255]
-    color_mapping[sorted_labels[2]] = [255,255,255]
-    image_result = np.zeros((h,w,c))
+    #color_mapping[sorted_labels[2]] = [255,255,255]
+    image_result = 255*np.ones((h,w,c))
     for n,(j,i) in enumerate(izip(list_patchs_y,list_patchs_x)):
         image_result[j:j+roi_size_y,i:i+roi_size_x,:] = color_mapping[ind[n]]
+    H,W = np.meshgrid(np.arange(h),np.arange(w))
+    for (j,i) in izip(H.flatten(),W.flatten()):
+        if np.array_equal(mask[j,i,:],[255,0,0]):
+            ground_truth.append(0)
+        elif np.array_equal(mask[j,i,:],[0,0,255]):
+            ground_truth.append(1)
+        else:
+            ground_truth.append(2)
+        if np.array_equal(image_result[j,i,:],[255,0,0]):
+            prediction.append(0)
+        elif np.array_equal(image_result[j,i,:],[0,0,255]):
+            prediction.append(1)
+        else:
+            prediction.append(2)
     f = plt.figure()
     f.add_subplot(1,4,1)
     plt.imshow(image)
@@ -124,4 +136,10 @@ for file_mask in list_mask:
     plt.imshow(image_result.astype(np.uint8))
     plt.show()
     f.savefig(file_mask[:-6]+'_res.png', dpi=f.dpi)
+for cl in [0,1,2]:
+    true_positive = np.sum(np.where(prediction==cl,1,0)==np.where(ground_truth==cl,1,0)) 
+    precision[cl] = 1.0*true_positive/np.sum(ground_truth==cl)
+    recall[cl] = 1.0*true_positive/np.sum(prediction==cl)
 
+print "precision : ",precision
+print "recall : ",recall
