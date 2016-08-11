@@ -18,8 +18,10 @@ def cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,ma
     Y,X = np.meshgrid(np.arange(0,h-roi_size_y,roi_size_y-overlap_y),np.arange(0,w-roi_size_x,roi_size_x-overlap_x)
 )
     for n,(j,i) in enumerate(izip(Y.flatten(),X.flatten())):
-	background = np.unique(mask[j:j+roi_size_y,i:i+roi_size_x])
-        if 0 in background:
+	#background = np.unique(mask[j:j+roi_size_y,i:i+roi_size_x])
+	background = 1.0*np.sum(mask[j:j+roi_size_y,i:i+roi_size_x]==0)/roi_size_x/roi_size_y
+        #if 0 in background:
+        if background>0.05:
             patchs = np.append(patchs,image[j:j+roi_size_y,i:i+roi_size_x,:].flatten().astype(np.uint8)[np.newaxis,:], axis=0)
             list_patchs_y = np.append(list_patchs_y,j)
             list_patchs_x = np.append(list_patchs_x,i)
@@ -71,8 +73,8 @@ list_mask = glob.glob('data_papers/*_m.*')
 flatten_or_not = False
 color_mapping = {0:[255,0,0],1:[0,0,255],2:[255,255,255]}
 resizing_factor = 4
-roi_size_x = 128/resizing_factor
-roi_size_y = 128/resizing_factor
+roi_size_x = 80/resizing_factor
+roi_size_y = 80/resizing_factor
 overlap_x = 0/resizing_factor
 overlap_y = 0/resizing_factor
 
@@ -86,10 +88,10 @@ for file_mask in list_mask:
     file_image = glob.glob(file_mask[:-6]+'.*')[0]
     image = cv2.imread(file_image)
     image = cv2.resize(image,(image.shape[1]/resizing_factor,image.shape[0]/resizing_factor))
-    print "processing "+file_image+"..."
-    gray = cv2.GaussianBlur(cv2.cvtColor(image,cv2.COLOR_RGB2GRAY),(5,5),0)
+    #print "processing "+file_image+"..."
+    gray = cv2.GaussianBlur(cv2.cvtColor(image,cv2.COLOR_RGB2GRAY),(3,3),0)
     #ret,binary = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    ret,binary = cv2.threshold(gray,220,255,cv2.THRESH_BINARY)
+    ret,binary = cv2.threshold(gray,175,255,cv2.THRESH_BINARY)
     mask = cv2.imread(file_mask)
     mask = cv2.resize(mask,(mask.shape[1]/resizing_factor,mask.shape[0]/resizing_factor))
     mask = mask[:,:,::-1]
@@ -112,15 +114,13 @@ for file_mask in list_mask:
     for n,(j,i) in enumerate(izip(list_patchs_y,list_patchs_x)):
         image_result[j:j+roi_size_y,i:i+roi_size_x,:] = color_mapping[ind[n]]
     ground_truth_ = np.zeros((h,w))
-    ground_truth_ = ground_truth_ + np.where(np.sum(mask-[0,0,255],axis=2)==0,1,0)
-    ground_truth_ = ground_truth_ + np.where(np.logical_and(np.sum(mask-[0,0,255],axis=2)!=0,np.sum(mask-[255,0,0],axis=2)!=0),2,0)
-    prediction_ = np.zeros((h,w))
-    prediction_ = prediction_ + np.where(np.sum(image_result-[0,0,255],axis=2)==0,1,0)
-    prediction_ = prediction_ + np.where(np.logical_and(np.sum(image_result-[0,0,255],axis=2)!=0,np.sum(image_result-[255,0,0],axis=2)!=0),2,0)
-    ground_truth = np.append(ground_truth,ground_truth_) 
-    print ground_truth.shape
-    prediction = np.append(prediction,prediction_) 
-    print prediction.shape
+    ground_truth_ = ground_truth_ + np.where(np.linalg.norm(mask-[255,0,0],axis=2)==0,1,0)
+    ground_truth_ = ground_truth_ + np.where(np.logical_and(np.linalg.norm(mask-[0,0,255],axis=2)!=0,np.linalg.norm(mask-[255,0,0],axis=2)!=0),2,0)
+    prediction_   = np.zeros((h,w))
+    prediction_   = prediction_   + np.where(np.linalg.norm(image_result-[255,0,0],axis=2)==0,1,0)
+    prediction_   = prediction_   + np.where(np.logical_and(np.linalg.norm(image_result-[0,0,255],axis=2)!=0,np.linalg.norm(image_result-[255,0,0],axis=2)!=0),2,0)
+    ground_truth = np.append(ground_truth,ground_truth_.flatten()) 
+    prediction = np.append(prediction,prediction_.flatten()) 
     f = plt.figure()
     f.add_subplot(1,4,1)
     plt.imshow(image)
@@ -132,8 +132,9 @@ for file_mask in list_mask:
     plt.imshow(image_result.astype(np.uint8))
     #plt.show()
     f.savefig(file_mask[:-6]+'_res.png', dpi=f.dpi)
+    f.clf()
 for cl in [0,1,2]:
-    true_positive = np.sum(np.where(prediction==cl,1,0)==np.where(ground_truth==cl,1,0)) 
+    true_positive = np.sum(np.where(prediction==cl,1,-5)==np.where(ground_truth==cl,1,5)) 
     precision[cl] = 1.0*true_positive/np.sum(ground_truth==cl)
     recall[cl] = 1.0*true_positive/np.sum(prediction==cl)
 
