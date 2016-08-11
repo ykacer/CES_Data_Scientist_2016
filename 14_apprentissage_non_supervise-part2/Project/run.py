@@ -84,11 +84,30 @@ ground_truth = np.asarray([])
 precision = np.zeros(3)
 recall = np.zeros(3)
 
+precision_ = np.zeros(3)
+recall_ = np.zeros(3)
+
+precision_best = np.zeros(3)
+recall_best = np.zeros(3)
+
+precision_worst = np.zeros(3)
+recall_worst = np.zeros(3)
+
+precision_mean_best = 0.0
+precision_mean_worst = 1.0
+
+recall_mean_best = 0.0
+recall_mean_worst = 1.0
+
 for file_mask in list_mask:
     file_image = glob.glob(file_mask[:-6]+'.*')[0]
     image = cv2.imread(file_image)
+
+    ### resize image for faster computation
     image = cv2.resize(image,(image.shape[1]/resizing_factor,image.shape[0]/resizing_factor))
-    #print "processing "+file_image+"..."
+    print "processing "+file_image+"..."
+
+    ### binarize image to find patchs corresponding to class 2 (background)
     gray = cv2.GaussianBlur(cv2.cvtColor(image,cv2.COLOR_RGB2GRAY),(3,3),0)
     #ret,binary = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     ret,binary = cv2.threshold(gray,175,255,cv2.THRESH_BINARY)
@@ -96,31 +115,82 @@ for file_mask in list_mask:
     mask = cv2.resize(mask,(mask.shape[1]/resizing_factor,mask.shape[0]/resizing_factor))
     mask = mask[:,:,::-1]
     h,w,c = image.shape
+
+    ### cut image into patchs, keep only patchs which are not class 2.
     patchs,list_patchs_x,list_patchs_y = cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,binary)
+
+    ### extract features of each patch
     patchs_preprocessed = np.vstack((descr_rgb(patchs),descr_hog(patchs)))
-    #### NMF
+
+    ### compute NMF classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
     #nmf = NMF(n_components=3)
     #patchs_transformed = nmf.fit_transform(patchs_preprocessed.transpose())
     #ind = np.argmax(patchs_transformed,axis=1)
-    #### KMEANS
+
+    
+    ### compute KMEANS classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
     km = KMeans(n_clusters=2)#3)
     ind = km.fit_predict(patchs_preprocessed.transpose())
-    
+   
+    ### patchs are not divide into categories, give class 0 (ullustration) for category in minority, class 1 for the other one.
     sorted_labels = np.argsort([np.sum(ind==0),np.sum(ind==1)])#,np.sum(ind==2)])
-    color_mapping[sorted_labels[0]] = [255,0,0]
-    color_mapping[sorted_labels[1]] = [0,0,255]
+    color_mapping[sorted_labels[0]] = [255,0,0] # red for class 0 (illustration) 
+    color_mapping[sorted_labels[1]] = [0,0,255] # blue for class 1 (texte) 
     #color_mapping[sorted_labels[2]] = [255,255,255]
+
+    ### compute prediction (class 0,1, or 2) for each pixel
     image_result = 255*np.ones((h,w,c))
     for n,(j,i) in enumerate(izip(list_patchs_y,list_patchs_x)):
         image_result[j:j+roi_size_y,i:i+roi_size_x,:] = color_mapping[ind[n]]
-    ground_truth_ = np.zeros((h,w))
-    ground_truth_ = ground_truth_ + np.where(np.linalg.norm(mask-[255,0,0],axis=2)==0,1,0)
-    ground_truth_ = ground_truth_ + np.where(np.logical_and(np.linalg.norm(mask-[0,0,255],axis=2)!=0,np.linalg.norm(mask-[255,0,0],axis=2)!=0),2,0)
     prediction_   = np.zeros((h,w))
     prediction_   = prediction_   + np.where(np.linalg.norm(image_result-[255,0,0],axis=2)==0,1,0)
     prediction_   = prediction_   + np.where(np.logical_and(np.linalg.norm(image_result-[0,0,255],axis=2)!=0,np.linalg.norm(image_result-[255,0,0],axis=2)!=0),2,0)
-    ground_truth = np.append(ground_truth,ground_truth_.flatten()) 
-    prediction = np.append(prediction,prediction_.flatten()) 
+    prediction_   = prediction_.flatten()
+
+    ### compute ground-truth (class 0,1, or 2) for each pixel 
+    ground_truth_ = np.zeros((h,w))
+    ground_truth_ = ground_truth_ + np.where(np.linalg.norm(mask-[255,0,0],axis=2)==0,1,0)
+    ground_truth_ = ground_truth_ + np.where(np.logical_and(np.linalg.norm(mask-[0,0,255],axis=2)!=0,np.linalg.norm(mask-[255,0,0],axis=2)!=0),2,0)
+    ground_truth_ = ground_truth_.flatten()
+
+    ### compute precision/recall for each class
+    for cl in [0,1,2]: 
+        true_positive_ = np.sum(np.where(prediction_==cl,1,-5)==np.where(ground_truth_==cl,1,5)) 
+        if np.sum(ground_truth_==cl) != 0:
+            precision_[cl] = 1.0*true_positive_/np.sum(ground_truth_==cl)
+        else:
+            precision_[cl] = -1
+        if np.sum(prediction_==cl) != 0:
+            recall_[cl] = 1.0*true_positive_/np.sum(prediction_==cl)
+        else:
+            recall_[cl] = -1
+    print "** precision (per class) : ",precision_
+    print "** recall : (per class) ",recall_
+    
+    precision_mean = np.mean(precision_[precision_!=-1])
+    recall_mean = np.mean(recall_[recall_!=-1])
+
+    print "** precision (mean) : ",precision_mean
+    print "** recall (mean) : ",recall_mean
+
+    if precision_mean > precision_mean_best:
+        precision_mean_best  = precision_mean
+        precision_best = precision_
+    if precision_mean < precision_mean_worst:
+        precision_mean_worst  = precision_mean
+        precision_worst = precision_
+    if recall_mean > recall_mean_best:
+        recall_mean_best  = recall_mean
+        recall_best = recall_
+    if recall_mean < recall_mean_worst:
+        recall_mean_worst  = recall_mean
+        recall_worst = recall_
+
+    # gather predictions and ground-truth for latter total precision/recall computation
+    ground_truth = np.append(ground_truth,ground_truth_) 
+    prediction = np.append(prediction,prediction_) 
+
+    # plot image, binary image (class 0), ground-truth, prediction
     f = plt.figure()
     f.add_subplot(1,4,1)
     plt.imshow(image)
@@ -133,10 +203,26 @@ for file_mask in list_mask:
     #plt.show()
     f.savefig(file_mask[:-6]+'_res.png', dpi=f.dpi)
     f.clf()
+
+# compute total precision/recall
 for cl in [0,1,2]:
     true_positive = np.sum(np.where(prediction==cl,1,-5)==np.where(ground_truth==cl,1,5)) 
     precision[cl] = 1.0*true_positive/np.sum(ground_truth==cl)
     recall[cl] = 1.0*true_positive/np.sum(prediction==cl)
 
-print "precision : ",precision
-print "recall : ",recall
+print "\n"
+print "STATISTICS : "
+print "** total precision (per class) : ",precision
+print "** total recall (per class): ",recall
+print "** total precision (mean) : ",np.mean(precision_)
+print "** total recall (mean) : ",np.mean(recall_)
+
+print "** best precision (per class) : ",precision_best
+print "** best recall (per class): ",recall_best
+print "** best precision (mean) : ",precision_mean_best
+print "** best recall (mean) : ",recall_mean_best
+
+print "** worst precision (per class) : ",precision_worst
+print "** worst recall (per class): ",recall_worst
+print "** worst precision (mean) : ",precision_mean_worst
+print "** worst recall (mean) : ",recall_mean_worst
