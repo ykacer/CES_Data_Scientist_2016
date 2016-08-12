@@ -37,6 +37,12 @@ def descr_rgb(patchs):
 	 patchs_preprocessed[:,n] = patchs[:,:,:,n].flatten()
     return patchs_preprocessed
 
+def descr_hsv(patchs):
+    patchs_preprocessed = np.zeros((patchs.shape[0]*patchs.shape[1]*patchs.shape[2],patchs.shape[3]))
+    for n in np.arange(patchs.shape[3]):
+	 patchs_preprocessed[:,n] = cv2.cvtColor(patchs[:,:,:,n],cv2.COLOR_BGR2HSV).flatten()
+    return patchs_preprocessed
+
 def descr_grad(patchs):
     patchs_preprocessed = np.zeros((patchs.shape[0]*patchs.shape[1],patchs.shape[3])) 
     for n in np.arange(patchs.shape[3]):
@@ -68,6 +74,7 @@ if os.path.exists('data_papers') == False:
     if os.path.exists('dataset_segmentation.rar') == False:
         os.system('wget https://archive.ics.uci.edu/ml/machine-learning-databases/00306/dataset_segmentation.rar')
     os.system('unrar e dataset_segmentation.rar data_papers')
+
 
 list_mask = glob.glob('data_papers/*_m.*')
 flatten_or_not = False
@@ -106,6 +113,10 @@ filename_recall_worst = ""
 
 for file_mask in list_mask:
     file_image = glob.glob(file_mask[:-6]+'.*')[0]
+    if file_image in ['data_papers/30.jpg','data_papers/33.jpg','data_papers/38.jpg','data_papers/56.jpg','data_papers/49.jpg']:
+        continue
+    
+    # load image
     image = cv2.imread(file_image)
 
     ### resize image for faster computation
@@ -113,9 +124,10 @@ for file_mask in list_mask:
     print "processing "+file_image+"..."
 
     ### binarize image to find patchs corresponding to class 2 (background)
+    binary_thresh = 200
     gray = cv2.GaussianBlur(cv2.cvtColor(image,cv2.COLOR_RGB2GRAY),(3,3),0)
+    ret,binary = cv2.threshold(gray,binary_thresh,255,cv2.THRESH_BINARY)
     #ret,binary = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    ret,binary = cv2.threshold(gray,200,255,cv2.THRESH_BINARY)
     mask = cv2.imread(file_mask)
     mask = cv2.resize(mask,(mask.shape[1]/resizing_factor,mask.shape[0]/resizing_factor))
     mask = mask[:,:,::-1]
@@ -125,7 +137,8 @@ for file_mask in list_mask:
     patchs,list_patchs_x,list_patchs_y = cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,binary)
 
     ### extract features of each patch
-    patchs_preprocessed = np.vstack((descr_rgb(patchs),descr_hog(patchs)))
+    #patchs_preprocessed = np.vstack((descr_rgb(patchs),descr_hog(patchs)))
+    patchs_preprocessed = np.vstack((descr_hsv(patchs),descr_hog(patchs)))
 
     ### compute NMF classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
     #nmf = NMF(n_components=3)
@@ -135,12 +148,19 @@ for file_mask in list_mask:
     ### compute KMEANS classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
     km = KMeans(n_clusters=2)#3)
     ind = km.fit_predict(patchs_preprocessed.transpose())
-   
-    ### patchs are not divide into categories, give class 0 (ullustration) for category in minority, class 1 for the other one.
-    sorted_labels = np.argsort([np.sum(ind==0),np.sum(ind==1)])#,np.sum(ind==2)])
+    
+    ### patchs are now divide into two categories, give class 0 (illustration) for category in minority, class 1 for the other one.
+    #sorted_labels = np.argsort([np.sum(ind==0),np.sum(ind==1)])#,np.sum(ind==2)])
+    #color_mapping[sorted_labels[0]] = [255,0,0] # red for class 0 (illustration) 
+    #color_mapping[sorted_labels[1]] = [0,0,255] # blue for class 1 (texte) 
+    #color_mapping[sorted_labels[2]] = [255,255,255]
+    
+    ### patchs are now divide into categories, give class 1 (illustration) for category with greater proportion of "white" (i.e. > binary_thresh).
+    p0 = 1.0*np.sum(np.squeeze(0.1140*patchs[:,:,0,ind==0]+0.5870*patchs[:,:,1,ind==0]+0.2989*patchs[:,:,2,ind==0]).flatten()>binary_thresh)/patchs.size
+    p1 = 1.0*np.sum(np.squeeze(0.1140*patchs[:,:,0,ind==1]+0.5870*patchs[:,:,1,ind==1]+0.2989*patchs[:,:,2,ind==1]).flatten()>binary_thresh)/patchs.size
+    sorted_labels = np.argsort([p0,p1])#,np.sum(ind==2)])
     color_mapping[sorted_labels[0]] = [255,0,0] # red for class 0 (illustration) 
     color_mapping[sorted_labels[1]] = [0,0,255] # blue for class 1 (texte) 
-    #color_mapping[sorted_labels[2]] = [255,255,255]
 
     ### compute prediction (class 0,1, or 2) for each pixel
     image_result = 255*np.ones((h,w,c))
@@ -168,26 +188,22 @@ for file_mask in list_mask:
             recall_[cl] = 1.0*true_positive_/np.sum(prediction_==cl)
         else:
             recall_[cl] = -1
-    print "** precision (per class) : ",precision_
-    print "** recall : (per class) ",recall_
+    #print "** precision (per class) : ",precision_
+    #print "** recall : (per class) ",recall_
     
     precision_mean_ = np.mean(precision_[precision_!=-1])
     recall_mean_ = np.mean(recall_[recall_!=-1])
 
-    print "** precision (mean) : ",precision_mean_
-    print "** recall (mean) : ",recall_mean_
+    #print "** precision (mean) : ",precision_mean_
+    #print "** recall (mean) : ",recall_mean_
 
     if precision_mean_ > precision_mean_best:
         precision_mean_best  = precision_mean_
         precision_best = precision_.copy()
         filename_precision_best = file_image
     if precision_mean_ < precision_mean_worst:
-	print precision_mean_worst
-        print precision_mean_
         precision_mean_worst  = precision_mean_
-	print precision_mean_worst
         precision_worst = precision_.copy()
-        print precision_worst
         filename_precision_worst = file_image
     if recall_mean_ > recall_mean_best:
         recall_mean_best  = recall_mean_
@@ -243,3 +259,4 @@ print "** worst precision (mean) : ",precision_mean_worst
 print filename_recall_worst+":"
 print "** worst recall (per class): ",recall_worst
 print "** worst recall (mean) : ",recall_mean_worst
+print"\n"
