@@ -99,6 +99,11 @@ precision_mean_worst = 1.0
 recall_mean_best = 0.0
 recall_mean_worst = 1.0
 
+filename_precision_best = ""
+filename_precision_worst = ""
+filename_recall_best = ""
+filename_recall_worst = ""
+
 for file_mask in list_mask:
     file_image = glob.glob(file_mask[:-6]+'.*')[0]
     image = cv2.imread(file_image)
@@ -110,7 +115,7 @@ for file_mask in list_mask:
     ### binarize image to find patchs corresponding to class 2 (background)
     gray = cv2.GaussianBlur(cv2.cvtColor(image,cv2.COLOR_RGB2GRAY),(3,3),0)
     #ret,binary = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    ret,binary = cv2.threshold(gray,175,255,cv2.THRESH_BINARY)
+    ret,binary = cv2.threshold(gray,200,255,cv2.THRESH_BINARY)
     mask = cv2.imread(file_mask)
     mask = cv2.resize(mask,(mask.shape[1]/resizing_factor,mask.shape[0]/resizing_factor))
     mask = mask[:,:,::-1]
@@ -126,7 +131,6 @@ for file_mask in list_mask:
     #nmf = NMF(n_components=3)
     #patchs_transformed = nmf.fit_transform(patchs_preprocessed.transpose())
     #ind = np.argmax(patchs_transformed,axis=1)
-
     
     ### compute KMEANS classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
     km = KMeans(n_clusters=2)#3)
@@ -167,24 +171,32 @@ for file_mask in list_mask:
     print "** precision (per class) : ",precision_
     print "** recall : (per class) ",recall_
     
-    precision_mean = np.mean(precision_[precision_!=-1])
-    recall_mean = np.mean(recall_[recall_!=-1])
+    precision_mean_ = np.mean(precision_[precision_!=-1])
+    recall_mean_ = np.mean(recall_[recall_!=-1])
 
-    print "** precision (mean) : ",precision_mean
-    print "** recall (mean) : ",recall_mean
+    print "** precision (mean) : ",precision_mean_
+    print "** recall (mean) : ",recall_mean_
 
-    if precision_mean > precision_mean_best:
-        precision_mean_best  = precision_mean
-        precision_best = precision_
-    if precision_mean < precision_mean_worst:
-        precision_mean_worst  = precision_mean
-        precision_worst = precision_
-    if recall_mean > recall_mean_best:
-        recall_mean_best  = recall_mean
-        recall_best = recall_
-    if recall_mean < recall_mean_worst:
-        recall_mean_worst  = recall_mean
-        recall_worst = recall_
+    if precision_mean_ > precision_mean_best:
+        precision_mean_best  = precision_mean_
+        precision_best = precision_.copy()
+        filename_precision_best = file_image
+    if precision_mean_ < precision_mean_worst:
+	print precision_mean_worst
+        print precision_mean_
+        precision_mean_worst  = precision_mean_
+	print precision_mean_worst
+        precision_worst = precision_.copy()
+        print precision_worst
+        filename_precision_worst = file_image
+    if recall_mean_ > recall_mean_best:
+        recall_mean_best  = recall_mean_
+        recall_best = recall_.copy()
+        filename_recall_best = file_image
+    if recall_mean_ < recall_mean_worst:
+        recall_mean_worst  = recall_mean_
+        recall_worst = recall_.copy()
+        filename_recall_worst = file_image
 
     # gather predictions and ground-truth for latter total precision/recall computation
     ground_truth = np.append(ground_truth,ground_truth_) 
@@ -212,17 +224,22 @@ for cl in [0,1,2]:
 
 print "\n"
 print "STATISTICS : "
+print"\n"
 print "** total precision (per class) : ",precision
 print "** total recall (per class): ",recall
-print "** total precision (mean) : ",np.mean(precision_)
-print "** total recall (mean) : ",np.mean(recall_)
-
+print "** total precision (mean) : ",np.mean(precision)
+print "** total recall (mean) : ",np.mean(recall)
+print"\n"
+print filename_precision_best+":"
 print "** best precision (per class) : ",precision_best
-print "** best recall (per class): ",recall_best
 print "** best precision (mean) : ",precision_mean_best
+print filename_recall_best+":"
+print "** best recall (per class): ",recall_best
 print "** best recall (mean) : ",recall_mean_best
-
+print"\n"
+print filename_precision_worst+":"
 print "** worst precision (per class) : ",precision_worst
-print "** worst recall (per class): ",recall_worst
 print "** worst precision (mean) : ",precision_mean_worst
+print filename_recall_worst+":"
+print "** worst recall (per class): ",recall_worst
 print "** worst recall (mean) : ",recall_mean_worst
