@@ -7,11 +7,9 @@
 \usepackage{fancyref}
 \usepackage{hyperref}
 
-\title{Classification d'images télévisées}
-\author{\textsc{Farhad} - \textsc{Heybati}\\
-\textsc{Youcef} - \textsc{Kacer}\\
-\textsc{Martin} - \textsc{Provost}}
-\date{9 May 2016}
+\title{Clustering de documents numerisés}
+\author{\textsc{Youcef} - \textsc{Kacer}}
+\date{20 Aout 2016}
 
 \begin{document}
  
@@ -21,231 +19,131 @@
 
 \frontmatter
 \chapter{Introduction}
-Ce document présente un cas très interessant pour le travail d'archivage : le partitionnement d'un document numérisé en illustration et texte.
-la multitude de langues possibles pour les caractères du texte, leurs polices possibles, le contenu très varié des illustrations, leur disposition dans le document sont autant de paramètres
-qui permettent difficilement d'imaginer une classification supervisé. En effet, le nombre d'exemples necessaire peut vite devenir important, leur labélisation fastidieuse.
-Dans ce cas, l'apport de la classification non supervisée devient très intéressante. D'autant plus que les caractères sont généralement en grand nombre, d'un seule couleur sur un fond blanc
-exploitation des edges), alors que les images sont assez colorées (exploitation du triplet RGB des pixels)
-Nous allons exploiter tout cela afin de réaliser le clustering d'un document en 3 catégories : illustration, texte et fond.
+Ce document présente un cas très intéressant pour le travail d'archivage : le partitionnement d'un document numérisé en illustration et texte.
+La multitude de langues et de polices possibles pour les caractères du texte, le contenu et la disposition très variés des illustrations sont 
+autant de paramètres qui permettent difficilement d'imaginer une classification supervisé. En effet, le nombre d'exemples nécessaires peut vite devenir important,
+leur labélisation fastidieuse.\\
+Dans ce cas, l'apport de la classification non supervisée devient très intéressante. D'autant plus que les caractères d'un document donné sont généralement en grand 
+nombre, d'un seul alphabet et d'une seule couleur sur fond blanc (exploitation des edges), alors que les images sont elles assez colorées (exploitation du triplet 
+RGB des pixels) : nous allons exploiter tout cela afin de réaliser le clustering d'un document en 3 catégories : illustration, texte et fond.
 
 
 \mainmatter
 \chapter{Images exploitées}
-\section{Corpus et labelisation}\label{labelisation}
-Nous allons exploités un total de 2351 images prises à partir de la vidéo d'un débat télévisé \cite{ref} .
-Nous avons exploité le fichier de transcription au format .trs \cite{ref} associé à cette vidéo, cela afin d'extraire les différents classes, et attribuer à chaque image sa classe.
-En effet, le fichier de transcription fournit un total de 9 classes : \\
+\section{Corpus}\label{labelisation}
+Nous allons exploiter un total de 101 images prises des archives du site de l'Université de Californie \cite{uci}. 
+Elles représentent chacune une page numérisée tirée de magazines et de journaux russophones \cite{dataset} :
 
-
-\begin{description} % listes descriptives
-
-\item[$M$ :] La présentatrice est seule à l'écran
-\item[$A$ :] La première intervenante est seule à l'écran
-\item[$B$ :] La seconde intervenante est seule à l'écran
-\item[$C$ :] Le premier intervenant est seul à l'écran
-\item[$D$ :] Le second intervenant est seul à l'écran
-\item[$ALL$ :] Les 5 personnes sont à l'écran
-\item[$MULTI$ :] Entre 2 et 4 personnes sont à l'écran
-\item[$INTRO$ :] Reportage d'introduction à l'écran
-\item[$CREDITS$ :] Générique d'emission à l'écran\\
-
-\end{description}
-
-Par ailleurs, le fichier de transcription donne à chaque intervalle de temps, ce qui est à l'écran parmi les classes citées plus-haut. 
-Moyennant un reformatage des données xml de ce fichier, on peut obtenir le tableau suivant :
-
-\begin{table}[H]
+\begin{figure}[H]
 \begin{center}
-\begin{tabular}{|c|c|c|}
-\hline
-\begin{bf}classe\end{bf} & \begin{bf}debut (s)\end{bf} & \begin{bf}fin (s)\end{bf} \\
-\hline
-$CREDITS$	& 0 & 11.36 \\
-\hline
-$INTRO$   & 11.36	& 84.64 \\
-\hline
-$M$	& 84.64	& 95.12 \\
-\hline
-$ALL$	& 95.12	& 103.2 \\
-\hline
-$A$	& 103.2	& 112.2 \\
-\hline
-$M$	& 112.2	& 115.24 \\
-\hline
-\vdots & \vdots &\vdots \\
-\hline
-$M$	& 2334.12 & 2340 \\
-\hline
-$ALL$	& 2340 & 2340.76 \\
-\hline
-$CREDITS$	& 2340.76 & 2349.72 \\
-\hline
-\end{tabular}
+\includegraphics[scale=0.2]{images/4.jpg}
+\includegraphics[scale=0.2]{images/5.jpg}
+\includegraphics[scale=0.2]{images/6.jpg}
 \end{center}
-\caption{Table de correspondance classes/intervalle de temps}
-\label{Table correspondance classe/temps}
-\end{table}
+\caption{Exemples d'images du dataset}
+\label{exemple1}
+\end{figure}
 \clearpage
 
-Les 2351 images étant prises à une seconde d'intervalle tout le long de la vidéo, on peut automatiquement labéliser celles ci via la table de
-correspondance \ref{Table correspondance classe/temps}.
-Ci-après, nous présentons quelques images pour chacune des 9 classes (Cf. figures \ref{classeM},\ref{classeA},\ref{classeB},\ref{classeC},\ref{classeD},
-\ref{classeALL},\ref{classeMULTI},\ref{classeINTRO},\ref{classeCREDITS}).
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00000089.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000159.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000176.jpg}
-\end{center}
-\caption{image de classe $M$}
-\label{classeM}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00000105.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000106.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000107.jpg}
-\end{center}
-\caption{image de classe $A$}
-\label{classeA}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00000147.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000148.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000149.jpg}
-\end{center}
-\caption{image de classe $B$}
-\label{classeB}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00000165.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000166.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000167.jpg}
-\end{center}
-\caption{image de classe $C$}
-\label{classeC}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00000288.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000289.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000290.jpg}
-\end{center}
-\caption{image de classe $D$}
-\label{classeD}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00000179.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000203.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000239.jpg}
-\end{center}
-\caption{image de classe $ALL$}
-\label{classeALL}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00000213.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000251.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000310.jpg}
-\end{center}
-\caption{image de classe $MULTI$}
-\label{classeMULTI}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00000013.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000024.jpg}
-\includegraphics[scale=0.3]{../data/frames/00000041.jpg}
-\end{center}
-\caption{image de classe $INTRO$}
-\label{classeINTRO}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{../data/frames/00002344.jpg}
-\includegraphics[scale=0.3]{../data/frames/00002348.jpg}
-\includegraphics[scale=0.3]{../data/frames/00002350.jpg}
-\end{center}
-\caption{image de classe $CREDITS$}
-\label{classeCREDITS}
-\end{figure}
-
-\section{Classification binaire}
-
-Par la suite, nous allons nous resteindre à seulement deux classes définies comme suit :\\
+\section{Vérité-terrain}
+A chacune de ces images est associée une image de vérite-terrain, attribuant à chaque pixel du document numérisé l'une des 3 classes parmi : \\
 \begin{description} % listes descriptives
-\item[$G$ :] \og Gros plan \fg{} (une seule personne est à l'ecran)
-\item[$L$ :] \og Large plan \fg{} (au moins deux personnes sont à l'écran)\\
+
+\item[$illustration$ :] Le pixel appartient à une illustration, une image, un fond d'image, un logo (en rouge sur les images vérité-terrain)
+\item[$texte$ :] Le pixel appartient à un paragraphe de texte, un titre, un commentaire (en bleu sur les images vérité-terrain)
+\item[$fond$ :] Le pixel appartient au fond blanc d'origine de la page (en blanc sur les images vérité-terrain).
+
 \end{description}
 
-
-Les classes $G$ et $L$ peuvent s'exprimer en fonction des 9 classes comme suit :\\
-
-\begin{description} % listes descriptives
-\item[$G$ :] $M$ | $A$ | $B$ | $C$ | $D$
-\item[$L$ :] $ALL$ | $MULTI$\\
-\end{description}
-
-
-Nous avons donc deux classes d'images $G$ et $L$ (respectivement 1491 et 761 images) (Cf. figures \ref{classeG} et
-\ref{classeL}) \\
+Voici quelques exemples de documents numérisés et leur vérité terrain \ref{exemple1} \ref{exemple2} \ref{exemple3}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{../data/frames/00000089.jpg}
-\includegraphics[scale=0.2]{../data/frames/00000105.jpg}
-\includegraphics[scale=0.2]{../data/frames/00000147.jpg}
-\includegraphics[scale=0.2]{../data/frames/00000165.jpg}
-\includegraphics[scale=0.2]{../data/frames/00000288.jpg}
+\includegraphics[scale=0.2]{images/1g.jpg}
+\includegraphics[scale=0.2]{images/1g_m.jpg}
 \end{center}
-\caption{image de classe $G$ (gros plan)}
-\label{classeG}
+\caption{image du dataset et sa vérité terrain}
+\label{exemple1}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{../data/frames/00000336.jpg}
-\includegraphics[scale=0.2]{../data/frames/00000394.jpg}
-\includegraphics[scale=0.2]{../data/frames/00000458.jpg}
-\includegraphics[scale=0.2]{../data/frames/00000474.jpg}
-\includegraphics[scale=0.2]{../data/frames/00000625.jpg}
+\includegraphics[scale=0.2]{images/4cw.jpg}
+\includegraphics[scale=0.2]{images/4cw_m.jpg}
 \end{center}
-\caption{image de classe $L$ (large plan)}
-\label{classeL}
+\caption{image du dataset et sa vérité terrain}
+\label{exemple2}
 \end{figure}
 
-Par la suite, nous allons expliciter différentes manières d'extraire de l'information afin de pouvoir discriminer les images de classe $G$
-, des images de classe $L$.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.2]{images/56.jpg}
+\includegraphics[scale=0.2]{images/56_m.jpg}
+\end{center}
+\caption{image du dataset et sa vérité terrain}
+\label{exemple3}
+\end{figure}
+\clearpage
+
+Par la suite, nous allons expliciter différentes manières d'extraire de l'information afin de pouvoir discriminer automatiquement, au sein d'une image, les pixels de classe
+$illustration$, de classe $texte$ et de classe $fond$.
 
 \chapter{Extraction d'information}
-\section{Extraction de contours}
+\section{Seuillage pour le fond}
 
-Cette méthode consiste à déterminer le nombre de contours détecté par des algorithmes de traitement
-d'image contenu dans \begin{itshape}OpenCV\end{itshape}\cite{opencv_library}, et d'en déduire si l'image est un \og gros plan \fg{} ou un \og large plan \fg{}.\\
-Nous effectuons 2 passes sur chaque image avec des paramétrages d'algorithmes différents afin de
-produire 2 variables par image.\\
-Dans chaque passe nous ajoutons un flou Gaussien à l'image afin d'atténuer les petits détails comme les
-traits du visage ou du décor.\\
-Ensuite, l'image est passée en niveau de gris pour être binarisée via un seuil adaptative ($\mathrm{cv::AdaptativeThreshold}$)\\
-Et enfin, on execute la fonction ($\mathrm{cv::findContours}$) avec une option différente pour chaque passe.\\
+Une manière simple et rapide d'isoler le fond, est de réaliser un seuillage de l'image passée en niveau de gris.\\
+Le seuil d'Otsu cherche le seuil qui sépare l'histogramme des niveaux de gris en deux classes, de sorte que la variance inter-classe soit maximale, la variance intra-
+classe minimale \ref{seuillage}.\\
 
-La première passe extrait les contours avec l'option \begin{itshape}CHAIN\_APPRO\_NONE\end{itshape}. 
-La seconde passe extrait les contours avec l'option \begin{itshape}CHAIN\_APPROX\_SIMPLE\end{itshape}. 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.2]{images/1g.jpg}
+\includegraphics[scale=0.2]{images/1g_binary.jpg}
+\end{center}
+\caption{seuillage}
+\label{seuillage}
+\end{figure}
 
-Les 2 informations du nombre de contours sont stockées ensuite dans un DataFrame comme descripteur
-destiné à être classifié de manière supervisée.
+Ainsi, cette première étape permet de trouver les pixels de $fond$. En effet, on attribue une telle classe aux pixels dont le voisinage carré est à 95\% blanc 
+dans l'image binaire.
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.2]{images/1g_binary.jpg}
+\includegraphics[scale=0.2]{images/1g_seuil.jpg}
+\end{center}
+\caption{seuillage puis attribution de la classe $fond$ (voisinage de taille 80 pixels)}
+\label{seuillage}
+\end{figure}
+
+Reste à definir un classe ($texte$ ou $illustration$) aux pixels restants/ 
+
+\section{Extraction de contours pour le texte}
+
+Les contours au voisinage d'un pixel, semblent être une information pertinente pour caractériser les caractères d'un document numérisé.\\
+En effet, les caractères sont généralement d'une couleur uniforme sur un fond uniforme cela afin de rendre la lecture aisée, ce qui a la 
+particularité de bien faire ressortir les gradients\\
+Pour extraire cette information, deux méthodes seront utilisées : l'application d'un filtre Laplacien et le calcul de l'histogramme orienté du gradient 
+\cite{Dala05histogramsof}, cela sur un patch carré. 
+
+\section{Extraction de saturation pour les illustrations}
+
+Comme évoqué precedemment, l'extraction d'une caractéristique de couleur est utile pour isoler les pixels d'illustration\\
+Utiliser le triple RGB du voisinage d'un pixel n'a peu de sens si on cherche à discriminer ces pixels des pixels de texte (souvent noir).
+En effet, le triplet HSV est plus approprié dans ce contexte : la saturation en particulier pour différencier les images couleur du texte gris ou noir.
+
+\chapter{Custering}
+
+A ce stade, nous avons des pixels qui ne sont pas du $fond$ et auxquels nous devons attribuer une classe parmi $texte$ et $illustration$.
+Les features extraits au chapître précédents doivent donc être décomposer en deux sous groupes, à cet effet deux algorithmes sont utilisés :
+\begin{description} % listes descriptives
+
+\item[$KMeans$ :] cet algorithme permet de créer deux amas compactes.
+\item[$NMF$ :] cet algorithme permet de projeter les features des N pixels. Ces features de dimension P seront projetés sur un espace à 2 dimensions. On crééra ensuite
+deux amas : un premier pour les points dont la première composante de projection est plus grande que la seconde, un second pour les autres. 
+\item[$fond$ :] Le pixel appartient au fond blanc d'origine de la page (en blanc sur les images vérité-terrain).
+
+\end{description}
 \section{Extraction de saturation}
 \subsection{Définition}
 Hue, Saturation, Value ou HSV est un modèle qui représente la couleur (H) en fonction de la saturation (S) en gris et la luminosité (V) (Cf. figure \ref{HSV}).

@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 from itertools import izip
 from sklearn.decomposition import NMF
 from sklearn.cluster import KMeans
+from scipy import misc
   
-
-
+descr = ['hog','hsv']
 
 def cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,mask):
     h,w,c = image.shape
@@ -138,7 +138,18 @@ for file_mask in list_mask:
 
     ### extract features of each patch
     #patchs_preprocessed = np.vstack((descr_rgb(patchs),descr_hog(patchs)))
-    patchs_preprocessed = np.vstack((descr_hsv(patchs),descr_hog(patchs)))
+    #patchs_preprocessed = np.vstack((descr_hsv(patchs),descr_hog(patchs)))
+    nb_patchs = patchs.shape[-1]
+    patchs_preprocessed = np.array([]).reshape(0,nb_patchs)
+    for d in descr:
+        if d == 'grad':
+            patchs_preprocessed = np.concatenate((patchs_preprocessed,descr_grad(patchs)),axis=0)
+        if d == 'hog':
+            patchs_preprocessed = np.concatenate((patchs_preprocessed,descr_hog(patchs)),axis=0)
+        if d == 'rbg':
+            patchs_preprocessed = np.concatenate((patchs_preprocessed,descr_rgb(patchs)),axis=0)
+        if d == 'hsv':
+            patchs_preprocessed = np.concatenate((patchs_preprocessed,descr_hsv(patchs)),axis=0)
 
     ### compute NMF classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
     #nmf = NMF(n_components=3)
@@ -219,6 +230,9 @@ for file_mask in list_mask:
     prediction = np.append(prediction,prediction_) 
 
     # plot image, binary image (class 0), ground-truth, prediction
+    res_name = "_res"
+    for d in descr:
+        res_name = res_name + "_" + d
     f = plt.figure()
     f.add_subplot(1,4,1)
     plt.imshow(image)
@@ -229,8 +243,9 @@ for file_mask in list_mask:
     f.add_subplot(1,4,4)
     plt.imshow(image_result.astype(np.uint8))
     #plt.show()
-    f.savefig(file_mask[:-6]+'_res.png', dpi=f.dpi)
+    f.savefig(file_mask[:-6]+res_name+'_all.png', dpi=f.dpi)
     f.clf()
+    misc.imsave(file_mask[:-6]+res_name+'.png',cv2.resize(image_result,(w*resizing_factor,h*resizing_factor)).astype(np.uint8))
 
 # compute total precision/recall
 for cl in [0,1,2]:
