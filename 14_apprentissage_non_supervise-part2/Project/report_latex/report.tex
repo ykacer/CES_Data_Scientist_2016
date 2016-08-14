@@ -7,7 +7,7 @@
 \usepackage{fancyref}
 \usepackage{hyperref}
 
-\title{Clustering de documents numerisés}
+\title{Clustering de documents numérisés}
 \author{\textsc{Youcef} - \textsc{Kacer}}
 \date{20 Aout 2016}
 
@@ -92,13 +92,13 @@ $illustration$, de classe $texte$ et de classe $fond$.
 \section{Seuillage pour le fond}
 
 Une manière simple et rapide d'isoler le fond, est de réaliser un seuillage de l'image passée en niveau de gris.\\
-Le seuil d'Otsu cherche le seuil qui sépare l'histogramme des niveaux de gris en deux classes, de sorte que la variance inter-classe soit maximale, la variance intra-
-classe minimale \ref{seuillage}.\\
+Le seuil d'Otsu cherche le seuil qui sépare l'histogramme des niveaux de gris en deux classes, de sorte que la variance inter-classe soit maximale, la variance intra-classe
+minimale \ref{seuillage}.\\
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.2]{images/1g.jpg}
-\includegraphics[scale=0.2]{images/1g_binary.jpg}
+%\includegraphics[scale=0.2]{images/1g_binary.jpg}
 \end{center}
 \caption{seuillage}
 \label{seuillage}
@@ -109,338 +109,159 @@ dans l'image binaire.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{images/1g_binary.jpg}
-\includegraphics[scale=0.2]{images/1g_seuil.jpg}
+%\includegraphics[scale=0.2]{images/1g_binary.jpg}
+%\includegraphics[scale=0.2]{images/1g_seuil.jpg}
 \end{center}
 \caption{seuillage puis attribution de la classe $fond$ (voisinage de taille 80 pixels)}
 \label{seuillage}
 \end{figure}
 
-Reste à definir un classe ($texte$ ou $illustration$) aux pixels restants/ 
+Reste à definir une classe ($texte$ ou $illustration$) aux pixels restants.
 
 \section{Extraction de contours pour le texte}
 
 Les contours au voisinage d'un pixel, semblent être une information pertinente pour caractériser les caractères d'un document numérisé.\\
-En effet, les caractères sont généralement d'une couleur uniforme sur un fond uniforme cela afin de rendre la lecture aisée, ce qui a la 
+En effet, les caractères sont généralement d'une couleur uniforme sur un fond uniforme (pour plus de lisiblité), ce qui a la 
 particularité de bien faire ressortir les gradients\\
 Pour extraire cette information, deux méthodes seront utilisées : l'application d'un filtre Laplacien et le calcul de l'histogramme orienté du gradient 
-\cite{Dala05histogramsof}, cela sur un patch carré. 
+\cite{Dalal05histogramsof}, cela sur un patch carré. 
 
 \section{Extraction de saturation pour les illustrations}
 
-Comme évoqué precedemment, l'extraction d'une caractéristique de couleur est utile pour isoler les pixels d'illustration\\
-Utiliser le triple RGB du voisinage d'un pixel n'a peu de sens si on cherche à discriminer ces pixels des pixels de texte (souvent noir).
-En effet, le triplet HSV est plus approprié dans ce contexte : la saturation en particulier pour différencier les images couleur du texte gris ou noir.
+Comme évoqué precedemment, l'extraction d'une caractéristique de couleur est utile pour isoler les pixels d'illustration.\\
+Utiliser le triplet RGB du voisinage d'un pixel n'a que peu de sens si on cherche à discriminer des pixels de texte (souvent noir).
+En effet, le triplet HSV est plus approprié dans ce contexte : la saturation en particulier pour différencier les images couleur du texte gris-noir.\\
+Les histogrammes des figures \ref{histo_hsv_illustration} et \ref{histo_hsv_texte} montrent parfaitement cette propriété : les patchs de texte ont des saturations
+proches de 0, contrairement aux patchs d'illustration.\\
 
-\chapter{Custering}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{images/histo_hsv_image.jpg}
+\includegraphics[scale=0.4]{images/histo_hsv_image2.jpg}
+\includegraphics[scale=0.4]{images/histo_hsv_image3.jpg}
+\end{center}
+\caption{histogrammes HSV pour trois patchs d'illustration}
+\label{histo_hsv_illustration}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{images/histo_hsv_texte.jpg}
+\includegraphics[scale=0.4]{images/histo_hsv_texte2.jpg}
+\includegraphics[scale=0.4]{images/histo_hsv_texte3.jpg}
+\end{center}
+\caption{histogrammes HSV pour trois patchs de texte}
+\label{histo_hsv_texte}
+\end{figure}
+
+
+\chapter{Clustering}
 
 A ce stade, nous avons des pixels qui ne sont pas du $fond$ et auxquels nous devons attribuer une classe parmi $texte$ et $illustration$.
 Les features extraits au chapître précédents doivent donc être décomposer en deux sous groupes, à cet effet deux algorithmes sont utilisés :
 \begin{description} % listes descriptives
 
-\item[$KMeans$ :] cet algorithme permet de créer deux amas compactes.
+\item[$KMeans$ :] cet algorithme permet de créer deux amas compactes par minimisation de l'énergie intra-cluster.
 \item[$NMF$ :] cet algorithme permet de projeter les features des N pixels. Ces features de dimension P seront projetés sur un espace à 2 dimensions. On crééra ensuite
-deux amas : un premier pour les points dont la première composante de projection est plus grande que la seconde, un second pour les autres. 
-\item[$fond$ :] Le pixel appartient au fond blanc d'origine de la page (en blanc sur les images vérité-terrain).
+deux amas : un premier pour les points dont la première composante de projection est plus grande que la seconde, un second pour les autres.
 
 \end{description}
-\section{Extraction de saturation}
-\subsection{Définition}
-Hue, Saturation, Value ou HSV est un modèle qui représente la couleur (H) en fonction de la saturation (S) en gris et la luminosité (V) (Cf. figure \ref{HSV}).
+
+A l'issue de cette étape de classification, nous avons donc deux amas de pixels. Nous définirons comme $texte$, l'amas de pixels dont la proportion de pixels blancs
+est la plus grande. En effet, le texte possède plus de pixels blancs vu qu'il est très souvent écris sur fond blanc.\\
+La figure \ref{resultat} montre l'application du $KMeans$ sur les descripteurs $HOG$+$HSV$ pour les pixels restants à déterminer.
+
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.5]{hue.jpg}
+%\includegraphics[scale=0.2]{images/1g_seuil.jpg}
+\includegraphics[scale=0.2]{images/1g_res_hog_hsv.jpg}
+\includegraphics[scale=0.2]{images/1g_m.jpg}
 \end{center}
-\caption{Illustration $HSV$ \cite{wiki:hsv}}
-\label{HSV}
+\caption{seuillage puis attribution de la classe $fond$ (voisinage de taille 80 pixels) - vérité terrain}
+\label{resultat}
 \end{figure}
+
+
+\chapter{Performances}
+
+% \section{Précision/Rappel}
+
+On applique le processus à toutes les images en procédant comme détaillé plus haut :
+
 \begin{description}
-\item[Teinte (Hue) :] Correspond à la couleur. Elle est définie sous la forme
-d'un cercle où les trois couleurs primaires RVB sont
-réparties aux angles 0\degre pour le rouge, 120\degre pour le vert
-et 240\degre pour le bleu.
-\item[Saturation :] C’est le taux de pureté de la couleur, qui varie entre un
-maximale (couleur éclatante) et l’achromatisme (couleur
-gris).
-\item[Valeur :]  C’est la mesure de l’intensité lumineuse de la couleur
-qui varie entre le noir et le blanc.
+ \item[-] Seuillage afin de déterminer les pixels de classe $fond$
+ \item[-] Extraction de features des pixels restants (pour chaque pixel, concaténation du vecteur descripteurs HOG (ou Laplacien) et du vecteur descripteur HSV)
+ \item[-] Clusterisation des features afin de déterminer la classe $illustration$ ou $texte$ des pixels restants
 \end{description}
 
-\subsection{Choix de la variable explicative}
-
-Nous sommes partis de l’hypothèse que les images en \og gros plan \fg{} sont plutôt gris et donc une saturation en couleur plus faible que les images en \og large plan \fg{}.\\
-La réalisation d’un histogramme sur la moyenne de saturation (Cf. Figure \ref{hue_histo}), portant sur la totalité des images, nous a permis d’identifier deux classes de type Gaussien pour modéliser nos 2 classes
-qui sont les images de type \og gros plan \fg{} et les images de type \og large plan \fg{}\\
-Nous présentons le code Python d'extraction de saturation et sa classification dans l'annexe \ref{code_python_saturation}
-\label{hue_frontiere}
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{hue_histogramme.jpg}
-\end{center}
-\caption{Histogramme des moyennes de saturation}
-\label{hue_histo}
-\end{figure}
-
-La moyenne de la saturation globale obtenue est 60.2561640854. 
-Nous avons considérés les images dont la saturation moyenne est inférieure à la moyenne globale comme appartenant à la classe \og gros plan \fg{} et les images dont 
-la saturation moyenne est supérieure à la moyenne globale comme appartenant à la classe \og large plan \fg{}.
-
-\section{Histogramme orienté du gradient}
-
-Cette méthode consiste à extraire l'information local de contours. Historiquement, sa première utilisation a consisté en 
-la détection de piétons \cite{hog}. Pour une image donnée, le vecteur descripteur des \begin{itshape}HOG\end{itshape} est la concaténation
-d'histogrammes de l'amplitude du gradient (en fonction de son orientation). Chaque histogramme est pris sur un carré de l'image
-appelé \og cellule \fg{}. L'ensemble des cellules quadrille entièrement l'image avec un eventuel recouvrement.\\
-Ces histogrammes sont ensuite normalisés en intensité par paquet de cellules adjacentes (appelés \og block \fg{}) afin d'obtenir des descripteurs 
-invariants au changement local d'illumination (Cf. figure \ref{hog}).
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{hog.jpg}
-\end{center}
-\caption{Construction d'un histogramme orienté du gradient \cite{hog2}}
-\label{hog}
-\end{figure}
-
-On peut espérer que ces descripteurs s'adaptent bien à notre problème. En effet, les epaules des intervenants à gauche 
-et à droite de l'image, ainsi que leur visage, sont des contours descriminants pour la classe $G$ (gros plan)
-(Cf. figure \ref{hog_classeG}). D'autre part, les gros plans ont un fond uniforme, 
-ce qui donnera beaucoup de gradient nul, et donc un descripteur \begin{itshape}sparse\end{itshape} pour la classe $G$ (gros plan).
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.3]{hog_exemple.jpg}
-\includegraphics[scale=0.3]{hog_exemple_contour.jpg}
-\includegraphics[scale=0.3]{hog_exemple_gradient.jpg}
-\includegraphics[scale=0.3]{hog_exemple2.jpg}
-\includegraphics[scale=0.3]{hog_exemple2_contour.jpg}
-\includegraphics[scale=0.3]{hog_exemple2_gradient.jpg}
-\end{center}
-\caption{Histogramme orienté du gradient pour les gros plans (classe $G$)}
-\label{hog_classeG}
-\end{figure}
-
-\section{Reseaux de neurones à convolution pré-entrainé}
-
-Cette méthode consiste à extraire les descripteurs produits par un réseau de neurones à convolution déjà entrainé.
-En effet, en récupérant la sortie de l'avant-dernière couche, on obtient la transformation finale haut-niveau de l'image, 
-avant la couche de classification.
-Cette technique est connue sous le nom de \begin{itshape}Transfer Learning\end{itshape} \cite{DBLP:journals/corr/YosinskiCBL14} 
-et a fait ses preuves dans le cas de réseaux de neurones entrainé sur la base 
-d'images \begin{itshape}ImageNet\end{itshape} \cite{imagenet_cvpr09}.
-Cette base de près de 10 millions d'images, contient une multitude de classes (animaux,ustensiles,humains,...) organisées hiérarchiquement, 
-et on peut espérer que les gros plans (classe $G$) correspondent à l'une de ces classes,et de même pour les images plan 
-large (classe $L$), de telle sorte qu'on puisse ensuite séparer les descripteurs via un classifieur 
-supervisé.
-
-\chapter{Résultats}
-\section{Extraction de contours}
-Pour expliquer le résultat de l’extraction de contours, voici quelques exemples d'images où les contours ont été tracés avec 
-la fonction $\mathrm{cv::drawContours}$.
-
-La figure \ref{contouringG1} montrent deux exemples de contouring sur des images \og gros plan \fg{} (classe $G$), appliqué
-avec l'option \begin{itshape}CHAIN\_APPRO\_NONE\end{itshape} (première passe)
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{contouring_exemple1_classeG_passe1.png}
-\includegraphics[scale=0.5]{contouring_exemple2_classeG_passe1.png}
-\end{center}
-\caption{Contouring sur des images de classe $G$ avec l'option CHAIN\_APPRO\_NONE}
-\label{contouringG1}
-\end{figure}
-
-La figure \ref{contouringL1} montrent deux exemples de contouring sur des images \og large plan \fg{} (classe $L$), appliqué
-avec l'option \begin{itshape}CHAIN\_APPRO\_NONE\end{itshape} (première passe)
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{contouring_exemple1_classeL_passe1.png}
-\includegraphics[scale=0.5]{contouring_exemple2_classeL_passe1.png}
-\end{center}
-\caption{Contouring sur des images de classe $L$ avec l'option CHAIN\_APPRO\_NONE}
-\label{contouringL1}
-\end{figure}
-
-Il y a plus de contours dans les images \og large plan \fg{} car le décor du plateau TV est composé de beaucoup de détails.
-Cela permet de bien différencier les gros plans des plans larges mais pour quelques cas le nombre de 
-contours ne suffit pas.\\
-Pour remédier à cela, nous avons mis en place la seconde passe et dont voici les résultats pour les mêmes 
-images : 
-
-La figure \ref{contouringG2} montre deux exemples de contouring sur des images \og gros plan \fg{} (classe $G$), appliqué
-avec l'option \begin{itshape}CHAIN\_APPRO\_SIMPLE\end{itshape} (seconde passe).
-
-La figure \ref{contouringL2} montre deux 
-exemples de contouring sur des images \og large plan \fg{} (classe $L$), appliqué avec 
-l'option \begin{itshape}CHAIN\_APPRO\_SIMPLE\end{itshape}\\
-
-
-Le nombre de contours à beaucoup augmenté par rapport à la première passe, ce qui va permettre de différencier encore mieux 
-les types de plans : en effet, on note ici un très grand nombre de contours dans le décor et sur les personnages, ce qui nous permet de 
-mieux discriminer les plans larges.
-Le bandeau du bas est plus détaillé en termes de contours que pour la première passe.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{contouring_exemple1_classeG_passe2.png}
-\includegraphics[scale=0.5]{contouring_exemple2_classeG_passe2.png}
-\end{center}
-\caption{Contouring sur des images de classe $G$ avec l'option CHAIN\_APPRO\_SIMPLE}
-\label{contouringG2}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{contouring_exemple1_classeL_passe2.png}
-\includegraphics[scale=0.5]{contouring_exemple2_classeL_passe2.png}
-\end{center}
-\caption{Contouring sur des images de classe $L$ avec l'option CHAIN\_APPRO\_SIMPLE}
-\label{contouringL2}
-\end{figure}
-
-\section{Extraction de teinte}
-En prenant comme frontière de décision, la valeur calculée en \ref{hue_frontiere}, alors on obtient un taux de prédiction correcte de 78.32\%.\\
-Par ailleurs, nous avons demandé à différent classifieurs d'effectuer un apprentissage supervisé sur les moyennes de saturation. Pour cela, nous avons divisé les images
-en deux sous-ensembles représentant 70\% du total pour l'entrainement, 30\% pour le test.\\
-Les resultats de cette classification sont illustrés dans la table \ref{Table_resultats_hue}. On voit que SVM et Random Forest donnent des frontières plus complexes qui permettent
-un meilleure score de test (90\%).\\
-Les classifieurs utilisés sont ceux de la librairie \begin{itshape}Scikit-Learn\end{itshape}, implémentés dans le script 
-\begin{itshape}Python\end{itshape} tiré de \cite{scikit_bench}, que nous avons adaptés.
+A des fins de mesures des performances, on utilise la vérité-terrain pour le calcul de précision/rappel pour chaque classe.\\
+\ref{res_classe1},\ref{res_classe2} et \ref{res_classe3} récapitulent les precision/rappel obtenus respectivement pour les classes $fond$,$texte$ et $illustration$.
 
 \begin{table}
 \begin{center}
-\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|}
+%\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-\begin{bf}classifieur\end{bf}& \begin{bf}score de test\end{bf} & \begin{bf}temps de training (s)\end{bf} & \begin{bf}temps de test (s)\end{bf} \\
+\multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
+\cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-Ridge Classifier & 0.67 & 0.44 & 0.001\\
+$Laplacien+HSV$ & 0.55 & 0.90 & 0.57 & 0.64\\
 \hline
-Perceptron &  0.652 & 0.005 & 0.0\\
-\hline
-Passive-Aggressive & 0.344 & 0.005 & 0.0\\
-\hline
-kNN & 0.779 & 0.002 & 0.003\\
-\hline
-Random forest & 0.906 & 0.421 & 0.021\\
-\hline
-linear SVM - L2 penalty & 0.630 & 0.002 & 0.0\\
-\hline
-SGDClassifier - L2 penalty & 0.655 & 0.003 & 0.0\\
-\hline
-linear SVM - L1 penalty	& 0.786 & 0.007 & 0.0\\
-\hline
-SGDClassifier - L1 penalty & 0.656 & 0.005 & 0.0\\
-\hline
-SGDClassifier - ElasticNet penalty & 0.616 & 0.005 & 0.0\\
-\hline
-NearestCentroid & 0.525 & 0.001 & 0.0\\
-\hline
-SVM & 0.902 & 0.215 & 0.062\\
-\hline
-linear SVM - L1 penalty - dual=False & 0.670 & 0.067 & 0.0\\
+$HOG+HSV$ &  0.55 & 0.90 & 0.61 & 0.69\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Résultats de classification supervisée sur les moyennes de saturation}
-\label{Table_resultats_hue}
+\caption{precision/rappel pour la classe $fond$}
+\label{res_classe1}
 \end{table}
-
-\section{Histogramme orienté du gradient}
-Nous avons extrait les descripteurs \begin{itshape}HOG\end{itshape} pour chacune des images de classe $G$ et $L$, en utilisant 
-une cellule de taille 32x32 (sans recouvrement) de sorte à récupérer les formes des épaules et du visage, et non les details 
-plus petits liés au port de lunettes par exemple. Pour la normalisation, nous l'avons effectué par groupe de carré à 4 cellules (avec
-recouvrement) afin de tenir compte du fait qu'au sein des gros plans, les intervenants peuvent être légèrement décalés.
-Puis, nous avons appliquer à ces descripteurs, différent classifieurs supervisés. 
-Nous avons découpé le set de descripteurs en deux sous-ensembles représentant 70\% du total pour l'entrainement, 
-30\% pour le test. Les resultats de classification sont illustrés dans la table \ref{Table_resultats_hog}.\\
-Les classifieurs utilisés sont ceux de la librairie \begin{itshape}Scikit-Learn\end{itshape}, implémentés dans le script 
-\begin{itshape}Python\end{itshape} tiré de \cite{scikit_bench}, que nous avons adaptés.
 
 \begin{table}
 \begin{center}
-\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|}
+%\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-\begin{bf}classifieur\end{bf}& \begin{bf}score de test\end{bf} & \begin{bf}temps de training (s)\end{bf} & \begin{bf}temps de test (s)\end{bf} \\
+\multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
+\cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-Ridge Classifier & 1.0 & 0.130 & 0.027\\
+$Laplacien+HSV$ & 0.63 & 0.55 & 0.38 & 0.40\\
 \hline
-Perceptron & 1.0 & 0.219 & 0.028\\
-\hline
-Passive-Aggressive & 1.0 & 0.352 & 0.024\\
-\hline
-kNN & 0.998 & 0.221 & 2.875\\
-\hline
-Random forest & 1.0 & 1.321 & 0.012\\
-\hline
-linear SVM - L2 penalty & 1.0 & 0.197 & 0.024\\
-\hline
-SGDClassifier - L2 penalty & 1.0 & 0.202 & 0.024\\
-\hline
-linear SVM - L1 penalty & 1.0 & 0.283 & 0.024\\
-\hline
-SGDClassifier - L1 penalty & 1.0 & 0.634 & 0.024\\
-\hline
-SGDClassifier - ElasticNet penalty & 1.0 & 0.721 & 0.024\\
-\hline
-NearestCentroid & 0.996 & 0.049 & 0.028\\
-\hline
-SVM & 0.998 & 0.446 & 0.203\\
-\hline
-linear SVM - L1 penalty - dual=False & 1.0 & 0.238 & 0.003\\
+$HOG+HSV$ &  0.64 & 0.61 & 0.39 & 0.47\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Résultats de classification supervisée sur les descripteurs $HOG$}
-\label{Table_resultats_hog}
+\caption{precision/rappel pour la classe $illustration$}
+\label{res_classe2}
 \end{table}
 
-\section{Reseaux de neurones à convolution pré-entrainé}
-Nous avons utilisé le code \begin{itshape}Overfeat\end{itshape} \cite{DBLP:journals/corr/SermanetEZMFL13}, récupéré par clonage du dépôt 
-Github correspondant \cite{overfeat}, pré-entrainé sur la base \begin{itshape}ImageNet\end{itshape} \cite{imagenet_cvpr09}.
-Nous avons extrait les descripteurs pour chacune des images de classe $G$ et $L$ pour leur appliquer différent classifieurs
- supervisés. Nous avons découpé le set de descripteurs en deux sous-ensembles 70\% du total pour l'entrainement, 30\% pour le test.
- Les resultats de classification sont illustrés dans la table \ref{Table_resultats_overfeat}.\\
- Les classifieurs utilisés sont ceux de la librairie \begin{itshape}Scikit-Learn\end{itshape}, implémentés dans le script 
-\begin{itshape}Python\end{itshape} tiré de \cite{scikit_bench}, que nous avons adaptés.
-
- 
 \begin{table}
 \begin{center}
-\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|}
+%\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-\begin{bf}classifieur\end{bf}& \begin{bf}score de test\end{bf} & \begin{bf}temps de training (s)\end{bf} & \begin{bf}temps de test (s)\end{bf} \\
+\multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
+\cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-Ridge Classifier & 1.0 & 0.762 & 0.152\\
+$Laplacien+HSV$ & 0.83 & 0.65 & 0.53 & 0.58\\
 \hline
-Perceptron & 0.998 & 1.515 & 0.155\\
-\hline
-Passive-Aggressive & 1.0 & 1.852 & 0.150\\
-\hline
-kNN & 0.998 & 1.456 & 16.77\\
-\hline
-Random forest & 0.998 & 3.851 & 0.024\\
-\hline
-linear SVM - L2 penalty & 1.0 & 1.105 & 0.149\\
-\hline
-SGDClassifier - L2 penalty & 0.998 & 1.156 & 0.153\\
-\hline
-linear SVM - L1 penalty & 1.0 & 1.220 & 0.149\\
-\hline
-SGDClassifier - L1 penalty & 1.0 & 5.581 & 0.149\\
-\hline
-SGDClassifier - ElasticNet penalty & 1.0 & 6.062 & 0.151\\
-\hline
-NearestCentroid	& 0.987 & 0.302 & 0.221\\
-\hline
-SVM & 1.0 & 3.508 & 1.591\\
-\hline
-linear SVM - L1 penalty - dual=False & 1.0 & 1.150 & 0.011\\
+$HOG+HSV$ & 0.87 & 0.66 & 0.75 & 0.62\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Résultats de classification supervisée sur les descripteurs $Overfeat$}
-\label{Table_resultats_overfeat}
+\caption{precision/rappel pour la classe $texte$}
+\label{res_classe3}
 \end{table}
+
+\clearpage
+
+On oberve les meilleurs résultats pour un partitionnement $KMeans$ du descripteur $HOG+HSV$ avec une precision moyenne (toute image et toute classe confondue) de 
+\begin{bf}0.68\end{bf} et un rappel moyen de \begin{bf}0.72\end{bf}.
+
+\section{Cas particuliers}
+
+\chapter{Code}
+
+\chapter{Resultats}
+
 \clearpage
 
 \appendix

@@ -9,6 +9,7 @@ from sklearn.cluster import KMeans
 from scipy import misc
   
 descr = ['hog','hsv']
+decomposition = 'kmeans'
 
 def cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,mask):
     h,w,c = image.shape
@@ -39,8 +40,10 @@ def descr_rgb(patchs):
 
 def descr_hsv(patchs):
     patchs_preprocessed = np.zeros((patchs.shape[0]*patchs.shape[1]*patchs.shape[2],patchs.shape[3]))
+    bins = np.arange(256)
     for n in np.arange(patchs.shape[3]):
-	 patchs_preprocessed[:,n] = cv2.cvtColor(patchs[:,:,:,n],cv2.COLOR_BGR2HSV).flatten()
+	 patch_hsv = cv2.cvtColor(patchs[:,:,:,n],cv2.COLOR_BGR2HSV)
+         patchs_preprocessed[:,n] = np.hstack((np.histogram(patch_hsv[:,:,0],bins)[0] ,np.histogram(patch_hsv[:,:,1],bins)[0], np.histogram(patch_hsv[:,:,2],bins)[0]))
     return patchs_preprocessed
 
 def descr_grad(patchs):
@@ -67,6 +70,48 @@ def descr_hog(patchs):
     for n in np.arange(patchs.shape[3]):
         patchs_preprocessed[:,n] = hog.compute(np.squeeze(patchs[:,:,:,n].astype(np.uint8))).flatten()
     return patchs_preprocessed
+
+def plot_histo(img,filename,hsv=False):
+    if hsv:
+        imgt = cv2.cvtColor(img,cv2.COLOR_BGR2HSV) 
+    else:
+        imgt = img
+    bins = np.arange(256)
+    f = plt.figure()
+    f.add_subplot(1,4,1)
+    plt.imshow(img)
+    f.add_subplot(1,4,2)
+    plt.bar(bins[:-1],np.histogram(imgt[:,:,0],bins)[0])
+    if hsv:
+        plt.title('hue')
+    else:
+        plt.title('blue')
+    plt.gca().axes.yaxis.set_ticklabels([])
+    plt.tick_params(labelsize=8)
+    f.add_subplot(1,4,3)
+    plt.bar(bins[:-1],np.histogram(imgt[:,:,1],bins)[0])
+    if hsv:
+        plt.title('saturation')
+    else:
+        plt.title('green')
+    plt.gca().axes.yaxis.set_ticklabels([])
+    plt.tick_params(labelsize=8)
+    f.add_subplot(1,4,4)
+    plt.bar(bins[:-1],np.histogram(imgt[:,:,2],bins)[0])
+    if hsv:
+        plt.title('value')
+    else:
+        plt.title('red')
+    plt.gca().axes.yaxis.set_ticklabels([])
+    plt.tick_params(labelsize=8)
+    st = f.suptitle('histogrammes')
+    #plt.show()
+    f.savefig(filename)
+    f.clf()
+
+
+
+
 
 
 if os.path.exists('data_papers') == False:
@@ -150,16 +195,17 @@ for file_mask in list_mask:
             patchs_preprocessed = np.concatenate((patchs_preprocessed,descr_rgb(patchs)),axis=0)
         if d == 'hsv':
             patchs_preprocessed = np.concatenate((patchs_preprocessed,descr_hsv(patchs)),axis=0)
-
-    ### compute NMF classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
-    #nmf = NMF(n_components=3)
-    #patchs_transformed = nmf.fit_transform(patchs_preprocessed.transpose())
-    #ind = np.argmax(patchs_transformed,axis=1)
-    
-    ### compute KMEANS classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
-    km = KMeans(n_clusters=2)#3)
-    ind = km.fit_predict(patchs_preprocessed.transpose())
-    
+    if decomposition == 'nmf':
+        ### compute NMF classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
+        nmf = NMF(n_components=3)
+        patchs_transformed = nmf.fit_transform(patchs_preprocessed.transpose())
+        ind = np.argmax(patchs_transformed,axis=1)
+    elif decomposition == 'kmeans':
+        ### compute KMEANS classification to find class for left patchs : class 0 (illustration) or class 1 (texte) 
+        km = KMeans(n_clusters=2)#3)
+        ind = km.fit_predict(patchs_preprocessed.transpose())
+    else: 
+        print decomposition + " : decomposition unknown"
     ### patchs are now divide into two categories, give class 0 (illustration) for category in minority, class 1 for the other one.
     #sorted_labels = np.argsort([np.sum(ind==0),np.sum(ind==1)])#,np.sum(ind==2)])
     #color_mapping[sorted_labels[0]] = [255,0,0] # red for class 0 (illustration) 
@@ -201,9 +247,10 @@ for file_mask in list_mask:
             recall_[cl] = -1
     #print "** precision (per class) : ",precision_
     #print "** recall : (per class) ",recall_
-    
-    precision_mean_ = np.mean(precision_[precision_!=-1])
-    recall_mean_ = np.mean(recall_[recall_!=-1])
+    precision_ = (precision_*1000).astype(np.uint)/1000.0
+    recall_ = (recall_*1000).astype(np.uint)/1000.0
+    precision_mean_ = int(np.mean(precision_[precision_!=-1])*1000)/1000.0
+    recall_mean_ = int(np.mean(recall_[recall_!=-1])*1000)/1000.0
 
     #print "** precision (mean) : ",precision_mean_
     #print "** recall (mean) : ",recall_mean_
@@ -233,6 +280,7 @@ for file_mask in list_mask:
     res_name = "_res"
     for d in descr:
         res_name = res_name + "_" + d
+    res_name = res_name + '_' + decomposition
     f = plt.figure()
     f.add_subplot(1,4,1)
     plt.imshow(image)
@@ -242,6 +290,8 @@ for file_mask in list_mask:
     plt.imshow(mask)
     f.add_subplot(1,4,4)
     plt.imshow(image_result.astype(np.uint8))
+    st = f.suptitle('p/r classe illustraton (rouge) = '+str(precision_[0])+' / '+str(recall_[0])+'\np/r class texte (bleu) = '+str(precision_[1])+' / '+str(recall_[1])+'\np/r class fond (blanc) = '+str(precision_[2])+' / '+str(recall_[2]))
+    st.set_y(0.85)
     #plt.show()
     f.savefig(file_mask[:-6]+res_name+'_all.png', dpi=f.dpi)
     f.clf()
