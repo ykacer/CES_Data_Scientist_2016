@@ -7,111 +7,22 @@ from itertools import izip
 from sklearn.decomposition import NMF
 from sklearn.cluster import KMeans
 from scipy import misc
-  
+from utils import *
+from functions import *
+
+
+# parameters #
+list_mask = glob.glob('data_papers/*_m.*')
 descr = ['hog','hsv']
 decomposition = 'kmeans'
-
-def cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,mask):
-    h,w,c = image.shape
-    list_patchs_y = np.asarray([]);    
-    list_patchs_x = np.asarray([]);    
-    patchs = np.empty((0,roi_size_y*roi_size_x*c)).astype(np.uint8)
-    Y,X = np.meshgrid(np.arange(0,h-roi_size_y,roi_size_y-overlap_y),np.arange(0,w-roi_size_x,roi_size_x-overlap_x)
-)
-    for n,(j,i) in enumerate(izip(Y.flatten(),X.flatten())):
-	#background = np.unique(mask[j:j+roi_size_y,i:i+roi_size_x])
-	background = 1.0*np.sum(mask[j:j+roi_size_y,i:i+roi_size_x]==0)/roi_size_x/roi_size_y
-        #if 0 in background:
-        if background>0.05:
-            patchs = np.append(patchs,image[j:j+roi_size_y,i:i+roi_size_x,:].flatten().astype(np.uint8)[np.newaxis,:], axis=0)
-            list_patchs_y = np.append(list_patchs_y,j)
-            list_patchs_x = np.append(list_patchs_x,i)
-    patchs = patchs.transpose()
-    nb_patchs = patchs.shape[1]
-    if flatten_or_not == False:
-	patchs = np.reshape(patchs,(roi_size_y,roi_size_x,c,nb_patchs))
-    return patchs,list_patchs_x,list_patchs_y
-
-def descr_rgb(patchs):
-    patchs_preprocessed = np.zeros((patchs.shape[0]*patchs.shape[1]*patchs.shape[2],patchs.shape[3]))
-    for n in np.arange(patchs.shape[3]):
-	 patchs_preprocessed[:,n] = patchs[:,:,:,n].flatten()
-    return patchs_preprocessed
-
-def descr_hsv(patchs):
-    patchs_preprocessed = np.zeros((patchs.shape[0]*patchs.shape[1]*patchs.shape[2],patchs.shape[3]))
-    bins = np.arange(256)
-    for n in np.arange(patchs.shape[3]):
-	 patch_hsv = cv2.cvtColor(patchs[:,:,:,n],cv2.COLOR_BGR2HSV)
-         patchs_preprocessed[:,n] = np.hstack((np.histogram(patch_hsv[:,:,0],bins)[0] ,np.histogram(patch_hsv[:,:,1],bins)[0], np.histogram(patch_hsv[:,:,2],bins)[0]))
-    return patchs_preprocessed
-
-def descr_grad(patchs):
-    patchs_preprocessed = np.zeros((patchs.shape[0]*patchs.shape[1],patchs.shape[3])) 
-    for n in np.arange(patchs.shape[3]):
-        patchs_preprocessed[:,n] = cv2.cvtColor(cv2.Laplacian(np.squeeze(patchs[:,:,:,n].astype(np.uint8)),cv2.CV_8U),cv2.COLOR_RGB2GRAY).flatten()
-    return patchs_preprocessed
-
-def descr_hog(patchs):
-    nbins = 9
-    derivAperture = 1
-    winSigma = 4.
-    histogramNormType = 0
-    L2HysThreshold = 2.0000000000000001e-01
-    gammaCorrection = 0
-    nlevels = 64
-    winSize = (patchs.shape[0],patchs.shape[1])
-    blockSize = (8,8)
-    blockStride = (4,4)
-    cellSize = (4,4)
-    feature_size = (winSize[0]-(blockSize[0]-blockStride[0]))/blockStride[0]*(winSize[1]-(blockSize[1]-blockStride[1]))/blockStride[1]*blockSize[0]/cellSize[0]*blockSize[1]/cellSize[1]*nbins
-    hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,cellSize,nbins,derivAperture,winSigma,histogramNormType,L2HysThreshold,gammaCorrection,nlevels)
-    patchs_preprocessed = np.zeros((feature_size,patchs.shape[3]))
-    for n in np.arange(patchs.shape[3]):
-        patchs_preprocessed[:,n] = hog.compute(np.squeeze(patchs[:,:,:,n].astype(np.uint8))).flatten()
-    return patchs_preprocessed
-
-def plot_histo(img,filename,hsv=False):
-    if hsv:
-        imgt = cv2.cvtColor(img,cv2.COLOR_BGR2HSV) 
-    else:
-        imgt = img
-    bins = np.arange(256)
-    f = plt.figure()
-    f.add_subplot(1,4,1)
-    plt.imshow(img)
-    f.add_subplot(1,4,2)
-    plt.bar(bins[:-1],np.histogram(imgt[:,:,0],bins)[0])
-    if hsv:
-        plt.title('hue')
-    else:
-        plt.title('blue')
-    plt.gca().axes.yaxis.set_ticklabels([])
-    plt.tick_params(labelsize=8)
-    f.add_subplot(1,4,3)
-    plt.bar(bins[:-1],np.histogram(imgt[:,:,1],bins)[0])
-    if hsv:
-        plt.title('saturation')
-    else:
-        plt.title('green')
-    plt.gca().axes.yaxis.set_ticklabels([])
-    plt.tick_params(labelsize=8)
-    f.add_subplot(1,4,4)
-    plt.bar(bins[:-1],np.histogram(imgt[:,:,2],bins)[0])
-    if hsv:
-        plt.title('value')
-    else:
-        plt.title('red')
-    plt.gca().axes.yaxis.set_ticklabels([])
-    plt.tick_params(labelsize=8)
-    st = f.suptitle('histogrammes')
-    #plt.show()
-    f.savefig(filename)
-    f.clf()
-
-
-
-
+flatten_or_not = False
+color_mapping = {0:[255,0,0],1:[0,0,255],2:[255,255,255]}
+resizing_factor = 4
+roi_size_x = 80/resizing_factor
+roi_size_y = 80/resizing_factor
+overlap_x = 0/resizing_factor
+overlap_y = 0/resizing_factor
+#############
 
 
 if os.path.exists('data_papers') == False:
@@ -120,15 +31,6 @@ if os.path.exists('data_papers') == False:
         os.system('wget https://archive.ics.uci.edu/ml/machine-learning-databases/00306/dataset_segmentation.rar')
     os.system('unrar e dataset_segmentation.rar data_papers')
 
-
-list_mask = glob.glob('data_papers/*_m.*')
-flatten_or_not = False
-color_mapping = {0:[255,0,0],1:[0,0,255],2:[255,255,255]}
-resizing_factor = 4
-roi_size_x = 80/resizing_factor
-roi_size_y = 80/resizing_factor
-overlap_x = 0/resizing_factor
-overlap_y = 0/resizing_factor
 
 prediction = np.asarray([])
 ground_truth = np.asarray([])

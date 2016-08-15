@@ -97,23 +97,23 @@ minimale \ref{seuillage}.\\
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{images/1g.jpg}
-%\includegraphics[scale=0.2]{images/1g_binary.jpg}
+\includegraphics[scale=0.3]{images/1g.jpg}
+\includegraphics[scale=0.075]{images/1g_binary.jpg}
 \end{center}
 \caption{seuillage}
 \label{seuillage}
 \end{figure}
 
 Ainsi, cette première étape permet de trouver les pixels de $fond$. En effet, on attribue une telle classe aux pixels dont le voisinage carré est à 95\% blanc 
-dans l'image binaire.
+dans l'image binaire \ref{classe_fond}
 
 \begin{figure}[H]
 \begin{center}
-%\includegraphics[scale=0.2]{images/1g_binary.jpg}
-%\includegraphics[scale=0.2]{images/1g_seuil.jpg}
+\includegraphics[scale=0.075]{images/1g_binary.jpg}
+\includegraphics[scale=0.075]{images/1g_seuil.jpg}
 \end{center}
-\caption{seuillage puis attribution de la classe $fond$ (voisinage de taille 80 pixels)}
-\label{seuillage}
+\caption{seuillage puis attribution de la classe $fond$ (voisinage de taille 40 pixels)}
+\label{classe_fond}
 \end{figure}
 
 Reste à definir une classe ($texte$ ou $illustration$) aux pixels restants.
@@ -129,16 +129,16 @@ Pour extraire cette information, deux méthodes seront utilisées : l'applicatio
 \section{Extraction de saturation pour les illustrations}
 
 Comme évoqué precedemment, l'extraction d'une caractéristique de couleur est utile pour isoler les pixels d'illustration.\\
-Utiliser le triplet RGB du voisinage d'un pixel n'a que peu de sens si on cherche à discriminer des pixels de texte (souvent noir).
+Cependant, utiliser les triplets RGB au voisinage d'un pixel n'a que peu de sens si on cherche à discriminer des pixels de texte (souvent noir).
 En effet, le triplet HSV est plus approprié dans ce contexte : la saturation en particulier pour différencier les images couleur du texte gris-noir.\\
 Les histogrammes des figures \ref{histo_hsv_illustration} et \ref{histo_hsv_texte} montrent parfaitement cette propriété : les patchs de texte ont des saturations
 proches de 0, contrairement aux patchs d'illustration.\\
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{images/histo_hsv_image.jpg}
-\includegraphics[scale=0.4]{images/histo_hsv_image2.jpg}
-\includegraphics[scale=0.4]{images/histo_hsv_image3.jpg}
+\includegraphics[scale=0.3]{images/histo_hsv_image.jpg}
+\includegraphics[scale=0.3]{images/histo_hsv_image2.jpg}
+\includegraphics[scale=0.3]{images/histo_hsv_image3.jpg}
 \end{center}
 \caption{histogrammes HSV pour trois patchs d'illustration}
 \label{histo_hsv_illustration}
@@ -146,9 +146,9 @@ proches de 0, contrairement aux patchs d'illustration.\\
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{images/histo_hsv_texte.jpg}
-\includegraphics[scale=0.4]{images/histo_hsv_texte2.jpg}
-\includegraphics[scale=0.4]{images/histo_hsv_texte3.jpg}
+\includegraphics[scale=0.3]{images/histo_hsv_texte.jpg}
+\includegraphics[scale=0.3]{images/histo_hsv_texte2.jpg}
+\includegraphics[scale=0.3]{images/histo_hsv_texte3.jpg}
 \end{center}
 \caption{histogrammes HSV pour trois patchs de texte}
 \label{histo_hsv_texte}
@@ -173,18 +173,18 @@ La figure \ref{resultat} montre l'application du $KMeans$ sur les descripteurs $
 
 \begin{figure}[H]
 \begin{center}
-%\includegraphics[scale=0.2]{images/1g_seuil.jpg}
-\includegraphics[scale=0.2]{images/1g_res_hog_hsv.jpg}
-\includegraphics[scale=0.2]{images/1g_m.jpg}
+\includegraphics[scale=0.06]{images/1g_seuil.jpg}
+\includegraphics[scale=0.06]{images/1g_res_hog_hsv.jpg}
+\includegraphics[scale=0.3]{images/1g_m.jpg}
 \end{center}
-\caption{seuillage puis attribution de la classe $fond$ (voisinage de taille 80 pixels) - vérité terrain}
+\caption{attribution de la classe $illustration$ (rouge) ou $texte$ (bleu) par $KMeans$ - en bas, la vérité terrain}
 \label{resultat}
 \end{figure}
 
 
 \chapter{Performances}
 
-% \section{Précision/Rappel}
+\section{Précision/Rappel}
 
 On applique le processus à toutes les images en procédant comme détaillé plus haut :
 
@@ -196,18 +196,16 @@ On applique le processus à toutes les images en procédant comme détaillé plu
 
 A des fins de mesures des performances, on utilise la vérité-terrain pour le calcul de précision/rappel pour chaque classe.\\
 \ref{res_classe1},\ref{res_classe2} et \ref{res_classe3} récapitulent les precision/rappel obtenus respectivement pour les classes $fond$,$texte$ et $illustration$.
-
+A noter que la classe fond est déterminé au début du processus par seuillage, et ne dépend donc pas des descripteurs et de la décomposition utilisé ensuite
+pour déterminer le $texte$ et les $illustrations$
 \begin{table}
 \begin{center}
 %\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
-\begin{tabular}{|c|c|c|c|c|}
+\begin{tabular}{|c|c|}
 \hline
-\multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
-\cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
+\begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-$Laplacien+HSV$ & 0.55 & 0.90 & 0.57 & 0.64\\
-\hline
-$HOG+HSV$ &  0.55 & 0.90 & 0.61 & 0.69\\
+0.55 & 0.90\\
 \hline
 \end{tabular}
 \end{center}
@@ -253,12 +251,50 @@ $HOG+HSV$ & 0.87 & 0.66 & 0.75 & 0.62\\
 
 \clearpage
 
-On oberve les meilleurs résultats pour un partitionnement $KMeans$ du descripteur $HOG+HSV$ avec une precision moyenne (toute image et toute classe confondue) de 
-\begin{bf}0.68\end{bf} et un rappel moyen de \begin{bf}0.72\end{bf}.
+On observe les meilleurs résultats pour un partitionnement $KMeans$ du descripteur $HOG+HSV$. Ainsi, la precision moyenne (toute image et toute classe confondue) est de 
+\begin{bf}0.68\end{bf} et le rappel moyen de \begin{bf}0.72\end{bf}.\\
+La figure \ref{meilleur_precision} présente l'image donnant la meilleure précision (\begin{bf}0.853\end{bf}).\\
+La figure \ref{meilleur_rappel} présente l'image donnant le meilleur rappel (\begin{bf}0.902\end{bf}).\\
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.25]{images/20.jpg}
+\includegraphics[scale=0.06]{images/20_res_hog_hsv_kmeans.jpg}
+\includegraphics[scale=0.25]{images/20_m.jpg}
+\end{center}
+\caption{image donnant la précision moyenne maximale - en bas sa vérité-terrain}
+\label{meilleur_precision}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.25]{images/50.jpg}
+\includegraphics[scale=0.06]{images/50_res_hog_hsv_kmeans.jpg}
+\includegraphics[scale=0.25]{images/50_m.jpg}
+\end{center}
+\caption{image donnant le rappel moyen maximal - en bas sa vérité-terrain}
+\label{meilleur_rappel}
+\end{figure}
+
+\clearpage
 
 \section{Cas particuliers}
 
+Quelques images ne presentent pas de
+\clearpage
+
 \chapter{Code}
+
+Le code $Python$ ayant permis les calculs présentés, se constitue de trois fichiers :
+\begin{description} % listes descriptives
+
+\item[$utils.py$ :] Ce fichier contient les fonctions pour le découpage de l'image en patch.
+\item[$functions.py$ :] Ce fichier contient les fonctions permettant l'extraction des features. Ces fonctions utilisent $OpenCV$ \cite{opencv_library}.
+\item[$run.py$ :] Ce fichier est le fichier principal. Il télécharge le dataset, le decompresse et lance le processus de clusterisation. Il affiche aussi les performances
+en précision/rappel à partir des images de vérité terrain.
+
+\end{description}
+
 
 \chapter{Resultats}
 
