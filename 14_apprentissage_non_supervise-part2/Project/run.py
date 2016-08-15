@@ -186,18 +186,26 @@ for file_mask in list_mask:
     f = plt.figure()
     f.add_subplot(1,4,1)
     plt.imshow(image)
+    plt.gca().axes.xaxis.set_ticklabels()
+    plt.gca().axes.yaxis.set_ticklabels()
     f.add_subplot(1,4,2)
     plt.imshow(binary,cmap=plt.get_cmap('gray'));
+    plt.gca().axes.xaxis.set_ticklabels()
+    plt.gca().axes.yaxis.set_ticklabels()
     f.add_subplot(1,4,3)
     plt.imshow(mask)
+    plt.gca().axes.xaxis.set_ticklabels()
+    plt.gca().axes.yaxis.set_ticklabels()
     f.add_subplot(1,4,4)
     plt.imshow(image_result.astype(np.uint8))
+    plt.gca().axes.xaxis.set_ticklabels()
+    plt.gca().axes.yaxis.set_ticklabels()
     st = f.suptitle('p/r classe illustraton (rouge) = '+str(precision_[0])+' / '+str(recall_[0])+'\np/r class texte (bleu) = '+str(precision_[1])+' / '+str(recall_[1])+'\np/r class fond (blanc) = '+str(precision_[2])+' / '+str(recall_[2]))
     st.set_y(0.85)
     #plt.show()
-    f.savefig(file_mask[:-6]+res_name+'_all.png', dpi=f.dpi)
+    f.savefig(file_mask[:-6]+res_name+'_all.jpg', dpi=f.dpi)
     f.clf()
-    misc.imsave(file_mask[:-6]+res_name+'.png',cv2.resize(image_result,(w*resizing_factor,h*resizing_factor)).astype(np.uint8))
+    misc.imsave(file_mask[:-6]+res_name+'.jpg',cv2.resize(image_result,(w*resizing_factor,h*resizing_factor)).astype(np.uint8))
 
 # compute total precision/recall
 for cl in [0,1,2]:

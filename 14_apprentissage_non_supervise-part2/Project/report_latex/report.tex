@@ -181,10 +181,7 @@ La figure \ref{resultat} montre l'application du $KMeans$ sur les descripteurs $
 \label{resultat}
 \end{figure}
 
-
-\chapter{Performances}
-
-\section{Précision/Rappel}
+\chapter{Précision/Rappel}
 
 On applique le processus à toutes les images en procédant comme détaillé plus haut :
 
@@ -278,117 +275,35 @@ La figure \ref{meilleur_rappel} présente l'image donnant le meilleur rappel (\b
 
 \clearpage
 
-\section{Cas particuliers}
-
-Quelques images ne presentent pas de
-\clearpage
-
 \chapter{Code}
 
 Le code $Python$ ayant permis les calculs présentés, se constitue de trois fichiers :
 \begin{description} % listes descriptives
 
 \item[$utils.py$ :] Ce fichier contient les fonctions pour le découpage de l'image en patch.
-\item[$functions.py$ :] Ce fichier contient les fonctions permettant l'extraction des features. Ces fonctions utilisent $OpenCV$ \cite{opencv_library}.
+\item[$functions.py$ :] Ce fichier contient les fonctions permettant l'extraction des features. Ces fonctions utilisent $OpenCV$ \cite{opencv_library} ainsi que $scikit-learn$ \cite{scikit-learn}
 \item[$run.py$ :] Ce fichier est le fichier principal. Il télécharge le dataset, le decompresse et lance le processus de clusterisation. Il affiche aussi les performances
-en précision/rappel à partir des images de vérité terrain.
+en précision/rappel à partir des images de vérité terrain. Il contient aussi les différents paramètres comme la taille de voisinage, la nature des descripteurs...
 
 \end{description}
 
 
 \chapter{Resultats}
 
+Parmi le dataset de 101 fichiers, certains au nombre de 5 ne presentent pas réellement de fond blanc, ce qui fausse l'étape de seuillage qui elle suppose l'existence d'une telle
+propriété.\\
+Nous présentons donc ci-après les résultats sur 96 fichiers avec les descripteurs $HOG+HSV$ décomposés par $KMeans$ :\\
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{../data_papers/20_res_hog_hsv_kmeans_all.jpg}
+\end{center}
+\caption{image donnant la précision moyenne maximale - en bas sa vérité-terrain}
+\label{meilleur_precision}
+\end{figure}
+
+
 \clearpage
-
-\appendix
-\chapter{Code Python pour l'extraction de saturation et sa classification}\label{code_python_saturation}
-\begin{verbatim}
-import numpy as np
-import cv2
-import os
-import matplotlib.pyplot as plt
-import shutil
-import pandas as pd
-
-saturation = []
-path='c:/tmp/images_debat/'
-dirs = os.listdir(path)
-file_valid='c:/tmp/labels.csv'
-# This would print all the files and directories
-for file in dirs:
-    if file.endswith((".jpg")):
-        colorImage = cv2.imread(path+file)
-        #print ('Traitement du fichier : ',path+file)
-        rows, cols, nbChannels = colorImage.shape
-
-        b,g,r = cv2.split(colorImage)
-        colorImage=cv2.merge([r,g,b])
-        color = ('b','g','r')
-        clorImageHSV=cv2.cvtColor(colorImage, cv2.COLOR_BGR2HSV)
-        h,s,v=cv2.split(clorImageHSV)
-        sm=np.mean(s)
-        saturation.append(sm)
-        #if file == '00000108.jpg' or file == '00000110.jpg' or file == '00000147.jpg':
-            #print ('saturation pour le fichier 108 - 110 -147:')
-            #print sm
-
-globalMean = np.mean(saturation)
-print ('Moyenne globale:')
-print globalMean
-#print saturation
-plt.hist(saturation, range = (35, 85), bins = 30, color = 'yellow',
-            edgecolor = 'red')
-plt.xlabel('Moyenne de la saturation')
-plt.ylabel('nombre images')
-plt.title('Histogramme saturation')
-#hist=np.histogram(saturation)
-#plt.bar(hist)
-plt.show()
-copyPathGrosPlan='c:/tmp/GrosPlan/'
-copyPathLargePlan='c:/tmp/LargePlan/'
-classif=pd.DataFrame(columns=('file_name', 'label'))
-classif_multi=pd.DataFrame(columns=('file_name', 'sm'))
-line = 0;
-for file1 in dirs:
-    if file1.endswith((".jpg")):
-        colorImage = cv2.imread(path+file1)
-        rows, cols, nbChannels = colorImage.shape
-
-        r,g,b = cv2.split(colorImage)
-        colorImage=cv2.merge([r,g,b])
-        color = ('b','g','r')
-        clorImageHSV=cv2.cvtColor(colorImage, cv2.COLOR_BGR2HSV)
-        h,s,v=cv2.split(clorImageHSV)
-        sm=np.mean(s)
-        classif_multi.loc[line]=(file1,sm)
-        #Gros plan
-        if  sm <= (globalMean):
-             classif.loc[line]=(file1,-1.)            
-        #Large plan
-        else:
-            classif.loc[line]=(file1,1.)            
-        
-        line = line+1
-
-classif.sort_values(['file_name'])
-#print classif            
-#Open the labelled file
-labelfile = open(file_valid)
-label_img = pd.read_csv(labelfile,sep=';', names=['file_name', 'label'],header=0,dtype={'label': float})
-label_img.sort_values(['file_name'])
-#print label_img
-
-correct_predict = pd.merge(classif, label_img, on=['file_name', 'label'], how='inner')
-#print len(correct_predict)
-#print len(label_img)
-print ('Resultat :', (float(len(correct_predict))/float(len(label_img)))*100.)
-#print classif_multi
-#print label_img
-label_img_mrg = pd.merge(classif_multi, label_img, on=['file_name'], how='inner')
-label_img_mrg = label_img_mrg.drop('file_name', 1)
-#print label_img_mrg
-label_img_mrg.to_csv('C:\perso\TP\Son-Image\classif_multi.csv', sep=';', encoding='utf-8')
-\end{verbatim}
 
 \backmatter
 
