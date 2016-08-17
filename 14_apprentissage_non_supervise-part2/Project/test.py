@@ -79,6 +79,10 @@ def main():
     image_result = 255*np.ones((h,w,c))
     for n,(j,i) in enumerate(izip(list_patchs_y,list_patchs_x)):
         image_result[j:j+roi_size_y,i:i+roi_size_x,:] = color_mapping[ind[n]]
+
+    # post-processing
+    image_result = post_processing(image_result)
+    
     res_name = "_res"
     for d in descr:
         res_name = res_name + "_" + d
