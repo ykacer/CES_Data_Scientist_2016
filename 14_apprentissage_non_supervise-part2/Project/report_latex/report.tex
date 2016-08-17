@@ -33,7 +33,7 @@ RGB des pixels) : nous allons exploiter tout cela afin de réaliser le clusterin
 \mainmatter
 \chapter{Images exploitées}
 \section{Corpus}\label{labelisation}
-Nous allons exploiter un total de 101 images prises des archives du site de l'Université de Californie \cite{uci}. 
+Nous allons exploiter un total de 102 images prises des archives du site de l'Université de Californie \cite{uci}. 
 Elles représentent chacune une page numérisée tirée de magazines et de journaux russophones \cite{dataset} :
 
 \begin{figure}[H]
@@ -183,6 +183,52 @@ La figure \ref{resultat} montre l'application du $KMeans$ sur les descripteurs $
 \label{resultat}
 \end{figure}
 
+\chapter{Post-traitement}
+
+Quand illustration présente des amas de pixels blancs (c'est la cas des images \ref{rect1} et \ref{rect2}), ces amas sont automatiquement vu comme du $fond$ à l'issu de l'étape
+de seuillage.\\
+Afin d'éviter cela, on va faire une hypothèse : toutes les illustrations sont carrés ou rectangulaires. Ce qui est souvent le cas des images et photos
+figurant dans des magazines ou des journaux.\\
+Ainsi, on va \og rectangulariser \fg toutes les composantes connexes d'$illustration$ en post-traitement ().\\
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.06]{images/rect_1.jpg}
+\includegraphics[scale=0.06]{images/rect_1_res_hog_hsv_kmeans.jpg}
+\end{center}
+\caption{amas de pixels manquants dans les illustrations après clustering $KMeans$ des descripteurs $HOG+HSV$}
+\label{rect1}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.06]{images/rect_50.jpg}
+\includegraphics[scale=0.06]{images/rect_50_res_hog_hsv_kmeans.jpg}
+\end{center}
+\caption{amas de pixels manquants dans les illustrations après clustering $KMeans$ des descripteurs $HOG+HSV$}
+\label{rect2}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.06]{images/rect_1_res_hog_hsv_kmeans.jpg}
+\includegraphics[scale=0.06]{images/rect_1_res_hog_hsv_kmeans_2.jpg}
+\end{center}
+\caption{\og rectangularisation \fg des pixels d'$illustration$ manquants}
+\label{rect3}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.06]{images/rect_50_res_hog_hsv_kmeans.jpg}
+\includegraphics[scale=0.06]{images/rect_50_res_hog_hsv_kmeans_2.jpg}
+\end{center}
+\caption{\og rectangularisation \fg des pixels d'$illustration$ manquants}
+\label{rect4}
+\end{figure}
+
+\clearpage
+
 \chapter{Précision/Rappel}
 
 On applique le processus à toutes les images en procédant comme détaillé plus haut :
@@ -204,7 +250,7 @@ pour déterminer le $texte$ et les $illustrations$
 \hline
 \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-0.55 & 0.90\\
+0.68 & 0.76\\
 \hline
 \end{tabular}
 \end{center}
@@ -220,9 +266,9 @@ pour déterminer le $texte$ et les $illustrations$
 \multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
 \cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-$Laplacien+HSV$ & 0.63 & 0.55 & 0.38 & 0.40\\
+$Laplacien+HSV$ & 0.75 & 0.55 & 0.50 & 0.46\\
 \hline
-$HOG+HSV$ &  0.64 & 0.61 & 0.39 & 0.47\\
+$HOG+HSV$ &  0.75 & 0.60 & 0.48 & 0.50\\
 \hline
 \end{tabular}
 \end{center}
@@ -238,9 +284,9 @@ $HOG+HSV$ &  0.64 & 0.61 & 0.39 & 0.47\\
 \multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
 \cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-$Laplacien+HSV$ & 0.83 & 0.65 & 0.53 & 0.58\\
+$Laplacien+HSV$ & 0.73 & 0.78 & 0.81 & 0.58\\
 \hline
-$HOG+HSV$ & 0.87 & 0.66 & 0.75 & 0.62\\
+$HOG+HSV$ & 0.74 & 0.78 & 0.80 & 0.66\\
 \hline
 \end{tabular}
 \end{center}
@@ -251,9 +297,9 @@ $HOG+HSV$ & 0.87 & 0.66 & 0.75 & 0.62\\
 \clearpage
 
 On observe les meilleurs résultats pour un partitionnement $KMeans$ du descripteur $HOG+HSV$. Ainsi, la precision moyenne (toute image et toute classe confondue) est de 
-\begin{bf}0.68\end{bf} et le rappel moyen de \begin{bf}0.72\end{bf}.\\
-La figure \ref{meilleur_precision} présente l'image donnant la meilleure précision (\begin{bf}0.853\end{bf}).\\
-La figure \ref{meilleur_rappel} présente l'image donnant le meilleur rappel (\begin{bf}0.902\end{bf}).\\
+\begin{bf}0.73\end{bf} et le rappel moyen de \begin{bf}0.71\end{bf}.\\
+La figure \ref{meilleur_precision} présente l'image donnant la meilleure précision (\begin{bf}0.906\end{bf}).\\
+La figure \ref{meilleur_rappel} présente l'image donnant le meilleur rappel (\begin{bf}0.893\end{bf}).\\
 
 \begin{figure}[H]
 \begin{center}
@@ -267,9 +313,9 @@ La figure \ref{meilleur_rappel} présente l'image donnant le meilleur rappel (\b
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.25]{images/50.jpg}
-\includegraphics[scale=0.06]{images/50_res_hog_hsv_kmeans.jpg}
-\includegraphics[scale=0.25]{images/50_m.jpg}
+\includegraphics[scale=0.25]{images/4.jpg}
+\includegraphics[scale=0.06]{images/4_res_hog_hsv_kmeans.jpg}
+\includegraphics[scale=0.25]{images/4_m.jpg}
 \end{center}
 \caption{image donnant le rappel moyen maximal - en bas sa vérité-terrain}
 \label{meilleur_rappel}
@@ -316,7 +362,8 @@ respectifs sont illustrés dans les figures \ref{test1} \ref{test2} \ref{test3}:
 Le code $Python$ ayant permis les calculs présentés, se constitue de trois fichiers :
 \begin{description} % listes descriptives
 
-\item[$utils.py$ :] Ce fichier contient les fonctions pour le découpage de l'image en patch.
+\item[$utils.py$ :] Ce fichier contient les fonctions pour le découpage de l'image en patch et le post-processing, la dernière utilise
+\begin{itshape}scikit-image\end{itshape} \cite{scikit-image}.
 \item[$functions.py$ :] Ce fichier contient les fonctions permettant l'extraction des features. Ces fonctions utilisent $OpenCV$ \cite{opencv_library} ainsi que $scikit-learn$ \cite{scikit-learn}
 \item[$run.py$ :] Ce fichier est le fichier principal. Il télécharge le dataset, le decompresse et lance le processus de clusterisation. Il affiche aussi les performances
 en précision/rappel à partir des images de vérité terrain. Il contient aussi les différents paramètres comme la taille de voisinage, la nature des descripteurs...
@@ -330,9 +377,9 @@ de fenêtre, les descripteurs, etc.. sont à modifier au tout début du fichier.
 
 \chapter{Résultats}
 
-Parmi le dataset de 101 fichiers, certains au nombre de 5 ne presentent pas réellement de fond blanc, ce qui fausse l'étape de seuillage qui elle suppose l'existence d'une telle
+Parmi le dataset de 102 fichiers, cinq ne presentent pas réellement de fond blanc, ce qui fausse l'étape de seuillage qui elle suppose l'existence d'une telle
 propriété.\\
-Nous présentons donc ci-après les résultats sur 96 fichiers avec les descripteurs $HOG+HSV$ décomposés par $KMeans$ :\\
+Nous présentons donc ci-après les résultats sur 97 fichiers avec les descripteurs $HOG+HSV$ décomposés par $KMeans$ :\\
 
 \begin{figure}[H]
 \begin{center}

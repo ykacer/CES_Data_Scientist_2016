@@ -13,8 +13,8 @@ from functions import *
 
 # parameters #
 list_mask = glob.glob('data_papers/*_m.*')
-descr = ['hog','hsv']
-decomposition = 'kmeans'
+descr = ['grad','hsv']
+decomposition = 'nmf'
 flatten_or_not = False
 color_mapping = {0:[255,0,0],1:[0,0,255],2:[255,255,255]}
 resizing_factor = 4
@@ -121,10 +121,13 @@ for file_mask in list_mask:
     color_mapping[sorted_labels[0]] = [255,0,0] # red for class 0 (illustration) 
     color_mapping[sorted_labels[1]] = [0,0,255] # blue for class 1 (texte) 
 
-    ### compute prediction (class 0,1, or 2) for each pixel
+    ### post-processing to make illusration "square"
     image_result = 255*np.ones((h,w,c))
     for n,(j,i) in enumerate(izip(list_patchs_y,list_patchs_x)):
         image_result[j:j+roi_size_y,i:i+roi_size_x,:] = color_mapping[ind[n]]
+    image_result = post_processing(image_result)
+
+    ### compute prediction (class 0,1, or 2) for each pixel
     prediction_   = np.zeros((h,w))
     prediction_   = prediction_   + np.where(np.linalg.norm(image_result-[255,0,0],axis=2)==0,1,0)
     prediction_   = prediction_   + np.where(np.logical_and(np.linalg.norm(image_result-[0,0,255],axis=2)!=0,np.linalg.norm(image_result-[255,0,0],axis=2)!=0),2,0)
