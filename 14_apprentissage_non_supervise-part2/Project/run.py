@@ -18,8 +18,8 @@ decomposition = 'kmeans'
 flatten_or_not = False
 color_mapping = {0:[255,0,0],1:[0,0,255],2:[255,255,255]}
 resizing_factor = 4
-roi_size_x = 80/resizing_factor
-roi_size_y = 80/resizing_factor
+roi_size_x = 64/resizing_factor
+roi_size_y = 64/resizing_factor
 overlap_x = 0/resizing_factor
 overlap_y = 0/resizing_factor
 #############
@@ -185,7 +185,7 @@ for file_mask in list_mask:
     res_name = res_name + '_' + decomposition
     f = plt.figure()
     f.add_subplot(1,4,1)
-    plt.imshow(image)
+    plt.imshow(image[:,:,::-1])
     plt.gca().axes.xaxis.set_ticklabels([])
     plt.gca().axes.yaxis.set_ticklabels([])
     f.add_subplot(1,4,2)

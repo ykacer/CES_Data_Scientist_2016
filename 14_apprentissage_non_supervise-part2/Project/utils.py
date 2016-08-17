@@ -1,11 +1,7 @@
-import os
-import glob
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import izip
-from sklearn.decomposition import NMF
-from sklearn.cluster import KMeans
 from scipy import misc
 
 
@@ -17,10 +13,8 @@ def cut_images(image,roi_size_x,roi_size_y,overlap_x,overlap_y,flatten_or_not,ma
     Y,X = np.meshgrid(np.arange(0,h-roi_size_y,roi_size_y-overlap_y),np.arange(0,w-roi_size_x,roi_size_x-overlap_x)
 )
     for n,(j,i) in enumerate(izip(Y.flatten(),X.flatten())):
-        #background = np.unique(mask[j:j+roi_size_y,i:i+roi_size_x])
         background = 1.0*np.sum(mask[j:j+roi_size_y,i:i+roi_size_x]==0)/roi_size_x/roi_size_y
-        #if 0 in background:
-        if background>0.05:
+        if background>0.2:
             patchs = np.append(patchs,image[j:j+roi_size_y,i:i+roi_size_x,:].flatten().astype(np.uint8)[np.newaxis,:], axis=0)
             list_patchs_y = np.append(list_patchs_y,j)
             list_patchs_x = np.append(list_patchs_x,i)
