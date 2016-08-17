@@ -62,3 +62,17 @@ def plot_histo(img,filename,hsv=False):
     f.savefig(filename)
     f.clf()
 
+def post_processing(image):
+    # get illustration pixel
+    illu = 255*(np.sum(image -[255,0,0],axis=2)<50).astype(np.uint8)
+    illu_out = illu.copy()
+    (cnts, _) = cv2.findContours(illu.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    for contour in cnts:
+	x1 = np.min(contour[:,0,0])+1
+	x2 = np.max(contour[:,0,0])-1
+	y1 = np.min(contour[:,0,1])+1
+	y2 = np.max(contour[:,0,1])-1
+        illu_out[x1:x2,y1:y2]=255
+    image_post = image.copy()
+    image_post[illu_out>0,:] = [255,0,0]
+    return image_post

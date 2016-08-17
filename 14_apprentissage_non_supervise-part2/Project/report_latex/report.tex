@@ -320,11 +320,15 @@ Le code $Python$ ayant permis les calculs présentés, se constitue de trois fic
 \item[$functions.py$ :] Ce fichier contient les fonctions permettant l'extraction des features. Ces fonctions utilisent $OpenCV$ \cite{opencv_library} ainsi que $scikit-learn$ \cite{scikit-learn}
 \item[$run.py$ :] Ce fichier est le fichier principal. Il télécharge le dataset, le decompresse et lance le processus de clusterisation. Il affiche aussi les performances
 en précision/rappel à partir des images de vérité terrain. Il contient aussi les différents paramètres comme la taille de voisinage, la nature des descripteurs...
+\item[$test.py$ :] Ce fichier permet de tester n'importe quel image représentant un document numérisé pour en réaliser le clustering 
+en trois classes, selon la méthode décrite dans ce document. Le fichier resultat est enregisté dans le même répertoire. Pour lancer
+l'exécution, il suffir de taper : $test.py$ $nomfichier.ext$. A noter que les paramètres comme le redimensionnement de l'image, la taille
+de fenêtre, les descripteurs, etc.. sont à modifier au tout début du fichier.
 
 \end{description}
 
 
-\chapter{Resultats}
+\chapter{Résultats}
 
 Parmi le dataset de 101 fichiers, certains au nombre de 5 ne presentent pas réellement de fond blanc, ce qui fausse l'étape de seuillage qui elle suppose l'existence d'une telle
 propriété.\\

@@ -44,4 +44,3 @@ def descr_hog(patchs):
         patchs_preprocessed[:,n] = hog.compute(np.squeeze(patchs[:,:,:,n].astype(np.uint8))).flatten()
     return patchs_preprocessed
 
-
