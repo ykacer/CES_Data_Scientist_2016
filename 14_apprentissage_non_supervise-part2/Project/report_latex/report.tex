@@ -123,7 +123,7 @@ Reste à definir une classe ($texte$ ou $illustration$) aux pixels restants.
 \section{Extraction de contours pour le texte}
 
 Les contours au voisinage d'un pixel, semblent être une information pertinente pour caractériser les caractères d'un document numérisé.\\
-En effet, les caractères sont généralement d'une couleur uniforme sur un fond uniforme (pour plus de lisiblité), ce qui a la 
+En effet, les caractères sont généralement des segments d'une couleur uniforme sur un fond uniforme (pour plus de lisiblité), ce qui a la 
 particularité de bien faire ressortir les gradients\\
 Pour extraire cette information, deux méthodes seront utilisées : ou bien l'application d'un filtre Laplacien, ou bien le calcul de l'histogramme orienté du gradient 
 \cite{Dalal05histogramsof}, cela sur un patch carré centré autour de chaque pixel. 
@@ -163,8 +163,9 @@ A ce stade, nous avons des pixels qui ne sont pas du $fond$ et auxquels nous dev
 Les features extraits au chapître précédents doivent donc être décomposer en deux sous groupes, à cet effet deux algorithmes sont utilisés :
 \begin{description} % listes descriptives
 
-\item[$KMeans$ :] cet algorithme permet de créer deux amas compactes par minimisation de l'énergie intra-cluster.
-\item[$NMF$ (\begin{itshape}Non-Negative Matrix Factorization\end{itshape} :] cet algorithme permet de projeter les features des N pixels. Ces features de dimension P seront projetés sur un espace à 2 dimensions positives. On crééra ensuite
+\item[$KMeans$ :] cet algorithme permet de créer deux amas (ou clusters) compactes par minimisation de l'énergie intra-cluster.
+\item[$NMF$ (\begin{itshape}Non-Negative Matrix Factorization\end{itshape}) :] cet algorithme permet de projeter les features 
+des N pixels. Ces features de dimension P seront projetés sur un espace à 2 dimensions positives. On crééra ensuite
 deux amas : un premier pour les points dont la première composante de projection est plus grande que la seconde, un second pour les autres.
 
 \end{description}
@@ -185,15 +186,17 @@ La figure \ref{resultat} montre l'application du $KMeans$ sur les descripteurs $
 
 \chapter{Post-traitement}
 
-Quand illustration présente des amas de pixels blancs (c'est la cas des images \ref{rect1} et \ref{rect2}), ces amas sont automatiquement vu comme du $fond$ à l'issu de l'étape
+Quand une illustration présente des amas de pixels blancs (c'est la cas des images \ref{rect1} et \ref{rect2}), ces amas sont automatiquement vu comme du $fond$ à l'issu de l'étape
 de seuillage.\\
-Afin d'éviter cela, on va faire une hypothèse : toutes les illustrations sont carrés ou rectangulaires. Ce qui est souvent le cas des images et photos
+Afin d'éviter cela, on va faire une hypothèse : toutes les illustrations sont carrées ou rectangulaires. Ce qui est souvent le cas des images et photos
 figurant dans des magazines ou des journaux.\\
-Ainsi, on va \og rectangulariser \fg toutes les composantes connexes d'$illustration$ en post-traitement ().\\
+Ainsi, on va \og rectangulariser \fg{} toutes les composantes connexes d'$illustration$ en post-traitement (voir \ref{rect3} et \ref{rect4}).\\
+Par ailleurs, nous allons \og boucher \fg{} les trous présents dans les amas de pixels $texte$, afin de rendre homogène les patés de texte 
+présents dans le document.\\
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.06]{images/rect_1.jpg}
+\includegraphics[scale=0.25]{images/rect_1.jpg}
 \includegraphics[scale=0.06]{images/rect_1_res_hog_hsv_kmeans.jpg}
 \end{center}
 \caption{amas de pixels manquants dans les illustrations après clustering $KMeans$ des descripteurs $HOG+HSV$}
@@ -202,7 +205,7 @@ Ainsi, on va \og rectangulariser \fg toutes les composantes connexes d'$illustra
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.06]{images/rect_50.jpg}
+\includegraphics[scale=0.25]{images/rect_50.jpg}
 \includegraphics[scale=0.06]{images/rect_50_res_hog_hsv_kmeans.jpg}
 \end{center}
 \caption{amas de pixels manquants dans les illustrations après clustering $KMeans$ des descripteurs $HOG+HSV$}
@@ -214,7 +217,7 @@ Ainsi, on va \og rectangulariser \fg toutes les composantes connexes d'$illustra
 \includegraphics[scale=0.06]{images/rect_1_res_hog_hsv_kmeans.jpg}
 \includegraphics[scale=0.06]{images/rect_1_res_hog_hsv_kmeans_2.jpg}
 \end{center}
-\caption{\og rectangularisation \fg des pixels d'$illustration$ manquants}
+\caption{\og rectangularisation \fg{} des pixels d'$illustration$}
 \label{rect3}
 \end{figure}
 
@@ -223,7 +226,7 @@ Ainsi, on va \og rectangulariser \fg toutes les composantes connexes d'$illustra
 \includegraphics[scale=0.06]{images/rect_50_res_hog_hsv_kmeans.jpg}
 \includegraphics[scale=0.06]{images/rect_50_res_hog_hsv_kmeans_2.jpg}
 \end{center}
-\caption{\og rectangularisation \fg des pixels d'$illustration$ manquants}
+\caption{\og rectangularisation \fg{} des pixels d'$illustration$}
 \label{rect4}
 \end{figure}
 
@@ -237,20 +240,24 @@ On applique le processus à toutes les images en procédant comme détaillé plu
  \item[-] Seuillage afin de déterminer les pixels de classe $fond$
  \item[-] Extraction de features des pixels restants (pour chaque pixel, concaténation du vecteur descripteurs HOG (ou Laplacien) et du vecteur descripteur HSV)
  \item[-] Clusterisation des features afin de déterminer la classe $illustration$ ou $texte$ des pixels restants
+ \item[-] Post-traitement par \og rectangularisation \fg{} des composantes connexes d'$illustration$
 \end{description}
 
 A des fins de mesures des performances, on utilise la vérité-terrain pour le calcul de précision/rappel pour chaque classe.\\
-\ref{res_classe1},\ref{res_classe2} et \ref{res_classe3} récapitulent les precision/rappel obtenus respectivement pour les classes $fond$,$texte$ et $illustration$.
-A noter que la classe fond est déterminé au début du processus par seuillage, et ne dépend donc pas des descripteurs et de la décomposition utilisé ensuite
-pour déterminer le $texte$ et les $illustrations$
+\ref{res_classe1},\ref{res_classe2} et \ref{res_classe3} récapitulent les precision/rappel obtenus respectivement pour les
+classes $fond$, $texte$ et $illustration$.\\
+
 \begin{table}
 \begin{center}
 %\begin{tabular}{|p{5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
-\begin{tabular}{|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-\begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
+\multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
+\cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-0.68 & 0.76\\
+$Laplacien+HSV$ & 0.70 & 0.75 & 0.43 & 0.67\\
+\hline
+$HOG+HSV$ &  0.74 & 0.76 & 0.62 & 0.69\\
 \hline
 \end{tabular}
 \end{center}
@@ -266,9 +273,9 @@ pour déterminer le $texte$ et les $illustrations$
 \multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
 \cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-$Laplacien+HSV$ & 0.75 & 0.55 & 0.50 & 0.46\\
+$Laplacien+HSV$ & 0.75 & 0.55 & 0.51 & 0.45\\
 \hline
-$HOG+HSV$ &  0.75 & 0.60 & 0.48 & 0.50\\
+$HOG+HSV$ &  0.75 & 0.59 & 0.46 & 0.47\\
 \hline
 \end{tabular}
 \end{center}
@@ -284,9 +291,9 @@ $HOG+HSV$ &  0.75 & 0.60 & 0.48 & 0.50\\
 \multirow{\begin{bf}Descripteurs\end{bf}} & \multicolumn{2}{c|}{\begin{bf}KMeans\end{bf}} & \multicolumn{2}{c|}{\begin{bf}NMF\end{bf}}\\
 \cline{2-5} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf} & \begin{bf}precision\end{bf} & \begin{bf}recall\end{bf}\\
 \hline
-$Laplacien+HSV$ & 0.73 & 0.78 & 0.81 & 0.58\\
+$Laplacien+HSV$ & 0.72 & 0.80 & 0.80 & 0.60\\
 \hline
-$HOG+HSV$ & 0.74 & 0.78 & 0.80 & 0.66\\
+$HOG+HSV$ & 0.72 & 0.81 & 0.78 & 0.69\\
 \hline
 \end{tabular}
 \end{center}
@@ -297,8 +304,8 @@ $HOG+HSV$ & 0.74 & 0.78 & 0.80 & 0.66\\
 \clearpage
 
 On observe les meilleurs résultats pour un partitionnement $KMeans$ du descripteur $HOG+HSV$. Ainsi, la precision moyenne (toute image et toute classe confondue) est de 
-\begin{bf}0.73\end{bf} et le rappel moyen de \begin{bf}0.71\end{bf}.\\
-La figure \ref{meilleur_precision} présente l'image donnant la meilleure précision (\begin{bf}0.906\end{bf}).\\
+\begin{bf}0.73\end{bf} et le rappel moyen de \begin{bf}0.72\end{bf}.\\
+La figure \ref{meilleur_precision} présente l'image donnant la meilleure précision (\begin{bf}0.911\end{bf}).\\
 La figure \ref{meilleur_rappel} présente l'image donnant le meilleur rappel (\begin{bf}0.893\end{bf}).\\
 
 \begin{figure}[H]
@@ -350,7 +357,7 @@ respectifs sont illustrés dans les figures \ref{test1} \ref{test2} \ref{test3}:
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.05]{../test/japanese.jpg}
+\includegraphics[scale=0.2]{../test/japanese.jpg}
 \includegraphics[scale=0.05]{../test/japanese_res_hog_hsv_kmeans.jpg}
 \end{center}
 \caption{test de la méthode sur l'image japanese.jpg}
@@ -368,17 +375,22 @@ Le code $Python$ ayant permis les calculs présentés, se constitue de trois fic
 \item[$run.py$ :] Ce fichier est le fichier principal. Il télécharge le dataset, le decompresse et lance le processus de clusterisation. Il affiche aussi les performances
 en précision/rappel à partir des images de vérité terrain. Il contient aussi les différents paramètres comme la taille de voisinage, la nature des descripteurs...
 \item[$test.py$ :] Ce fichier permet de tester n'importe quel image représentant un document numérisé pour en réaliser le clustering 
-en trois classes, selon la méthode décrite dans ce document. Le fichier resultat est enregisté dans le même répertoire. Pour lancer
-l'exécution, il suffir de taper : $test.py$ $nomfichier.ext$. A noter que les paramètres comme le redimensionnement de l'image, la taille
-de fenêtre, les descripteurs, etc.. sont à modifier au tout début du fichier.
+en trois classes, selon la méthode décrite dans ce document. A noter que les paramètres comme le redimensionnement de l'image, la taille
+de fenêtre, les descripteurs, etc.. sont à modifier au tout début du fichier. 
+Le fichier resultat est enregisté dans le même répertoire. Pour lancer
+l'exécution, il suffir de taper :\\
+\\
+                    $test.py$ $nomfichier.ext$.\\
+\\
+
 
 \end{description}
 
 
 \chapter{Résultats}
 
-Parmi le dataset de 102 fichiers, cinq ne presentent pas réellement de fond blanc, ce qui fausse l'étape de seuillage qui elle suppose l'existence d'une telle
-propriété.\\
+Parmi le dataset de 102 fichiers, cinq ne presentent pas réellement de fond blanc, ce qui fausse l'étape de seuillage qui elle, 
+suppose l'existence d'une telle propriété.\\
 Nous présentons donc ci-après les résultats sur 97 fichiers avec les descripteurs $HOG+HSV$ décomposés par $KMeans$ :\\
 
 \begin{figure}[H]
@@ -683,16 +695,6 @@ Nous présentons donc ci-après les résultats sur 97 fichiers avec les descript
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.6]{../data_papers/30_res_hog_hsv_kmeans_all.jpg}
-\end{center}
-\caption{de gauche à droite : image 30.jpg, binarisation, decomposition, vérité-terrain}
-\label{30}
-\end{figure}
-\clearpage
-
-
-\begin{figure}[H]
-\begin{center}
 \includegraphics[scale=0.6]{../data_papers/31_res_hog_hsv_kmeans_all.jpg}
 \end{center}
 \caption{de gauche à droite : image 31.jpg, binarisation, decomposition, vérité-terrain}
@@ -707,16 +709,6 @@ Nous présentons donc ci-après les résultats sur 97 fichiers avec les descript
 \end{center}
 \caption{de gauche à droite : image 32.jpg, binarisation, decomposition, vérité-terrain}
 \label{32}
-\end{figure}
-\clearpage
-
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.6]{../data_papers/33_res_hog_hsv_kmeans_all.jpg}
-\end{center}
-\caption{de gauche à droite : image 33.jpg, binarisation, decomposition, vérité-terrain}
-\label{33}
 \end{figure}
 \clearpage
 
@@ -759,17 +751,6 @@ Nous présentons donc ci-après les résultats sur 97 fichiers avec les descript
 \label{37}
 \end{figure}
 \clearpage
-
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.6]{../data_papers/38_res_hog_hsv_kmeans_all.jpg}
-\end{center}
-\caption{de gauche à droite : image 38.jpg, binarisation, decomposition, vérité-terrain}
-\label{38}
-\end{figure}
-\clearpage
-
 
 \begin{figure}[H]
 \begin{center}
@@ -923,16 +904,6 @@ Nous présentons donc ci-après les résultats sur 97 fichiers avec les descript
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.6]{../data_papers/49_res_hog_hsv_kmeans_all.jpg}
-\end{center}
-\caption{de gauche à droite : image 49.jpg, binarisation, decomposition, vérité-terrain}
-\label{49}
-\end{figure}
-\clearpage
-
-
-\begin{figure}[H]
-\begin{center}
 \includegraphics[scale=0.6]{../data_papers/4cw_res_hog_hsv_kmeans_all.jpg}
 \end{center}
 \caption{de gauche à droite : image 4cw.bmp, binarisation, decomposition, vérité-terrain}
@@ -1037,16 +1008,6 @@ Nous présentons donc ci-après les résultats sur 97 fichiers avec les descript
 \end{center}
 \caption{de gauche à droite : image 55.jpg, binarisation, decomposition, vérité-terrain}
 \label{55}
-\end{figure}
-\clearpage
-
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.6]{../data_papers/56_res_hog_hsv_kmeans_all.jpg}
-\end{center}
-\caption{de gauche à droite : image 56.jpg, binarisation, decomposition, vérité-terrain}
-\label{56}
 \end{figure}
 \clearpage
 

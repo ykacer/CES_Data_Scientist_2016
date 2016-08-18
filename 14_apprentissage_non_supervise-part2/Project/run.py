@@ -13,8 +13,8 @@ from functions import *
 
 # parameters #
 list_mask = glob.glob('data_papers/*_m.*')
-descr = ['grad','hsv']
-decomposition = 'nmf'
+descr = ['hog','hsv']
+decomposition = 'kmeans'
 flatten_or_not = False
 color_mapping = {0:[255,0,0],1:[0,0,255],2:[255,255,255]}
 resizing_factor = 4
@@ -117,7 +117,7 @@ for file_mask in list_mask:
     ### patchs are now divide into categories, give class 1 (illustration) for category with greater proportion of "white" (i.e. > binary_thresh).
     p0 = 1.0*np.sum(np.squeeze(0.1140*patchs[:,:,0,ind==0]+0.5870*patchs[:,:,1,ind==0]+0.2989*patchs[:,:,2,ind==0]).flatten()>binary_thresh)/patchs.size
     p1 = 1.0*np.sum(np.squeeze(0.1140*patchs[:,:,0,ind==1]+0.5870*patchs[:,:,1,ind==1]+0.2989*patchs[:,:,2,ind==1]).flatten()>binary_thresh)/patchs.size
-    sorted_labels = np.argsort([p0,p1])#,np.sum(ind==2)])
+    sorted_labels = np.argsort([p0,p1])
     color_mapping[sorted_labels[0]] = [255,0,0] # red for class 0 (illustration) 
     color_mapping[sorted_labels[1]] = [0,0,255] # blue for class 1 (texte) 
 
@@ -129,14 +129,14 @@ for file_mask in list_mask:
 
     ### compute prediction (class 0,1, or 2) for each pixel
     prediction_   = np.zeros((h,w))
-    prediction_   = prediction_   + np.where(np.linalg.norm(image_result-[255,0,0],axis=2)==0,1,0)
-    prediction_   = prediction_   + np.where(np.logical_and(np.linalg.norm(image_result-[0,0,255],axis=2)!=0,np.linalg.norm(image_result-[255,0,0],axis=2)!=0),2,0)
+    prediction_   = prediction_   + np.where(np.linalg.norm(image_result-[255,0,0],axis=2)<10,1,0)
+    prediction_   = prediction_   + np.where(np.logical_and(np.linalg.norm(image_result-[0,0,255],axis=2)>10,np.linalg.norm(image_result-[255,0,0],axis=2)>10),2,0)
     prediction_   = prediction_.flatten()
 
     ### compute ground-truth (class 0,1, or 2) for each pixel 
     ground_truth_ = np.zeros((h,w))
-    ground_truth_ = ground_truth_ + np.where(np.linalg.norm(mask-[255,0,0],axis=2)==0,1,0)
-    ground_truth_ = ground_truth_ + np.where(np.logical_and(np.linalg.norm(mask-[0,0,255],axis=2)!=0,np.linalg.norm(mask-[255,0,0],axis=2)!=0),2,0)
+    ground_truth_ = ground_truth_ + np.where(np.linalg.norm(mask-[255,0,0],axis=2)<10,1,0)
+    ground_truth_ = ground_truth_ + np.where(np.logical_and(np.linalg.norm(mask-[0,0,255],axis=2)>10,np.linalg.norm(mask-[255,0,0],axis=2)>10),2,0)
     ground_truth_ = ground_truth_.flatten()
 
     ### compute precision/recall for each class

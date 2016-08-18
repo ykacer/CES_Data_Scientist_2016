@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import izip
-from scipy import misc
+from scipy.ndimage.morphology import binary_fill_holes
 from skimage import measure
 import pymorph
 
@@ -66,10 +66,20 @@ def plot_histo(img,filename,hsv=False):
     f.clf()
 
 def post_processing(image):
-    # get illustration pixel
+    image_post = image.copy()
+
+     # get texte pixel
+    illu = 255*(np.sum((image -[0,0,255])**2,axis=2)<10).astype(np.uint8)
+    # fill holes
+    illu_out = binary_fill_holes(illu)
+    image_post[illu_out>0,:] = [0,0,255]
+
+   # get illustration pixel
     illu = 255*(np.sum((image -[255,0,0])**2,axis=2)<10).astype(np.uint8)
+    # get bounding-box of connected components
     bbox = pymorph.blob(measure.label(illu),'boundingbox','data')
     illu_out = illu.copy()
+    # transform connected components into englobing rectangles
     for l in bbox:
 	x1 = l[0]
 	y1 = l[1]
@@ -77,6 +87,6 @@ def post_processing(image):
 	y2 = l[3]
         if ((y2-y1)<image.shape[0]/2) | ((x2-x1)<image.shape[1]/2):
             illu_out[y1:y2,x1:x2]=255
-    image_post = image.copy()
     image_post[illu_out>0,:] = [255,0,0]
+
     return image_post
