@@ -197,7 +197,7 @@ each number of components, a cross-validation is performed using Linear Discrimi
 
  * Project/functions.py : function that extract HOG and HSV descriptors from patchs (**OpenCV**,**scikit-learn**)
 
- * Project/run.py : main file that download digitized russian magazines and newspapers digitized from [*UCI archives*](https://archive.ics.uci.edu/ml/machine-learning-databases/00306/), and apply clustering to divide image into 3 classes : background, text and image. From Linux terminal :
+ * Project/run.py : main file that download digitized russian page magazines and newspapers from [*UCI archives*](https://archive.ics.uci.edu/ml/machine-learning-databases/00306/), and apply clustering to divide image into 3 classes : background, text and image. From Linux terminal :
 
 	`python run.py`
 
