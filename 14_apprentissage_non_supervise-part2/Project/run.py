@@ -195,11 +195,11 @@ for file_mask in list_mask:
     plt.imshow(binary,cmap=plt.get_cmap('gray'));
     plt.gca().axes.xaxis.set_ticklabels([])
     plt.gca().axes.yaxis.set_ticklabels([])
-    f.add_subplot(1,4,3)
+    f.add_subplot(1,4,4)
     plt.imshow(mask)
     plt.gca().axes.xaxis.set_ticklabels([])
     plt.gca().axes.yaxis.set_ticklabels([])
-    f.add_subplot(1,4,4)
+    f.add_subplot(1,4,3)
     plt.imshow(image_result.astype(np.uint8))
     plt.gca().axes.xaxis.set_ticklabels([])
     plt.gca().axes.yaxis.set_ticklabels([])
