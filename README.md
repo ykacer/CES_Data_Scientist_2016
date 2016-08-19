@@ -191,6 +191,22 @@ each number of components, a cross-validation is performed using Linear Discrimi
 
  * TP_nmf/snd/ : contains sound wav files using for ICA
 
+#### part 2:
+
+ * Project/utils.py : python utilities to cut image into patchs and to post-process clustering (**scikit-image**)
+
+ * Project/functions.py : function that extract HOG and HSV descriptors from patchs (**OpenCV**,**scikit-learn**)
+
+ * Project/run.py : main file that download digitized russian magazines and newspapers digitized from [*UCI archives*](https://archive.ics.uci.edu/ml/machine-learning-databases/00306/), and apply clustering to divide image into 3 classes : background, text and image.
+
+ * Project/test.py : file that test any image that represents a scan of a page from magazine or newpapers. Provides image clustering result into same folder. From linux terminal :
+
+	`python test.py image_name.[jpg|png|bmp|tif]`
+
+ * test/ : contains three digitized documents from three other languages to test generalizaiton of the method
+
+ * Project/report_latex/ report.pdf : Latex report that describes the whole clustering method
+
 ### Réseaux bayesiens et Chaines de Markov
 
 #### part 1
