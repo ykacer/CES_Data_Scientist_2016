@@ -26,10 +26,37 @@
 \frontmatter
 \chapter{Introduction}
 Ce document présente le projet de sciences des données que je compte développer, dans le cadre de la validation du CES Data Scientist à Telecom-Paristech \cite{cesds}.
+Il consiste à exploiter des images satellitaires haute-résolution afin d'en extraire des indicateurs socio-économiques.\\
+En effet, évaluer la densité démographique d'un pays, par exemple, peut représenter un co\^{u}t non négligeable en terme de 
+recensement, or utiliser des images aériennes et leurs caractéristiques permettrait de prédire la population présente à moindre co\^{u}t.
+En effet, les \og edges \fg des routes et des batiments caractérisent les zones urbaines et donc les zones à forte population, alors que
+les champs et les for\^{e}ts caractérisent des zones faiblement peuplées.\\
 
 \mainmatter
 \chapter{Images exploitées}
 
+Les images à exploiter proviennent du satellite Landsat 8 de la NASA et sont libres d'accès \cite{landsat8}. Ce satellite scanne tout le globe terrestre 
+tous les 16 jours. Elles permettent donc non seulement d'étudier une zone à un moment donnée mais aussi d'étudier son évolution sur
+une période donné.\\
+Ces images sont très riches car elles présentent en tout 11 canaux, 9 dans le visible et 2 dans l'infra-rouge, pour des résolutions 
+allant de 15 à 60 mètres. Donc en plus des caractéristiques de formes, le niveau des images doit pouvoir renseigner sur 
+les matérieux présents au sein d'un zone (métal ou végétation par exemple).\\
+
+\chapter{Méthode d'apprentissage}
+
+L'idée serait de s'intéresser à une certaine zone (un pays par exemple), dont on aurait l'indicateur de densité de population (valeur 
+à prédire) en fonction de la commune du pays.\\
+On pourra alors récupérer plusieurs images satellitaires quadrillant cette zone, et attribuer à chacune d'elles
+sa valeur de densité de population (on doit pouvoir utiliser la latitude et la longitude d'une image pour retrouver la commune concernée).\\
+Ainsi, on récupère un ensemble classique d'images labelisées.\\
+Ensuite, on pourra extraire des descripteurs de ces images (histogramme orienté du gradient \cite{Dalal05histogramsof}, entre autre)
+auquels on appliquera un algorithme de regression supervisé (la valeur à prédire, la densité de
+polpulation, est plut\^{o}t continue que discrète).\\
+On pourra alors tester la généralisation du classifieur, en s'intéressant à d'autres pays.\\
+
+\chapter{Outils}
+
+Les images peuvent 
 
 \clearpage
 
