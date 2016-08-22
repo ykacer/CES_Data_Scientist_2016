@@ -4,7 +4,7 @@ import sys
 import happybase
 import numpy as np
 
-hdfs_index = 'indexwikiFromMapReduce/part-r-00000'
+hdfs_index = 'indexwikiFromMapReduce/part-00000'
 
 connection = happybase.Connection('localhost','9090')
 
