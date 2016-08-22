@@ -11,7 +11,7 @@
 
 \title{%
   Projet de Sciences des Données \\
-  \large Explotation d'images satellites pour la prevision de croissance économique \\
+  \large Explotation d'images satellites haute-résolution \\pour la prevision d'indicateurs socio-économiques \\
     }
 
 \author{\textsc{Youcef} - \textsc{Kacer}}
@@ -25,10 +25,10 @@
 
 \frontmatter
 \chapter{Introduction}
-Ce document présente le projet de sciences des données que je compte développer, dans le cadre de la validation du CES Data Scientist à Telecom-Paristech \cite{cesds}.
-Il consiste à exploiter des images satellitaires haute-résolution afin d'en extraire des indicateurs socio-économiques.\\
+Ce document présente le projet de sciences des données que je compte développer, dans le cadre de la validation du CES Data Scientist à Telecom-Paristech \cite{cesds}.\\
+Ce projet consiste à exploiter des images satellitaires haute-résolution afin d'en extraire des indicateurs socio-économiques.\\
 En effet, évaluer la densité démographique d'un pays, par exemple, peut représenter un co\^{u}t non négligeable en terme de 
-recensement, or utiliser des images aériennes et leurs caractéristiques permettrait de prédire la population présente à moindre co\^{u}t.
+recensement. Or utiliser des images aériennes et leurs caractéristiques permettrait de prédire la population présente à moindre co\^{u}t.
 En effet, les \og edges \fg des routes et des batiments caractérisent les zones urbaines et donc les zones à forte population, alors que
 les champs et les for\^{e}ts caractérisent des zones faiblement peuplées.\\
 
@@ -36,35 +36,44 @@ les champs et les for\^{e}ts caractérisent des zones faiblement peuplées.\\
 \chapter{Images exploitées}
 
 Les images à exploiter proviennent du satellite Landsat 8 de la NASA et sont libres d'accès \cite{landsat8}. Ce satellite scanne tout le globe terrestre 
-tous les 16 jours. Elles permettent donc non seulement d'étudier une zone à un moment donnée mais aussi d'étudier son évolution sur
-une période donné.\\
-Ces images sont très riches car elles présentent en tout 11 canaux, 9 dans le visible et 2 dans l'infra-rouge, pour des résolutions 
-allant de 15 à 60 mètres. Donc en plus des caractéristiques de formes, le niveau des images doit pouvoir renseigner sur 
-les matérieux présents au sein d'un zone (métal ou végétation par exemple).\\
+tous les 16 jours. Ces images permettent donc non seulement d'étudier une zone à un moment donnée mais aussi d'étudier son évolution sur
+une période donnée.\\
+Ces images sont très riches dans la mesure où elles présentent en tout 11 canaux, 9 dans le visible et 2 dans l'infra-rouge, pour des résolutions 
+allant de 15 à 60 mètres. Donc en plus des caractéristiques de formes, le niveau des images doit pouvoir nous renseigner sur 
+la nature des materiaux et des objets présents au sein d'une zone (métal ou végétation par exemple), les canaux infra-rouges pourront très certainement
+quantifier la présence humaine.\\
 
 \chapter{Méthode d'apprentissage}
 
 L'idée serait de s'intéresser à une certaine zone (un pays par exemple), dont on aurait l'indicateur de densité de population (valeur 
-à prédire) en fonction de la commune du pays.\\
-On pourra alors récupérer plusieurs images satellitaires quadrillant cette zone, et attribuer à chacune d'elles
+à prédire) pour un grand ensemble de communes du pays.\\
+On pourra alors récupérer plusieurs images satellitaires quadrillant ce pays, et attribuer à chacune d'elles
 sa valeur de densité de population (on doit pouvoir utiliser la latitude et la longitude d'une image pour retrouver la commune concernée).\\
-Ainsi, on récupère un ensemble classique d'images labelisées.\\
+Ainsi, on récupère un ensemble classique d'images labelisées par sa densité de population.\\
 Ensuite, on pourra extraire des descripteurs de ces images (histogramme orienté du gradient \cite{Dalal05histogramsof}, entre autre)
 auquels on appliquera un algorithme de regression supervisé (la valeur à prédire, la densité de
-polpulation, est plut\^{o}t continue que discrète).\\
+population, est plut\^{o}t continue que discrète).\\
+On aurait donc un modèle de classification capable de prédire la densité de population d'une zone en fonction d'images satellites.\\
 On pourra alors tester la généralisation du classifieur, en s'intéressant à d'autres pays.\\
 
-\chapter{Outils}
+\chapter{Outils pour le stockage, le calcul et la visualisation}
 
-Les images peuvent 
+Les images seront stockées sur HDFS \cite{White:2009:HDG:1717298} (soit en mode \og single-node cluster \fg, soit en mode \og multi-node cluster \fg via le cluster de Telecom ParisTech), cela permettra
+d'extraire les descripteurs par Map/Reduce. Ces descripteurs seront aussi stockés de manière distribuée, via une table HBASE afin de 
+pouvoir effectuer des requ\^{e}tes et vérifier les valeurs calculées.\\
+On utilisera alors la librairie de Machine Learning MLlib de Spark \cite{Meng:2016:MML:2946645.2946679}, dédiée à l'apprentissage sur données distribuées dans HDFS.
+Pour la regression, cette librairie ne permet cependant que les regressions linéaires (soit par moindres carrés linéaires, par Ridge ou par Lasso) et les regressions logistiques (pas de SVM).\\
+On testera toutes ces méthodes pour en analyser les erreurs en cross-validation.\\
+Enfin, pour la visualisation des resultats, on proposera une page html utilisant la librairie D3 i\cite{Jain:2014:DVD:2667432.2667451} pour l'affichage de la carte de densité de population. Cette interface web sera aussi
+intéractive que possible afin de permettre des zooms mais aussi l'observation de la densité de population sur une année antérieure.
 
 \clearpage
 
 \backmatter
 
-\listoftables
+%\listoftables
 
-\listoffigures
+%\listoffigures
 
 \bibliographystyle{alpha}
 \bibliography{biblio}
