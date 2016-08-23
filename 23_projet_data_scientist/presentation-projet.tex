@@ -62,9 +62,9 @@ Les images seront stockées sur HDFS \cite{White:2009:HDG:1717298} (soit en mode
 d'extraire les descripteurs par Map/Reduce. Ces descripteurs seront aussi stockés de manière distribuée, via une table HBASE afin de 
 pouvoir effectuer des requ\^{e}tes et vérifier les valeurs calculées.\\
 On utilisera alors la librairie de Machine Learning MLlib de Spark \cite{Meng:2016:MML:2946645.2946679}, dédiée à l'apprentissage sur données distribuées dans HDFS.
-Pour la regression, cette librairie ne permet cependant que les regressions linéaires (soit par moindres carrés linéaires, par Ridge ou par Lasso) et les regressions logistiques (pas de SVM).\\
+Pour la regression, cette librairie ne permet cependant que les regressions linéaires (soit par moindres carrés linéaires, par Ridge ou par Lasso) et les regressions logistiques (pas de SVM regressif).\\
 On testera toutes ces méthodes pour en analyser les erreurs en cross-validation.\\
-Enfin, pour la visualisation des resultats, on proposera une page html utilisant la librairie D3 i\cite{Jain:2014:DVD:2667432.2667451} pour l'affichage de la carte de densité de population. Cette interface web sera aussi
+Enfin, pour la visualisation des resultats, on proposera une page html utilisant la librairie D3 \cite{Jain:2014:DVD:2667432.2667451} pour l'affichage de la carte de densité de population. Cette interface web sera aussi
 intéractive que possible afin de permettre des zooms mais aussi l'observation de la densité de population sur une année antérieure.
 
 \clearpage
