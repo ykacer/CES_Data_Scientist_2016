@@ -36,12 +36,49 @@ les champs et les for\^{e}ts caractérisent des zones faiblement peuplées.\\
 \chapter{Images exploitées}
 
 Les images à exploiter proviennent du satellite Landsat 8 de la NASA et sont libres d'accès \cite{landsat8}. Ce satellite scanne tout le globe terrestre 
-tous les 16 jours. Ces images permettent donc non seulement d'étudier une zone à un moment donnée mais aussi d'étudier son évolution sur
-une période donnée.\\
-Ces images sont très riches dans la mesure où elles présentent en tout 11 canaux, 9 dans le visible et 2 dans l'infra-rouge, pour des résolutions 
-allant de 15 à 60 mètres. Donc en plus des caractéristiques de formes, le niveau des images doit pouvoir nous renseigner sur 
+tous les 16 jours, ce depuis 2013. Ces images permettent donc non seulement d'étudier une zone à un moment donnée mais aussi d'étudier son évolution sur
+une période donnée (entre 2013 et 2016, on aurait donc 91 couvertures d'une même zone).\\
+Ces images sont très riches dans la mesure où elles présentent en tout 11 canaux, 9 dans le visible et 2 dans l'infra-rouge. Donc en plus des caractéristiques de formes, le niveau des images doit pouvoir nous renseigner sur 
 la nature des materiaux et des objets présents au sein d'une zone (métal ou végétation par exemple), les canaux infra-rouges pourront très certainement
 quantifier la présence humaine.\\
+Certaines combinaisons bien spécifiques de bandes peuvent apporter de l'information, comme le montre le tableau \ref{combinaison}
+tiré de \cite{esri}:
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Natural Color & 4 , 3 , 2\\
+\hline
+False Color (urban) & 7 , 6 , 4\\
+\hline
+Color Infrared (vegetation) & 5 , 4 , 3\\
+\hline
+Agriculture & 6 , 5 , 2\\
+\hline
+Atmospheric Peration & 7 , 6 , 5\\
+\hline
+Healthy Vegetation & 5 , 6 , 2\\
+\hline
+Land/Water & 5 , 6 , 4\\
+\hline
+Natural With Atmospheric Removal & 7 , 5 , 3\\
+\hline
+Shortwave Infrared & 7 , 5 , 4\\
+\hline
+Vegetation Analysis & 6 , 5 , 4\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Combinaisons possibles à 3 canaux}
+\label{combinaison}
+\end{table}
+\clearpage
+Ces bandes couvrent approximativement un périmètre de 183km dans la direction Nord-Sud et 170km
+dans la direction Est-Ouest, pour une résolution de 30 mètres. Cette
+résolution équivaut à la demi-longueur d'un terrain de football, ce qui ne sera pas
+suffisant pour récupérer les edges des batiments et autres structures, c'est pour cela qu'on envisagera de coupler nos images
+satellitaires à l'exploitation des images couleur de Google Earth.\\
+
 
 \chapter{Méthode d'apprentissage}
 
@@ -58,7 +95,24 @@ On pourra alors tester la généralisation du classifieur, en s'intéressant à 
 
 \chapter{Outils pour le stockage, le calcul et la visualisation}
 
-Les images seront stockées sur HDFS \cite{White:2009:HDG:1717298} (soit en mode \og single-node cluster \fg, soit en mode \og multi-node cluster \fg via le cluster de Telecom ParisTech), cela permettra
+Si l'on s'intéresse à un territoire grand comme la France, on doit s'attendre à récupérer un total de 49 datasets 
+pour quadriller cette zone \cite{quadrillage}\\
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.25]{emrpise_france_landsat8.jpg}
+\end{center}
+\caption{Quadrillage de la France par Landsat-8 \cite{geosud}}
+\label{quadrillage}
+\end{figure}
+\clearpage
+
+Chaque dataset compte les 11 bandes évoquées plus haut, mais aussi une image d'information de 
+qualité renseignant pour chaun des pixels, la présence ou non de nuage, la présence ou non de mers ainsi que la 
+présence ou non de neige.\\
+Chaque dataset mesurant approximativement 1Go, on aurait une quantité totale de 49Go. Des descripteurs comme les 
+hitogrammes orientés du gradient pourraient multiplier cette quantité par un facteur 2, soit 100Go, ce qui ne tiendrait pas 
+en mémoire vive.
+Les images seront donc stockées sur HDFS \cite{White:2009:HDG:1717298} (soit en mode \og single-node cluster \fg, soit en mode \og multi-node cluster \fg via le cluster de Telecom ParisTech), cela permettra
 d'extraire les descripteurs par Map/Reduce. Ces descripteurs seront aussi stockés de manière distribuée, via une table HBASE afin de 
 pouvoir effectuer des requ\^{e}tes et vérifier les valeurs calculées.\\
 On utilisera alors la librairie de Machine Learning MLlib de Spark \cite{Meng:2016:MML:2946645.2946679}, dédiée à l'apprentissage sur données distribuées dans HDFS.
