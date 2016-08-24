@@ -29,7 +29,7 @@ Ce document présente le projet de sciences des données que je compte développ
 Ce projet consiste à exploiter des images satellitaires haute-résolution afin d'en extraire des indicateurs socio-économiques.\\
 En effet, évaluer la densité démographique d'un pays, par exemple, peut représenter un co\^{u}t non négligeable en terme de 
 recensement. Or utiliser des images aériennes et leurs caractéristiques permettrait de prédire la population présente à moindre co\^{u}t.
-En effet, les \og edges \fg des routes et des batiments caractérisent les zones urbaines et donc les zones à forte population, alors que
+En effet, les \og edges \fg{} des routes et des batiments caractérisent les zones urbaines et donc les zones à forte population, alors que
 les champs et les for\^{e}ts caractérisent des zones faiblement peuplées.\\
 
 \mainmatter
@@ -73,12 +73,40 @@ Vegetation Analysis & 6 , 5 , 4\\
 \label{combinaison}
 \end{table}
 \clearpage
-Ces bandes couvrent approximativement un périmètre de 183km dans la direction Nord-Sud et 170km
-dans la direction Est-Ouest, pour une résolution de 30 mètres. Cette
+Ces bandes couvrent approximativement un périmètre de 185km dans la direction Nord-Sud et 185km
+dans la direction Est-Ouest, pour une résolution de 30 mètres (soit des images de ~8000x8000 pixels). Cette
 résolution équivaut à la demi-longueur d'un terrain de football, ce qui ne sera pas
 suffisant pour récupérer les edges des batiments et autres structures, c'est pour cela qu'on envisagera de coupler nos images
 satellitaires à l'exploitation des images couleur de Google Earth.\\
+Les figures \ref{band2},\ref{band3},\ref{band4} présentent respectivement les bandes 2,3 et 4 d'un dataset que nous
+avons pu télécharger depuis \cite{landsat8}, et pris autour de la ville
+de \begin{itshape}Grenada (Espagne)\end{itshape}
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.8]{LC82000342015021LGN00_B2r.jpg}
+\end{center}
+\caption{image Lansat-8 (bande 2), région autour de $Grenada$ $(Espagne)$}
+\label{band2}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.8]{LC82000342015021LGN00_B3r.jpg}
+\end{center}
+\caption{image Lansat-8 (bande 3), région autour de $Grenada$ $(Espagne)$}
+\label{band3}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.8]{LC82000342015021LGN00_B4r.jpg}
+\end{center}
+\caption{image Lansat-8 (bande 4), région autour de $Grenada$ $(Espagne)$}
+\label{band4}
+\end{figure}
+
+\clearpage
 
 \chapter{Méthode d'apprentissage}
 
@@ -107,27 +135,33 @@ pour quadriller cette zone \cite{quadrillage}\\
 \clearpage
 
 Chaque dataset compte les 11 bandes évoquées plus haut, mais aussi une image d'information de 
-qualité renseignant pour chaun des pixels, la présence ou non de nuage, la présence ou non de mers ainsi que la 
+qualité renseignant pour chacun des pixels, la présence ou non de nuage, la présence ou non de mers ainsi que la 
 présence ou non de neige.\\
-Chaque dataset mesurant approximativement 1Go, on aurait une quantité totale de 49Go. Des descripteurs comme les 
-hitogrammes orientés du gradient pourraient multiplier cette quantité par un facteur 2, soit 100Go, ce qui ne tiendrait pas 
+Ainsi, chaque dataset mesure approximativement 1Go, on donc aurait une quantité totale de \begin{bf}49Go\end{bf} . 
+Des descripteurs comme les 
+hitogrammes orientés du gradient (pour une taille de block 16 pixels , une taille de cellule de 4, un recouvrement de 4)
+pourraient multiplier cette quantité par un facteur 8, soit \begin{bf}392Go\end{bf}, ce qui ne tiendrait pas 
 en mémoire vive.
-Les images seront donc stockées sur HDFS \cite{White:2009:HDG:1717298} (soit en mode \og single-node cluster \fg, soit en mode \og multi-node cluster \fg via le cluster de Telecom ParisTech), cela permettra
-d'extraire les descripteurs par Map/Reduce. Ces descripteurs seront aussi stockés de manière distribuée, via une table HBASE afin de 
+Les images seront donc stockées sur HDFS \cite{White:2009:HDG:1717298} (soit en mode \og single-node cluster \fg, 
+soit en mode \og multi-node cluster \fg via le cluster de Telecom ParisTech), cela permettra
+d'extraire les descripteurs par Map/Reduce. Les descripteurs seront aussi stockés de manière distribuée, via une table HBASE afin de 
 pouvoir effectuer des requ\^{e}tes et vérifier les valeurs calculées.\\
-On utilisera alors la librairie de Machine Learning MLlib de Spark \cite{Meng:2016:MML:2946645.2946679}, dédiée à l'apprentissage sur données distribuées dans HDFS.
-Pour la regression, cette librairie ne permet cependant que les regressions linéaires (soit par moindres carrés linéaires, par Ridge ou par Lasso) et les regressions logistiques (pas de SVM regressif).\\
+Une fois les descripteurs calculés, on utilisera la librairie de Machine Learning MLlib de Spark \cite{Meng:2016:MML:2946645.2946679}, 
+dédiée à l'apprentissage sur données distribuées dans HDFS.
+Pour la regression, cette librairie ne permet cependant que les regressions linéaires 
+(soit par moindres carrés, par Ridge ou par Lasso) et les regressions logistiques (pas de SVM regressif).\\
 On testera toutes ces méthodes pour en analyser les erreurs en cross-validation.\\
-Enfin, pour la visualisation des resultats, on proposera une page html utilisant la librairie D3 \cite{Jain:2014:DVD:2667432.2667451} pour l'affichage de la carte de densité de population. Cette interface web sera aussi
+Enfin, pour la visualisation des resultats, on proposera une page html utilisant la librairie javascript 
+D3 \cite{Jain:2014:DVD:2667432.2667451} pour l'affichage de la carte de densité de population. Cette interface web sera aussi
 intéractive que possible afin de permettre des zooms mais aussi l'observation de la densité de population sur une année antérieure.
 
 \clearpage
 
 \backmatter
 
-%\listoftables
+\listoftables
 
-%\listoffigures
+\listoffigures
 
 \bibliographystyle{alpha}
 \bibliography{biblio}
