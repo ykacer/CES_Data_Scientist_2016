@@ -42,8 +42,12 @@ gdal_merge_simple -in ./tmp/b4-8bit.tif -in ./tmp/b3-8bit.tif -in ./tmp/b2-8bit.
 
 # Pan-sharpen RGB image
 gdal_landsat_pansharp -rgb ./tmp/rgb.tif -lum ./tmp/rgb.tif 0.25 0.23 0.52 -pan ./tmp/b3-8bit.tif -ndv 0 -o ./tmp/pan.tif
+convert -combine ./tmp/b{4,3,2}-projected.tif ./tmp/pan2.tif
+convert -combine ./tmp/b{5,6,4}-projected.tif ./tmp/veg.tif
 
 # Colour correct and convert to JPG
 convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan.tif final-pan-rgb-corrected.jpg
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/pan2.tif final-rgb-corrected.tif
+convert -verbose -channel B -gamma 1.25 -channel G -gamma 1.25 -channel RGB -sigmoidal-contrast 25x25% ./tmp/veg.tif final-veg-corrected.tif
 
 echo "Finished."
