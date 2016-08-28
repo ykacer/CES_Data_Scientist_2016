@@ -348,3 +348,9 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
  * spark.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
 
  * storm.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
+
+### Data Science Project
+
+ * introduction/presentation-project.pdf : brief report that introduces Data Science Project. This project exploits Landsat-8 satellite images for population density prediction.
+
+ * landat-8_gdal-processing : bash file that pre-preprocess a ~1Gb typical Landast-8 dataset creating channels combination(Credit to :[*Dan Stahlke*](https://github.com/gina-alaska/dans-gdal-scripts))
