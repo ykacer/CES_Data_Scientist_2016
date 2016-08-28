@@ -81,7 +81,7 @@ satellitaires à l'exploitation des images couleur de Google Earth.\\
 Les figures \ref{band2},\ref{band3},\ref{band4} présentent respectivement les bandes 2,3 et 4 d'un dataset que nous
 avons pu télécharger depuis \cite{landsat8}, et pris autour de la ville
 de \begin{itshape}Paris (France)\end{itshape}. Ces bandes sont respectivement les bandes visible du rouge, du vert et du bleu.\\
-La figure \ref{color} presente la combinaison de ces trois bandes, et donc l'image couleur resultante (ainsi qu'un zoom autour de l'\begin{itshape}Ile-de-France\end{itshape}.\\
+La figure \ref{color} presente la combinaison de ces trois bandes, et donc l'image couleur resultante (ainsi qu'un zoom autour de l'\begin{itshape}Ile-de-France\end{itshape}).\\
 La figure \ref{vegetation} presente la combinaison des trois bandes 6,5,4 qui permet l'analyse de la végétation.\\
 
 \begin{figure}[H]
@@ -157,15 +157,16 @@ pour quadriller cette zone \ref{quadrillage}\\
 Chaque dataset compte les 11 bandes évoquées plus haut, mais aussi une image d'information de 
 qualité renseignant pour chacun des pixels, la présence ou non de nuage, la présence ou non de mers ainsi que la 
 présence ou non de neige.\\
-Ainsi, chaque dataset mesure approximativement 1Go, on donc aurait une quantité totale de \begin{bf}49Go\end{bf} . 
+Ainsi, chaque dataset mesure approximativement 1Go, on aurait donc une quantité totale de \begin{bf}49Go\end{bf} . 
 Des descripteurs comme les 
-hitogrammes orientés du gradient (pour une taille de block 16 pixels , une taille de cellule de 4, un recouvrement de 4)
+histogrammes orientés du gradient (pour une taille de block 16 pixels , une taille de cellule de 4, un recouvrement de 4)
 pourraient multiplier cette quantité par un facteur 8, soit \begin{bf}392Go\end{bf}, ce qui ne tiendrait pas 
-en mémoire vive.
-Les images seront donc stockées sur HDFS \cite{White:2009:HDG:1717298} (soit en mode \og single-node cluster \fg, 
-soit en mode \og multi-node cluster \fg via le cluster de Telecom ParisTech), cela permettra
-d'extraire les descripteurs par Map/Reduce. Les descripteurs seront aussi stockés de manière distribuée, via une table HBASE afin de 
-pouvoir effectuer des requ\^{e}tes et vérifier les valeurs calculées.\\
+en mémoire vive.\\
+Les images seront donc stockées sur HDFS \cite{White:2009:HDG:1717298} (soit en mode \og single-node cluster \fg{}, 
+soit en mode \og multi-node cluster \fg{} via le cluster de Telecom ParisTech). On créera alors une table distribuée orientée document afin d'y 
+stocker des informations de métadonnées associées aux images, concernant la latitude, la longitude, le pourcentage de couverture 
+nuageuse, la date, l'heure, etc... . Cela permettra par exemple, de retrouver rapidement les images trop nuageuses ou les images prises de nuit, pour les mettre de côté.
+On calculera alors les descripteurs des images par Map/Reduce, qu'on stockera dans un grand fichier distribué type CSV.
 Une fois les descripteurs calculés, on utilisera la librairie de Machine Learning MLlib de Spark \cite{Meng:2016:MML:2946645.2946679}, 
 dédiée à l'apprentissage sur données distribuées dans HDFS.
 Pour la regression, cette librairie ne permet cependant que les regressions linéaires 
