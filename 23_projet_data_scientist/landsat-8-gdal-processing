@@ -32,7 +32,7 @@ if [ ! -d "$DIRECTORY" ]; then
 fi	
 
 # Convert 16-bit images into 8-bit and tweak levels
-for BAND in {8,6,5,4,3,2}; do
+for BAND in {8,7,6,5,4,3,2}; do
 	gdalwarp -t_srs EPSG:3857 "$1"_B"$BAND".TIF ./tmp/b"$BAND"-projected.tif;
 	gdal_contrast_stretch -ndv 0 -linear-stretch 70 30 ./tmp/b"$BAND"-projected.tif ./tmp/b"$BAND"-8bit.tif;
 done
@@ -43,11 +43,27 @@ gdal_merge_simple -in ./tmp/b4-8bit.tif -in ./tmp/b3-8bit.tif -in ./tmp/b2-8bit.
 # Pan-sharpen RGB image
 gdal_landsat_pansharp -rgb ./tmp/rgb.tif -lum ./tmp/rgb.tif 0.25 0.23 0.52 -pan ./tmp/b3-8bit.tif -ndv 0 -o ./tmp/pan.tif
 convert -combine ./tmp/b{4,3,2}-projected.tif ./tmp/pan2.tif
-convert -combine ./tmp/b{5,6,4}-projected.tif ./tmp/veg.tif
+convert -combine ./tmp/b{7,6,4}-projected.tif ./tmp/urban.tif
+convert -combine ./tmp/b{5,4,3}-projected.tif ./tmp/color_ir.tif
+convert -combine ./tmp/b{6,5,2}-projected.tif ./tmp/agri.tif
+convert -combine ./tmp/b{7,6,5}-projected.tif ./tmp/atmo.tif
+convert -combine ./tmp/b{5,6,2}-projected.tif ./tmp/healthy.tif
+convert -combine ./tmp/b{5,6,4}-projected.tif ./tmp/land.tif
+convert -combine ./tmp/b{7,5,3}-projected.tif ./tmp/pan3.tif
+convert -combine ./tmp/b{7,5,4}-projected.tif ./tmp/short_ir.tif
+convert -combine ./tmp/b{6,5,4}-projected.tif ./tmp/veg.tif
 
 # Colour correct and convert to JPG
 convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan.tif final-pan-rgb-corrected.jpg
-convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/pan2.tif final-rgb-corrected.tif
-convert -verbose -channel B -gamma 1.25 -channel G -gamma 1.25 -channel RGB -sigmoidal-contrast 25x25% ./tmp/veg.tif final-veg-corrected.tif
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/pan2.tif "$1"_C1_Natural_Color.TIF
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 25x25% ./tmp/urban.tif "$1"_C2_False_Color.TIF
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/color_ir.tif "$1"_C3_Color_InfraRed.TIF
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/agri.tif "$1"_C4_Agriculture.TIF
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/atmo.tif "$1"_C5_Atmospheric_Penetration.TIF
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/healthy.tif "$1"_C6_Healthy_vegetation.TIF
+convert -verbose -channel B -gamma 1.25 -channel G -gamma 1.25 -channel RGB -sigmoidal-contrast 25x25% ./tmp/land.tif "$1"_C7_Land_Water.TIF
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/pan3.tif "$1"_C8_Natural_Atmospheric_removal.TIF
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/short_ir.tif "$1"_C9_Shortwave_InfraRedr.TIF
+convert -verbose -channel B -gamma 0.925 -channel R -gamma 1.03 -channel RGB -sigmoidal-contrast 50x16% ./tmp/veg.tif "$1"_C10_Vegetation_Analysis.TIF
 
 echo "Finished."
