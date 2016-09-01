@@ -63,16 +63,27 @@ gdal_landsat_pansharp -rgb ./tmp/b7-8bit.tif -rgb ./tmp/b5-8bit.tif -rgb ./tmp/b
 
 gdal_landsat_pansharp -rgb ./tmp/b6-8bit.tif -rgb ./tmp/b5-8bit.tif -rgb ./tmp/b4-8bit.tif -lum ./tmp/b6-8bit.tif 0.25 -lum ./tmp/b5-8bit.tif 0.23 -lum ./tmp/b4-8bit.tif 0.52 -pan ./tmp/b8-8bit.tif -ndv 0 -o ./tmp/pan_veg.tif
 
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_rgb.tif "$1"_pan"-natural_color_432-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_urban.tif "$1"_pan"-false_color_764-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_color_ir.tif "$1"_pan"-infrared_color_543-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_agri.tif "$1"_pan"-agriculture_652-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_atmo.tif "$1"_pan"-atmospheric_penetration_765-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_healthy.tif "$1"_pan"-healthy_vegetation_562-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_land.tif "$1"_pan"-land_water_564-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_rgb2.tif "$1"_pan"-natural_atmospheric_removal_753-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_short_ir.tif "$1"_pan"-shortwave_infrared_754-"corrected.tif
-convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_veg.tif "$1"_pan"-vegetation_analysis_654-"corrected.tif
+mv ./tmp/pan_rgb.tif "$1"_pan"-natural_color_432-"corrected.tif
+mv ./tmp/pan_urban.tif "$1"_pan"-false_color_764-"corrected.tif
+mv ./tmp/pan_color_ir.tif "$1"_pan"-infrared_color_543-"corrected.tif
+mv ./tmp/pan_agri.tif "$1"_pan"-agriculture_652-"corrected.tif
+mv ./tmp/pan_atmo.tif "$1"_pan"-atmospheric_penetration_765-"corrected.tif
+mv ./tmp/pan_healthy.tif "$1"_pan"-healthy_vegetation_562-"corrected.tif
+mv ./tmp/pan_land.tif "$1"_pan"-land_water_564-"corrected.tif
+mv ./tmp/pan_rgb2.tif "$1"_pan"-natural_atmospheric_removal_753-"corrected.tif
+mv ./tmp/pan_short_ir.tif "$1"_pan"-shortwave_infrared_754-"corrected.tif
+mv ./tmp/pan_veg.tif "$1"_pan"-vegetation_analysis_654-"corrected.tif
+
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_rgb.tif "$1"_pan"-natural_color_432-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_urban.tif "$1"_pan"-false_color_764-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_color_ir.tif "$1"_pan"-infrared_color_543-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_agri.tif "$1"_pan"-agriculture_652-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_atmo.tif "$1"_pan"-atmospheric_penetration_765-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_healthy.tif "$1"_pan"-healthy_vegetation_562-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_land.tif "$1"_pan"-land_water_564-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_rgb2.tif "$1"_pan"-natural_atmospheric_removal_753-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_short_ir.tif "$1"_pan"-shortwave_infrared_754-"corrected.tif
+#convert -verbose -channel B -gamma 0.8 -quality 95 ./tmp/pan_veg.tif "$1"_pan"-vegetation_analysis_654-"corrected.tif
 
 
 #convert -combine ./tmp/b{4,3,2}-projected.tif ./tmp/pan2.tif
