@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+
+folder=$1
+dest=$2
+
+if [ -e "$dest" ]
+then
+	rm $dest
+fi
+echo merging
+for csvfile in `ls "$folder"*.csv`
+do 
+	echo "- $csvfile"
+	cat $csvfile | sed '1 d' >> $dest
+	header=`head -n 1 $csvfile`
+done
+sed -i "1i$header" $dest
+echo "into $dest"
+
+
