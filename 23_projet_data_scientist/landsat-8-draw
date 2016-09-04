@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+
+file=$1
+dest=${file%%/*}
+for dataset in `cut -d',' -f53 $file | sed '1 d'`
+do 
+	path=${dataset:3:3}
+	row=${dataset:6:3}
+	year=${dataset:9:4}
+	wget http://earthexplorer.usgs.gov/browse/landsat_8/$year/$path/$row/$dataset.jpg -P $dest
+done
+
+python draw.py $1
