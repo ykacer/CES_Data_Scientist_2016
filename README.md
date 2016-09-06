@@ -17,14 +17,20 @@ Credit to Telecom-Paristech, See [CES Data Scientist-Telecom ParisTech](https://
 
 keywords : features classification, cost function, empirical risk, bayesian classifier, bias/variance compromise.
 
+ * boosting-ces.pd (credit to [*Florence d'Alché*](http://perso.telecom-paristech.fr/~fdalche/Site/index.html)).
+
+ * cours2-SD210-part2.pdf (credit to [*Florence d'Alché*](http://perso.telecom-paristech.fr/~fdalche/Site/index.html)).
+
+ * cours-ces-1-introv0.pdf (credit to [*Joseph Salmon*](http://www.josephsalmon.eu/))
+
  * Papers/
 
 Some introductive papers to Machine Learning.
 
- * Exercises/ 
-- TP_intro_python_ml_digits.v3.ipynb : K-neighrest-neighboors on MNIST digits dataset using **scikit-learn**, cross validation, confusion matrix.
+ * Exercises/TP_intro_python_ml_digits.v3.ipynb : K-neighrest-neighboors on MNIST digits dataset using **scikit-learn**, cross validation, confusion matrix.
 
 #### part2 :
+
  * COURS2.pdf (credit to [*Stephan Clemençon*](http://perso.telecom-paristech.fr/~clemenco/Home.html))
 
 keywords : basic algorithms for classification (Logistic Regression, Linear Discriminant Analysis, Perceptron, Partitionning algorithms, Decision Tree), model complexity, model selection (penalization, cross validation, bootstrap).
