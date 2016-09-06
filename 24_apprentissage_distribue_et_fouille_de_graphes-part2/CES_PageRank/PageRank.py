@@ -6,28 +6,29 @@ import hadoopy
 class mapper(object):
     def __init__(self):
         self.d = 0.25
-        generator_vector = hadoopy.readtb("hdfs://localhost:9000/user/user/vector")
-        self.r = {}
-        for score in generator_vector:
-            self.r[score[0].encode('utf-8')] = score[1]
     def map(self,key, value):
+        url = key[0].encode('utf-8')
+        r = key[1]
         for v in value:
-            product = (1-self.d)*1/len(value)*self.r[key]
-            yield v,product
+            product = 1.0/len(value)*r
+            yield v.encode('utf-8'),product
+        yield url,value
 
 class reducer(object):
     def __init__(self):
         self.d = 0.25
-        generator_vector = hadoopy.readtb("hdfs://localhost:9000/user/user/vector")
-        self.r = {}
-        for score in generator_vector:
-            self.r[score[0].encode('utf-8')] = score[1]
+        self.N = 64375
     def reduce(self,key, values):
-        summation = 0
+        links = []
+        r = 0
         for v in values:
-            summation = summation+v
-        summation = summation + self.d*self.r[key]
-        yield key.encode('utf-8'),summation 
+            if type(v) is list: 
+                links = v
+            else:
+                r = r + v
+
+        r = (1-self.d)*r + self.d/self.N
+        yield (key.encode('utf-8'),r),links
   
 if __name__ == "__main__":
     hadoopy.run(mapper, reducer, doc=__doc__)
