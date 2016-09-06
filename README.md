@@ -364,15 +364,15 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
 
  * CES_PageRank/pagerankPythonEnglish.pdf : PageRank lab queries (Credit to Mauro Sozio) 
 
- * CES_PageRank/labels : text file containing a label for each aeticle of Simple English Wikipedia
+ * CES_PageRank/labels : text file containing a label for each article of Simple English Wikipedia
 
- * CES_PageRank/edge_list.txt : txt file containing all links between Simple English Wikipedia
+ * CES_PageRank/edge_list.txt : txt file containing all links between Simple English Wikipedia articles
 
  * CES_PageRank/LoadIntoHDFS.py : Python file that puts graph matric into HDFS
 
- * CES_PageRank/PageRankDriver.py : Python file that launch **hadoopy** Map/Reduce classes defined into PageRank.py
+ * CES_PageRank/PageRankDriver.py : Python file that launch **hadoopy** to compute Map/Reduce classes defined into PageRank.py
 
- * CES_PageRank/PageRank : Python file that implements **Hadoop MapReduce** classes to compute vector of imortance
+ * CES_PageRank/PageRank.py : Python file that implements Map/Reduce classes to compute vector of importance
 
 ### Data Science Project
 
