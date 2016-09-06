@@ -349,6 +349,31 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
 
  * storm.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
 
+
+### apprentissage distribué et fouille de graphes
+
+#### part 1
+
+ * Lec3-PageRank.pdf : Page Rank Algorithm, matrix factorisation, random teleport
+
+ * Densest.pdf : Dense subgraph
+
+ * lec2-assoc-rules.pdf : 
+
+#### part 2
+
+ * CES_PageRank/pagerankPythonEnglish.pdf : PageRank lab queries (Credit to Mauro Sozio) 
+
+ * CES_PageRank/labels : text file containing a label for each aeticle of Simple English Wikipedia
+
+ * CES_PageRank/edge_list.txt : txt file containing all links between Simple English Wikipedia
+
+ * CES_PageRank/LoadIntoHDFS.py : Python file that puts graph matric into HDFS
+
+ * CES_PageRank/PageRankDriver.py : Python file that launch **hadoopy** Map/reduce using Map/Reduce classes
+
+ * CES_PageRank/PageRank : Python file that implements **Hadoop MapReduce** classes to compute vector of imortance
+
 ### Data Science Project
 
  * introduction/presentation-project.pdf : brief report that introduces Data Science Project. This project exploits Landsat-8 satellite images for population density prediction.
