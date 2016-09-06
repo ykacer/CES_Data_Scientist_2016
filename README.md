@@ -350,15 +350,15 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
  * storm.pdf (Credit to [*Pierre Senellart*](http://pierre.senellart.com/))
 
 
-### apprentissage distribué et fouille de graphes
+### Apprentissage distribué et fouille de graphes
 
 #### part 1
 
- * Lec3-PageRank.pdf : Page Rank Algorithm, matrix factorisation, random teleport
+ * Lec3-PageRank.pdf : Page Rank Algorithm, matrix factorisation, random teleport (Credit to Mauro Sozio)
 
- * Densest.pdf : Dense subgraph
+ * Densest.pdf : Dense subgraph (Credit to Mauro Sozio)
 
- * lec2-assoc-rules.pdf : 
+ * lec2-assoc-rules.pdf : (Credit to Mauro Sozio) 
 
 #### part 2
 
@@ -370,7 +370,7 @@ keywords : Discret and continuous Markov Models, Hidden Markov Model, Monte-Carl
 
  * CES_PageRank/LoadIntoHDFS.py : Python file that puts graph matric into HDFS
 
- * CES_PageRank/PageRankDriver.py : Python file that launch **hadoopy** Map/reduce using Map/Reduce classes
+ * CES_PageRank/PageRankDriver.py : Python file that launch **hadoopy** Map/Reduce classes defined into PageRank.py
 
  * CES_PageRank/PageRank : Python file that implements **Hadoop MapReduce** classes to compute vector of imortance
 
