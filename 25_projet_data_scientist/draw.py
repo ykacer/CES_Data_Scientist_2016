@@ -6,6 +6,7 @@ import cv2
 import matplotlib.pyplot as plt
 from itertools import izip
 import utm
+from pyproj import Proj
 
 file = sys.argv[1]
 folder = os.path.dirname(file)
@@ -43,57 +44,52 @@ latitude1 = image_coords[:,2]
 longitude1 = image_coords[:,9]
 latitude2 = image_coords[:,6]
 longitude2 = image_coords[:,5]
-
-R = 6370
-
-x1 = (R*np.cos(d2*image_coords[:,2])*np.cos(image_coords[:,9])).astype(np.int)
-y1 = (R*np.cos(d2*image_coords[:,2])*np.sin(image_coords[:,9])).astype(np.int)
-x2 = (R*np.cos(d6*image_coords[:,6])*np.cos(image_coords[:,5])).astype(np.int)
-y2 = (R*np.cos(d6*image_coords[:,6])*np.sin(image_coords[:,5])).astype(np.int)
-
-x1 = (R*np.sin(image_coords[:,9])).astype(np.int)
-y1 = (R*d2*np.sin(image_coords[:,2])).astype(np.int)
-x2 = (R*np.sin(image_coords[:,5])).astype(np.int)
-y2 = (R*d6*np.sin(image_coords[:,6])).astype(np.int)
+R = 6378137.0 # R in meters
+ref={}
+for l,z in izip(np.arange(-180,180,6),np.arange(1,61,1)):
+    ref[z] = (z-1)*R*6*np.pi/180+R*3*np.pi/180
+    print z,l,Proj("+proj=utm +zone="+str(z)+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(l+3,0),ref[z]
+	
+x1 = np.array([utm.from_latlon(lati, longi)[0]-500000+ref[utm.from_latlon(lati, longi)[2]] for lati,longi in izip(latitude1,longitude1)]).astype(int)/1000
+y1 = d2*np.array([utm.from_latlon(lati, longi)[1] for lati,longi in izip(latitude1,longitude1)]).astype(int)/1000
+x2 = np.array([utm.from_latlon(lati, longi)[0]-500000+ref[utm.from_latlon(lati, longi)[2]] for lati,longi in izip(latitude2,longitude2)]).astype(int)/1000
+y2 = d6*np.array([utm.from_latlon(lati, longi)[1] for lati,longi in izip(latitude2,longitude2)]).astype(int)/1000
 
 
-lambert1 = 0.5*np.log10((1+np.sin(latitude1))/(1-np.sin(latitude1)))-0.08248325676/2*np.log10((1+(0.08248325676*np.sin(latitude1)))/(1-(0.08248325676*np.sin(latitude1))));
-R = 11745793.39 * np.exp(-0.7289686274 * lambert1);
-gamma = 0.7289686274 * (longitude1 - 0.040792344);
-x1 = (600000.0 + R*np.sin(gamma)) / 1000;
-y1 = (2000000.0 + 6199695.768 - R*np.cos(gamma)) / 1000; 
-y1 = -1*y1
+#x1 = np.array([Proj("+proj=utm +zone="+os.popen('cat France/'+filename+'/'+filename+'_MTL.txt | grep ZONE | cut -c 16-17').read()[:-1]+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long1,lat1)[0] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
+#y1 = d2*np.array([Proj("+proj=utm +zone="+os.popen('cat France/'+filename+'/'+filename+'_MTL.txt | grep ZONE | cut -c 16-17').read()[:-1]+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long1,lat1)[1] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
+#x2 = np.array([Proj("+proj=utm +zone="+os.popen('cat France/'+filename+'/'+filename+'_MTL.txt | grep ZONE | cut -c 16-17').read()[:-1]+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long2,lat2)[0] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
+#y2 = d6*np.array([Proj("+proj=utm +zone="+os.popen('cat France/'+filename+'/'+filename+'_MTL.txt | grep ZONE | cut -c 16-17').read()[:-1]+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long2,lat2)[1] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
 
-lambert2 = 0.5*np.log10((1+np.sin(latitude2))/(1-np.sin(latitude2)))-0.08248325676/2*np.log10((1+(0.08248325676*np.sin(latitude2)))/(1-(0.08248325676*np.sin(latitude2))));
-R = 11745793.39 * np.exp(-0.7289686274 * lambert2);
-gamma = 0.7289686274 * (longitude2 - 0.040792344);
-x2 = (600000.0 + R*np.sin(gamma)) / 1000;
-y2 = (2000000.0 + 6199695.768 - R*np.cos(gamma)) / 1000; 
-y2 = -1*y2
+#x1 = np.array([Proj("+proj=utm +zone=31, +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long1,lat1)[0] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
+#y1 = d2*np.array([Proj("+proj=utm +zone=31, +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long1,lat1)[1] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
+#x2 = np.array([Proj("+proj=utm +zone=31, +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long2,lat2)[0] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
+#y2 = d6*np.array([Proj("+proj=utm +zone=31, +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long2,lat2)[1] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
 
-x1 = np.array([utm.from_latlon(lati, longi)[0] for lati,longi in izip(latitude1,longitude1)]).astype(int)
-y1 = np.array([utm.from_latlon(lati, longi)[1] for lati,longi in izip(latitude1,longitude1)]).astype(int)
-x2 = np.array([utm.from_latlon(lati, longi)[0] for lati,longi in izip(latitude2,longitude2)]).astype(int)
-y2 = np.array([utm.from_latlon(lati, longi)[1] for lati,longi in izip(latitude2,longitude2)]).astype(int)
-x1 = x1/1000
-y1 = -y1/1000
-x2 = x2/1000
-y2 = -y2/1000
+#x1 = 100*longitude1
+#x1 = 100*image_coords[:,3]
+#y1 = 100*d2*latitude1
 
 offset_y = np.min(y1)
 offset_x = np.min(x1)
-print np.min(x1)
-print np.min(y1)
-print np.max(x2)
-print np.max(y2)
+print "min x1 :",np.min(x1)
+print "min y1 :",np.min(y1)
+print "max x1 :",np.max(x1)
+print "max y1 :",np.max(y1)
 
-nargin = 500
+#for i,filename in enumerate(image_names):
+    #x1true = os.popen('cat France/'+filename+'/'+filename+'_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -c 38-48').read()
+    #print x1[i],int(float(x1true[:-1]))/1000
+    #x1[i] = int(float(x1true[:-1]))/1000
+
+
+nargin = 600
 h = int(np.max(y2)-np.min(y1)+2*nargin)+1
 w = int(np.max(x2)-np.min(x1)+2*nargin)+1
 print "h:",h
 print "w:",w
 draw = np.zeros((h,w,3))
-scaling = 5
+scaling = 7.2
 resolution = 30 # meters
 
 for i,filename in enumerate(image_names):
@@ -102,9 +98,11 @@ for i,filename in enumerate(image_names):
     anchor_y = nargin+y1[i]-offset_y
     image = cv2.imread(folder+'/'+filename+".jpg",-1)
     hi,wi,ci = image.shape
-    hs = hi*scaling*resolution/1000
-    ws = wi*scaling*resolution/1000
-    image = cv2.resize(cv2.imread(folder+'/'+filename+".jpg",-1),(ws,hs))
+    hs = int(hi*scaling*resolution/1000)
+    ws = int(wi*scaling*resolution/1000)
+    #hs = 10
+    #ws = 10
+    image = cv2.resize(image,(ws,hs))
     temp[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:] = image[:,:,::-1]
     draw = draw + temp
     draw[draw>255]=255

@@ -10,6 +10,7 @@ do
 	row=${dataset:6:3}
 	year=${dataset:9:4}
 	wget http://earthexplorer.usgs.gov/browse/landsat_8/$year/$path/$row/$dataset.jpg -P $dest
+	#landsat download $dataset MTL -d $dest
 done
 
 python draw.py $1
