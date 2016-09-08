@@ -48,6 +48,7 @@ R = 6378137.0 # R in meters
 ref={}
 for l,z in izip(np.arange(-180,180,6),np.arange(1,61,1)):
     ref[z] = (z-1)*R*6*np.pi/180+R*3*np.pi/180
+    ref[z] = 0.75*ref[z]
     print z,l,Proj("+proj=utm +zone="+str(z)+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(l+3,0),ref[z]
 	
 x1 = np.array([utm.from_latlon(lati, longi)[0]-500000+ref[utm.from_latlon(lati, longi)[2]] for lati,longi in izip(latitude1,longitude1)]).astype(int)/1000
@@ -88,24 +89,21 @@ h = int(np.max(y2)-np.min(y1)+2*nargin)+1
 w = int(np.max(x2)-np.min(x1)+2*nargin)+1
 print "h:",h
 print "w:",w
-draw = np.zeros((h,w,3))
-scaling = 7.2
-resolution = 30 # meters
 
+draw = np.zeros((h,w,3))
+factor = np.ones((h,w,3))
 for i,filename in enumerate(image_names):
     temp = np.zeros((h,w,3))
     anchor_x = nargin+x1[i]-offset_x
     anchor_y = nargin+y1[i]-offset_y
     image = cv2.imread(folder+'/'+filename+".jpg",-1)
     hi,wi,ci = image.shape
-    hs = int(hi*scaling*resolution/1000)
-    ws = int(wi*scaling*resolution/1000)
-    #hs = 10
-    #ws = 10
+    hs = np.abs(y2[i]-y1[i])
+    ws = np.abs(x2[i]-x1[i])
     image = cv2.resize(image,(ws,hs))
-    temp[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:] = image[:,:,::-1]
-    draw = draw + temp
-    draw[draw>255]=255
+    temp[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:] = 255-image[:,:,::-1]
+    draw = draw + factor*temp
+    factor[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:] = np.dstack([np.where(cv2.cvtColor(image,cv2.COLOR_BGR2HSV)[:,:,2]<4,1,0)]*3)*factor[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:]
 plt.imshow(draw); 
 plt.savefig(folder+'/covering-selection.png')
 plt.show()
