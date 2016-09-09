@@ -39,7 +39,7 @@ la technique de \og pan-sharpening \fg{}.
 \chapter{Importation des images Landsat-8}
 \section{Téléchargement}
 
-L'interface du site de l'USGS permet de rechercher des images contenues dans une zone à délimiter via des points repérés par 
+L'interface du site de l'$USGS$ permet de rechercher des images contenues dans une zone à délimiter via des points repérés par 
 leur latitude et longitude \ref{selection}.\\
 
 \begin{figure}[H]
@@ -132,7 +132,7 @@ Nous avons donc une liste d'identifiants d'images avec leurs coordonnées en lat
 Nous avons vu que ces données peuvent être obtenues sans redondance, prises de jour, avec une couverture nuageuse minimale.\\
 Cependant, il reste à verifier que ces données couvrent bien le territoire voulue, pour cela nous allons projeter les images obtenues
 sur un plan en utlisant la convention $UTM$ \cite{wiki:utm}.\\
-Cette convention divise la surface terreste en zones délimitées par les méridiens (espacées de 6 degrés) et 
+Cette convention divise la surface terrestre en zones délimitées par les méridiens (espacées de 6 degrés) et 
 les latitudes (espacées de 8 degrés) \ref{utm}.
 \begin{figure}[H]
 \begin{center}
@@ -151,14 +151,14 @@ entre un point d'une zone et un point d'une autre zone n'a aucun sens et chaque 
 Cette distance a cependant un sens si toutes les cordonnées ($longitude$,$latitude$) sont converties en coordonnées ($x$,$y$) suivant
 le système de projection d'une même zone donnée, aux effets de distorsion prêt.\\
 C'est cette simplification que nous allons adopter : pour chaque territoire, on utilisera le système de projection de la zone centrale.
-Par exemple, pour notre exemple du territoire français, nous allons projeté les ($longitude$,$latitude$) en prenant le système de projection
+Par exemple, pour le territoire français, nous allons projeté les ($longitude$,$latitude$) en prenant le système de projection
 de la zone $31T$ \ref{utm_france} :
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{images/utm_zones_europe.png}
 \end{center}
-\caption{Division de continent européen en zones ($UTM$) \cite{wiki:utm}}
+\caption{Division du continent européen en zones ($UTM$) \cite{wiki:utm}}
 \label{utm_france}
 \end{figure}
 
@@ -171,7 +171,7 @@ la package $utm$ sur $python$ \cite{utm_package}.
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_france.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $France$}
+\caption{Projection $UTM$ d'images Landsat-8 du territoire $France$ (unité : km)}
 \label{projection_france}
 \end{figure}
 
@@ -185,38 +185,38 @@ pour d'autres territoires à divers endroits du globe \ref{projection_uruguay},\
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_uruguay.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $Uruguay$}
+\caption{Projection $UTM$ d'images Landsat-8 du territoire $Uruguay$ (unité : km)}
 \label{projection_uruguay}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_kenya.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $Kenya$}
+\caption{Projection $UTM$ d'images Landsat-8 du territoire $Kenya$ (unité : km)}
 \label{projection_kenya}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_newzealand.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $Nouvelle$-$Zelande$}
+\caption{Projection $UTM$ d'images Landsat-8 du territoire $Nouvelle$-$Zelande$ (unité : km)}
 \label{projection_newzealand}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_usa.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $USA$}
+\caption{Projection $UTM$ d'images Landsat-8 du territoire $Etats$-$Unis$ (unité : km)}
 \label{projection_usa}
 \end{figure}
 
 \clearpage
 
-On remarquera que pour certains terrioires comme celui ds $USA$ ou celui de \begin{itshape}Nouvelle-Zelande\end{itshape}, 
+On remarquera que pour certains terrioires comme celui des \begin{itshape}Etats-Unis\end{itshape} ou celui de \begin{itshape}Nouvelle-Zelande\end{itshape}, 
 le territoire n'est pas totalement couvert. En effet, les requ\^{e}tes sur le site de l'$USGS$ renvoit un maximum 
 de 100 images, et il se peut donc que toutes les images ne couvrent pas toute la zone délimitée. 
 Mais, on peut palier à cela en augmentant ce maximum 
-ou en effectuant plusieurs recherches du même territoire pour différentes année qu'on concatène ensuite.\\
+ou en effectuant plusieurs recherches du même territoire pour différentes années dont on concatène ensuite les résultats.\\
 
 \chapter{Pré-traitement des images}
 \section{Combinaison de bandes spectrales}
@@ -224,7 +224,7 @@ ou en effectuant plusieurs recherches du même territoire pour différentes ann�
 A ce stade, nous avons donc une liste d'url vers des images Landsat-8 couvrant un certain territoire.\\
 Chaque image est en fait un dataset de 11 canaux, 9 dans le visible et 2 dans l'infra-rouge.\\
 L'illustration \ref{lc8_bands} montre les bandes spectrales des 11 canaux pour les satellites 
-Landsat-7 (en bas) et Landsat-8 (en haut):
+Landsat-7 et Landsat-8 (senseurs \begin{itshape}OLI/TRS\end{itshape}):
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.2]{images/landsat8_bands.jpg}
@@ -264,15 +264,15 @@ Vegetation Analysis & 6 , 5 , 4\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Combinaisons possibles à 3 canaux}
+\caption{Combinaisons des canaux d'une image Landsat-8}
 \label{combinaison}
 \end{table}
 \clearpage
 
 Ces bandes couvrent approximativement un périmètre de 185km dans la direction Nord-Sud et 185km
 dans la direction Est-Ouest, pour une résolution de 30 mètres (soit des images d'environ 8000 sur 8000 pixels).\\
-La figure \ref{color} presente la combinaison de ces trois bandes Rouge, Vert, Blue, et donc l'image couleur resultante 
-(ainsi qu'un zoom autour de l'\begin{itshape}Ile-de-France\end{itshape}).\\
+La figure \ref{color} presente la combinaison des bandes Rouge, Verte et Bleue, et donc l'image couleur resultante 
+(ainsi qu'un zoom autour de \begin{itshape}Paris\end{itshape}).\\
 La figure \ref{vegetation} presente la combinaison des trois bandes 6,5,4 qui permet l'analyse de la végétation.\\
 
 
@@ -281,7 +281,7 @@ La figure \ref{vegetation} presente la combinaison des trois bandes 6,5,4 qui pe
 \includegraphics[scale=0.03]{images/paris_rgb.png}
 \includegraphics[scale=0.5]{images/paris_rgb_zoom.png}
 \end{center}
-\caption{image couleur Lansat-8 (bandes 4,3,2), région autour de $Paris$ $(France)$ + zoom}
+\caption{Image couleur Lansat-8 (bandes 4,3,2), région autour de $Paris$ $(France)$ + zoom}
 \label{color}
 \end{figure}
 
@@ -290,7 +290,7 @@ La figure \ref{vegetation} presente la combinaison des trois bandes 6,5,4 qui pe
 \begin{center}
 \includegraphics[scale=0.3]{images/paris_vegetal_zoom_pansharpened.png}
 \end{center}
-\caption{image végétale Lansat-8 (bandes 6,5,4), région autour de $Paris$ $(France)$}
+\caption{Image végétale Lansat-8 (bandes 6,5,4), région autour de $Paris$ $(France)$}
 \label{vegetation}
 \end{figure}
 
@@ -299,8 +299,8 @@ La figure \ref{vegetation} presente la combinaison des trois bandes 6,5,4 qui pe
 \section{Pan-sharpening}
 
 Parmi les 11 bandes, la bande 8 est la seule présentant une résolution de 15m au lieu de 30m. Elle est utilisé pour améliorer la résolution
-des combinaisons de bandes.\\
-Ainsi la figure \ref{pan-sharpen} montre la différence entre l'image couleur à 30m de résolution et cella à 15m obtenue par pan-sharpening.
+des combinaisons de bandes: c'est le \begin{itshape}pan-sharpening\end{itshape}.\\
+Ainsi la figure \ref{pan_sharpen} montre la différence entre l'image couleur à 30m de résolution et cella à 15m obtenue par \begin{itshape}pan-sharpening\end{itshape}.
 Pour calculer cette image, on utilise le package Linux \begin{itshape}landsat-util\end{itshape} \cite{dans-gdal}.
 
 \begin{figure}[H]
@@ -308,11 +308,22 @@ Pour calculer cette image, on utilise le package Linux \begin{itshape}landsat-ut
 \includegraphics[scale=0.4]{images/paris_rgb_zoom.png}
 \includegraphics[scale=0.2]{images/paris_rgb_zoom_pansharpened.png}
 \end{center}
-\caption{image couleur Landsat-8 et son pan-sharpening, $Paris$ $(France)$}
-\label{vegetation}
+\caption{Image couleur Landsat-8 et son $pan$-$sharpening$, $Paris$ $(France)$}
+\label{pan_sharpen}
 \end{figure}
 
 \clearpage
+
+\section{Extraction d'information pour la classification supervisée}
+
+On est donc en mesure de pré-traiter les données d'un territoire donné, par combinaison de bandes puis \begin{itshape}pan-sharpening\end{itshape}.\\
+Il s'agit à présent de récupérer un fichier renseignant la densité de population en différents points de ce territoire, chacun 
+de ces points étant repéré par un couple ($longitude$,$latitude$).\\
+On effectue alors la projection $UTM$ (comme décrit plus haut) de chacun de ces points, pour pouvoir récupérer l'image Landsat-8
+correspondante et ouvrir une fenêtre autour du point (patch).\\
+Nous aurions donc un ensemble de couples ($patch$,\begin{itshape}valeur de densité\end{itshape}) en vue d'une classification supervisée.\\
+Il reste donc maintenant à extraire un vecteur descripteur pertinent à partir de chaque patch, chaque patch existant sous forme de multiple combinaisons
+possibles de bandes à haute résolution (\begin{itshape}pan-sharpening\end{itshape}).
 
 \backmatter
 
