@@ -12,11 +12,11 @@
 
 \title{%
   Projet de Sciences des Données \\
-  \large Explotation d'images satellites haute-résolution \\pour la prevision d'indicateurs socio-économiques \\
+  \large Explotation d'images satellites haute-résolution \\pour la prévision d'indicateurs socio-économiques \\
     }
 
 \author{\textsc{Youcef} - \textsc{Kacer}}
-\date{9 Septembre 2016}
+\date{12 Septembre 2016}
 
 \begin{document}
  
@@ -26,7 +26,7 @@
 
 \frontmatter
 \chapter{Introduction}
-Ce document présente le pré-traitement des images du satellite Landsat-8 en vue de la prédiction d'indicateurs socio-économiques (à 
+Ce document présente le pré-traitement des images du satellite \begin{itshape}Landsat-8\end{itshape} en vue de la prédiction d'indicateurs socio-économiques (à 
 priori la densité de population dans un premier temps). Il s'agit de montrer comment, pour un territoire donné,
 importer les images depuis le site de l'$USGS$ (\begin{itshape}U.S. Geological Survey\end{itshape}) \cite{landsat8}, en supprimer les doublons, et ne conserver 
 que celles de meilleure qualité.
@@ -58,7 +58,7 @@ Plusieurs critères sont disponibles et que nous allons exploiter :\\
 
 \item[-] Contr\^{o}ler la couverture nuageuse (inférieure à 10\%).
 \item[-] Contr\^{o}ler la période d'acquistion (privilégier les acquisitions de jour).
-\item[-] Renseigner des bornes d'acquisition en temps (prendre une large étendue temporelle pour être s\^{o}r de couvrir tout le territoire)
+\item[-] Renseigner des bornes d'acquisition en temps (prendre une large étendue temporelle pour être s\^{u}r de couvrir tout le territoire)
 
 \end{itemize}
 
@@ -95,7 +95,7 @@ LC81990302013344LGN00& 199& 030&DAY&2.96&43.18467&.19295&44.24396&-.67281&43.824
 \end{tabular}
 \end{adjustbox}
 \end{center}
-\caption{Images Landsat-8 et méta-données}
+\caption{Images $Landsat-8$ et méta-données}
 \label{attributs}
 \end{table}
 
@@ -171,7 +171,7 @@ la package $utm$ sur $python$ \cite{utm_package}.
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_france.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $France$ (unité : km)}
+\caption{Projection $UTM$ d'images $Landsat-8$ du territoire $France$ (unité : km)}
 \label{projection_france}
 \end{figure}
 
@@ -185,28 +185,28 @@ pour d'autres territoires à divers endroits du globe \ref{projection_uruguay},\
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_uruguay.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $Uruguay$ (unité : km)}
+\caption{Projection $UTM$ d'images $Landsat-8$ du territoire $Uruguay$ (unité : km)}
 \label{projection_uruguay}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_kenya.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $Kenya$ (unité : km)}
+\caption{Projection $UTM$ d'images $Landsat-8$ du territoire $Kenya$ (unité : km)}
 \label{projection_kenya}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_newzealand.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $Nouvelle$-$Zelande$ (unité : km)}
+\caption{Projection $UTM$ d'images $Landsat-8$ du territoire $Nouvelle$-$Zelande$ (unité : km)}
 \label{projection_newzealand}
 \end{figure}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.8]{images/projection_usa.png}
 \end{center}
-\caption{Projection $UTM$ d'images Landsat-8 du territoire $Etats$-$Unis$ (unité : km)}
+\caption{Projection $UTM$ d'images $Landsat-8$ du territoire $Etats$-$Unis$ (unité : km)}
 \label{projection_usa}
 \end{figure}
 
@@ -221,15 +221,15 @@ ou en effectuant plusieurs recherches du même territoire pour différentes ann�
 \chapter{Pré-traitement des images}
 \section{Combinaison de bandes spectrales}
 
-A ce stade, nous avons donc une liste d'url vers des images Landsat-8 couvrant un certain territoire.\\
+A ce stade, nous avons donc une liste d'url vers des images \begin{itshape}Landsat-8\end{itshape} couvrant un certain territoire.\\
 Chaque image est en fait un dataset de 11 canaux, 9 dans le visible et 2 dans l'infra-rouge.\\
-L'illustration \ref{lc8_bands} montre les bandes spectrales des 11 canaux pour les satellites 
-Landsat-7 et Landsat-8 (senseurs \begin{itshape}OLI/TRS\end{itshape}):
+L'illustration \ref{lc8_bands} montre les bandes spectrales des 11 canaux pour le satellite 
+\begin{itshape}Landsat-8\end{itshape} (senseurs \begin{itshape}OLI/TRS\end{itshape}) et les 8 canaux liés au satellite \begin{itshape}Landsat-7\end{itshape}:
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.2]{images/landsat8_bands.jpg}
 \end{center}
-\caption{Bandes spectrales des différents canaux spectraux pour les satellites Landsat-7 et Landsat-8 \cite{landsat8}}
+\caption{Bandes spectrales des différents canaux spectraux pour les satellites $Landsat-7$ et $Landsat-8$ \cite{landsat8}}
 \label{lc8_bands}
 \end{figure}
 
@@ -264,7 +264,7 @@ Vegetation Analysis & 6 , 5 , 4\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Combinaisons des canaux d'une image Landsat-8}
+\caption{Combinaisons des canaux d'une image $Landsat-8$}
 \label{combinaison}
 \end{table}
 \clearpage
@@ -272,7 +272,7 @@ Vegetation Analysis & 6 , 5 , 4\\
 Ces bandes couvrent approximativement un périmètre de 185km dans la direction Nord-Sud et 185km
 dans la direction Est-Ouest, pour une résolution de 30 mètres (soit des images d'environ 8000 sur 8000 pixels).\\
 La figure \ref{color_paris} presente la combinaison des bandes 4,3,2 qui permet d'avoir l'image couleur, pour le dataset incluant Paris et pour un zoom autour de $Paris$.\\
-La figure \ref{urban} presente la combinaison des trois bandes 7,6,4 qui permet l'analyse urbaine, pour des zooms autour de $Paris$, $Versailes$ et $Fontainebleau$.\\
+La figure \ref{urban} presente la combinaison des trois bandes 7,6,4 qui permet l'analyse urbaine, pour des zooms autour de $Paris$, $Versailles$ et $Fontainebleau$.\\
 
 \begin{figure}[H]
 \begin{center}
@@ -295,9 +295,15 @@ La figure \ref{urban} presente la combinaison des trois bandes 7,6,4 qui permet 
 
 \clearpage
 
+Les images urbaines de $Paris$,$Versailles$ et $Fontainebleau$ font bien ressortir la présence de batiments en ton gris-rose. cette présence
+semble être croissante en fonction de la densité de population de ces villes, qui est de 21288 habs/m\up{2} pour $Paris$, 3289 habs/m\up{2}
+pour $Versailles$ et 87 habs/m\up{2} pour $Fontainebleau$. La combinaison d'images 7,6,4 semble être adéquate pour quantifier la densité
+de population.
+
 \section{Pan-sharpening}
 
-Parmi les 11 bandes, la bande 8 est la seule présentant une résolution de 15m au lieu de 30m. Elle est utilisé pour améliorer la résolution
+Parmi les 11 bandes, la bande 8 est la seule présentant une résolution de 15m au lieu de 30m (c'est la bande $panchromatique$). 
+Elle est utilisé pour améliorer la résolution
 des combinaisons de bandes: c'est le \begin{itshape}pan-sharpening\end{itshape}.\\
 Ainsi la figure \ref{pan_sharpen} montre la différence entre l'image couleur à 30m de résolution et celle à 15m obtenue par \begin{itshape}pan-sharpening\end{itshape}.
 Pour calculer cette image, on utilise le package Linux \begin{itshape}landsat-util\end{itshape} \cite{dans-gdal}.
@@ -307,7 +313,7 @@ Pour calculer cette image, on utilise le package Linux \begin{itshape}landsat-ut
 \includegraphics[scale=0.4]{images/paris_rgb_zoom.png}
 \includegraphics[scale=0.2]{images/paris_rgb_zoom_pansharpened.png}
 \end{center}
-\caption{Image couleur Landsat-8 et son $pan$-$sharpening$, $Paris$ $(France)$}
+\caption{Image couleur $Landsat-8$ et son $pan$-$sharpening$, $Paris$ $(France)$}
 \label{pan_sharpen}
 \end{figure}
 
@@ -318,7 +324,7 @@ Pour calculer cette image, on utilise le package Linux \begin{itshape}landsat-ut
 On est donc en mesure de pré-traiter les données d'un territoire donné, par combinaison de bandes puis \begin{itshape}pan-sharpening\end{itshape}.\\
 Il s'agit à présent de récupérer un fichier renseignant la densité de population en différents points de ce territoire, chacun 
 de ces points étant repéré par un couple ($longitude$,$latitude$).\\
-Ainsi, on peut récupérer auprès de \cite{sql-data}, un fichier csv de près de 36000 communes renseignant pour chacune d'elle la densité de population de 2012 (habs/m2), la 
+Ainsi, on peut récupérer auprès de \cite{sql-data}, un fichier csv de près de 36000 communes renseignant pour chacune d'elle la densité de population de 2012 (habs/m\up{2}), la 
 longitude et la latitude, entre autres \ref{densite}.
 
 \begin{table}
@@ -357,13 +363,13 @@ On effectue alors la projection $UTM$ (comme décrit plus haut) de chacun de ces
 \begin{center}
 \includegraphics[scale=0.2]{images/density_france.png}
 \end{center}
-\caption{Densité du territoire $France$ en habs/m2}
+\caption{Densité du territoire $France$ en habs/m\up{2}}
 \label{densite_france}
 \end{figure}
 
 \clearpage
 
-A partir de chacun de ces points, on va alors pouvoir récupérer l'image Landsat-8
+A partir de chacun de ces points, on va alors pouvoir récupérer l'image \begin{itshape}Landsat-8\end{itshape}
 correspondante et ouvrir une fenêtre autour du point (patch).\\
 Nous aurions donc un ensemble de couples ($patch$,\begin{itshape}valeur de densité\end{itshape}) en vue d'une classification supervisée.\\
 Il reste donc maintenant à extraire un vecteur descripteur pertinent à partir de chaque patch, chaque patch existant sous forme de multiple combinaisons
