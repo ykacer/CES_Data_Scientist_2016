@@ -1,0 +1,14 @@
+#!/bin/bash
+
+file=$1
+header=`head -n 1 $1`
+
+sed '1 d' $1 | \
+awk -F"," 'BEGIN {OFS = "," } {$56=substr($19,6,2); print}' | \
+ sed 's/\,/\t/g' | \
+awk 'BEGIN {OFS=FS="\t"} {gsub(/\./,",",$24)}1' | \
+sort -t $'\t' -k 56n -k 24g | \
+awk 'BEGIN {OFS=FS="\t"} {gsub(/\,/,".",$24)}1' | \
+sed 's/\t/\,/g' | \
+sort -t',' -k 56n -u > ${file%%.*}_clean_zone.csv
+sed -i "1i${header}" ${file%%.*}_clean_zone.csv
