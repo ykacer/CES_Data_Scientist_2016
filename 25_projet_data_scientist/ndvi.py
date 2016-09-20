@@ -66,7 +66,7 @@ image_months = [month[5:7] for month in list(pd.read_csv(file,sep=',',header=0,u
 for ID,month in izip(image_names,image_months):
 	print "processing "+folder+'/'+ID+'...'
 	if os.path.isdir(folder+'/'+ID) == False:
-		os.system('/usr/local/bin/landsat download '+ID+' --bands 45 --dest '+folder)
+		os.system('/usr/local/bin/landsat download '+ID+' --bands 2345 --dest '+folder)
 		if os.path.isfile(folder+'/'+ID+'.tar.bz') == True:
 			os.mkdir(folder+'/'+ID)
  			os.system('tar xfvj '+folder+'/'+ID+'.tar.bz -C '+folder+'/'+ID)
@@ -76,7 +76,13 @@ for ID,month in izip(image_names,image_months):
                 os.mkdir(folder+'/'+name)
 	
         os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvigrey')
+        for band in [2,3,4]:
+            os.system('gdal_contrast_stretch -ndv 0 -linear-stretch 70 30 '+folder+'/'+ID+'/'+ID+'_B'+str(band)+'.TIF '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
+        os.system('gdal_merge_simple -in '+folder+'/'+ID+'_B4_8.TIF -in '+folder+'/'+ID+'_B3_8.TIF -in '+folder+'/'+ID+'_B2_8.TIF  -out '+folder+'/'+ID+'_rgb.TIF')
+        for band in [2,3,4]:
+            os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
 	ndvi_grey = cv2.imread(home+'/landsat/processed/'+ID+'/'+ID+'_NDVI.TIF',-1);
+	rgb = cv2.imread(folder+'/'+ID+'_rgb.TIF',-1);
         if cmap_ndvi == []:
                 cdict = {}
 	        os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvi')
@@ -95,9 +101,11 @@ for ID,month in izip(image_names,image_months):
                 cmap_ndvi = make_colormap(seq)
 
 	zoom = ndvi_grey[y1:y2,x1:x2];
+        zoom_rgb = rgb[y1:y2,x1:x2];
         fig = plt.figure(); 
         cplt=plt.imshow(zoom,cmap=cmap_ndvi,vmin=0,vmax=255); 
         cbar = fig.colorbar(cplt, ticks=[int(255*fr) for fr in f]);
         cbar.ax.set_yticklabels([str(fr) for fr in frontiers])
-        plt.savefig(folder+'/'+name+'/ndvi_'+month+'_map.png')
-        cv2.imwrite(folder+'/'+name+'/ndvi_'+month+'.png',np.delete(255*cmap_ndvi(zoom),3,2)[:,:,::-1]);
+        plt.savefig(folder+'/'+name+'/'+month+'_ndvi_colormap.png')
+        cv2.imwrite(folder+'/'+name+'/'+month+'_ndvi.png',np.delete(255*cmap_ndvi(zoom),3,2)[:,:,::-1]);
+        cv2.imwrite(folder+'/'+name+'/'+month+'_rgb.png',zoom_rgb[:,:,::-1]);
