@@ -80,7 +80,7 @@ de celui de l'image \begin{itshape}LANDSAT-8\end{itshape}, il faudrait afficher 
 Seulement, le site de l'$IGN$ ne propose des images géoréférencées qu'à l'achat, mais nous pouvons contourner cela en récupérant une 
 image non géoréférencé, qu'on géoréférencerait ensuite via un logiciel $SIG$, $QGIS$ en l'occurence.\\
 
-\subsection{Géoréférencement d'une image de l'IGN}
+\subsection{Création d'une image de l'IGN géoréférencée}
 
 Le portail de l'IGN \cite{ign-portail} permet de parcourir le globe en affichant instantanément les coordonnées des points dans 
 plusieurs systèmes de coordonnées possibles. La figure \ref{ign-portail} montre l'interface du portail affichant la commune de
@@ -90,13 +90,13 @@ plusieurs systèmes de coordonnées possibles. La figure \ref{ign-portail} montr
 \begin{center}
 \includegraphics[scale=0.3]{images/ign-portail-Thonon.png}
 \end{center}
-\caption{portail de l'$IGN$ - commune de Thonon-Les-Bains en coordonnées NTF93/Lambert93 \cite{ign-portail}}
+\caption{Portail de l'$IGN$ - commune de Thonon-Les-Bains en coordonnées NTF93/Lambert93 \cite{ign-portail}}
 \label{ign-portail}
 \end{figure}
 
 \clearpage
 
-La manipulation consiste à prendre un snapshot du portail pour cette zone, en affichant au préalable les coordonnées de 
+La manipulation consiste à prendre un snapshot du portail pour cette zone, en y inscrivant au préalable les coordonnées de 
 plusieurs points via l'outil de marquage et d'annotation du portail. La figure \ref{ign-points} montre ainsi six points 
 dont on a indiqué les coordonnées en \begin{itshape}NTF 93/Lambert 93\end{itshape}. Ces points vont jouer le rôle des 
 \begin{itshape}points d'amers\end{itshape} décrits plus haut dans le principe de géoréférencement \ref{principe_geo}.
@@ -113,9 +113,10 @@ dont on a indiqué les coordonnées en \begin{itshape}NTF 93/Lambert 93\end{itsh
 
 Le logiciel libre $QGIS$ \cite{QGIS_software} permet de géoréférencer une image dans le même système de coordonnées que des points de
 contr\^{o}le préalablement renseignés dans l'outil.\\
-Pour commencer, il faut ouvrir un projet dans l'outil et renseigné le système de projection dans lesquel on souhaite visualiser
+Pour commencer, il faut ouvrir un projet dans la fen\^{e}tre principale et renseigner le système de projection dans lequel on souhaite visualiser
 les images géoréférencées (on parle de \begin{itshape}raster\end{itshape}). On choisit ici le système de projection
-\begin{itshape}EPSG:32631\end{itshape} car c'est celui dans lequel les images \begin{itshape}Landsat-8\end{itshape} sont projetées et
+\begin{itshape}EPSG:32631\end{itshape} car c'est celui dans lequel les images \begin{itshape}Landsat-8\end{itshape} (dans la zone $UTM$ 
+de \begin{itshape}Thonon-Les-Bains\end{itshape}) sont projetées et
 sur lequel on projetera notre snapshot IGN une fois géoréférencé, pour comparaison.\\
 La figure \ref{qgis-projet} montre la manipulation dans les propriétés du projet.
 
@@ -160,7 +161,7 @@ et le tableau des points de contr\^{o}le en bas.
 
 \clearpage
 
-Maintenant que les points de renseignement sont données, on va définir la transformation à appliquer. Pour cela, on ouvre l'onglet
+Maintenant que les points de renseignement sont donnés, on va définir la transformation à appliquer. Pour cela, on ouvre l'onglet
  \og Paramètres > Tranformation \fg{}, qu'on renseigne comme dans la figure \ref{qgis-transformation}. Par ordre, 
 on renseigne le type de transformation, ici polynomiale du second degré. En effet, avec six points d'amers, on peut se permettre
 une transformation non linéaire d'ordre 2 en vertu de la formule \cite{Nicolas:2014}:
@@ -172,7 +173,7 @@ On renseigne aussi le type de réechantillonnage des pixels, afin d'affecter une
 après transformation. Et enfin, on renseigne le système de géoréférencement correspondant 
 à nos points d'amers, soit \begin{itshape}NTF 93/Lambert 93\end{itshape} (\begin{itshape}EPSG:2154\end{itshape}). On peut aussi
  cocher la case \og charger dans QGIS lorsque terminé \fg{} afin d'avoir l'image géoréférencé directement
- dans le système de coordonnées du projet (\begin{itshape}EPSG:32631\end{itshape}).
+ projeté dans le système de coordonnées du projet (\begin{itshape}EPSG:32631\end{itshape}).
 
 \begin{figure}[H]
 \begin{center}
@@ -191,7 +192,7 @@ notre snapshot dans le système de coordonnées \begin{itshape}EPSG:32631\end{it
 \begin{center}
 \includegraphics[scale=0.3]{images/qgis-resultat.png}
 \end{center}
-\caption{Projet $QGIS$ et affichage du raster géoéréférencé dans la fen\^{e}tre principale}
+\caption{Projet $QGIS$ et affichage du raster géoéréférencé projeté dans la fen\^{e}tre principale}
 \label{qgis-resultat}
 \end{figure}
 
@@ -201,8 +202,19 @@ notre snapshot dans le système de coordonnées \begin{itshape}EPSG:32631\end{it
 
 A présent que notre snapshot IGN est géoréférencé et projeté dans le système de coordonnées de \begin{itshape}Landsat-8\end{itshape}
 (\begin{itshape}EPSG:32631\end{itshape}), on peut charger une image géoréférencé \begin{itshape}Landsat-8\end{itshape} contenant la 
-commune de \begin{itshape}Thonon-Les-Bains\end{itshape}. Pour cela, on a télécharger les bandes 2,3,4 correspondantes et formé l'image 
-couleur  \ref{Thonon-landsat}.
+commune de \begin{itshape}Thonon-Les-Bains\end{itshape}. Pour cela, on a téléchargé les bandes 2,3,4 correspondantes et formé l'image 
+couleur  \ref{Thonon-landsat}. On peut vérifier que le système de géoréférencement de ces images est bien \begin{itshape}EPSG:32621\end{itshape} via la 
+commande \begin{itshape}listgeo\end{itshape}:\\
+
+\begin{center}
+listgeo LC81960282016252LGN00\_B2.TIF
+\end{center}
+
+qui renvoit bien ($PCS$ pour \begin{itshape}Projection Coordinate System\end{itshape}) :\\
+
+\begin{center}
+PCS: 32621\\
+\end{center}
 
 \begin{figure}[H]
 \begin{center}
@@ -212,8 +224,10 @@ couleur  \ref{Thonon-landsat}.
 \label{Thonon-landsat}
 \end{figure}
 
+\clearpage
+
 On peut alors charger cette image dans la fenêtre principale $QGIS$ via l'onglet \og Couche > Ajouter une couche > Ajouter une couche 
-raster \fg{}. On peut alors observer la superposition des deux rasters et même régler leur transparence (sous(fen\^{e}tre \og couches \fg{}) 
+raster \fg{}. On observe au final la superposition des deux rasters et dont on peut régler la transparence (sous-fen\^{e}tre \og couches \fg{}) 
 dans la fen\^{e}tre principale $QGIS$) \ref{qgis_super}
 
 \begin{figure}[H]
@@ -225,10 +239,10 @@ dans la fen\^{e}tre principale $QGIS$) \ref{qgis_super}
 \label{qgis_super}
 \end{figure}
 
+\clearpage
+
 On constate une assez bonne superposition des deux rasters, le géoréférencement du satellite \begin{itshape}Landsat-8\end{itshape} peut
  donc \^{e}tre considéré comme convenable.
- 
-\clearpage
 
 \backmatter
 

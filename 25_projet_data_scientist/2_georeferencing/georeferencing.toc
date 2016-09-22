@@ -4,5 +4,5 @@
 \contentsline {section}{\numberline {1.1}Principe}{1}{section.1.1}
 \contentsline {section}{\numberline {1.2}Les syst\IeC {\`e}mes de g\IeC {\'e}or\IeC {\'e}f\IeC {\'e}rencement}{1}{section.1.2}
 \contentsline {section}{\numberline {1.3}G\IeC {\'e}or\IeC {\'e}f\IeC {\'e}rencement des images Landsat-8}{2}{section.1.3}
-\contentsline {subsection}{\numberline {1.3.1}G\IeC {\'e}or\IeC {\'e}f\IeC {\'e}rencement d'une image de l'IGN}{2}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {1.3.1}Cr\IeC {\'e}ation d'une image de l'IGN g\IeC {\'e}or\IeC {\'e}f\IeC {\'e}renc\IeC {\'e}e}{2}{subsection.1.3.1}
 \contentsline {subsection}{\numberline {1.3.2}Superposition d'un raster Landsat-8}{16}{subsection.1.3.2}

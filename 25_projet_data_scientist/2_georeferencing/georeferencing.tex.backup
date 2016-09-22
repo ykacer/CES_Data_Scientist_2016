@@ -202,7 +202,17 @@ notre snapshot dans le système de coordonnées \begin{itshape}EPSG:32631\end{it
 A présent que notre snapshot IGN est géoréférencé et projeté dans le système de coordonnées de \begin{itshape}Landsat-8\end{itshape}
 (\begin{itshape}EPSG:32631\end{itshape}), on peut charger une image géoréférencé \begin{itshape}Landsat-8\end{itshape} contenant la 
 commune de \begin{itshape}Thonon-Les-Bains\end{itshape}. Pour cela, on a télécharger les bandes 2,3,4 correspondantes et formé l'image 
-couleur  \ref{Thonon-landsat}.
+couleur  \ref{Thonon-landsat}. On peut vérifier que le système de géoréférencement de ces images est bien \begin{itshape}EPSG:32621\end{itshape} via la commande :\\
+
+\begin{itemize}
+\item[] listgeo LC81960282016252LGN00_B2.TIF\\
+\end{itemize}
+
+qui renvoit bien ($PCS$ pour \begin{itshape}Projection Coordinate System\end{itshape} :\\
+
+\begin{itemize}
+\item[] PCS: 32621\\
+\end{itemize}
 
 \begin{figure}[H]
 \begin{center}
@@ -213,17 +223,21 @@ couleur  \ref{Thonon-landsat}.
 \end{figure}
 
 On peut alors charger cette image dans la fenêtre principale $QGIS$ via l'onglet \og Couche > Ajouter une couche > Ajouter une couche 
-raster \fg{}. On peut alors observer la superposition des deux rasters en réglant leur transparence
+raster \fg{}. On peut alors observer la superposition des deux rasters et même régler leur transparence (sous(fen\^{e}tre \og couches \fg{}) 
+dans la fen\^{e}tre principale $QGIS$) \ref{qgis_super}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{images/Thonon_landsat.png}
+\includegraphics[scale=0.3]{images/qgis-superposition0.png}
+\includegraphics[scale=0.3]{images/qgis-superposition.png}
 \end{center}
-\caption{Image couleur à partir d'images géoréférencées Landsat-8 contenant la commune de Thonon-Les-Bains}
-\label{Thonon-landsat}
+\caption{Projet $QGIS$ et superposition des rasters IGN et Landsat-8 géoréférencés en EPSG:32621 - commune de Thonon-Les-Bains}
+\label{qgis_super}
 \end{figure}
 
-\clearpage
+On constate une assez bonne superposition des deux rasters, le géoréférencement du satellite \begin{itshape}Landsat-8\end{itshape} peut
+ donc \^{e}tre considéré comme convenable.
+ 
 \clearpage
 
 \backmatter
