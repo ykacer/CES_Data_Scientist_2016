@@ -1,0 +1,76 @@
+\documentclass[pdftex,a4paper,DIV15]{scrartcl}
+
+\usepackage{cmap}
+\usepackage[utf8]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{graphicx} 
+\usepackage{adjustbox}
+\usepackage{fancyref}
+\usepackage{hyperref}
+\usepackage{url}
+
+\usepackage{url} 
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{paralist}
+\usepackage{hyperref}
+
+\hyphenation{Map-Reduce}
+
+\title{
+CES Data Scientist - PageRank Exam}
+\author{Youcef KACER (\texttt{youcef.kacer@telecom-paristech.fr})}
+
+
+\begin{document}
+
+\maketitle
+
+
+\begin{description} % listes descriptives
+
+\item[Exercise 1 :] We expose here after the system of linear equations that solve PageRank scores associated to graph $G$ ($r_{i}$ being PageRank score for page $i$):
+
+\begin{eqnarray*} % systeme d'equation
+r_1 &=& r_4\\
+r_2 &=& 1/2*r_1\\
+r_3 &=& 1/2*r_1 + r_2\\
+r_4 &=& r_3\\
+1   &=& r_1 + r_2 + r_3 + r_4
+\end{eqnarray*}
+
+We can solve manually the system :
+
+\begin{eqnarray*} % systeme d'equation
+r_1 &=& r_3\\
+r_1 &=& r_4\\
+r_2 &=& 1/2*r_1 \\
+1   &=& 7/2*r_1
+\end{eqnarray*}
+
+\begin{eqnarray*} % systeme d'equation
+r_1 &=& 2/7\\
+r_2 &=& 1/7\\
+r_3 &=& 2/7\\
+r_4 &=& 2/7
+\end{eqnarray*}
+\\
+
+Otherwise, we can solve the system using previous PageRank lab using MapReduce. We just need to adapt \begin{itshape}edge\_list.txt\end{itshape} to the graph $G$. 
+In this file, each line represents a page indice and the page indices it links to :\\
+
+1 2 3\\
+2 3\\
+3 4\\
+4 1\\
+
+\item[Exercise 2 :] bestiole qui fait bloub.
+\item[Exercise 3 :] bestiole qui fait rire.
+\item[Exercise 4 :] bestiole qui fait mal.
+
+\end{description}
+
+\end{document}
