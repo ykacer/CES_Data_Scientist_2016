@@ -107,15 +107,54 @@ reduce(key,values) // values is an array containing all the integers because
       max = n
     }
   }
-  return 0,max
+  return max
 }
 \end{verbatim}
-\\
+
 \item[Exercise 3 :] 
 
 The keyword \begin{itshape}yield\end{itshape} is very useful to read data that are too big to fit in memory (RAM). Thus, we read those data directly from hard disk piece by piece.
-For example, one can read a big .csv file line by line (or lines block by lines block). So, not all the data are in memory but only a piece at once. 
+For example, one can read a big .csv file line by line (or lines block by lines block). So, not all the data are in memory but only a piece at once. This is well suitable in
+Map to provide large quantity of pairs (key,value), one by one into main memory of nodes.\\
+
 \item[Exercise 4 :] 
+
+\begin{itemize}
+
+\item[1.] \textbf{True.}\\
+\\
+You can make parallel each element computation of vector result. We show here after a Map/Reduce implementation
+for multiplying matrix $M_{i,j}$ ($i$ being line indice, $j$ row indice) by vector $V_{j}$
+\begin{verbatim}
+map(key=(i,Vj),value=Mij)
+{
+  yield i,Mij*Vj
+}
+reduce(key=k,value=v)
+{
+  sum = 0
+  for p in v
+  {
+    sum = sum + p
+  }
+  yield k,sum
+}
+\end{verbatim}
+
+\\
+\item[2.] \textbf{False.}\\
+\\
+At each iteration, communication between nodes takes time, so too much iterations make the whole process slow.
+\item[3.] \textbf{True.}\\
+\\
+The number of iterations needed for PageRank computation is 100, even smaller (10 as we experimented in our wikipedia lab).
+\item[4.] \textbf{False.}\\
+\\
+
+\item[5.] \textbf{False.}\\
+\\
+Map/Reduce works efficiently in batch mode, not in streaming mode.
+\end{itemize}
 
 \end{description}
 
