@@ -124,7 +124,7 @@ Map to provide large quantity of pairs (key,value), one by one into main memory 
 \item[1.] \textbf{True.}\\
 \\
 You can make parallel each element computation of vector result. We show here after a Map/Reduce implementation
-for multiplying matrix $M_{i,j}$ ($i$ being line indice, $j$ row indice) by vector $V_{j}$
+for multiplying matrix $M_{i,j}$ ($i$ being row indice, $j$ column indice) by vector $V_{j}$
 \begin{verbatim}
 map(key=(i,Vj),value=Mij)
 {
@@ -141,9 +141,9 @@ reduce(key=k,value=v)
 }
 \end{verbatim}
 
-\\
+
 \item[2.] \textbf{False.}\\
-\\
+
 At each iteration, communication between nodes takes time, so too much iterations make the whole process slow.
 \item[3.] \textbf{True.}\\
 \\
