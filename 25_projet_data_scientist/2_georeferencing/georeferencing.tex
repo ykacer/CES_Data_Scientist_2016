@@ -203,7 +203,7 @@ notre snapshot dans le système de coordonnées \begin{itshape}EPSG:32631\end{it
 A présent que notre snapshot IGN est géoréférencé et projeté dans le système de coordonnées de \begin{itshape}Landsat-8\end{itshape}
 (\begin{itshape}EPSG:32631\end{itshape}), on peut charger une image géoréférencé \begin{itshape}Landsat-8\end{itshape} contenant la 
 commune de \begin{itshape}Thonon-Les-Bains\end{itshape}. Pour cela, on a téléchargé les bandes 2,3,4 correspondantes et formé l'image 
-couleur  \ref{Thonon-landsat}. On peut vérifier que le système de géoréférencement de ces images est bien \begin{itshape}EPSG:32621\end{itshape} via la 
+couleur  \ref{Thonon-landsat}. On peut vérifier que le système de géoréférencement de ces images est bien \begin{itshape}EPSG:32631\end{itshape} via la 
 commande \begin{itshape}listgeo\end{itshape}:\\
 
 \begin{center}
@@ -213,7 +213,7 @@ listgeo LC81960282016252LGN00\_B2.TIF
 qui renvoit bien ($PCS$ pour \begin{itshape}Projection Coordinate System\end{itshape}) :\\
 
 \begin{center}
-PCS: 32631\\
+PCS = 32631 (WGS 84 / UTM zone 31N)\\
 \end{center}
 
 \begin{figure}[H]
