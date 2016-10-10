@@ -50,13 +50,12 @@ cmap_ndvi = make_colormap([blue,f[0],blue,cyan,f[2],red,yellow,f[4],yellow,light
 file = sys.argv[1]
 
 # take coordinates for cropping
-x1 = int(sys.argv[2])
-y1 = int(sys.argv[3])
-x2 = int(sys.argv[4])
-y2 = int(sys.argv[5])
+c_long = float(sys.argv[2])
+c_lat = float(sys.argv[3])
+surface = float(sys.argv[4])
 
 # name of cropping
-name = sys.argv[6];
+name = sys.argv[5];
 
 # loop over datasets, download it if not yet present, construct NDVI using bands 4 and 5. record it using customed colormap
 folder = os.path.dirname(file)
@@ -76,17 +75,25 @@ for ID,month in izip(image_names,image_months):
                 os.mkdir(folder+'/'+name)
 	
         os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvigrey')
+        projection = os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B4.TIF | grep 'PCS =' | cut -c7-11").read()[:-1]
+        print "projection : EPSG:",projection
+        os.popen("gdalwarp -t_srs EPSG:"+projection+" ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
+        #os.popen("cp  ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
         for band in [2,3,4]:
             os.system('gdal_contrast_stretch -ndv 0 -linear-stretch 70 30 '+folder+'/'+ID+'/'+ID+'_B'+str(band)+'.TIF '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
         os.system('gdal_merge_simple -in '+folder+'/'+ID+'_B4_8.TIF -in '+folder+'/'+ID+'_B3_8.TIF -in '+folder+'/'+ID+'_B2_8.TIF  -out '+folder+'/'+ID+'_rgb.TIF')
         for band in [2,3,4]:
             os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
-	ndvi_grey = cv2.imread(home+'/landsat/processed/'+ID+'/'+ID+'_NDVI.TIF',-1);
+	ndvi_grey = cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1);
 	rgb = cv2.imread(folder+'/'+ID+'_rgb.TIF',-1);
         if cmap_ndvi == []:
                 cdict = {}
 	        os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvi')
-		ndvi = cv2.imread(home+'/landsat/processed/'+ID+'/'+ID+'_NDVI.TIF',-1);
+                #os.popen("gdalwarp -t_srs EPSG:"+projection+" ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
+                #os.popen("cp ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF")
+		ndvi = cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1);
+                print ndvi_grey.shape
+                print ndvi.shape
                 for j in np.arange(ndvi_grey.shape[0]):
                     for i in np.arange(ndvi_grey.shape[1]):
                         cdict[ndvi_grey[j,i]] = ndvi[j,i,:]/255.0
@@ -100,12 +107,72 @@ for ID,month in izip(image_names,image_months):
                         seq.append(cdict[int(255*i)])
                 cmap_ndvi = make_colormap(seq)
 
-	zoom = ndvi_grey[y1:y2,x1:x2];
-        zoom_rgb = rgb[y1:y2,x1:x2];
+        ## FORM RGB ZOOM OF THE CITY
+
+        #ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
+        ul_x = float(os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B2.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
+        #ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
+        ul_y = float(os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B2.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
+        #br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
+        br_x = float(os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B2.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
+        #br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
+        br_y = float(os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B2.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
+        print "ul_y : ",ul_y
+        print "br_y : ",br_y
+        print "ul_x : ",ul_x
+        print "br_x : ",br_x
+        [c_x,c_y]=Proj("+init=EPSG:"+projection+" +units=m +no_defs")(c_long,c_lat)
+        print "c_y : ",c_y
+        print "c_x : ",c_x
+        d = np.sqrt(surface)*1000 # window size in meters 
+        print "d : ",d
+        print "h,w rgb : ",rgb.shape
+        x1 = int(float(c_x-d/2-ul_x)/(br_x-ul_x)*rgb.shape[1])
+        y1 = int(float(c_y-d/2-ul_y)/(br_y-ul_y)*rgb.shape[0])
+        x2 = int(float(c_x+d/2-ul_x)/(br_x-ul_x)*rgb.shape[1])
+        y2 = int(float(c_y+d/2-ul_y)/(br_y-ul_y)*rgb.shape[0])
+        print "x1 : ",x1
+        print "x2 : ",x2
+        print "y1 : ",y1
+        print "y2 : ",y2
+        zoom_rgb = rgb[y2:y1,x1:x2,:];
+        print "zoom rgb shape : ",zoom_rgb.shape
+
+        ## FORM NDVI ZOOM OF THE CITY
+
+        #ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
+        ul_x = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
+        #ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
+        ul_y = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
+        #br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
+        br_x = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
+        #br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
+        br_y = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
+        print "ul_y : ",ul_y
+        print "br_y : ",br_y
+        print "ul_x : ",ul_x
+        print "br_x : ",br_x
+        [c_x,c_y]=Proj("+init=EPSG:"+projection+" +units=m +no_defs")(c_long,c_lat)
+        print "c_y : ",c_y
+        print "c_x : ",c_x
+        d = np.sqrt(surface)*1000 # window size in meters 
+        print "d : ",d
+        print "h,w ndvi : ",ndvi_grey.shape
+        x1 = int(float(c_x-d/2-ul_x)/(br_x-ul_x)*ndvi_grey.shape[1])
+        y1 = int(float(c_y-d/2-ul_y)/(br_y-ul_y)*ndvi_grey.shape[0])
+        x2 = int(float(c_x+d/2-ul_x)/(br_x-ul_x)*ndvi_grey.shape[1])
+        y2 = int(float(c_y+d/2-ul_y)/(br_y-ul_y)*ndvi_grey.shape[0])
+        print "x1 : ",x1
+        print "x2 : ",x2
+        print "y1 : ",y1
+        print "y2 : ",y2
+	zoom = ndvi_grey[y2:y1,x1:x2];
+        print "zoom ndvi shape :",zoom.shape
+
         fig = plt.figure(); 
         cplt=plt.imshow(zoom,cmap=cmap_ndvi,vmin=0,vmax=255); 
         cbar = fig.colorbar(cplt, ticks=[int(255*fr) for fr in f]);
         cbar.ax.set_yticklabels([str(fr) for fr in frontiers])
         plt.savefig(folder+'/'+name+'/'+month+'_ndvi_colormap.png')
         cv2.imwrite(folder+'/'+name+'/'+month+'_ndvi.png',np.delete(255*cmap_ndvi(zoom),3,2)[:,:,::-1]);
-        cv2.imwrite(folder+'/'+name+'/'+month+'_rgb.png',zoom_rgb[:,:,::-1]);
+        cv2.imwrite(folder+'/'+name+'/'+month+'_rgb.png',zoom_rgb);#[:,:,::-1]);
