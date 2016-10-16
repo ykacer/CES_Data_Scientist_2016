@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import pandas as pd
 import numpy as np
 import os
@@ -31,11 +33,13 @@ def make_colormap(seq):
     return mcolors.LinearSegmentedColormap('CustomMap', cdict)
 
 # put natural limits for NDVI values
-frontiers = [-1,-0.1,0.0,0.1,0.3,0.6,0.9,1.0]
+frontiers = [-1,-0.1,-0.03,0.1,0.3,0.5,0.9,1.0]
 f = (frontiers-np.min(frontiers))/(np.max(frontiers)-np.min(frontiers))
 dark_green = np.asarray([47,79,47])/255.0;
 light_green = np.asarray([34,139,34])/255.0;
 light_brown = np.asarray([205,133,63])/255.0;
+dark_brown = np.asarray([139,69,19])/255.0;
+
 blue = c('blue');
 cyan = c('cyan');
 red = c('red');
@@ -43,7 +47,8 @@ dark_red = np.asarray([139,0,0])/255.0;
 yellow = c('yellow');
 
 # generate custom color map using limits defined below
-cmap_ndvi = make_colormap([blue,f[0],blue,cyan,f[2],red,yellow,f[4],yellow,light_brown,f[5],light_brown,light_green,f[6],light_green,dark_green,f[7],dark_green])
+#cmap_ndvi = make_colormap([blue,f[0],blue,cyan,f[2],red,yellow,f[4],yellow,light_brown,f[5],light_brown,light_green,f[6],light_green,dark_green,f[7],dark_green])
+cmap_ndvi = make_colormap([blue,f[0],blue,cyan,f[2],red,yellow,f[4],yellow,light_green,f[5],light_green,dark_green,f[6],dark_green,dark_brown,f[7],dark_brown])
 #cmap_ndvi = []
 
 # take USGS csv file containing metadata for datasets
@@ -61,6 +66,8 @@ name = sys.argv[5];
 folder = os.path.dirname(file)
 image_names = list(pd.read_csv(file,sep=',',header=0,usecols=[52])['Display ID'])
 image_months = [month[5:7] for month in list(pd.read_csv(file,sep=',',header=0,usecols=[18])['Date Acquired'])]
+nbins = 256
+histo_per_month = {}
 
 for ID,month in izip(image_names,image_months):
 	print "processing "+folder+'/'+ID+'...'
@@ -74,18 +81,22 @@ for ID,month in izip(image_names,image_months):
         if os.path.isdir(folder+'/'+name) == False:
                 os.mkdir(folder+'/'+name)
 	
-        os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvigrey')
+        if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False:
+            os.system('python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'_NDVI.TIF')
         projection = os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B4.TIF | grep 'PCS =' | cut -c7-11").read()[:-1]
         print "projection : EPSG:",projection
-        os.popen("gdalwarp -t_srs EPSG:"+projection+" ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
-        #os.popen("cp  ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
-        for band in [2,3,4]:
-            os.system('gdal_contrast_stretch -ndv 0 -linear-stretch 70 30 '+folder+'/'+ID+'/'+ID+'_B'+str(band)+'.TIF '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
-        os.system('gdal_merge_simple -in '+folder+'/'+ID+'_B4_8.TIF -in '+folder+'/'+ID+'_B3_8.TIF -in '+folder+'/'+ID+'_B2_8.TIF  -out '+folder+'/'+ID+'_rgb.TIF')
-        for band in [2,3,4]:
-            os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
-	ndvi_grey = cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1);
-	rgb = cv2.imread(folder+'/'+ID+'_rgb.TIF',-1);
+        #os.popen("gdalwarp -t_srs EPSG:"+projection+" ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
+        if os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False:
+            for band in [2,3,4]:
+                os.system('gdal_contrast_stretch -ndv 0 -linear-stretch 70 30 '+folder+'/'+ID+'/'+ID+'_B'+str(band)+'.TIF '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
+            os.system('gdal_merge_simple -in '+folder+'/'+ID+'_B4_8.TIF -in '+folder+'/'+ID+'_B3_8.TIF -in '+folder+'/'+ID+'_B2_8.TIF  -out '+folder+'/'+ID+'_RGB.TIF')
+            for band in [2,3,4]:
+                os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
+        ndvi_grey = (cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1).astype(np.float32))/(2**15-1)-1;
+        ndvi_grey[ndvi_grey>1]=1
+        print "ndvi min  :",np.min(ndvi_grey)
+        print "ndvi max  :",np.max(ndvi_grey)
+	rgb = cv2.imread(folder+'/'+ID+'_RGB.TIF',-1);
         if cmap_ndvi == []:
                 cdict = {}
 	        os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvi')
@@ -170,9 +181,36 @@ for ID,month in izip(image_names,image_months):
         print "zoom ndvi shape :",zoom.shape
 
         fig = plt.figure(); 
-        cplt=plt.imshow(zoom,cmap=cmap_ndvi,vmin=0,vmax=255); 
-        cbar = fig.colorbar(cplt, ticks=[int(255*fr) for fr in f]);
+        cplt=plt.imshow(zoom,cmap=cmap_ndvi,vmin=-1,vmax=1); 
+        cbar = fig.colorbar(cplt, ticks=frontiers);
         cbar.ax.set_yticklabels([str(fr) for fr in frontiers])
         plt.savefig(folder+'/'+name+'/'+month+'_ndvi_colormap.png')
-        cv2.imwrite(folder+'/'+name+'/'+month+'_ndvi.png',np.delete(255*cmap_ndvi(zoom),3,2)[:,:,::-1]);
-        cv2.imwrite(folder+'/'+name+'/'+month+'_rgb.png',zoom_rgb);#[:,:,::-1]);
+        zoom_rescaled = 255*(zoom-(-1))/(1-(-1));
+        cv2.imwrite(folder+'/'+name+'/'+month+'_ndvi.png',(255*cmap_ndvi(zoom_rescaled.astype(np.uint8))).astype(np.uint8)[:,:,:3][:,:,::-1]);
+        cv2.imwrite(folder+'/'+name+'/'+month+'_rgb.png',zoom_rgb);
+        fig = plt.figure();
+        bins = np.linspace(-1,1,nbins);
+        histo = np.histogram(zoom,bins)[0]
+        histo_per_month[unicode(month)] = histo
+        plt.plot(bins[:-1],histo)
+        plt.savefig(folder+'/'+name+'/'+month+'_ndvi_histo.png')
+
+
+legend_per_month = {
+u'01':[u'Janvier','b-'],u'02':[u'Février','bx'],u'03':[u'Mars','b+'],
+u'04':[u'Avril','g-'],u'05':[u'Mai','gx'],u'06':[u'Juin','g+'],
+u'07':[u'Juillet','r-'],u'08':[u'Aout','rx'],u'09':[u'Septembre','r+'],
+u'10':[u'Octobre','k-'],u'11':[u'Novembre','kx'],u'12':[u'Décembre','k+']
+}
+
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
+for month in ['12','01','02','03','04','05','06','07','08','09','10','11']:
+    if month in histo_per_month.keys():
+        ax1.plot(bins[:-1],histo_per_month[month],label=legend_per_month[month][0])
+colormap = plt.cm.gist_rainbow
+colors = [colormap(i) for i in np.linspace(0, 1,len(ax1.lines))]
+for i,j in enumerate(ax1.lines):
+    j.set_color(colors[i])
+ax1.legend(loc=2,fontsize='x-small')
+plt.savefig(folder+'/'+name+'/all_ndvi_histo.png')
