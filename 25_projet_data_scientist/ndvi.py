@@ -192,6 +192,7 @@ for ID,month in izip(image_names,image_months):
         bins = np.linspace(-1,1,nbins);
         histo = np.histogram(zoom,bins)[0]
         histo_per_month[unicode(month)] = histo
+        np.save(folder+'/'+name+'/ndvi_histo.npy',histo_per_month)
         plt.plot(bins[:-1],histo)
         plt.savefig(folder+'/'+name+'/'+month+'_ndvi_histo.png')
 
