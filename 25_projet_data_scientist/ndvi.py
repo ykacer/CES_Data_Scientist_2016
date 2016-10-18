@@ -194,11 +194,12 @@ for ID,month in izip(image_names,image_months):
         histo = np.histogram(zoom,bins)[0]
         histo_per_month[unicode(month)] = histo
 
+        plt.plot(bins[:-1],histo)
+        plt.savefig(folder+'/'+name+'/'+month+'_ndvi_histo.png')
+
 histo_per_month['density'] = densite
 histo_per_month['surface'] = surface
 np.save(folder+'/'+name+'/ndvi_histo.npy',histo_per_month)
-plt.plot(bins[:-1],histo)
-plt.savefig(folder+'/'+name+'/'+month+'_ndvi_histo.png')
 
 
 legend_per_month = {
