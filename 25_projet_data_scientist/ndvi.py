@@ -58,9 +58,10 @@ file = sys.argv[1]
 c_long = float(sys.argv[2])
 c_lat = float(sys.argv[3])
 surface = float(sys.argv[4])
+densite = float(sys.argv[5])
 
 # name of cropping
-name = sys.argv[5];
+name = sys.argv[6];
 
 # loop over datasets, download it if not yet present, construct NDVI using bands 4 and 5. record it using customed colormap
 folder = os.path.dirname(file)
@@ -192,9 +193,12 @@ for ID,month in izip(image_names,image_months):
         bins = np.linspace(-1,1,nbins);
         histo = np.histogram(zoom,bins)[0]
         histo_per_month[unicode(month)] = histo
-        np.save(folder+'/'+name+'/ndvi_histo.npy',histo_per_month)
-        plt.plot(bins[:-1],histo)
-        plt.savefig(folder+'/'+name+'/'+month+'_ndvi_histo.png')
+
+histo_per_month['density'] = densite
+histo_per_month['surface'] = surface
+np.save(folder+'/'+name+'/ndvi_histo.npy',histo_per_month)
+plt.plot(bins[:-1],histo)
+plt.savefig(folder+'/'+name+'/'+month+'_ndvi_histo.png')
 
 
 legend_per_month = {
