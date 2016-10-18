@@ -34,7 +34,7 @@ for s in sorted_densities:
     print s,name
     plt.plot(nbins,curve,label=unicode(name)+u' ('+str(s)+u' habs/km\^2)')
 
-plt.legend(loc=2,fontsize='x-small')
+plt.legend(loc=2,fontsize='medium')
 plt.show()
 
 
