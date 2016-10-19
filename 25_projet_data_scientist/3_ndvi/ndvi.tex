@@ -3,11 +3,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
-\usepackage{graphicx} 
+\usepackage{graphicx}
 \usepackage{adjustbox}
 \usepackage{fancyref}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry} % pour les marges
 
 
 \title{%
@@ -54,7 +55,7 @@ la librairie $gdal$ sur $python$ nous permet d'effectuer l'opération de différ
 \begin{center}
 \includegraphics[scale=0.45]{images/Chamonix/08_ndvi_histo.png}
 \end{center}
-\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la commune de $Chamonix$ sur un périmètre de $116$km2 au mois d'$Aout$}
+\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la commune de $Chamonix-Mont-Blanc$ sur un périmètre de $116$km\textsuperscript{2} au mois d'$Aout$}
 \label{chamonix_ndvi}
 \end{figure}
 
@@ -71,7 +72,7 @@ La figure \ref{chamonix_ndvi} montre un $NDVI$ négatif au sud de la commune de 
 \begin{center}
 \includegraphics[scale=0.45]{images/Manaus/07_ndvi_histo.png}
 \end{center}
-\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la ville de $Manaus$ ($Bresil$) sur un périmètre de $11000$km2 au mois de $Juillet$}
+\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la ville de $Manaus$ ($Bresil$) sur un périmètre de $11000$km\textsuperscript{2} au mois de $Juillet$}
 \label{manaus_ndvi}
 \end{figure}
 
@@ -89,7 +90,7 @@ du \begin{itshape}Rio Negro\end{itshape} apparait lui en négatif\\
 \begin{center}
 \includegraphics[scale=0.4]{images/Paris/12_ndvi_histo.png}
 \end{center}
-\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la ville de $Paris$ sur un périmètre de $105$km2 au mois de $Decembre$}
+\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la ville de $Paris$ sur un périmètre de $105$km\textsuperscript{2} au mois de $Decembre$}
 \label{paris_ndvi}
 \end{figure}
 
@@ -100,10 +101,16 @@ La figure \ref{paris_ndvi} montre un $NDVI$ quasi nulle donc sans végétation, 
 
 \chapter{Evolution du NDVI au cours d'une année}
 
-Comme vu au chapître précédent, la distribution du $NDVI$ dépend de la présence ou non de végétaux. Ainsi, on peut légitimement se demander comment évolue 
-cet indice en fonction des saisons.\\
-La figure \ref{paris_ndvi_annee} montre l'évolution du $NDVI$ sur 10 mois pour la ville de $Paris$. On note un étalement de la distribution dans les mois chauds d\^u à l'abondance de végétation à cette époque
-de l'année.
+Comme vu au chapître précédent, la distribution du $NDVI$ dépend beaucoup du relief paysager (végétaux, montagnes, eau).
+Ainsi, on peut légitimement se demander comment évolue cet indice en fonction des saisons.\\
+Pour cela, nous allons étudier quatre types de communes selon leur paysage : urbain, plainier, montagneux, littoral.\\
+
+\section{Pour une commune urbaine (Paris)}
+
+La figure \ref{paris_ndvi_annee} montre l'évolution du $NDVI$ sur $10$ mois pour la ville de $Paris$. On note un étalement de la distribution 
+dans les mois chauds d\^u à la vigueur des espaces verts à cette époque de l'année. Cépendant, même s'il s'éloigne de 0, le mode principal 
+demeure toujours à basse fréquence.
+
 \begin{figure}[H]
 \centerline{
 \includegraphics[scale=0.25]{images/Paris/03_ndvi.png}
@@ -131,54 +138,131 @@ de l'année.
 }
 \begin{center}
 \includegraphics[scale=0.45]{images/Paris/all_ndvi_histo.png}
+\includegraphics[scale=0.5]{images/Paris/04_rgb.png}
 \end{center}
-\caption{De la gauche vers la droite sur la première ligne, évolution du $NDVI$ entre $Mars$ et $Juillet$ pour la ville de $Paris$ sur un périmètre de $105$km2.
-De la gauche vers la droite sur la seconde ligne, évolution du $NDVI$ entre $Aout$ et $Decembre$ pour la ville de $Paris$ sur un périmètre de $105$km2. 
-En bas, supersposition des histogrammes de $NDVI$ pour les mois de $Mars$ à $Decembre$}
+\caption{De la gauche vers la droite sur la première ligne, évolution du $NDVI$ entre $Mars$ et $Juillet$ pour la ville de $Paris$ sur un périmètre de $105$km\textsuperscript{2}.
+De la gauche vers la droite sur la seconde ligne, évolution du $NDVI$ entre $Aout$ et $Decembre$ pour la ville de $Paris$ sur un périmètre de $105$km\textsuperscript{2}. 
+En bas, supersposition des histogrammes de $NDVI$ pour les mois de $Mars$ à $Decembre$ et image couleur}
 \label{paris_ndvi_annee}
 \end{figure}
 
 \clearpage
 
-Cette différence est encore plus nette pour une ville moins urbaine comme $Fontainebleau$ \ref{fontainebleau_ndvi_annee}.
+\section{Pour une commune plainière (Fontainebleau)}
+
+Pour une commune planière comme $Fontainebleau$ \ref{fontainebleau_ndvi_annee}, l'étalement de la distribution est beaucoup plus franc et déplace même
+le mode principale vers les hautes fréquences ($0.5$).
  
 \begin{figure}[H]
 \centerline{
-\includegraphics[scale=0.25]{images/Fontainebleau/03_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/03_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
-\includegraphics[scale=0.25]{images/Fontainebleau/04_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/04_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
-\includegraphics[scale=0.25]{images/Fontainebleau/05_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/05_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
-\includegraphics[scale=0.25]{images/Fontainebleau/06_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/06_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
-\includegraphics[scale=0.25]{images/Fontainebleau/07_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/07_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
 }
 \centerline{
-\includegraphics[scale=0.25]{images/Fontainebleau/08_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/08_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
-\includegraphics[scale=0.25]{images/Fontainebleau/09_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/09_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
-\includegraphics[scale=0.25]{images/Fontainebleau/10_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/10_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
-\includegraphics[scale=0.25]{images/Fontainebleau/11_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/11_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
-\includegraphics[scale=0.25]{images/Fontainebleau/12_ndvi.png}
+\includegraphics[scale=0.2]{images/Fontainebleau/12_ndvi.png}
 \includegraphics[scale=0.2]{images/colormap.png}
 }
 \begin{center}
 \includegraphics[scale=0.45]{images/Fontainebleau/all_ndvi_histo.png}
+\includegraphics[scale=0.4]{images/Fontainebleau/12_rgb.png}
 \end{center}
-\caption{De la gauche vers la droite sur la première ligne, évolution du $NDVI$ entre $Mars$ et $Juillet$ pour la ville de $Fontainebleau$ sur un périmètre de $172$km2.
-De la gauche vers la droite sur la seconde ligne, évolution du $NDVI$ entre $Aout$ et $Decembre$ pour la ville de $Fontainebleau$ sur un périmètre de $172$km2. 
+\caption{De la gauche vers la droite sur la première ligne, évolution du $NDVI$ entre $Mars$ et $Juillet$ pour la ville de $Fontainebleau$ sur un périmètre de $172$km\textsuperscript{2}.
+De la gauche vers la droite sur la seconde ligne, évolution du $NDVI$ entre $Aout$ et $Decembre$ pour la ville de $Fontainebleau$ sur un périmètre de $172$km\textsuperscript{2}. 
+En bas, supersposition des histogrammes de $NDVI$ pour les mois de $Mars$ à $Decembre$ et image couleur}
+\label{fontainebleau_ndvi_annee}
+\end{figure}
+
+\clearpage
+
+\section{Pour une commune montagneuse (Annecy)}
+
+Pour une commune montagneuse comme Annecy, le déplacement du mode principal en saison chaude se situe à une fréquence intermédiaire ($0.2$).
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.7]{images/Annecy/03_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+\includegraphics[scale=0.7]{images/Annecy/04_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+\includegraphics[scale=0.7]{images/Annecy/05_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+\includegraphics[scale=0.7]{images/Annecy/06_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+\includegraphics[scale=0.7]{images/Annecy/07_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.7]{images/Annecy/08_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+\includegraphics[scale=0.7]{images/Annecy/09_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+\includegraphics[scale=0.7]{images/Annecy/10_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+\includegraphics[scale=0.7]{images/Annecy/11_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+\includegraphics[scale=0.7]{images/Annecy/12_ndvi.png}
+\includegraphics[scale=0.2]{images/colormap.png}
+}
+\begin{center}
+\includegraphics[scale=0.45]{images/Annecy/all_ndvi_histo.png}
+\includegraphics[scale=1.2]{images/Annecy/12_rgb.png}
+
+\end{center}
+\caption{De la gauche vers la droite sur la première ligne, évolution du $NDVI$ entre $Mars$ et $Juillet$ pour la ville de $Annecy$ sur un périmètre de $13.65$km\textsuperscript{2}.
+De la gauche vers la droite sur la seconde ligne, évolution du $NDVI$ entre $Aout$ et $Decembre$ pour la ville de $Annecy$ sur un périmètre de $13.65$km\textsuperscript{2}. 
 En bas, supersposition des histogrammes de $NDVI$ pour les mois de $Mars$ à $Decembre$}
 \label{fontainebleau_ndvi_annee}
 \end{figure}
 
-On note donc que le $NDVI$ au saison chaude permet de mieux discriminer les villes très urbabnisées comme $Paris$ des communes plus rurales comme $Fontainebleau$. En effet, il y a apparition
-d'un mode princpal à haute fréquence dans le second cas que l'on n'observe pas dans le premier.
 \clearpage
+
+\section{Pour une commune littorale (Montpellier)}
+
+\clearpage
+
+Ainsi, nous avons...
+
+\chapter{Evolution du NDVI en fonction de la densité de population}
+
+L'INSEE définit quatre types de communes en fonction de la densité de population. Nous reprenons ci-après la nomenclature telle que définie sur le
+site de l'organisme public :\\
+\begin{quotation}
+
+\Large{
+La nouvelle typologie de l’Insee s’inspire de la classification européenne urbain-rural conçue à partir des données carroyées de population. 
+Elle permet de définir 3 types d’espace :
+
+\begin{itemize}
+\item \emph{les communes densément peuplées} : dont la densité de population au carreau est d’au moins 1 500 habitants par km\textsuperscript{2} 
+et qui comptabilisent un minimum de 50 000 habitants ;
+
+\item \emph{les communes de densité intermédiaire} : les carreaux contigus ayant une densité de population d’au moins 300 habitants par km\textsuperscript{2} 
+et un minimum de 5 000 habitants ;
+
+\item \emph{Les communes peu denses} : les carreaux contigus ayant une densité de population de moins de 300 habitants par km\textsuperscript{2} et moins de 5 000 habitants.
+Avec cette typologie, 90 \% des communes françaises sont « rurales ». L’Insee rajoute alors un 4e degré en partant de la «maille rurale » (peu dense) :
+
+\item \emph{les communes très peu denses} : carreaux de densité de population d’au moins 25 habitants par km\textsuperscript{2} et moins de 300 habitants
+\end{itemize}
+}
+
+\end{quotation}
 
 \backmatter
 
