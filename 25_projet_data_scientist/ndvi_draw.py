@@ -34,6 +34,11 @@ for s in sorted_densities:
     name = data[s][0]
     print s,name
     plt.plot(nbins,curve,label=unicode(name)+u' ('+str(s)+u' habs/km²)')
-
-plt.legend(loc=2,fontsize='small')
-plt.savefig(month+'.png')
+name_month = {
+        u'01':u'Janvier',u'02':u'Février',u'03':u'Mars',
+        u'04':u'Avril',u'05':u'Mai',u'06':u'Juin',
+        u'07':u'Juillet',u'08':u'Aout',u'09':u'Septembre',
+        u'10':u'Octobre',u'11':u'Novembre',u'12':u'Décembre'
+        }
+plt.legend(loc=2,fontsize='x-small')
+plt.savefig(name_month[month]+'.png')
