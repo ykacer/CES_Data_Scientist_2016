@@ -83,7 +83,7 @@ for ID,month in izip(image_names,image_months):
                 os.mkdir(folder+'/'+name)
 	
         if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False:
-            os.system('python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'_NDVI.TIF')
+            os.system('/usr/bin/python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'_NDVI.TIF')
         projection = os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B4.TIF | grep 'PCS =' | cut -c7-11").read()[:-1]
         print "projection : EPSG:",projection
         #os.popen("gdalwarp -t_srs EPSG:"+projection+" ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
@@ -193,8 +193,8 @@ for ID,month in izip(image_names,image_months):
         bins = np.linspace(-1,1,nbins);
         histo = np.histogram(zoom,bins)[0]
         histo_per_month[unicode(month)] = histo
-
         plt.plot(bins[:-1],histo)
+	print folder+'/'+name+'/'+month+'_ndvi_histo.png'
         plt.savefig(folder+'/'+name+'/'+month+'_ndvi_histo.png')
 
 histo_per_month['density'] = densite
