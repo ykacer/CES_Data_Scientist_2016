@@ -17,7 +17,7 @@
     }
 
 \author{\textsc{Youcef} - \textsc{Kacer}}
-\date{22 Septembre 2016}
+\date{20 Octobre 2016}
 
 \begin{document}
  
@@ -38,7 +38,7 @@ rouge ($R$) et proche-infrarouge ($PIR$) via la formule :
 
 \[NDVI=\frac{PIR-R}{PIR+R}\]
 
-Typiquement, l'eau, la neige et les nuages refléchissent plus dans le rouge que le proche-infrarouge, soit un $NDVI$ négatif\\
+Typiquement, l'eau, la neige et les nuages refléchissent plus dans le rouge que dans le proche-infrarouge, soit un $NDVI$ négatif\\
 Les sols nus réfléchissent tout autant dans les deux bandes d'où un NDVI nul\\
 En revanche, les sols revétus de végétaux refléchissent bien plus dans le proche infra-rouge, ce qui donne un $NDVI$ positif, et d'autant
 plus positif que la végétation est dense.\\
@@ -276,42 +276,247 @@ En bas, supersposition des histogrammes de $NDVI$ pour les mois de $Mars$ à $De
 
 Ainsi, nous avons pu mettre en évidence divers comportements de l'indice en fonction des saisons et du paysage. On note que la distribution au mois de Juin-Juillet est 
 très dispersée. En effet, la végétation des zones faiblement urbaines (litoral, plaine, montagne) n'est pas toujours visible en dehors de la période estivale, hors c'est la
-végétation qui doit pouvoir nous renseigné sur la densité d'une zone donnée.\\
+végétation qui doit pouvoir nous renseigner sur la densité d'une zone donnée.\\
 Dans la partie qui suit, nous allons définir plusieurs catégories de commune liées à la densité de population et observer leur $NDVI$ pour la période estivale.\\
 
 \chapter{Evolution du NDVI en fonction de la densité de population}
 
 L'INSEE définit quatre types de communes en fonction de la densité de population. Nous reprenons ci-après la nomenclature telle que définie sur le
-site de l'organisme public :\\
-\begin{quotation}
+site de l'organisme public \cite{insee}:\\
 
-\Large{
+\begin{quotation}
+\begin{itshape}
 La nouvelle typologie de l’Insee s’inspire de la classification européenne urbain-rural conçue à partir des données carroyées de population. 
 Elle permet de définir 3 types d’espace :\\
 
-\begin{itemize}
-\item \emph{les communes densément peuplées} : dont la densité de population au carreau est d’au moins 1 500 habitants par km\textsuperscript{2} 
+\begin{description}
+\item[les communes densément peuplées :] dont la densité de population au carreau est d’au moins 1 500 habitants par km\textsuperscript{2} 
 et qui comptabilisent un minimum de 50 000 habitants ;
 
-\item \emph{les communes de densité intermédiaire} : les carreaux contigus ayant une densité de population d’au moins 300 habitants par km\textsuperscript{2} 
+\item[Les communes de densité intermédiaire :] les carreaux contigus ayant une densité de population d’au moins 300 habitants par km\textsuperscript{2} 
 et un minimum de 5 000 habitants ;
 
-\item \emph{Les communes peu denses} : les carreaux contigus ayant une densité de population de moins de 300 habitants par km\textsuperscript{2} et moins de 5 000 habitants.
+\item[Les communes peu denses :] les carreaux contigus ayant une densité de population de moins de 300 habitants par km\textsuperscript{2} 
+et moins de 5 000 habitants.
 Avec cette typologie, 90 \% des communes françaises sont « rurales ». L’Insee rajoute alors un 4e degré en partant de la «maille rurale » (peu dense) :
 
-\item \emph{les communes très peu denses} : carreaux de densité de population d’au moins 25 habitants par km\textsuperscript{2} et moins de 300 habitants
-\end{itemize}
-}
-
-Pour chacune de ces quatres catégories, nous choisissons trois communes :
-\begin{itemize}
- \item communes densément peuplées : $Lyon$ ($10117$habs/km\textsuperscript{2}), $Montpellier$ ($4524$habs/km\textsuperscript{2}) et $Perpignan$ ($1724$habs/km\textsuperscript{2}).
- \item communes de densité intermédiaire : $
-\end{itemize}
-
-
+\item[les communes très peu denses :] carreaux de densité de population d’au moins 25 habitants par km\textsuperscript{2} et moins de 300 habitants
+\end{description}
+\end{itshape}
 \end{quotation}
 
+Pour chacune de ces quatres catégories, nous avons choisis trois communes \ref{cat1},\ref{cat2},\ref{cat3},\ref{cat4}:\\
+
+\clearpage
+
+\begin{table}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{c|}{\begin{bf}communes densément peuplées\end{bf}} \\
+\hline 
+nom & densité (habs/km\textsuperscript{2}) & nombre d'habitants \\
+\hline 
+Lyon & 10117 & 474900\\
+\hline 
+Montpellier & 4524 & 253000 \\
+\hline 
+Amiens & 2689 & 134400 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Trois communes densément peuplées : $Lyon$, $Montpellier$, $Amiens$}
+\label{cat1}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{c|}{\begin{bf}communes de densité intermédiaire\end{bf}} \\
+\hline 
+nom & densité (habs/km\textsuperscript{2}) & nombre d'habitants \\
+\hline 
+Abbeville & 914 & 24100\\
+\hline 
+Louvres & 824 & 9000 \\
+\hline 
+Limours & 453 & 6400 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Trois communes de densité intermédiaire : $Abbeville$, $Louvres$, $Limours$}
+\label{cat2}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{c|}{\begin{bf}communes peu denses\end{bf}} \\
+\hline 
+nom & densité (habs/km\textsuperscript{2}) & nombre d'habitants \\
+\hline 
+Roissy-en-France & 195 & 2500\\
+\hline 
+Fontenay-en-Parisis & 176 & 2000 \\
+\hline 
+Malay-le-Grand & 69 & 1600 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Trois communes peu denses : $Roissy-en-France$, $Fontenay-en-Parisis$, $Malay-le-Grand$}
+\label{cat3}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{c|}{\begin{bf}communes très peu denses\end{bf}} \\
+\hline 
+nom & densité (habs/km\textsuperscript{2}) & nombre d'habitants \\
+\hline 
+Brignancourt & 66 & 200\\
+\hline 
+Omiécourt & 43 & 200 \\
+\hline 
+Marieux & 27 & 100 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Trois communes très peu denses : $Brignancourt$, $Omiecourt$, $Marieux$}
+\label{cat4}
+\end{table}
+
+\clearpage
+
+La figure \ref{ndvi_categorie} montre la superposition des courbes de $NDVI$ au mois de $Juillet$ pour chacune des communes de chaque catégorie :\\
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{images/ndvi_categorie.png}
+}
+\caption{Superposition des courbes de $NDVI$ pour les communes densément peuplées (rouge), les communes de densité intermédiaire (bleu),
+les communes peu denses (jaune) ainsi que les communes très peu denses (vert)}
+\label{ndvi_categorie}
+\end{figure}
+\clearpage
+
+Nous observons donc que les communes les plus denses sont caractérisés par un spectre d'amplitude fort et distribué vers les basses fréquences. A mesure 
+qu'on se déplace vers les communes les moins denses, on constate une diminution d'amplitude et un déplacement de la distribution de $NDVI$ vers les
+hautes fréquences.\\
+Les figures \ref{ndvi_cat1},\ref{ndvi_cat2},\ref{ndvi_cat3} et \ref{ndvi_cat4} présentent les images de $NDVI$ pour les communes de chaque catégorie.\\ 
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.6]{images/Lyon/07_rgb.png}
+\includegraphics[scale=0.6]{images/Lyon/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.6]{images/Montpellier/07_rgb.png}
+\includegraphics[scale=0.6]{images/Montpellier/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.6]{images/Amiens/07_rgb.png}
+\includegraphics[scale=0.6]{images/Amiens/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\caption{Image $NDVI$ et image couleur au mois de $Juillet$ pour les trois communes densément peuplées, de haut en bas respectivement :
+$Lyon$ ($10117$ habs/km\textsuperscript{2}),
+$Montpellier$ ($4524$ habs/km\textsuperscript{2}),
+$Amiens$ ($2689$ habs/km\textsuperscript{2}),
+}
+\label{ndvi_cat1}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.9]{images/Abbeville/07_rgb.png}
+\includegraphics[scale=0.9]{images/Abbeville/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.9]{images/Louvres/07_rgb.png}
+\includegraphics[scale=0.9]{images/Louvres/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.9]{images/Limours/07_rgb.png}
+\includegraphics[scale=0.9]{images/Limours/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\caption{Image $NDVI$ et image couleur au mois de $Juillet$ pour les trois communes de densité intermédiaire, de haut en bas respectivement :
+$Abbeville$ ($914$ habs/km\textsuperscript{2}),
+$Louvres$ ($824$ habs/km\textsuperscript{2}),
+$Limours$ ($453$ habs/km\textsuperscript{2}),
+}
+\label{ndvi_cat2}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=1.1]{images/Roissy-en-France/07_rgb.png}
+\includegraphics[scale=1.1]{images/Roissy-en-France/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=1.1]{images/Fontenay-en-Parisis/07_rgb.png}
+\includegraphics[scale=1.1]{images/Fontenay-en-Parisis/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=1.1]{images/Malay-le-Grand/07_rgb.png}
+\includegraphics[scale=1.1]{images/Malay-le-Grand/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\caption{Image $NDVI$ et image couleur au mois de $Juillet$ pour les trois communes peu denses, de haut en bas respectivement :
+$Roissy-en-France$ ($195$ habs/km\textsuperscript{2}),
+$Fontenay-en-Parisis$ ($176$ habs/km\textsuperscript{2}),
+$Malay-le-Grand$ ($63$ habs/km\textsuperscript{2}),
+}
+\label{ndvi_cat3}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=1.5]{images/Brignancourt/07_rgb.png}
+\includegraphics[scale=1.5]{images/Brignancourt/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=1.5]{images/Omiecourt/07_rgb.png}
+\includegraphics[scale=1.5]{images/Omiecourt/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=1.5]{images/Marieux/07_rgb.png}
+\includegraphics[scale=1.5]{images/Marieux/07_ndvi.png}
+\includegraphics[scale=0.3]{images/colormap.png}
+}
+\caption{Image $NDVI$ et image couleur au mois de $Juillet$ pour les trois communes peu denses, de haut en bas respectivement :
+$Brignancourt$ ($66$ habs/km\textsuperscript{2}),
+$Omiecourt$ ($43$ habs/km\textsuperscript{2}),
+$Marieux$ ($27$ habs/km\textsuperscript{2}),
+}
+\label{ndvi_cat4}
+\end{figure}
+\clearpage
+
+
+\clearpage
 %Paris 21288
 %Versailles 3289
 %Fontainebleau 89
