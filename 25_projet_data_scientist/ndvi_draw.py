@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import sys
-
+import pickle
 
 month = unicode(sys.argv[1]);
 data = {};
@@ -30,10 +30,11 @@ for row_path in sys.argv[2:]:
 sorted_densities = np.sort(densities)
 nbins = np.linspace(-1,1,curve.size)
 for s in sorted_densities:
-    curve = data[s][1]
-    name = data[s][0]
-    print s,name
-    plt.plot(nbins,curve,label=unicode(name)+u' ('+str(s)+u' habs/km²)')
+	curve = data[s][1]
+	name = data[s][0]
+	print s,name
+	plt.plot(nbins,curve,label=unicode(name)+u' ('+str(s)+u' habs/km²)')
+
 name_month = {
         u'01':u'Janvier',u'02':u'Février',u'03':u'Mars',
         u'04':u'Avril',u'05':u'Mai',u'06':u'Juin',
@@ -41,4 +42,5 @@ name_month = {
         u'10':u'Octobre',u'11':u'Novembre',u'12':u'Décembre'
         }
 plt.legend(loc=2,fontsize='x-small')
+pickle.dump(plt.subplot(111), file(name_month[month]+'.pickle', 'w'))
 plt.savefig(name_month[month]+'.png')
