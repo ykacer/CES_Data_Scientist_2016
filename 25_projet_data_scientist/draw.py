@@ -121,7 +121,7 @@ for i,filename in enumerate(image_names):
     draw = draw + factor*temp
     factor[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:] = np.dstack([np.where(cv2.cvtColor(image,cv2.COLOR_BGR2HSV)[:,:,2]<4,1,0)]*3)*factor[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:]
 plt.imshow(draw); 
-#plt.savefig(folder+'/covering-selection.png')
+plt.savefig(folder+'/covering-selection.png')
 plt.show()
 
 
