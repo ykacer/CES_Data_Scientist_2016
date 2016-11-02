@@ -74,11 +74,12 @@ print "\n"
 #y1 = d2*np.array([Proj("+proj=utm +zone="+os.popen('cat France/'+filename+'/'+filename+'_MTL.txt | grep ZONE | cut -c 16-17').read()[:-1]+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long1,lat1)[1] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
 #x2 = np.array([Proj("+proj=utm +zone="+os.popen('cat France/'+filename+'/'+filename+'_MTL.txt | grep ZONE | cut -c 16-17').read()[:-1]+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long2,lat2)[0] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
 #y2 = d6*np.array([Proj("+proj=utm +zone="+os.popen('cat France/'+filename+'/'+filename+'_MTL.txt | grep ZONE | cut -c 16-17').read()[:-1]+" +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long2,lat2)[1] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
-
-x1 = np.array([Proj("+proj=utm +zone="+zone_ref+", +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long1,lat1)[0] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
-y1 = -1*np.array([Proj("+proj=utm +zone="+zone_ref+", +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long1,lat1)[1] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
-x2 = np.array([Proj("+proj=utm +zone="+zone_ref+", +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long2,lat2)[0] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
-y2 = -1*np.array([Proj("+proj=utm +zone="+zone_ref+", +ellps=WGS84 +datum=WGS84 +units=m +no_defs")(long2,lat2)[1] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
+projection_value = "+proj=utm +zone="+zone_ref+", +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+projection_value = "epsg:3857"
+x1 =    np.array([Proj(init=projection_value)(long1,lat1)[0] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
+y1 = -1*np.array([Proj(init=projection_value)(long1,lat1)[1] for lat1,long1,filename in izip(latitude1,longitude1,image_names)]).astype(np.int)/1000
+x2 =    np.array([Proj(init=projection_value)(long2,lat2)[0] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
+y2 = -1*np.array([Proj(init=projection_value)(long2,lat2)[1] for lat2,long2,filename in izip(latitude2,longitude2,image_names)]).astype(np.int)/1000
 
 #x1 = 100*longitude1
 #x1 = 100*image_coords[:,3]
@@ -97,7 +98,7 @@ print "max y1 :",np.max(y1)
     #x1[i] = int(float(x1true[:-1]))/1000
 
 
-nargin = 600
+nargin = 25
 h = int(np.max(y2)-np.min(y1)+2*nargin)+1
 w = int(np.max(x2)-np.min(x1)+2*nargin)+1
 print "h:",h
@@ -120,7 +121,7 @@ for i,filename in enumerate(image_names):
     draw = draw + factor*temp
     factor[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:] = np.dstack([np.where(cv2.cvtColor(image,cv2.COLOR_BGR2HSV)[:,:,2]<4,1,0)]*3)*factor[anchor_y:anchor_y+hs,anchor_x:anchor_x+ws,:]
 plt.imshow(draw); 
-plt.savefig(folder+'/covering-selection.png')
+#plt.savefig(folder+'/covering-selection.png')
 plt.show()
 
 

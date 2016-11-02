@@ -9,7 +9,10 @@ do
 	path=${dataset:3:3}
 	row=${dataset:6:3}
 	year=${dataset:9:4}
-	wget http://earthexplorer.usgs.gov/browse/landsat_8/$year/$path/$row/$dataset.jpg -P $dest
+	if [ ! -e $dest/$dataset.jpg ]
+	then
+		wget http://earthexplorer.usgs.gov/browse/landsat_8/$year/$path/$row/$dataset.jpg -P $dest
+	fi
 	#landsat download $dataset MTL -d $dest
 done
 
