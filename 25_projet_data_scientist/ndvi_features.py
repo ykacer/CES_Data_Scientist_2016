@@ -236,7 +236,7 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	plt.plot(bins[:-1],histo)
 	plt.savefig(folder+'/'+name+'/'+name+'_ndvi_histo.png')
 	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(d))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
-	features.close()
+features.close()
 
 
 
