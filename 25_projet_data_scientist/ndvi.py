@@ -82,17 +82,22 @@ for ID,month in izip(image_names,image_months):
         if os.path.isdir(folder+'/'+name) == False:
                 os.mkdir(folder+'/'+name)
 	
-        if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False:
-            os.system('/usr/bin/python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'_NDVI.TIF')
         projection = os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B4.TIF | grep 'PCS =' | cut -c7-11").read()[:-1]
-        print "projection : EPSG:",projection
-        #os.popen("gdalwarp -t_srs EPSG:"+projection+" ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
+        if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False:
+            os.system('/usr/bin/python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'_NDVI_temp.TIF')
+            print "native projection : EPSG:",projection
+            print "target projection : EPSG:3857"
+            os.popen('gdalwarp -t_srs EPSG:3857 '+ folder+'/'+ID+'_NDVI_temp.TIF '+folder+"/"+ID+"_NDVI.TIF");
+	    os.system('rm '+folder+'/'+ID+'_NDVI_temp.TIF')
         if os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False:
             for band in [2,3,4]:
                 os.system('gdal_contrast_stretch -ndv 0 -linear-stretch 70 30 '+folder+'/'+ID+'/'+ID+'_B'+str(band)+'.TIF '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
-            os.system('gdal_merge_simple -in '+folder+'/'+ID+'_B4_8.TIF -in '+folder+'/'+ID+'_B3_8.TIF -in '+folder+'/'+ID+'_B2_8.TIF  -out '+folder+'/'+ID+'_RGB.TIF')
+            os.system('gdal_merge_simple -in '+folder+'/'+ID+'_B4_8.TIF -in '+folder+'/'+ID+'_B3_8.TIF -in '+folder+'/'+ID+'_B2_8.TIF  -out '+folder+'/'+ID+'_RGB_temp.TIF')
             for band in [2,3,4]:
                 os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
+            os.popen('gdalwarp -t_srs EPSG:3857 '+ folder+'/'+ID+'_RGB_temp.TIF '+folder+"/"+ID+"_RGB.TIF");
+	    os.system('rm '+folder+'/'+ID+'_RGB_temp.TIF')
+	continue;
         ndvi_grey = (cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1).astype(np.float32))/(2**15-1)-1;
         ndvi_grey[ndvi_grey>1]=1
         print "ndvi min  :",np.min(ndvi_grey)
