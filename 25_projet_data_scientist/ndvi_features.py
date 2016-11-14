@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 import sys
 import os
+import shutil
+import commands
 import codecs
 from itertools import izip
 import cv2
@@ -11,6 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import utm
 from pyproj import Proj
+import gdal
 from os.path import expanduser
 home = expanduser("~")
 
@@ -62,11 +65,11 @@ features_file = folder+"/ndvi_features.csv"
 features = codecs.open(features_file, 'w', 'utf-8')
 features.write('name,'+','.join(str(i) for i in np.arange(nbins-1).tolist())+',densite,population,surface\n')
 
-data = pd.read_csv(data_file,sep=',',header=0,encoding='utf-8',usecols=[5,16,17,18,19,20])
+data = pd.read_csv(data_file,sep=',',header=0,encoding='utf-8',usecols=[2,16,17,18,19,20])
 cities = {}
 cities['latitude'] = np.array(data[u'latitude (degrés)'])
 cities['longitude'] = np.array(data[u'longitude (degrés)'])
-cities['nom'] = list(data[u'Nom réel'])
+cities['nom'] = list(data[u'Slug'])
 cities['population'] = np.array(data[u'Population 2012'])
 cities['densite'] = np.array(data[u'densité en 2010'])
 cities['surface'] = np.array(data[u'Surface'])
@@ -91,6 +94,11 @@ lat_max = np.max([images['NWlat'].max(),images['SWlat'].max(),images['NElat'].ma
 long_min = np.min([images['NWlong'].min(),images['SWlong'].min(),images['NElong'].min(),images['SElong'].min()])
 long_max = np.max([images['NWlong'].max(),images['SWlong'].max(),images['NElong'].max(),images['SElong'].max()])
 
+folder_cities = folder+'/cities'
+if os.path.isdir(folder_cities):
+	shutil.rmtree(folder_cities)
+os.mkdir(folder_cities)
+
 for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitude'],cities['densite'],cities['population'],cities['surface']):
 	if (lt<lat_min) | (lt>lat_max) | (lg<long_min) | (lg>long_max):
 		print "Warning : "+name+" not in any of the provided Landsat datasets..."
@@ -107,19 +115,21 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 			os.system('tar xfvj '+folder+'/'+ID+'.tar.bz -C '+folder+'/'+ID)
 			os.system('rm '+folder+'/'+ID+'.tar.bz')
 
-	if os.path.isdir(folder+'/'+name) == False:
-		os.mkdir(folder+'/'+name)
-
-	os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B2.TIF '+folder+'/'+ID+'/'+ID+'_proj_B2.TIF ');
-	os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B3.TIF '+folder+'/'+ID+'/'+ID+'_proj_B3.TIF ');
-	os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_proj_B4.TIF ');
-	os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'/'+ID+'_proj_B5.TIF ');
+	if os.path.isdir(folder_cities+'/'+name) == False:
+		os.mkdir(folder_cities+'/'+name)
+	
+	if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False | os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False:
+		os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B2.TIF '+folder+'/'+ID+'/'+ID+'_proj_B2.TIF ');
+		os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B3.TIF '+folder+'/'+ID+'/'+ID+'_proj_B3.TIF ');
+		os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_proj_B4.TIF ');
+		os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'/'+ID+'_proj_B5.TIF ');
 
 	if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False:
 	    os.system('/usr/bin/python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_proj_B4.TIF '+folder+'/'+ID+'/'+ID+'_proj_B5.TIF '+folder+'/'+ID+'_NDVI.TIF')
 
-	projection = os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B4.TIF | grep 'PCS =' | cut -c7-11").read()[:-1]
-	print "projection : EPSG:",projection
+	#projection = os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B4.TIF | grep 'PCS =' | cut -c7-11").read()[:-1]
+	#print "projection : EPSG:",projection
+
 	if os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False:
 	    for band in [2,3,4]:
 		os.system('gdal_contrast_stretch -ndv 0 -linear-stretch 70 30 '+folder+'/'+ID+'/'+ID+'_proj_B'+str(band)+'.TIF '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
@@ -157,19 +167,29 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 		cmap_ndvi = make_colormap(seq)
 
 	## FORM RGB ZOOM OF THE CITY
-
-	#ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-	ul_x = float(os.popen("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
-	#ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-	ul_y = float(os.popen("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
-	#br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-	br_x = float(os.popen("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
-	#br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-	br_y = float(os.popen("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
+	geo = gdal.Open(folder+"/"+ID+"_RGB.TIF")
+	geo_t = geo.GetGeoTransform()
+	ul_x = geo_t[0]
+	ul_y = geo_t[3]
+	br_x = geo_t[0] + geo_t[1]*geo.RasterXSize
+	br_y = geo_t[3] + geo_t[5]*geo.RasterYSize
 	print "ul_y : ",ul_y
 	print "br_y : ",br_y
 	print "ul_x : ",ul_x
 	print "br_x : ",br_x
+	#ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
+	#print "listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1"
+	#ul_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
+	#ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
+	#ul_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
+	#br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
+	#br_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
+	#br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
+	#br_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
+	#print "ul_y : ",ul_y
+	#print "br_y : ",br_y
+	#print "ul_x : ",ul_x
+	#print "br_x : ",br_x
 	[c_x,c_y]=Proj("+init=EPSG:3857 +units=m +no_defs")(lg,lt)
 	print "c_y : ",c_y
 	print "c_x : ",c_x
@@ -192,15 +212,20 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	print "zoom rgb shape : ",zoom_rgb.shape
 
 	## FORM NDVI ZOOM OF THE CITY
-
+	geo = gdal.Open(folder+"/"+ID+"_NDVI.TIF")
+	geo_t = geo.GetGeoTransform()
+	ul_x = geo_t[0]
+	ul_y = geo_t[3]
+	br_x = geo_t[0] + geo_t[1]*geo.RasterXSize
+	br_y = geo_t[3] + geo_t[5]*geo.RasterYSize
 	#ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-	ul_x = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
+	#ul_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
 	#ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-	ul_y = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
+	#ul_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
 	#br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-	br_x = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
+	#br_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
 	#br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-	br_y = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
+	#br_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
 	print "ul_y : ",ul_y
 	print "br_y : ",br_y
 	print "ul_x : ",ul_x
@@ -226,15 +251,16 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	cplt=plt.imshow(zoom,cmap=cmap_ndvi,vmin=-1,vmax=1); 
 	cbar = fig.colorbar(cplt, ticks=frontiers);
 	cbar.ax.set_yticklabels([str(fr) for fr in frontiers])
-	plt.savefig(folder+'/'+name+'/'+name+'_ndvi_colormap.png')
+	plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_colormap.png')
 	zoom_rescaled = 255*(zoom-(-1))/(1-(-1));
-	cv2.imwrite((folder+'/'+name+'/'+name+'_ndvi.png').encode("utf-8"),(255*cmap_ndvi(zoom_rescaled.astype(np.uint8))).astype(np.uint8)[:,:,:3][:,:,::-1]);
-	cv2.imwrite((folder+'/'+name+'/'+name+'_rgb.png').encode("utf-8"),zoom_rgb);
+	cv2.imwrite((folder_cities+'/'+name+'/'+name+'_ndvi.png').encode("utf-8"),(255*cmap_ndvi(zoom_rescaled.astype(np.uint8))).astype(np.uint8)[:,:,:3][:,:,::-1]);
+	cv2.imwrite((folder_cities+'/'+name+'/'+name+'_rgb.png').encode("utf-8"),zoom_rgb);
 	fig = plt.figure();
 	bins = np.linspace(-1,1,nbins);
 	histo = np.histogram(zoom,bins)[0]
 	plt.plot(bins[:-1],histo)
-	plt.savefig(folder+'/'+name+'/'+name+'_ndvi_histo.png')
+	plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_histo.png')
+	plt.close()
 	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(d))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
 features.close()
 
