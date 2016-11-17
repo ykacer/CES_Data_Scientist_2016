@@ -99,6 +99,7 @@ if os.path.isdir(folder_cities):
 	shutil.rmtree(folder_cities)
 os.mkdir(folder_cities)
 
+IDprev = ""
 for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitude'],cities['densite'],cities['population'],cities['surface']):
 	if (lt<lat_min) | (lt>lat_max) | (lg<long_min) | (lg>long_max):
 		print "Warning : "+name+" not in any of the provided Landsat datasets..."
@@ -138,19 +139,21 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 		os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
 	    for band in [2,3,4,5]:
 		os.system('rm '+folder+'/'+ID+'/'+ID+'_proj_B'+str(band)+'_8.TIF');
-
-	ndvi_grey = (cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1).astype(np.float32))/(2**15-1)-1;
-	ndvi_grey[ndvi_grey>1]=1
+	
+	if ID != IDprev:
+		ndvi_grey = (cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1).astype(np.float32))/(2**15-1)-1;
+		ndvi_grey[ndvi_grey>1]=1
 	print "ndvi min  :",np.min(ndvi_grey)
 	print "ndvi max  :",np.max(ndvi_grey)
-
-	rgb = cv2.imread(folder+'/'+ID+'_RGB.TIF',-1);
+	if ID != IDprev:
+		rgb = cv2.imread(folder+'/'+ID+'_RGB.TIF',-1);
 	if cmap_ndvi == []:
 		cdict = {}
 		os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvi')
 		#os.popen("gdalwarp -t_srs EPSG:"+projection+" ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
 		#os.popen("cp ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF")
-		ndvi = cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1);
+		if ID != IDprev:
+			ndvi = cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1);
 		print ndvi_grey.shape
 		print ndvi.shape
 		for j in np.arange(ndvi_grey.shape[0]):
@@ -205,6 +208,7 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	print "y1 : ",y1
 	print "y2 : ",y2
 	if (x1<0) | (y1<0) | (x2>=rgb.shape[1]) | (y2>=rgb.shape[0]):
+	    IDprev = ID
 	    print "Warning : "+name+" doesn't fit into the nearest dataset..."
 	    continue;
 
@@ -246,7 +250,7 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	print "y2 : ",y2
 	zoom = ndvi_grey[y2:y1,x1:x2];
 	print "zoom ndvi shape :",zoom.shape
-
+	
 	fig = plt.figure(); 
 	cplt=plt.imshow(zoom,cmap=cmap_ndvi,vmin=-1,vmax=1); 
 	cbar = fig.colorbar(cplt, ticks=frontiers);
@@ -255,13 +259,17 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	zoom_rescaled = 255*(zoom-(-1))/(1-(-1));
 	cv2.imwrite((folder_cities+'/'+name+'/'+name+'_ndvi.png').encode("utf-8"),(255*cmap_ndvi(zoom_rescaled.astype(np.uint8))).astype(np.uint8)[:,:,:3][:,:,::-1]);
 	cv2.imwrite((folder_cities+'/'+name+'/'+name+'_rgb.png').encode("utf-8"),zoom_rgb);
+	plt.gcf().clear()
+
 	fig = plt.figure();
 	bins = np.linspace(-1,1,nbins);
 	histo = np.histogram(zoom,bins)[0]
 	plt.plot(bins[:-1],histo)
 	plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_histo.png')
-	plt.close()
+	plt.gcf().clear()
+
 	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(d))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
+	IDprev = ID
 features.close()
 
 
