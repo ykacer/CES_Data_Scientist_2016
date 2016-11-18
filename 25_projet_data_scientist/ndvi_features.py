@@ -60,6 +60,9 @@ data_file = sys.argv[1]
 usgs_file = sys.argv[2]
 
 nbins = 256;
+verbose = 0;
+record = 0;
+
 folder = os.path.dirname(data_file);
 features_file = folder+"/ndvi_features.csv"
 features = codecs.open(features_file, 'w', 'utf-8')
@@ -143,10 +146,9 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	if ID != IDprev:
 		ndvi_grey = (cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1).astype(np.float32))/(2**15-1)-1;
 		ndvi_grey[ndvi_grey>1]=1
-	print "ndvi min  :",np.min(ndvi_grey)
-	print "ndvi max  :",np.max(ndvi_grey)
-	if ID != IDprev:
-		rgb = cv2.imread(folder+'/'+ID+'_RGB.TIF',-1);
+	if verbose:
+		print "ndvi min  :",np.min(ndvi_grey)
+		print "ndvi max  :",np.max(ndvi_grey)
 	if cmap_ndvi == []:
 		cdict = {}
 		os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvi')
@@ -169,51 +171,56 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 		        seq.append(cdict[int(255*i)])
 		cmap_ndvi = make_colormap(seq)
 
-	## FORM RGB ZOOM OF THE CITY
-	geo = gdal.Open(folder+"/"+ID+"_RGB.TIF")
-	geo_t = geo.GetGeoTransform()
-	ul_x = geo_t[0]
-	ul_y = geo_t[3]
-	br_x = geo_t[0] + geo_t[1]*geo.RasterXSize
-	br_y = geo_t[3] + geo_t[5]*geo.RasterYSize
-	print "ul_y : ",ul_y
-	print "br_y : ",br_y
-	print "ul_x : ",ul_x
-	print "br_x : ",br_x
-	#ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-	#print "listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1"
-	#ul_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
-	#ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-	#ul_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
-	#br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-	#br_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
-	#br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-	#br_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
-	#print "ul_y : ",ul_y
-	#print "br_y : ",br_y
-	#print "ul_x : ",ul_x
-	#print "br_x : ",br_x
-	[c_x,c_y]=Proj("+init=EPSG:3857 +units=m +no_defs")(lg,lt)
-	print "c_y : ",c_y
-	print "c_x : ",c_x
-	d = np.sqrt(s)*1000 # window size in meters 
-	print "d : ",d
-	print "h,w rgb : ",rgb.shape
-	x1 = int(float(c_x-d/2-ul_x)/(br_x-ul_x)*rgb.shape[1])
-	y1 = int(float(c_y-d/2-ul_y)/(br_y-ul_y)*rgb.shape[0])
-	x2 = int(float(c_x+d/2-ul_x)/(br_x-ul_x)*rgb.shape[1])
-	y2 = int(float(c_y+d/2-ul_y)/(br_y-ul_y)*rgb.shape[0])
-	print "x1 : ",x1
-	print "x2 : ",x2
-	print "y1 : ",y1
-	print "y2 : ",y2
-	if (x1<0) | (y1<0) | (x2>=rgb.shape[1]) | (y2>=rgb.shape[0]):
-	    IDprev = ID
-	    print "Warning : "+name+" doesn't fit into the nearest dataset..."
-	    continue;
+	if record:
+		## FORM RGB ZOOM OF THE CITY
+		if ID != IDprev:
+			rgb = cv2.imread(folder+'/'+ID+'_RGB.TIF',-1);
+		geo = gdal.Open(folder+"/"+ID+"_RGB.TIF")
+		geo_t = geo.GetGeoTransform()
+		ul_x = geo_t[0]
+		ul_y = geo_t[3]
+		br_x = geo_t[0] + geo_t[1]*geo.RasterXSize
+		br_y = geo_t[3] + geo_t[5]*geo.RasterYSize
+		#ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
+		#print "listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1"
+		#ul_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
+		#ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
+		#ul_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
+		#br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
+		#br_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
+		#br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
+		#br_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
+		if verbose:
+			print "ul_y : ",ul_y
+			print "br_y : ",br_y
+			print "ul_x : ",ul_x
+			print "br_x : ",br_x
+		[c_x,c_y]=Proj("+init=EPSG:3857 +units=m +no_defs")(lg,lt)
+		if verbose:
+			print "c_y : ",c_y
+			print "c_x : ",c_x
+		d = np.sqrt(s)*1000 # window size in meters 
+		if verbose:
+			print "d : ",d
+			print "h,w rgb : ",rgb.shape
+		x1 = int(float(c_x-d/2-ul_x)/(br_x-ul_x)*rgb.shape[1])
+		y1 = int(float(c_y-d/2-ul_y)/(br_y-ul_y)*rgb.shape[0])
+		x2 = int(float(c_x+d/2-ul_x)/(br_x-ul_x)*rgb.shape[1])
+		y2 = int(float(c_y+d/2-ul_y)/(br_y-ul_y)*rgb.shape[0])
+		if verbose:
+			print "x1 : ",x1
+			print "x2 : ",x2
+			print "y1 : ",y1
+			print "y2 : ",y2
+		if (x1<0) | (y1<0) | (x2>=rgb.shape[1]) | (y2>=rgb.shape[0]):
+		    IDprev = ID
+		    print "Warning : "+name+" doesn't fit into the nearest dataset..."
+		    continue;
 
-	zoom_rgb = rgb[y2:y1,x1:x2,:];
-	print "zoom rgb shape : ",zoom_rgb.shape
+		zoom_rgb = rgb[y2:y1,x1:x2,:];
+		if verbose:
+			print "zoom rgb shape : ",zoom_rgb.shape
+		cv2.imwrite((folder_cities+'/'+name+'/'+name+'_rgb.png').encode("utf-8"),zoom_rgb);
 
 	## FORM NDVI ZOOM OF THE CITY
 	geo = gdal.Open(folder+"/"+ID+"_NDVI.TIF")
@@ -230,43 +237,49 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	#br_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
 	#br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
 	#br_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
-	print "ul_y : ",ul_y
-	print "br_y : ",br_y
-	print "ul_x : ",ul_x
-	print "br_x : ",br_x
+	if verbose:
+		print "ul_y : ",ul_y
+		print "br_y : ",br_y
+		print "ul_x : ",ul_x
+		print "br_x : ",br_x
 	[c_x,c_y]=Proj("+init=EPSG:3857 +units=m +no_defs")(lg,lt)
-	print "c_y : ",c_y
-	print "c_x : ",c_x
+	if verbose:
+		print "c_y : ",c_y
+		print "c_x : ",c_x
 	d = np.sqrt(s)*1000 # window size in meters 
-	print "d : ",d
-	print "h,w ndvi : ",ndvi_grey.shape
+	if verbose:
+		print "d : ",d
+		print "h,w ndvi : ",ndvi_grey.shape
 	x1 = int(float(c_x-d/2-ul_x)/(br_x-ul_x)*ndvi_grey.shape[1])
 	y1 = int(float(c_y-d/2-ul_y)/(br_y-ul_y)*ndvi_grey.shape[0])
 	x2 = int(float(c_x+d/2-ul_x)/(br_x-ul_x)*ndvi_grey.shape[1])
 	y2 = int(float(c_y+d/2-ul_y)/(br_y-ul_y)*ndvi_grey.shape[0])
-	print "x1 : ",x1
-	print "x2 : ",x2
-	print "y1 : ",y1
-	print "y2 : ",y2
+	if verbose:
+		print "x1 : ",x1
+		print "x2 : ",x2
+		print "y1 : ",y1
+		print "y2 : ",y2
 	zoom = ndvi_grey[y2:y1,x1:x2];
-	print "zoom ndvi shape :",zoom.shape
+	if verbose:
+		print "zoom ndvi shape :",zoom.shape
 	
-	fig = plt.figure(); 
-	cplt=plt.imshow(zoom,cmap=cmap_ndvi,vmin=-1,vmax=1); 
-	cbar = fig.colorbar(cplt, ticks=frontiers);
-	cbar.ax.set_yticklabels([str(fr) for fr in frontiers])
-	plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_colormap.png')
-	zoom_rescaled = 255*(zoom-(-1))/(1-(-1));
-	cv2.imwrite((folder_cities+'/'+name+'/'+name+'_ndvi.png').encode("utf-8"),(255*cmap_ndvi(zoom_rescaled.astype(np.uint8))).astype(np.uint8)[:,:,:3][:,:,::-1]);
-	cv2.imwrite((folder_cities+'/'+name+'/'+name+'_rgb.png').encode("utf-8"),zoom_rgb);
-	plt.gcf().clear()
+	if record:
+		fig = plt.figure(); 
+		cplt=plt.imshow(zoom,cmap=cmap_ndvi,vmin=-1,vmax=1); 
+		cbar = fig.colorbar(cplt, ticks=frontiers);
+		cbar.ax.set_yticklabels([str(fr) for fr in frontiers])
+		plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_colormap.png')
+		zoom_rescaled = 255*(zoom-(-1))/(1-(-1));
+		cv2.imwrite((folder_cities+'/'+name+'/'+name+'_ndvi.png').encode("utf-8"),(255*cmap_ndvi(zoom_rescaled.astype(np.uint8))).astype(np.uint8)[:,:,:3][:,:,::-1]);
+		plt.gcf().clear()
 
-	fig = plt.figure();
+		fig = plt.figure();
 	bins = np.linspace(-1,1,nbins);
 	histo = np.histogram(zoom,bins)[0]
-	plt.plot(bins[:-1],histo)
-	plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_histo.png')
-	plt.gcf().clear()
+	if record:
+		plt.plot(bins[:-1],histo)
+		plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_histo.png')
+		plt.gcf().clear()
 
 	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(d))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
 	IDprev = ID
