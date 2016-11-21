@@ -15,7 +15,7 @@ from sklearn import linear_model
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
 
-def write_submission(csv_file,id,loss)
+def write_submission(csv_file,id,loss):
     dtype = [('id','int32'), ('loss','float32')]
     values = np.zeros(loss.size,dtype=dtype)
     values['id'] = id
@@ -26,11 +26,11 @@ print("Formatting data")
 
 data = pd.read_csv('France/ndvi_features.csv')
 variables = [v for v in data.columns if v not in ['name','population','surface','densite']]
-y = data['densite']; 
+y = data['population'].as_matrix()/data['surface'].as_matrix(); 
 X = data[variables]; 
 
 print("Classification bench")
-cv = ShuffleSplit(y.size,test_size=0.3) # cross-validation set
+cv = ShuffleSplit(y.size,n_iter=5,test_size=0.3) # cross-validation set
 results = [];
 verbose = 2
 
@@ -58,7 +58,7 @@ param_grid = {'fit_intercept':[True,False],'alpha':[0.01,0.1,1.0,10.0,100.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 #ytest = grid.best_estimator_.predict(X_test)
-results.append(['Lasso Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
+results.append(['Lasso Regression',g1rid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
 #write_submission('sample_submission_lasso_regression.csv',id_test,ytest)
 
 print("* ElasticNet Regression")
@@ -90,8 +90,8 @@ results.append(['Support Vector Regression',grid.grid_scores_,grid.scorer_,grid.
 #write_submission('sample_submission_support_regression.csv',id_test,ytest)
 
 print("* Random Forest Regressor")
-cl = RandomForestRegressor()
-param_grid = {'max_features':['auto']}
+cl = RandomForestRegressor(n_estimators=70,max_features='sqrt',random_state=0)
+param_grid = {'max_depth':range(5,16,2),'min_samples_split':range(1,102,20)} # best 11 and 21
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 #ytest = grid.best_estimator_.predict(X_test)
