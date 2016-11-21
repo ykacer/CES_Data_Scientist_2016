@@ -38,8 +38,8 @@ d8 = np.where(direction8=='N',1,-1)
 d9 = np.where(direction9=='W',-1,1)
 
 cloud_cover = np.array(pd.read_csv(file,sep=',',header=0,usecols=[23]))
-print "-- maximum cloud covering : "+str(np.max(cloud_cover))+"%"
-print "-- minimum cloud covering : "+str(np.min(cloud_cover))+"%"
+print "-- maximum cloud covering : "+str(np.max(cloud_cover))+"%"+" ("+image_names[np.argmin(cloud_cover)]+")"
+print "-- minimum cloud covering : "+str(np.min(cloud_cover))+"%"+" ("+image_names[np.argmax(cloud_cover)]+")"
 print "\n"
 
 latitude1 = image_coords[:,2]
