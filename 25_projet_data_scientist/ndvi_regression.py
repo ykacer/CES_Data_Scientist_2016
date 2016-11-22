@@ -13,7 +13,7 @@ from sklearn import grid_search
 
 from sklearn import linear_model
 from sklearn.svm import SVR
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
 
 def write_submission(csv_file,id,loss):
     dtype = [('id','int32'), ('loss','float32')]
@@ -91,9 +91,18 @@ results.append(['Support Vector Regression',grid.grid_scores_,grid.scorer_,grid.
 
 print("* Random Forest Regressor")
 cl = RandomForestRegressor(max_depth=11,min_samples_split=40,min_samples_leaf=20,max_features=33,random_state=0)
-param_grid = {'n_estimators':60}
+param_grid = {'n_estimators':[60]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 #ytest = grid.best_estimator_.predict(X_test)
 results.append(['Random Forest Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
 #write_submission('sample_submission_random_forest_regression.csv',id_test,ytest)
+
+print("* Gradient Boosting Regressor")
+cl = GradientBoostingRegressor(n_estimators=400,max_depth=17,min_samples_split=30,min_samples_leaf=30,max_features=19,subsample=0.75,random_state=0)
+param_grid = {'learning_rate':[0.01]}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(X,y)
+#ytest = grid.best_estimator_.predict(X_test)
+results.append(['Gradient Boosting Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
+#
