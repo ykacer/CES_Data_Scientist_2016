@@ -80,8 +80,8 @@ results.append(['Ransac Regression',[],[],best_score_,[],None,""])
 #write_submission('sample_submission_ransac_regression.csv',id_test,ytest)
 
 print("* Support Vector Regression")
-cl = SVR(kernel='rbf',verbose=True)
-param_grid = {'gamma':[0.0,0.1,1.0,10.0,100.0],'C':[0.01,0.1,1.0,10.0,100.0],'epsilon':[0.001,0.01,0.1,1.0]}
+cl = SVR(kernel='linear',verbose=True)
+param_grid = {'C':[10.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 #ytest = grid.best_estimator_.predict(X_test)
@@ -90,8 +90,8 @@ results.append(['Support Vector Regression',grid.grid_scores_,grid.scorer_,grid.
 #write_submission('sample_submission_support_regression.csv',id_test,ytest)
 
 print("* Random Forest Regressor")
-cl = RandomForestRegressor(n_estimators=70,max_features='sqrt',random_state=0)
-param_grid = {'max_depth':range(5,16,2),'min_samples_split':range(1,102,20)} # best 11 and 21
+cl = RandomForestRegressor(max_depth=11,min_samples_split=40,min_samples_leaf=20,max_features=33,random_state=0)
+param_grid = {'n_estimators':60}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 #ytest = grid.best_estimator_.predict(X_test)
