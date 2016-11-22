@@ -8,6 +8,8 @@
 \usepackage{fancyref}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{amsmath} % pour les cascades de fraction
+\usepackage{colortbl} % bfseries pour mettre une colonne en gras
 \usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry} % pour les marges
 
 
@@ -27,22 +29,85 @@
 
 \frontmatter
 \chapter{Introduction}
-Dans ce document, nous présentons les premiers de résulats de classiifcation des communes françaises, à partir de leur histogramme de $NDVI$. Nous cherchons ainsi à pédire
-la densité de population de chaque commune. 
+Dans ce document, nous présentons les premiers résultats de régression et de classification des communes françaises, à partir de leur histogramme de $NDVI$. 
+Nous cherchons ainsi à prédire la densité de population de chaque commune.\\
+Nous verrons comment ont été selectionnées les scènes \begin{itshape}Landsat-8\end{itshape} pour le territoire français à partir desquelles on extrait le $NDVI$ de chaque commune.\\
+Ensuite, nous présenterons d'abord le problème d'apprentissage comme un problème de régression où on cherche à prédire la densité comme valeur continue, à partir
+des histogrammes de $NDVI$ des communes. Puis, nous simplifierons le problème en catégorisant la densité, nous ramenant ainsi à un problème de classification.\\
+Les techniques d'apprentissage utilisées seront très variées et on s'attachera à les comparer entre elles via un critère de performance.
 
 \mainmatter
 \chapter{Données Landsat-8 pour la France métropolitaine}
 
-Nous avons récupéré des scènes Landsat-8 couvrant la France métropolitaine entre le 15 Mai 2015 et le 15 Septembre 2015.\\
-Cette période est la plus courte permettant d'avoir une converture totale du territoire métroplitain tout en conservant une couverture nuageuse inférieure à 10\%.
+Une scène \begin{itshape}Landsat-8\end{itshape} correspond à une certaine zone de la Terre couverte périodiquement (16 jours) par le satellite. 
+Elle est identifiée par un \begin{itshape}path\end{itshape} (typiquement entre
+$192$ et $204$ pour la France) et un \begin{itshape}row\end{itshape} (typiquement entre $023$ et $032$ pour la France).\\ 
+Nous avons récupéré des scènes Landsat-8 couvrant la France métropolitaine entre le 15 Mai 2013 et le 15 Septembre 2013.\\
+La figure \ref{selection_france} montre le polygone de sélection des scènes sur l'interface du site de l'$USGS$ \cite{landsat8}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/france-selection.png}
+\end{center}
+\caption{Polygone de sélection des scènes $Landsat-8$ pour la France sur l'interface du site de l'$USGS$}
+\label{selection_france}
+\end{figure}
+
+\clearpage
+
+Cette période correspond à l'année des valeurs de densité de population à notre disposition pour l'ensemble des communes de France.\\
+La période de Mai à Septembre est la plus courte permettant de couvrir tout le territoire métroplitain tout en conservant une occupation
+nuageuse inférieure à 20\%.
 Nous obtenons ainsi 70 scènes Landsat-8 chacune correspondant à un couple $path$,$row$ unique.\\
-Les figures \ref{cloud1},\ref{cloud2} et \ref{cloud3} montrent des miniatures couleurs des 3 scènes ayant la plus forte couverture nuageuse
+Les figures \ref{cloud1},\ref{cloud3},\ref{cloud4} et \ref{cloud5} montrent des miniatures couleurs des 4 scènes parmi les 70, ayant une couverture 
+nuageuse supérieure à 10\%
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.2]{images/LC82000242013271LGN00.jpg}
+\end{center}
+\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $200$,$024$ (region Nord-Pas-de-Calais) - couverture nuageuse de 20.00\% }
+\label{cloud1}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.2]{images/LC82030252013196LGN00.jpg}
+\end{center}
+\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $203$,$025$ (région des îles anglo-normandes) - couverture nuageuse de 18.30\%}
+\label{cloud3}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.2]{images/LC81950262013156LGN00.jpg}
+\end{center}
+\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $195$,$026$ (poînte strabourgeoise) - couverture nuageuse de 13.00\%}
+\label{cloud4}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.2]{images/LC81950282013204LGN00.jpg}
+\end{center}
+\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $203$,$028$ (frontière franco-italo-suisse) - couverture nuageuse de 12.60\%}
+\label{cloud5}
+\end{figure}
+
+On voit donc que les scènes ayant une forte couverture nuageuse sont :
+\begin{description}
+\item[-] soit des scènes contenant beaucoup de domaine maritime
+\item[-] soit des scènes limitrophes de pays voisins. 
+\end{description}
+La présence de nuage devrait donc avoir une faible impacte sur le $NDVI$ des communes françaises.
+\clearpage
 
 la figure \ref{couverture} présente toutes les scènes après projection en Web Mercator (EPSG:3857) (repère absolu).
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.6]{images/france-covering.png}
+\includegraphics[scale=0.7]{images/france-covering.png}
 \end{center}
 \caption{Concaténation des 70 scènes Lansat-8 après projection en Web Mercator (EPSG:3857)}
 \label{couverture}
@@ -51,33 +116,223 @@ la figure \ref{couverture} présente toutes les scènes après projection en Web
 
 \chapter{Extraction de l'histogramme de NDVI}
 
-Nus avons à disposition un fichier de 36700 comunes françaises contenant entre autre, la latitude et la longitude, la surface, la densité de population en 2012 ainsi
-que la population en 2010.\\
-Afin d'obtenir des longitudes, latitude précises, nous les avons corrigés en utilisant une API Python de géolocalisation $geopy$ \cite{geopy}.\\
-on projète les latitude et longitude en Web Mercator pour chacune des communes. Les positions $x$,$y$ obtenues permettent d'aller récupérer la scéne Landsat-8
-L'INSEE définit quatre types de communes en fonction de la densité de population. Nous reprenons ci-après la nomenclature telle que définie sur le
-site de l'organisme public \cite{insee}:\\
+Nous avons à notre disposition un fichier de $36700$ comunes françaises contenant entre autres caractéristiques, les latitude et longitude en degrés,
+la surface em km\textsuperscript{2}, la densité de population tel que recensée par l'INSEE en 2013 \cite{insee_pop2013}.\\
+Afin d'obtenir des longitudes et latitudes précises, nous les avons corrigés en utilisant une API $Python$ de géolocalisation: $geopy$ \cite{geopy}.\\
 
-\begin{quotation}
-\begin{itshape}
-La nouvelle typologie de l’Insee s’inspire de la classification européenne urbain-rural conçue à partir des données carroyées de population. 
-Elle permet de définir 3 types d’espace :\\
-
+La méthode d'extraction d'information du NDVI pour chaque commune se fait comme suit :
 \begin{description}
-\item[les communes densément peuplées :] dont la densité de population au carreau est d’au moins 1 500 habitants par km\textsuperscript{2} 
-et qui comptabilisent un minimum de 50 000 habitants ;
-
-\item[Les communes de densité intermédiaire :] les carreaux contigus ayant une densité de population d’au moins 300 habitants par km\textsuperscript{2} 
-et un minimum de 5 000 habitants ;
-
-\item[Les communes peu denses :] les carreaux contigus ayant une densité de population de moins de 300 habitants par km\textsuperscript{2} 
-et moins de 5 000 habitants.
-Avec cette typologie, 90 \% des communes françaises sont « rurales ». L’Insee rajoute alors un 4e degré en partant de la «maille rurale » (peu dense) :
-
-\item[les communes très peu denses :] carreaux de densité de population d’au moins 25 habitants par km\textsuperscript{2} et moins de 300 habitants
+\item[-] Pour une commune donnée, on projete ses latitude et longitude en Web Mercator. Les positions $x$,$y$ obtenues permettent d'aller récupérer 
+la scéne \begin{itshape}Landsat-8\end{itshape} dont le centre est le plus proche de la commune. Prendre la scène la plus proche de cette manière,
+permet d'éviter que la commune échoue sur un bord non couvert par une scène.
+\item[-] Puis, on découpe un carré de centre les coordonnées de la  commune, et d'aire égale à la surface de la commune.
+\item[-] On crée alors l'image de \begin{itshape}NDVI\end{itshape} correspondante
+\item[-] On calcule l'histogramme de l'image de \begin{itshape}NDVI\end{itshape} en prenant 256 bins uniformément répartis dans l'intervalle [-1 1].
+\item[-] On obtient ainsi un vecteur descripteur pour la commune
+\item[-] On réitère le procédé pour chacune des communes
 \end{description}
-\end{itshape}
-\end{quotation}
+
+
+Nous présentons le procédé à travers l'exemple ci-après \ref{ndvi_extraction} :
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.45]{images/05_rgb.png}
+\includegraphics[scale=0.45]{images/05_ndvi.png}
+\includegraphics[scale=0.4]{images/colormap.png}
+}
+\begin{center}
+\includegraphics[scale=0.45]{images/05_ndvi_histo.png}
+\end{center}
+\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la commune de $Carcassonne$ sur un périmètre de $65.08$km\textsuperscript{2} au mois de $Mai$ 2013}
+\label{ndvi_extraction}
+\end{figure}
+
+\clearpage
+
+Au final, nos données se présente sous la forme d'un tableau contenant à chaque ligne, l'histogramme d'une commune et sa densité. Avec un total
+de $36139$ communes métropolitaines.\ref{data_reg}.
+
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|>{\bfseries}c|}
+
+\hline 
+nom &  bin-1 & bin-2 & ... & bin-135 & bin-136 &... & bin-255 & bin-256 & densité (habs/km\textsuperscript{2}) \\
+\hline 
+Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 93.0\\
+\hline 
+cormoranche-sur-saone & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 107.0\\
+\hline 
+Paris & 0 & 0 & ... & 1953 & 1815 & ... & 0 & 0 & 21288.0\\
+\hline
+Lyon & 0 & 0 & ... & 1099 & 1032 & ... & 0 & 0 & 460.0\\
+\hline
+Tours & 0 & 0 & ... & 268 & 238 & ... & 0 & 0 & 3888.0\\
+\hline
+Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.0\\
+\hline 
+... & ... & ... & ... & ... & ... & ... & ... & ... & ... \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Variables explicatives (histogramme de $NDVI$) et variable à prédire (densité) par régression, sous forme de tableau}
+\label{data_reg}
+\end{table}
+
+\clearpage
+
+Nous avons donc à présent des données sous forme de tableau prêt à être utiliser pour l'apprentissage supervisée.
+
+\chapter{Régression pour la prédiction de densité de population en fonction du NDVI}
+
+\section{Erreur de généralisation d'un modèle de régression}
+
+Nous avons testé plusieurs algorithmes (ou modèle) de régression, du plus simple (régression linéaire) au plus élaboré (forêt aléatoire d'arbres régressifs).
+Chacun de ces algorithmes est évalué par cross-validation. \\
+C'est-à-dire qu'on compose plusieurs sets à partir des échantillons de départ. Chaque set contient un sous ensemble
+aléatoire des échantillons pour l'entraînement de l'algorithme (70\% du total), le reste des echantillons (30\%) constitue l'ensemble de test
+et est utilisé pour calculer l'erreur commise par l'algorithme entrainée.\\
+Nous avons donc après cross-validation, un nombre d'erreurs égale au nombre de sets, dont on considère la moyenne et la variance.\\
+\begin{bf}Cette moyenne est alors l'erreur de généralisation de l'algorithme.\end{bf}\\
+\begin{bf}La variance mesure elle, la sensibilité de cette erreur à la fluctuation des données.\end{bf}\\
+Pour calculer l'erreur sur le sous-ensemble de test, nous utilisons le coefficient de détermination (souvent noté R\textsuperscript{2}) qui s'exprime
+comme suit:
+
+\begin{equation}
+R^{2} = 1-\frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i-p_i)^2}{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i-\widehat{y})^2}
+\end{equation}
+
+avec:
+\begin{description}
+\item[-] ${y_i}$, l'ensemble des valeurs à prédire pour les échantillons de test.
+\item[-] ${p_i}$, l'ensemble des prédictions associées et calculées via le modèle entrainé.
+\item[-] $\widehat{y} = \sum \limits_{\underset{}{i=1}}^{n_{test}} y_i$, la moyenne des échantillons de test
+\end{description}
+Un tel coefficient peut-\^{e}tre potentiellement négatif, auquel cas le modèle s'ajuste très mal aux données. A l'opposé, plus le coefficient
+est proche de 1, mieux il s'ajuste aux données.
+
+\section{Comparatif de plusieurs algorithmes régressifs}
+
+Nous avons utiliser la librairie \begin{itshape}Scikit-learn\end{itshape}\cite{scikit-learn} sur \begin{itshape}Python\end{itshape} 
+pour l'implémentation des différents modèles. Le module \begin{itshape}GridSearchCV\end{itshape} permet de lancer
+la cross-validation d'un modèle de manière très simple.\\
+A noter que plus un algorithme est élaboré, plus il comporte d'hyperparamètres à régler. A titre d'exemple, la régression pénalisée (Ridge)
+ne comporte qu'un seul hyperparamètre, le coefficient de pénalisation. Alors que la for\^{e}t d'arbres aléatoires en comporte plus d'une dizaine
+(nombre d'arbres, profondeur des arbres, nombre de variables sélectionnées,...). L'erreur de généralisation que nous présentons pour chaque modèle 
+est celle qui utilise la meilleure combinaison d'hyperparamètres.\\
+Le nombre de sets pour la cross-validation a été fixé $5$.\\
+
+
+\chapter{Classification pour la prédiction de densité de population en fonction du NDVI}
+
+Les résultats de régression présentés au chapître précédent sont très perfectibles malgré l'utilisation d'algorithmes très puissants qui ont déjà fait leur
+preuve sur un certain nombre de challenges ($Kaggle$,$Hackathon$). Dès lors, on peut se demander si une simplification du problème permettrait de mieux lier
+le $NDVI$ à la densité. La régression ayant eu du mal à s'ajuster au données continue de densité, nous allons catégoriser celle-ci afin de nous ramener à un
+problème de classification.
+
+\section{Catégorisation}
+Il s'agit de découper l'intervalle de densité en une partition d'intervalles. La multi-binarisation d'Otsu permet de créer une telle partition en
+minimisant la variance au sein de chaque parition, tout en maximisant la variance inter-partition.\\
+La figure \ref{densite_histo} présente l'histogramme de densité de nos échantillons :
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/densite_histo.jpg}
+\includegraphics[scale=0.5]{images/densite_histo_zoom.jpg}
+\end{center}
+\caption{Histogramme des densités et son zoom}
+\label{densite_histo}
+\end{figure}
+\clearpage
+
+On applique alors la méthode d'Otsu ($Matlab$) sur l'histogramme pour différentes valeurs en nombre de catégories (ou nombre de clusters si on voit la méthode comme
+une méthode de segmentation). On obtient à chaque fois un score reflétant la compacité des catégories créées. La figure \ref{otsu} montre l'évolution du score
+pour différentes nombre de catégories :
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/densite_otsu_thresholding.jpg}
+\end{center}
+\caption{Score de catégorisation par Otsu pour différents nombre de catégories}
+\label{otsu}
+\end{figure}
+\clearpage
+
+On remarque que le score est maximal pour un nombre de catégories de 5.\\
+La figure \ref{densite_histo_otsu} montre les 4 seuils obtenus pour la segmentation à 5 catégories.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/densite_histo_otsu.jpg}
+\includegraphics[scale=0.5]{images/densite_histo_otsu_zoom.jpg}
+\end{center}
+\caption{Histogramme des densités et son zoom avec seuils d'Otsu pour 5 catégories}
+\label{densite_histo_otsu}
+\end{figure}
+\clearpage
+
+Les 4 seuils obtenus sont par ordre croissant : $523$,$2091$,$5855$ et $13487$.\\
+Ainsi, en arrondissant ces valeurs, on créé 5 catégories pour nos échantillons:\\
+\begin{description}
+ \item[catégorie 1:] densité comprise entre 0 et 500
+ \item[catégorie 2:] densité comprise entre 500 et 2000
+ \item[catégorie 3:] densité comprise entre 2000 et 5000
+ \item[catégorie 4:] densité comprise entre 5000 et 13000
+ \item[catégorie 5:] densité supérieure à 13000 
+\end{description}
+\clearpage
+
+D'où le nouveau tableau obtenu en tenant compte cette fois de la catégorie comme variable à prédire \ref{data_class}:\\
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|>{\bfseries}c|}
+\hline 
+nom &  bin-1 & bin-2 & ... & bin-135 & bin-136 &... & bin-255 & bin-256 & densité (catégorie) \\
+\hline 
+Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 1\\
+\hline 
+cormoranche-sur-saone & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 1\\
+\hline 
+Paris & 0 & 0 & ... & 1953 & 1815 & ... & 0 & 0 & 5\\
+\hline
+Lyon & 0 & 0 & ... & 1099 & 1032 & ... & 0 & 0 & 1\\
+\hline
+Tours & 0 & 0 & ... & 268 & 238 & ... & 0 & 0 & 3\\
+\hline
+Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 2\\
+\hline 
+... & ... & ... & ... & ... & ... & ... & ... & ... & ... \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Variables explicatives (histogramme de $NDVI$) et variable à prédire (densité) par classification, sous forme de tableau}
+\label{data_class}
+\end{table}
+
+\clearpage
+ 
+\section{Erreur de généralisation d'un modèle de classification}
+
+L'idée est exactement la même que pour la régression à ceci près que la formule de calcul de l'erreur sur le sous-ensemble de test d'un set donné, est
+différente. En effet, les valeurs à prédire étant à présent catégorisées, on utilise l'erreur de précision dont la formule est décrité ci-après:\\
+
+\begin{equation}
+Accuracy = \frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i \neq p_i)}{n_{test}}
+\end{equation}
+
+avec:
+\begin{description}
+\item[-] ${y_i}$, l'ensemble des valeurs à prédire pour les échantillons de test.
+\item[-] ${p_i}$, l'ensemble des prédictions associées et calculées via le modèle entrainé.
+\end{description}
+
+\section{Comparatif de plusieurs algorithmes régressifs}
+
+Ici, encore nous présentons les erreurs de classification pour différents modèles, chaque modèle étant utilisé avec sa meilleure combinaison
+d'hyperparamètres.
 
 
 \clearpage
