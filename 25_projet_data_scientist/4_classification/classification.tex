@@ -189,19 +189,21 @@ Nous avons donc à présent des données sous forme de tableau prêt à être ut
 
 \section{Erreur de généralisation d'un modèle de régression}
 
-Nous avons testé plusieurs algorithmes (ou modèle) de régression, du plus simple (régression linéaire) au plus élaboré (forêt aléatoire d'arbres régressifs).
+Nous avons testé plusieurs algorithmes (ou modèles) de régression, du plus simple (régression linéaire) au plus élaboré (forêt aléatoire d'arbres régressifs).
 Chacun de ces algorithmes est évalué par cross-validation. \\
 C'est-à-dire qu'on compose plusieurs sets à partir des échantillons de départ. Chaque set contient un sous ensemble
 aléatoire des échantillons pour l'entraînement de l'algorithme (70\% du total), le reste des echantillons (30\%) constitue l'ensemble de test
-et est utilisé pour calculer l'erreur commise par l'algorithme entrainée.\\
+et est utilisé pour calculer l'erreur commise par l'algorithme entrainé.\\
 Nous avons donc après cross-validation, un nombre d'erreurs égale au nombre de sets, dont on considère la moyenne et la variance.\\
-\begin{bf}Cette moyenne est alors l'erreur de généralisation de l'algorithme.\end{bf}\\
-\begin{bf}La variance mesure elle, la sensibilité de cette erreur à la fluctuation des données.\end{bf}\\
-Pour calculer l'erreur sur le sous-ensemble de test, nous utilisons le coefficient de détermination (souvent noté R\textsuperscript{2}) qui s'exprime
-comme suit:
+\begin{bf}Cette moyenne est alors l'erreur d'ajustement aux données commmise par l'algorithme.\end{bf}\\
+\begin{bf}La variance mesure elle, la sensibilité de cette erreur à la fluctuation des données et donc la généralisation du modèle.\end{bf}\\
+Ces deux valeurs ne peuvent être simultanément aussi basses qu'on le souhaite : un modèle qui s'ajuste parfaitement aux données aura toujours du
+mal à généraliser cette ajustement à des données nouvelles. Inversement, un modèle comportant un léger biais saura s'adapter aux données nouvelles.\\
+\\
+Pour calculer l'erreur sur le sous-ensemble de test, nous utilisons le coefficient de détermination (souvent noté R\textsuperscript{2}) comme suit:
 
 \begin{equation}
-R^{2} = 1-\frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i-p_i)^2}{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i-\widehat{y})^2}
+Erreur = 1 - R^{2} = \frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i-p_i)^2}{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i-\widehat{y})^2}
 \end{equation}
 
 avec:
@@ -210,20 +212,52 @@ avec:
 \item[-] ${p_i}$, l'ensemble des prédictions associées et calculées via le modèle entrainé.
 \item[-] $\widehat{y} = \sum \limits_{\underset{}{i=1}}^{n_{test}} y_i$, la moyenne des échantillons de test
 \end{description}
-Un tel coefficient peut-\^{e}tre potentiellement négatif, auquel cas le modèle s'ajuste très mal aux données. A l'opposé, plus le coefficient
-est proche de 1, mieux il s'ajuste aux données.
+Une telle erreur peut-\^{e}tre potentiellement supérieur à 1, auquel cas le modèle s'ajuste très mal aux données (il fait pire que l'estimateur constant 
+de moyenne). A l'opposé, plus l'erreur est proche de 0, mieux il s'ajuste aux données.
 
 \section{Comparatif de plusieurs algorithmes régressifs}
 
-Nous avons utiliser la librairie \begin{itshape}Scikit-learn\end{itshape}\cite{scikit-learn} sur \begin{itshape}Python\end{itshape} 
-pour l'implémentation des différents modèles. Le module \begin{itshape}GridSearchCV\end{itshape} permet de lancer
+Nous avons utilisé la librairie \begin{itshape}Scikit-learn\end{itshape}\cite{scikit-learn} sur \begin{itshape}Python\end{itshape} 
+pour l'implémentation de différents modèles régressifs. Le module \begin{itshape}GridSearchCV\end{itshape} permet de lancer
 la cross-validation d'un modèle de manière très simple.\\
 A noter que plus un algorithme est élaboré, plus il comporte d'hyperparamètres à régler. A titre d'exemple, la régression pénalisée (Ridge)
 ne comporte qu'un seul hyperparamètre, le coefficient de pénalisation. Alors que la for\^{e}t d'arbres aléatoires en comporte plus d'une dizaine
-(nombre d'arbres, profondeur des arbres, nombre de variables sélectionnées,...). L'erreur de généralisation que nous présentons pour chaque modèle 
+(nombre d'arbres, profondeur des arbres, nombre de variables sélectionnées,...).\\
+L'erreur de généralisation que nous présentons pour chaque modèle 
 est celle qui utilise la meilleure combinaison d'hyperparamètres.\\
 Le nombre de sets pour la cross-validation a été fixé $5$.\\
+\\
+Le tableau \ref{regression_resultats} résume les résultats obtenus\\
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{2}{c|}{\begin{bf}Régression\end{bf}} \\
+\hline 
+Modèle & Erreur de généralisation \\
+\hline 
+Régression & > 1\\
+\hline 
+Régression pénalisée & > 1 \\
+\hline 
+Support Vector Régression à noyau gaussien & ~1 \\
+\hline
+For\^{e}t d'arbres aléatoires régressifs & 0.8\\
+\hline
+Boosting d'arbres aléatoires régressifs & 0.739\\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Erreur de généralisation pour différents modèles régressifs}
+\label{regression_resultats}
+\end{table}
 
+On constate que le NDVI n'explique pas du tout la densité de manière linéaire, au vu des très mauvais scores obtenus pour la régression linéaire.\\
+Les Machines à Support de Vecteurs font aussi bien que l'estimateur de moyenne.\\
+Les arbres de décision permettent de diminuer l'erreur mais ne premettent toujours pas d'expliquer la densité.\
+Nous allons dans la prochaine partie, simplifier le problème en se rapportant à un problème de classification.\\
 
 \chapter{Classification pour la prédiction de densité de population en fonction du NDVI}
 
@@ -283,7 +317,7 @@ Ainsi, en arrondissant ces valeurs, on créé 5 catégories pour nos échantillo
 \end{description}
 \clearpage
 
-Un tel découpage donne lieu à un distribution avec une grande disproportion entre les catégories, ce qui peut potentiellement perturber certains algorithmes de classification :\\
+Un tel découpage donne lieu à une distribution avec une grande disproportion entre les catégories, ce qui peut potentiellement perturber certains algorithmes de classification :\\
 \begin{description}
  \item[catégorie 1:] 20 échantillons
  \item[catégorie 2:] 102 échantillons
@@ -291,10 +325,6 @@ Un tel découpage donne lieu à un distribution avec une grande disproportion en
  \item[catégorie 4:] 1287 échantillons
  \item[catégorie 5:] 34443 échantillons
 \end{description}
-
-
-
-
 
 D'où le nouveau tableau obtenu en tenant compte cette fois de la catégorie comme variable à prédire \ref{data_class}:\\
 \begin{table}[H]
@@ -330,10 +360,10 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 2\\
 \section{Erreur de généralisation d'un modèle de classification}
 
 L'idée est exactement la même que pour la régression à ceci près que la formule de calcul de l'erreur sur le sous-ensemble de test d'un set donné, est
-différente. En effet, les valeurs à prédire étant à présent catégorisées, on utilise l'erreur de précision dont la formule est décrité ci-après:\\
+différente. En effet, les valeurs à prédire étant à présent catégorisées, on utilise l'erreur de précision dont la formule est décrite ci-après:\\
 
 \begin{equation}
-Accuracy = \frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i \neq p_i)}{n_{test}}
+Erreur = \frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i \neq p_i)}{n_{test}}
 \end{equation}
 
 avec:
@@ -344,7 +374,7 @@ avec:
 
 \section{Comparatif de plusieurs algorithmes régressifs}
 
-Ici, encore nous présentons les erreurs de classification pour différents modèles, chaque modèle étant utilisé avec sa meilleure combinaison
+Ici encore, nous présentons les erreurs de classification pour différents modèles, chaque modèle étant utilisé avec sa meilleure combinaison
 d'hyperparamètres.
 
 
