@@ -72,3 +72,27 @@ param_test2 = {'max_depth':range(7,25,2), 'min_samples_split':range(100,201,10)}
 estimator = GradientBoostingClassifier(learning_rate=0.1, n_estimators=70, max_features='sqrt', subsample=0.8, random_state=10)
 gridsearch2 = GridSearchCV(estimator = estimator, param_grid = param_test2,n_jobs=4,iid=False, cv=5)
 gridsearch2.fit(train[predictors],train[target])
+
+# grid search : tree parameters
+param_test3 = {'min_samples_split':range(190,300,20), 'min_samples_leaf':range(30,71,10)}
+estimator = GradientBoostingClassifier(learning_rate=0.1, n_estimators=70,max_depth=21,max_features='sqrt', subsample=0.8, random_state=10)
+gridsearch3 = GridSearchCV(estimator = estimator, param_grid = param_test3,n_jobs=4,iid=False, cv=5)
+gridsearch3.fit(train[predictors],train[target])
+
+# grid search : max features
+param_test4 = {'max_features':range(7,22,2)}
+estimator = GradientBoostingClassifier(learning_rate=0.1, n_estimators=70, max_depth=21, min_samples_split=210, min_samples_leaf=60, subsample=0.8, random_state=10)
+gridsearch4 = GridSearchCV(estimator = estimator, param_grid = param_test4,n_jobs=4,iid=False, cv=5)
+gridsearch4.fit(train[predictors],train[target])
+
+# grid search : subsample
+param_test5 = {'subsample':[0.6,0.7,0.75,0.8,0.85,0.9]}
+estimator = GradientBoostingClassifier(learning_rate=0.1, n_estimators=70, max_depth=21, min_samples_split=210, min_samples_leaf=60, max_features=15, random_state=10)
+gsearch5 = GridSearchCV(estimator = estimator, param_grid = param_test5,n_jobs=4,iid=False, cv=5)
+gsearch5.fit(train[predictors],train[target])
+
+# grid search : learning_rate
+param_test6 = {'learning_rate':[0.01]}
+estimator = GradientBoostingClassifier(n_estimators=700, max_depth=21, min_samples_split=210, min_samples_leaf=60, max_features=15, subsample=0.8, random_state=10)
+gsearch6 = GridSearchCV(estimator = estimator, param_grid = param_test6,n_jobs=4,iid=False, cv=5)
+gsearch6.fit(train[predictors],train[target])
