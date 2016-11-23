@@ -227,13 +227,13 @@ L'erreur de généralisation que nous présentons pour chaque modèle
 est celle qui utilise la meilleure combinaison d'hyperparamètres.\\
 Le nombre de sets pour la cross-validation a été fixé $5$.\\
 \\
-Le tableau \ref{regression_resultats} résume les résultats obtenus\\
+Le tableau \ref{regression_resultats} résume les résultats obtenus.
 \begin{table}[H]
 \begin{center}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{|c|c|}
 \hline
-\multicolumn{2}{c|}{\begin{bf}Régression\end{bf}} \\
+\multicolumn{2}{|c|}{\begin{bf}Régression\end{bf}} \\
 \hline 
 Modèle & Erreur de généralisation \\
 \hline 
@@ -243,7 +243,9 @@ Régression pénalisée & > 1 \\
 \hline 
 Support Vector Régression à noyau gaussien & ~1 \\
 \hline
-For\^{e}t d'arbres aléatoires régressifs & 0.8\\
+Réseau de neurones régressif & 0.822\\
+\hline
+For\^{e}t d'arbres aléatoires régressifs & 0.800\\
 \hline
 Boosting d'arbres aléatoires régressifs & 0.739\\
 \hline
@@ -256,8 +258,11 @@ Boosting d'arbres aléatoires régressifs & 0.739\\
 
 On constate que le NDVI n'explique pas du tout la densité de manière linéaire, au vu des très mauvais scores obtenus pour la régression linéaire.\\
 Les Machines à Support de Vecteurs font aussi bien que l'estimateur de moyenne.\\
-Les arbres de décision permettent de diminuer l'erreur mais ne premettent toujours pas d'expliquer la densité.\
-Nous allons dans la prochaine partie, simplifier le problème en se rapportant à un problème de classification.\\
+Les arbres de décision permettent de diminuer l'erreur mais ne premettent toujours pas d'expliquer la densité.\\
+Comme nous le verrons dans la prochaine partie, la distribution de la densité comporte un petit nombre de valeurs très hautes, il serait donc intéressant
+de chercher à prédire le logarithme de la densité $d$ : $log(\alpha+d)$ avec $\alpha$, une constante strictement positive à régler.\\
+Cepandant, nous allons dans la prochaine partie laisser de côté le problème de la régression et simplifier le problème en nous
+rapportant à un problème de classification.\\
 
 \chapter{Classification pour la prédiction de densité de population en fonction du NDVI}
 
@@ -375,9 +380,27 @@ avec:
 \section{Comparatif de plusieurs algorithmes régressifs}
 
 Ici encore, nous présentons les erreurs de classification pour différents modèles, chaque modèle étant utilisé avec sa meilleure combinaison
-d'hyperparamètres.
-
-
+d'hyperparamètres.\\
+\\
+Le tableau \ref{classification_resultats} résume les résultats obtenus.\\
+Le boosting d'arbres aléatoires suffit à très bien expliquer la relation entre le NDVI et la densité catégorisée (4,3\% d'erreur en généralisation)\\.
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{2}{|c|}{\begin{bf}Classification\end{bf}} \\
+\hline 
+Modèle & Erreur de généralisation \\
+\hline
+Boosting d'arbres aléatoires & 0.043\\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Erreur de généralisation pour différents modèles de classification}
+\label{classification_resultats}
+\end{table}
 \clearpage
 %Paris 21288
 %Versailles 3289
