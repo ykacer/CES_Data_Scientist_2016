@@ -11,6 +11,7 @@ from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import ShuffleSplit
 from sklearn import grid_search
 
+from sklearn.preprocessing import StandardScaler  
 from sklearn import linear_model
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
@@ -86,9 +87,25 @@ grid.fit(X,y)
 results.append(['Gradient Boosting Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
 
 print("* Multi Layer Perceptron Regressor")
-cl = MLPRegressor(hidden_layer_sizes=(1000),verbose=True)
-param_grid = {'learning_rate_init':[0.0001]}
+scaler = StandardScaler()  
+scaler.fit(X)  
+Xsc = scaler.transform(X)  
+
+cl = MLPRegressor(hidden_layer_sizes=(1000,500),alpha=0.0001,solver='sgd',learning_rate='adaptive',tol=0.0001,early_stopping=True,verbose=True)
+param_grid = {'learning_rate_init':[0.000005]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
-grid.fit(X,y)
+grid.fit(Xsc,y)
+results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
+
+cl = MLPRegressor(hidden_layer_sizes=(1000,500),alpha=0.0001,solver='sgd',power_t=0.2,learning_rate='invscaling',tol=0.0001,early_stopping=True,verbose=True)
+param_grid = {'learning_rate_init':[0.000005]}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(Xsc,y)
+results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
+
+cl = MLPRegressor(hidden_layer_sizes=(1000),solver='lbfgs',tol=0.0001,verbose=True)
+param_grid = {'learning_rate_init':[0.001]}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(Xsc,y)
 results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
 
