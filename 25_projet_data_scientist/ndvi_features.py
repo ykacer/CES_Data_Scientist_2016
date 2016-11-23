@@ -70,12 +70,13 @@ features.write('name,'+','.join(str(i) for i in np.arange(nbins-1).tolist())+',d
 
 data = pd.read_csv(data_file,sep=',',header=0,encoding='utf-8',usecols=[2,16,17,18,19,20])
 cities = {}
-cities['latitude'] = np.array(data[u'latitude (degrés)'])
-cities['longitude'] = np.array(data[u'longitude (degrés)'])
-cities['nom'] = list(data[u'Slug'])
-cities['population'] = np.array(data[u'Population 2012'])
-cities['densite'] = np.array(data[u'densité en 2010'])
-cities['surface'] = np.array(data[u'Surface'])
+cities['latitude'] = np.array(data[u'LAT'])
+cities['longitude'] = np.array(data[u'LONG'])
+cities['nom'] = list(data[u'LIBMIN'])
+cities['surface'] = list(data[u'SURFACE'])
+cities['population'] = np.array(data[u'PMUN13'])
+cities['densite'] =  cities['population']/cities['surface']
+cities['surface'] = np.array(data[u'SURFACE'])
 
 data = pd.read_csv(usgs_file,sep=',',header=0,encoding='utf-8',usecols=np.arange(42,53))
 images = {}
