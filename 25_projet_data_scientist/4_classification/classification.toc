@@ -1,3 +1,0 @@
-\select@language {french}
-\contentsline {chapter}{Introduction}{i}{chapter*.2}
-\contentsline {chapter}{\numberline {1}Donn\IeC {\'e}es Landsat-8 pour la France m\IeC {\'e}tropolitaine}{1}{chapter.1}
