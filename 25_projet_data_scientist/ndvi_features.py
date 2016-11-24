@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import sys
 import os
+import re
 import shutil
 import commands
 import codecs
@@ -60,15 +61,15 @@ data_file = sys.argv[1]
 usgs_file = sys.argv[2]
 
 nbins = 256;
-verbose = 0;
-record = 0;
+verbose = 1;
+record = 1;
 
 folder = os.path.dirname(data_file);
 features_file = folder+"/ndvi_features.csv"
 features = codecs.open(features_file, 'w', 'utf-8')
 features.write('name,'+','.join(str(i) for i in np.arange(nbins-1).tolist())+',densite,population,surface\n')
 
-data = pd.read_csv(data_file,sep=',',header=0,encoding='utf-8',usecols=[2,16,17,18,19,20])
+data = pd.read_csv(data_file,encoding='utf-8')
 cities = {}
 cities['latitude'] = np.array(data[u'LAT'])
 cities['longitude'] = np.array(data[u'LONG'])
@@ -105,6 +106,7 @@ os.mkdir(folder_cities)
 
 IDprev = ""
 for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitude'],cities['densite'],cities['population'],cities['surface']):
+	name = re.sub('\/','-',name)
 	if (lt<lat_min) | (lt>lat_max) | (lg<long_min) | (lg>long_max):
 		print "Warning : "+name+" not in any of the provided Landsat datasets..."
 		continue;
@@ -112,7 +114,7 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	nearest_dataset = np.argmin((lt-images['Clat'])**2+(lg-images['Clong'])**2)
 	ID = images['ID'][nearest_dataset]
 
-	print "processing "+folder+'/'+ID+' for city '+name+'...'
+	print "\nprocessing "+folder+'/'+ID+' for city '+name+'...'
 	if os.path.isdir(folder+'/'+ID) == False:
 		os.system('/usr/local/bin/landsat download '+ID+' --bands 2345 --dest '+folder)
 		if os.path.isfile(folder+'/'+ID+'.tar.bz') == True:
@@ -275,7 +277,7 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 		plt.gcf().clear()
 
 		fig = plt.figure();
-	bins = np.linspace(-1,1,nbins);
+	bins = np.linspace(-1,1,nbins+1);
 	histo = np.histogram(zoom,bins)[0]
 	if record:
 		plt.plot(bins[:-1],histo)
