@@ -60,14 +60,14 @@ cmap_ndvi = make_colormap([blue,f[0],blue,cyan,f[2],red,yellow,f[4],yellow,light
 data_file = sys.argv[1]
 usgs_file = sys.argv[2]
 
-nbins = 256;
-verbose = 1;
-record = 1;
+nbins = 512;
+verbose = 0;
+record = 0;
 
 folder = os.path.dirname(data_file);
 features_file = folder+"/ndvi_features.csv"
 features = codecs.open(features_file, 'w', 'utf-8')
-features.write('name,'+','.join(str(i) for i in np.arange(nbins-1).tolist())+',densite,population,surface\n')
+features.write('name,'+','.join(str(i) for i in np.arange(nbins).tolist())+',densite,population,surface\n')
 
 data = pd.read_csv(data_file,encoding='utf-8')
 cities = {}
@@ -114,7 +114,7 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 	nearest_dataset = np.argmin((lt-images['Clat'])**2+(lg-images['Clong'])**2)
 	ID = images['ID'][nearest_dataset]
 
-	print "\nprocessing "+folder+'/'+ID+' for city '+name+'...'
+	#print "\nprocessing "+folder+'/'+ID+' for city '+name+'...'
 	if os.path.isdir(folder+'/'+ID) == False:
 		os.system('/usr/local/bin/landsat download '+ID+' --bands 2345 --dest '+folder)
 		if os.path.isfile(folder+'/'+ID+'.tar.bz') == True:
