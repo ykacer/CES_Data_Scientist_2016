@@ -76,7 +76,7 @@ print u"\t- density  : "+str(densite)+u" habs/km²"
 folder = os.path.dirname(file)
 image_names = list(pd.read_csv(file,sep=',',header=0,usecols=[52])['Display ID'])
 image_months = [month[5:7] for month in list(pd.read_csv(file,sep=',',header=0,usecols=[18])['Date Acquired'])]
-nbins = 256
+nbins = 512
 histo_per_month = {}
 
 for ID,month in izip(image_names,image_months):
