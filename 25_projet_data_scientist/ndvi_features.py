@@ -107,7 +107,7 @@ if os.path.isdir(folder_cities):
 os.mkdir(folder_cities)
 
 IDprev = ""
-for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitude'],cities['densite'],cities['population'],cities['surface']):
+for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitude'],cities['densite'],cities['population'],cities['surface']):
 	name = re.sub('\/','-',name)
 	if (lt<lat_min) | (lt>lat_max) | (lg<long_min) | (lg>long_max):
 		print "Warning : "+name+" not in any of the provided Landsat datasets..."
@@ -286,7 +286,7 @@ for (name,lt,lg,d,p,s) in izip(cities['nom'],cities['latitude'],cities['longitud
 		plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_histo.png')
 		plt.gcf().clear()
 
-	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(d))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
+	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(de))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
 	IDprev = ID
 features.close()
 
