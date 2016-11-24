@@ -224,7 +224,7 @@ for ID,month in izip(image_names,image_months):
         cv2.imwrite(folder+'/'+name+'/'+month+'_ndvi.png',(255*cmap_ndvi(zoom_rescaled.astype(np.uint8))).astype(np.uint8)[:,:,:3][:,:,::-1]);
         cv2.imwrite(folder+'/'+name+'/'+month+'_rgb.png',zoom_rgb);
         fig = plt.figure();
-        bins = np.linspace(-1,1,nbins);
+        bins = np.linspace(-1,1,nbins+1);
         histo = np.histogram(zoom,bins)[0]
         histo_per_month[unicode(month)] = histo
         plt.plot(bins[:-1],histo)
