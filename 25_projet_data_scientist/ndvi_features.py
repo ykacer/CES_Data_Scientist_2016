@@ -69,7 +69,9 @@ features_file = folder+"/ndvi_features.csv"
 features = codecs.open(features_file, 'w', 'utf-8')
 features.write('name,'+','.join(str(i) for i in np.arange(nbins).tolist())+',densite,population,surface\n')
 
-data = pd.read_csv(data_file,encoding='utf-8',na_values='NaN')
+data = pd.read_csv(data_file,encoding='utf-8',na_values="NaN",keep_default_na=False)
+data.dropna(how="any", inplace=True);
+print data.shape
 cities = {}
 cities['latitude'] = np.array(data[u'LAT'])
 cities['longitude'] = np.array(data[u'LONG'])
