@@ -83,7 +83,7 @@ nuageuse supérieure à 10\%
 \begin{center}
 \includegraphics[scale=0.2]{images/LC81950262013156LGN00.jpg}
 \end{center}
-\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $195$,$026$ (poînte strabourgeoise) - couverture nuageuse de 13.00\%}
+% \caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $195$,$026$ (poînte strasbourgeoise) - couverture nuageuse de 13.00\%}
 \label{cloud4}
 \end{figure}
 
@@ -162,7 +162,7 @@ nom &  bin-1 & bin-2 & ... & bin-135 & bin-136 &... & bin-255 & bin-256 & densit
 \hline 
 Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 93.0\\
 \hline 
-cormoranche-sur-saone & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 107.0\\
+Cormoranche-sur-saone & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 107.0\\
 \hline 
 Paris & 0 & 0 & ... & 1953 & 1815 & ... & 0 & 0 & 21288.0\\
 \hline
@@ -195,7 +195,7 @@ C'est-à-dire qu'on compose plusieurs sets à partir des échantillons de dépar
 aléatoire des échantillons pour l'entraînement de l'algorithme (70\% du total), le reste des echantillons (30\%) constitue l'ensemble de test
 et est utilisé pour calculer l'erreur commise par l'algorithme entrainé.\\
 Nous avons donc après cross-validation, un nombre d'erreurs égale au nombre de sets, dont on considère la moyenne et la variance.\\
-\begin{bf}Cette moyenne est alors l'erreur d'ajustement aux données commmise par l'algorithme.\end{bf}\\
+\begin{bf}Cette moyenne est alors l'erreur d'ajustement aux données commise par l'algorithme.\end{bf}\\
 \begin{bf}La variance mesure elle, la sensibilité de cette erreur à la fluctuation des données et donc la généralisation du modèle.\end{bf}\\
 Ces deux valeurs ne peuvent être simultanément aussi basses qu'on le souhaite : un modèle qui s'ajuste parfaitement aux données aura toujours du
 mal à généraliser cette ajustement à des données nouvelles. Inversement, un modèle comportant un léger biais saura s'adapter aux données nouvelles.\\
@@ -273,7 +273,7 @@ problème de classification.
 
 \section{Catégorisation}
 Il s'agit de découper l'intervalle de densité en une partition d'intervalles. La multi-binarisation d'Otsu permet de créer une telle partition en
-minimisant la variance au sein de chaque parition, tout en maximisant la variance inter-partition.\\
+minimisant la variance au sein de chaque partition, tout en maximisant la variance inter-partition.\\
 La figure \ref{densite_histo} présente l'histogramme de densité de nos échantillons :
 
 \begin{figure}[H]
@@ -341,7 +341,7 @@ nom &  bin-1 & bin-2 & ... & bin-135 & bin-136 &... & bin-255 & bin-256 & densit
 \hline 
 Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 1\\
 \hline 
-cormoranche-sur-saone & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 1\\
+Cormoranche-sur-saone & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 1\\
 \hline 
 Paris & 0 & 0 & ... & 1953 & 1815 & ... & 0 & 0 & 5\\
 \hline
