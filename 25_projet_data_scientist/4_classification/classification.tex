@@ -127,7 +127,7 @@ la scéne \begin{itshape}Landsat-8\end{itshape} dont le centre est le plus proch
 permet d'éviter que la commune échoue sur un bord non couvert par une scène.
 \item[-] Puis, on découpe un carré de centre les coordonnées de la  commune, et d'aire égale à la surface de la commune.
 \item[-] On crée alors l'image de \begin{itshape}NDVI\end{itshape} correspondante
-\item[-] On calcule l'histogramme de l'image de \begin{itshape}NDVI\end{itshape} en prenant 256 bins uniformément répartis dans l'intervalle [-1 1].
+\item[-] On calcule l'histogramme de l'image de \begin{itshape}NDVI\end{itshape} en prenant 512 bins uniformément répartis dans l'intervalle [-1 1].
 \item[-] On obtient ainsi un vecteur descripteur pour la commune
 \item[-] On réitère le procédé pour chacune des communes
 \end{description}
@@ -158,7 +158,7 @@ de $36139$ communes métropolitaines.\ref{data_reg}.
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|>{\bfseries}c|}
 
 \hline 
-nom &  bin-1 & bin-2 & ... & bin-135 & bin-136 &... & bin-255 & bin-256 & densité (habs/km\textsuperscript{2}) \\
+nom &  bin-1 & bin-2 & ... & bin-255 & bin-256 &... & bin-511 & bin-512 & densité (habs/km\textsuperscript{2}) \\
 \hline 
 Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 93.0\\
 \hline 
@@ -239,13 +239,17 @@ Modèle & Erreur de généralisation \\
 \hline 
 Régression & > 1\\
 \hline 
-Régression pénalisée & > 1 \\
+Régression Ridge ($\lambda=1000$) & ~ 1 \\
 \hline 
+Régression Lasso ($\lambda=100$) & 0.960 \\
+\hline 
+Régression ElasticNet ($\lambda=10,l=0.75$) & 0.963 \\
+\hline
 Support Vector Régression à noyau gaussien & ~1 \\
 \hline
 Réseau de neurones régressif & 0.822\\
 \hline
-For\^{e}t d'arbres aléatoires régressifs & 0.800\\
+For\^{e}t d'arbres aléatoires régressifs & 0.4926\\
 \hline
 Boosting d'arbres aléatoires régressifs & 0.739\\
 \hline
@@ -337,7 +341,7 @@ D'où le nouveau tableau obtenu en tenant compte cette fois de la catégorie com
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|>{\bfseries}c|}
 \hline 
-nom &  bin-1 & bin-2 & ... & bin-135 & bin-136 &... & bin-255 & bin-256 & densité (catégorie) \\
+nom &  bin-1 & bin-2 & ... & bin-255 & bin-256 &... & bin-511 & bin-512 & densité (catégorie) \\
 \hline 
 Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 1\\
 \hline 
