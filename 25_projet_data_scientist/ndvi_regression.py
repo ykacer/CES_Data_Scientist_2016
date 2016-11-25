@@ -48,7 +48,7 @@ cl = linear_model.Lasso()
 param_grid = {'fit_intercept':[True,False],'alpha':[0.01,0.1,1.0,10.0,100.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
-results.append(['Lasso Regression',g1rid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
+results.append(['Lasso Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,""])
 
 print("* ElasticNet Regression")
 cl = linear_model.ElasticNet()
