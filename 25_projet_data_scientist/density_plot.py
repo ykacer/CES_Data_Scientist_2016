@@ -21,15 +21,29 @@ year = sys.argv[2]
 
 df = pd.read_csv(cities_file,encoding='utf-8')
 df.dropna(how='any',inplace=True)
+df = df[df.SURFACE != 0]
+if year==u'13':
+    df = df[df.PMUN13 != 0]
+
+if year==u'14':
+    df = df[df.PMUN14 != 0]
+
+if year==u'15':
+    df = df[df.PMUN15 != 0]
+
+if year==u'16':
+    df = df[df.PMUN16 != 0]
 
 lg = df[u'LONG'].as_matrix()
 lt = df[u'LAT'].as_matrix()
 x = np.array([Proj(init="EPSG:3857")(longi,lat)[0] for lat,longi in izip(lt,lg)]).astype(np.int)/1000.0
 y = np.array([Proj(init="EPSG:3857")(longi,lat)[1] for lat,longi in izip(lt,lg)]).astype(np.int)/1000.0
 s = df[u'SURFACE'].as_matrix()
-
 p = df[u'PMUN'+year].as_matrix()
+
+
 d = p/s
+
 
 def make_colormap(seq):
     """ Return a LinearSegmentedColormap
@@ -90,14 +104,14 @@ legend_labels = []
 legend_scatters = []
 for i,cl in enumerate(colors):
 	ci = np.asarray(cl)/255.0
-	print ci
 	d1 = density[i]
 	d2 = density[i+1]
-	xi = x[(d>d1) & (d<d2)]
-	yi = y[(d>d1) & (d<d2)]
-	di = d[(d>d1) & (d<d2)]
-	si = s[(d>d1) & (d<d2)]
-	sci = plt.scatter(xi,yi,s=100,marker='o',facecolor=ci,edgecolor=ci)
+	xi = x[(d>=d1) & (d<d2)]
+	yi = y[(d>=d1) & (d<d2)]
+	di = d[(d>=d1) & (d<d2)]
+	si = s[(d>=d1) & (d<d2)]
+	ni = di.shape[0]
+	sci = plt.scatter(xi,yi,s=50,marker='o',facecolor=[ci,]*3,edgecolor=[ci,]*3)
 	legend_scatters.append(sci)
 	legend_labels.append(str(int(d1))+u' - '+str(int(d2))+u' habs/km²')
 
