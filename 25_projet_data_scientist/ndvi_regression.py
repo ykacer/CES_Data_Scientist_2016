@@ -17,6 +17,12 @@ from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
 from sklearn.neural_network import MLPRegressor
 
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.wrappers.scikit_learn import KerasClassifier,KerasRegressor
+from keras.utils.np_utils import to_categorical
+from keras.optimizers import SGD,Adagrad,RMSprop,Adam
+
 print("Formatting data")
 
 data = pd.read_csv('France/ndvi_features.csv')
@@ -108,4 +114,22 @@ param_grid = {'learning_rate_init':[0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
 results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+
+print("* Neural Network Regression (Keras)")
+def make_model():
+    model = Sequential()
+    model.add(Dense(output_dim=1204,input_dim=512,init='uniform',activation='relu'))
+    #model.add(Dense(512, init='uniform', activation='relu'))
+    model.add(Dense(1, init='normal', activation='softmax'))
+    opt = SGD(lr=0.01, decay=1e-1, momentum=0.9, nesterov=True)
+    #opt = Adagrad()
+    #opt = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+    #opt = RMSprop()
+    model.compile(loss='mean_squared_error', optimizer=opt, metrics=['mean_squared_error'])
+    return model
+
+cl = KerasRegressor(make_model, nb_epoch=20)
+param_grid = {'batch_size':[100]}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(Xsc,y)
 
