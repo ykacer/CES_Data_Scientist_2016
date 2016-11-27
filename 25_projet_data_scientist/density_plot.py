@@ -111,7 +111,7 @@ for i,cl in enumerate(colors):
 	di = d[(d>=d1) & (d<d2)]
 	si = s[(d>=d1) & (d<d2)]
 	ni = di.shape[0]
-	sci = plt.scatter(xi,yi,s=50,marker='o',facecolor=[ci,]*3,edgecolor=[ci,]*3)
+	sci = plt.scatter(xi,yi,s=50,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
 	legend_scatters.append(sci)
 	legend_labels.append(str(int(d1))+u' - '+str(int(d2))+u' habs/km²')
 
