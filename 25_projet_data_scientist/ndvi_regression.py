@@ -118,8 +118,8 @@ results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.score
 print("* Neural Network Regression (Keras)")
 def make_model(optimizer='adam'):
     model = Sequential()
-    model.add(Dense(output_dim=1204,input_dim=512,init='uniform',activation='relu'))
-    #model.add(Dense(512, init='uniform', activation='relu'))
+    model.add(Dense(output_dim=1024,input_dim=512,init='uniform',activation='relu'))
+    model.add(Dense(512, init='uniform', activation='relu'))
     model.add(Dense(1, init='normal', activation='softmax'))
     #opt = SGD(lr=0.01, decay=1e-1, momentum=0.9, nesterov=True)
     #opt = Adagrad()
