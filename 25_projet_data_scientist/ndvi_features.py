@@ -61,7 +61,7 @@ data_file = sys.argv[1]
 usgs_file = sys.argv[2]
 year = sys.argv[3]
 
-nbins = 512;
+nbins = 1024;
 verbose = 0;
 record = 0;
 
