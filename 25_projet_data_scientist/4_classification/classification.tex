@@ -231,33 +231,33 @@ Le tableau \ref{regression_resultats} résume les résultats obtenus.
 \begin{table}[H]
 \begin{center}
 \begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{|c|c|}
+\begin{tabular}{|c|c|c|}
 \hline
-\multicolumn{2}{|c|}{\begin{bf}Régression\end{bf}} \\
+\multicolumn{3}{|c|}{\begin{bf}Régression (512 bins)\end{bf}} \\
 \hline 
-Modèle & Erreur de généralisation \\
+Modèle & Moyenne erreur de généralisation & Variance erreur de généralisation\\
 \hline 
-Régression & > 1\\
+Régression & > 1 & > 1\\
 \hline 
-Régression Ridge ($\lambda=1000$) & ~ 1 \\
+Régression Ridge ($\lambda=1000$) & ~ 1 & 0.005\\
 \hline 
-Régression Lasso ($\lambda=100$) & 0.960 \\
+Régression Lasso ($\lambda=100$) & 0.960 & 0.030\\
 \hline 
-Régression ElasticNet ($\lambda=10,l=0.75$) & 0.963 \\
+Régression ElasticNet ($\lambda=10,l=0.75$) & 0.963 & 0.020\\
 \hline
-Support Vector Régression à noyau gaussien & ~1 \\
+Support Vector Régression à noyau gaussien & ~1 & 0.05\\
 \hline
-Réseau de neurones régressif & 0.822\\
+Réseau de neurones régressif & 0.677 & 0.08\\
 \hline
-For\^{e}t d'arbres aléatoires régressifs & 0.4926\\
+For\^{e}t d'arbres aléatoires régressifs & 0.4926 & 0.037\\
 \hline
-Boosting d'arbres aléatoires régressifs & 0.739\\
+Boosting d'arbres aléatoires régressifs & 0.739 & 0.009\\
 \hline
 \end{tabular}
 \end{adjustbox}
 \end{center}
 \caption{Erreur de généralisation pour différents modèles régressifs}
-\label{regression_resultats}
+\label{regression_resultats_512}
 \end{table}
 
 On constate que le NDVI n'explique pas du tout la densité de manière linéaire, au vu des très mauvais scores obtenus pour la régression linéaire.\\
