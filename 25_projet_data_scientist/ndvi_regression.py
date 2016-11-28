@@ -22,6 +22,8 @@ from keras.layers import Dense
 from keras.wrappers.scikit_learn import KerasClassifier,KerasRegressor
 from keras.utils.np_utils import to_categorical
 from keras.optimizers import SGD,Adagrad,RMSprop,Adam,Nadam
+from keras.layers.convolutional import Convolution1D
+from keras.layers.pooling import MaxPooling1D
 
 print("Formatting data")
 
@@ -116,7 +118,7 @@ grid.fit(Xsc,y)
 results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
 
 print("* Neural Network Regression (Keras)")
-def make_model(optimizer='adam'):
+def make_nn(optimizer='adam'):
     model = Sequential()
     model.add(Dense(output_dim=1024,input_dim=512,init='uniform',activation='relu'))
     model.add(Dense(512, init='uniform', activation='relu'))
@@ -128,52 +130,38 @@ def make_model(optimizer='adam'):
     model.compile(loss='mean_squared_error', optimizer=optimizer, metrics=['mean_squared_error'])
     return model
 
-cl = KerasRegressor(make_model, nb_epoch=100)
+cl = KerasRegressor(make_nn, nb_epoch=100)
 optimizers = [
-Adagrad(lr=0.000001, epsilon=1e-08, decay=0.0),
-Adagrad(lr=0.00001, epsilon=1e-08, decay=0.0),
-Adagrad(lr=0.0001, epsilon=1e-08, decay=0.0),
-Adagrad(lr=0.001, epsilon=1e-08, decay=0.0),
-Adagrad(lr=0.01, epsilon=1e-08, decay=0.0),
-Adagrad(lr=0.1, epsilon=1e-08, decay=0.0),
-Adagrad(lr=0.000001, epsilon=1e-06, decay=0.0),
-Adagrad(lr=0.00001, epsilon=1e-06, decay=0.0),
-Adagrad(lr=0.0001, epsilon=1e-06, decay=0.0),
-Adagrad(lr=0.001, epsilon=1e-06, decay=0.0),
-Adagrad(lr=0.01, epsilon=1e-06, decay=0.0),
-Adagrad(lr=0.1, epsilon=1e-06, decay=0.0),
-Adagrad(lr=0.000001, epsilon=1e-04, decay=0.0),
-Adagrad(lr=0.00001, epsilon=1e-04, decay=0.0),
-Adagrad(lr=0.0001, epsilon=1e-04, decay=0.0),
-Adagrad(lr=0.001, epsilon=1e-04, decay=0.0),
-Adagrad(lr=0.01, epsilon=1e-04, decay=0.0),
-Adagrad(lr=0.1, epsilon=1e-04, decay=0.0),
-Adagrad(lr=0.000001, epsilon=1e-02, decay=0.0),
-Adagrad(lr=0.00001, epsilon=1e-02, decay=0.0),
-Adagrad(lr=0.0001, epsilon=1e-02, decay=0.0),
-Adagrad(lr=0.001, epsilon=1e-02, decay=0.0),
-Adagrad(lr=0.01, epsilon=1e-02, decay=0.0),
-Adagrad(lr=0.1, epsilon=1e-02, decay=0.0),
-RMSprop(lr=0.000001, rho=0.9, epsilon=1e-08, decay=0.0),
-RMSprop(lr=0.00001, rho=0.9, epsilon=1e-08, decay=0.0),
-RMSprop(lr=0.0001, rho=0.9, epsilon=1e-08, decay=0.0),
-RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0),
-RMSprop(lr=0.01, rho=0.9, epsilon=1e-08, decay=0.0),
-Nadam(lr=0.000001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004),
-Nadam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004),
-Nadam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004),
-Nadam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004),
-Nadam(lr=0.01, beta_1=0.9, beta_2=0.999, epsilon=1e-08, schedule_decay=0.004),
-SGD(lr=0.000001, clipnorm=1.),
-SGD(lr=0.00001, clipnorm=1.),
-SGD(lr=0.0001, clipnorm=1.),
-SGD(lr=0.001, clipnorm=1.),
-SGD(lr=0.01, clipnorm=1.),
-Adam(lr=0.000001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0),
-Adam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0),
-Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0),
-Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0),
-Adam(lr=0.01, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)]
+SGD(lr=0.000000001, clipnorm=1.)]
+
+param_grid = {'batch_size':[10000],'optimizer':optimizers}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(Xsc,y)
+
+print("* Convolutional Neural Network Regression (Keras)")
+def make_cnn(optimizer='adam'):
+    model = Sequential()
+    
+    model.add(Convolution1D(32,9,subsample_length=4,border_mode='same',activation='relu',input_shape=(1,512)))
+    model.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
+    
+    model.add(Convolution1D(32,3,border_mode='same',activation='relu'))
+    model.add(Convolution1D(32,3,border_mode='same',activation='relu'))
+    model.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
+    
+    model.add(Convolution1D(64,3,border_mode='same',activation='relu'))
+    model.add(Convolution1D(64,3,border_mode='same',activation='relu'))
+    model.add(MaxPooling1D(pool_length=2, stride=None, border_mode='valid'))
+    
+    model.add(Flatten())
+    model.add(Dense(512))
+    model.add(Activation('relu'))
+    model.add(Dense(1))
+    return model
+
+cl = KerasRegressor(make_cnn, nb_epoch=100)
+optimizers = [
+SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)]
 
 param_grid = {'batch_size':[100],'optimizer':optimizers}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
