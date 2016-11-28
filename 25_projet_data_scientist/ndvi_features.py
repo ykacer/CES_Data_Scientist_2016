@@ -59,6 +59,7 @@ cmap_ndvi = make_colormap([blue,f[0],blue,cyan,f[2],red,yellow,f[4],yellow,light
 
 data_file = sys.argv[1]
 usgs_file = sys.argv[2]
+year = sys.argv[3]
 
 nbins = 512;
 verbose = 0;
@@ -77,7 +78,7 @@ cities['latitude'] = np.array(data[u'LAT'])
 cities['longitude'] = np.array(data[u'LONG'])
 cities['nom'] = list(data[u'LIBMIN'])
 cities['surface'] = list(data[u'SURFACE'])
-cities['population'] = np.array(data[u'PMUN13'])
+cities['population'] = np.array(data[u'PMUN'+year])
 cities['densite'] =  cities['population']/cities['surface']
 cities['surface'] = np.array(data[u'SURFACE'])
 
