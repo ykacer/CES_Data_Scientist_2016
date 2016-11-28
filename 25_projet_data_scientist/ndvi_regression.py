@@ -97,8 +97,8 @@ scaler = StandardScaler()
 scaler.fit(X)  
 Xsc = scaler.transform(X)  
 
-cl = MLPRegressor(hidden_layer_sizes=(1000,500),alpha=0.0001,solver='sgd',learning_rate='adaptive',tol=0.0001,early_stopping=True,verbose=True)
-param_grid = {'learning_rate_init':[0.000005]}
+cl = MLPRegressor(hidden_layer_sizes=(1400,700),alpha=0.0001,solver='sgd',learning_rate='adaptive',tol=0.0001,early_stopping=True,verbose=True)
+param_grid = {'learning_rate_init':[0.00001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
 results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
@@ -174,9 +174,6 @@ Adam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0),
 Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0),
 Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0),
 Adam(lr=0.01, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)]
-
-
-
 
 param_grid = {'batch_size':[100],'optimizer':optimizers}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
