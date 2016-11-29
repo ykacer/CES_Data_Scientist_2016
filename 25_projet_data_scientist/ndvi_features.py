@@ -68,7 +68,7 @@ record = 0;
 folder = os.path.dirname(data_file);
 features_file = folder+"/ndvi_features.csv"
 features = codecs.open(features_file, 'w', 'utf-8')
-features.write('name,'+','.join(str(i) for i in np.arange(nbins).tolist())+',densite,population,surface\n')
+features.write('LIBMIN,'+','.join(str(i) for i in np.arange(nbins).tolist())+u',LAT,LONG,DENSITE,PMUN'+year+',SURFACE\n')
 
 data = pd.read_csv(data_file,encoding='utf-8',na_values="NaN",keep_default_na=False)
 data.dropna(how="any", inplace=True);
@@ -287,9 +287,7 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 		plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_histo.png')
 		plt.gcf().clear()
 
-	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(de))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
+	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(lt))+u','+unicode(str(lg))+u','+unicode(str(de))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
 	IDprev = ID
 features.close()
-
-
 
