@@ -10,7 +10,7 @@
 \usepackage{url}
 \usepackage{amsmath} % pour les cascades de fraction
 \usepackage{colortbl} % bfseries pour mettre une colonne en gras
-\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry} % pour les marges
+\usepackage[top=1cm, bottom=1cm, left=1cm, right=1cm]{geometry} % pour les marges
 
 
 \title{%
@@ -227,7 +227,7 @@ L'erreur de généralisation que nous présentons pour chaque modèle
 est celle qui utilise la meilleure combinaison d'hyperparamètres.\\
 Le nombre de sets pour la cross-validation a été fixé $5$.\\
 \\
-Le tableau \ref{regression_resultats} résume les résultats obtenus.
+Le tableau \ref{regression_resultats_512} résume les résultats obtenus pour un histogramme de ndvi à $512$ bins.
 \begin{table}[H]
 \begin{center}
 \begin{adjustbox}{max width=\textwidth}
@@ -258,6 +258,39 @@ Boosting d'arbres aléatoires régressifs & 0.739 & 0.009\\
 \end{center}
 \caption{Erreur de généralisation pour différents modèles régressifs}
 \label{regression_resultats_512}
+\end{table}
+
+Le tableau \ref{regression_resultats_1024} résume les résultats obtenus pour un histogramme de ndvi à $1024$ bins.
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{\begin{bf}Régression (1024 bins)\end{bf}} \\
+\hline 
+Modèle & Moyenne erreur de généralisation & Variance erreur de généralisation\\
+\hline 
+Régression & > 1 & > 1\\
+\hline 
+Régression Ridge ($\lambda=100$) & ~ 1 & 0.024\\
+\hline 
+Régression Lasso ($\lambda=100$) & 0.965 & 0.020\\
+\hline 
+Régression ElasticNet ($\lambda=100,l=0.75$) & 0.958 & 0.020\\
+\hline
+Support Vector Régression à noyau gaussien & ~1 & 0.05\\
+\hline
+Réseau de neurones régressif & 0.677 & 0.08\\
+\hline
+For\^{e}t d'arbres aléatoires régressifs & 0.4926 & 0.037\\
+\hline
+Boosting d'arbres aléatoires régressifs & 0.739 & 0.009\\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\caption{Erreur de généralisation pour différents modèles régressifs}
+\label{regression_resultats_1024}
 \end{table}
 
 On constate que le NDVI n'explique pas du tout la densité de manière linéaire, au vu des très mauvais scores obtenus pour la régression linéaire.\\
@@ -381,7 +414,7 @@ avec:
 \item[-] ${p_i}$, l'ensemble des prédictions associées et calculées via le modèle entrainé.
 \end{description}
 
-\section{Comparatif de plusieurs algorithmes régressifs}
+\section{Comparatif de plusieurs algorithmes régressifs} 
 
 Ici encore, nous présentons les erreurs de classification pour différents modèles, chaque modèle étant utilisé avec sa meilleure combinaison
 d'hyperparamètres.\\
@@ -406,6 +439,70 @@ Boosting d'arbres aléatoires & 0.043\\
 \label{classification_resultats}
 \end{table}
 \clearpage
+
+\chapter{Test pour la prédiction de densité de population en fonction du NDVI}
+
+\section{Erreur de test pour la régression}
+
+Nous avons rassembler les informations de longitude, latitude et densité de population des communes de plusieurs pays européens : Belgique, 
+Luxembourg, Pays-Bas et Suisse.\\
+Nous avons ensuite extrait les histogrammes de ndvi de chaque commune et tester la prédiction par le modèle des For\^{e}t d'arbres aléatoires régressifs
+\ref{regression_resultats_1024}, où l'erreur de généralisation est la meilleure obtenue sur les données françaises ($0.4926$).\\
+
+Nous présentons ci-après la vérité-terrain et la prédiction de densité pour chacun de ces pays, sous forme de carte légendée \ref{test_france}
+,\ref{test_belgique},\ref{test_luxembourg},\ref{test_pays-bas},\ref{test_suisse}:\\
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{images/france_ground_truth.png}
+\includegraphics[scale=0.4]{images/france_Random_Forest_Regression.png}
+\end{center}
+\caption{Test régressif de prédiction de densité pour la France (erreur $0.297$)}
+\label{test_france}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/belgique_ground_truth.png}
+\includegraphics[scale=0.5]{images/belgique_Random_Forest_Regression.png}
+\end{center}
+\caption{Test régressif de prédiction de densité pour la Belgique (erreur $0.439$)}
+\label{test_belgique}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/luxembourg_ground_truth.png}
+\includegraphics[scale=0.5]{images/luxembourg_Random_Forest_Regression.png}
+\end{center}
+\caption{Test régressif de prédiction de densité pour le Luxembourg (erreur $0.485$)}
+\label{test_luxembourg}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/pays-bas_ground_truth.png}
+\includegraphics[scale=0.5]{images/pays-bas_Random_Forest_Regression.png}
+\end{center}
+\caption{Test régressif de prédiction de densité pour les Pays-Bas (erreur $0.619$)}
+\label{test_pays-bas}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/suisse_ground_truth.png}
+\includegraphics[scale=0.5]{images/suisse_Random_Forest_Regression.png}
+\end{center}
+\caption{Test régressif de prédiction de densité pour la Suisse (erreur $0.616$)}
+\label{test_suisse}
+\end{figure}
+\clearpage
+
+
 %Paris 21288
 %Versailles 3289
 %Fontainebleau 89
