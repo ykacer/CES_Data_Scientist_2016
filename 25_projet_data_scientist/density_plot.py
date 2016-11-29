@@ -19,6 +19,9 @@ cities_file = sys.argv[1]
 folder = os.path.dirname(cities_file)
 year = sys.argv[2]
 
+if len(sys.argv)==4:
+	density_imagename = folder+u'/'+sys.argv[3]
+
 df = pd.read_csv(cities_file,encoding='utf-8')
 df.dropna(how='any',inplace=True)
 df = df[df.SURFACE != 0]
@@ -44,8 +47,11 @@ s = df[u'SURFACE'].as_matrix()
 p = df[u'PMUN'+year].as_matrix()
 
 
-d = p/s
-
+if 'PREDICTION' in df.columns:
+    d = df['PREDICTION'].as_matrix()
+else:
+    d = p/s
+    density_imagename = folder+u'/density.png'
 
 def make_colormap(seq):
     """ Return a LinearSegmentedColormap
@@ -120,5 +126,5 @@ for i,cl in enumerate(colors):
 plt.xlabel('x Web Mercator (km)')
 plt.ylabel('y Web Mercator (km)')
 ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.95, 0.5),fontsize = 'large')
-plt.savefig(folder+'/density.png')
+plt.savefig(density_imagename)
 plt.show()
