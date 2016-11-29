@@ -22,6 +22,8 @@ year = sys.argv[2]
 df = pd.read_csv(cities_file,encoding='utf-8')
 df.dropna(how='any',inplace=True)
 df = df[df.SURFACE != 0]
+print str(df.shape[0])+" cities"
+
 if year==u'13':
     df = df[df.PMUN13 != 0]
 
