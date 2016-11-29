@@ -125,6 +125,6 @@ for i,cl in enumerate(colors):
 
 plt.xlabel('x Web Mercator (km)')
 plt.ylabel('y Web Mercator (km)')
-ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.95, 0.5),fontsize = 'large')
-plt.savefig(density_imagename)
+ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.90, 0.5),fontsize = 'small')
+plt.savefig(density_imagename,dpi=fig.dpi)
 plt.show()
