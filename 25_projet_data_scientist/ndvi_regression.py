@@ -17,6 +17,8 @@ from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
 from sklearn.neural_network import MLPRegressor
 
+from sklearn.externals import joblib
+
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.wrappers.scikit_learn import KerasClassifier,KerasRegressor
@@ -25,9 +27,13 @@ from keras.optimizers import SGD,Adagrad,RMSprop,Adam,Nadam
 from keras.layers.convolutional import Convolution1D
 from keras.layers.pooling import MaxPooling1D
 
+import os
+
 print("Formatting data")
 
-data = pd.read_csv('France/ndvi_features.csv')
+data = pd.read_csv('France/ndvi_features.csv',encoding='utf-8',na_values='NaN')
+data.dropna(how='any',inplace=True)
+data = data[data.surface != 0]
 variables = [v for v in data.columns if v not in ['name','population','surface','densite']]
 y = data['population'].as_matrix()/data['surface'].as_matrix(); 
 X = data[variables].as_matrix(); 
@@ -42,28 +48,28 @@ cl = linear_model.LinearRegression()
 param_grid = {'fit_intercept':[True,False]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
-results.append(['Linear Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['Linear Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Ridge Regression")
 cl = linear_model.Ridge()
 param_grid = {'fit_intercept':[True,False],'alpha':[0.001,0.01,0.1,1.0,10.0,100.0,1000.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
-results.append(['Ridge Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['Ridge Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Lasso Regression")
 cl = linear_model.Lasso()
 param_grid = {'fit_intercept':[True,False],'alpha':[0.01,0.1,1.0,10.0,100.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
-results.append(['Lasso Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['Lasso Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* ElasticNet Regression")
 cl = linear_model.ElasticNet()
 param_grid = {'fit_intercept':[True,False],'alpha':[0.01,0.1,1.0,10.0,100.0],'l1_ratio':[0.25,0.5,0.75]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
-results.append(['ElasticNet Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['ElasticNet Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Ransac Regression")
 base_estimator = linear_model.LinearRegression(fit_intercept=True)
@@ -78,21 +84,21 @@ param_grid = {'C':[10.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
-results.append(['Support Vector Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),info])
+results.append(['Support Vector Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Random Forest Regressor")
 cl = RandomForestRegressor(max_depth=19,min_samples_split=10,min_samples_leaf=5,max_features=16,random_state=0)
-param_grid = {'n_estimators':80}
+param_grid = {'n_estimators':[80]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
-results.append(['Random Forest Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['Random Forest Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Gradient Boosting Regressor")
 cl = GradientBoostingRegressor(learning_rate=0.01,max_depth=8,min_samples_split=500,min_samples_leaf=50,max_features='sqrt',subsample=0.8,random_state=0)
 param_grid = {'n_estimators':range(20,81,20)}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
-results.append(['Gradient Boosting Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['Gradient Boosting Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Multi Layer Perceptron Regressor")
 scaler = StandardScaler()  
@@ -103,19 +109,19 @@ cl = MLPRegressor(hidden_layer_sizes=(1400,700),alpha=0.0001,solver='sgd',learni
 param_grid = {'learning_rate_init':[0.00001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
-results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 cl = MLPRegressor(hidden_layer_sizes=(1000,500),alpha=0.0001,solver='sgd',power_t=0.2,learning_rate='invscaling',tol=0.0001,early_stopping=True,verbose=True)
 param_grid = {'learning_rate_init':[0.000005]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
-results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 cl = MLPRegressor(hidden_layer_sizes=(1000),solver='lbfgs',tol=0.0001,verbose=True)
 param_grid = {'learning_rate_init':[0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
-results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),""])
+results.append(['Multi Layer Perceptron Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Neural Network Regression (Keras)")
 def make_nn(optimizer='adam'):
@@ -131,12 +137,11 @@ def make_nn(optimizer='adam'):
     return model
 
 cl = KerasRegressor(make_nn, nb_epoch=100)
-optimizers = [
-SGD(lr=0.000000001, clipnorm=1.)]
-
+optimizers = [SGD(lr=0.000000001, clipnorm=1.)]
 param_grid = {'batch_size':[10000],'optimizer':optimizers}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
+results.append(['Neural Network Regression (Keras)',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Convolutional Neural Network Regression (Keras)")
 def make_cnn(optimizer='adam'):
@@ -160,10 +165,18 @@ def make_cnn(optimizer='adam'):
     return model
 
 cl = KerasRegressor(make_cnn, nb_epoch=100)
-optimizers = [
-SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)]
-
+optimizers = [SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)]
 param_grid = {'batch_size':[100],'optimizer':optimizers}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
+results.append(['Convolutional Neural Network Regression (Keras)',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
+try:
+	os.mkdir('model_regression')
+except:
+	pass
+
+for res in results:
+    name = res[0];
+    model = res[6];
+    joblib.dump(model,u'model_regression/'+name+u'.pkl')
