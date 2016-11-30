@@ -43,8 +43,8 @@ lg = df[u'LONG'].as_matrix()
 lt = df[u'LAT'].as_matrix()
 x = np.array([Proj(init="EPSG:3857")(longi,lat)[0] for lat,longi in izip(lt,lg)]).astype(np.int)/1000.0
 y = np.array([Proj(init="EPSG:3857")(longi,lat)[1] for lat,longi in izip(lt,lg)]).astype(np.int)/1000.0
-s = df[u'SURFACE'].as_matrix()
-p = df[u'PMUN'+year].as_matrix()
+s = df[u'SURFACE'].as_matrix().astype(np.float64)
+p = df[u'PMUN'+year].as_matrix().astype(np.float64)
 
 
 if 'PREDICTION' in df.columns:
@@ -52,6 +52,11 @@ if 'PREDICTION' in df.columns:
 else:
     d = p/s
     density_imagename = folder+u'/density.png'
+
+dpi = 1000
+size_pt = 50
+if (y.max()-y.min())>1000:
+    size_pt = 5
 
 def make_colormap(seq):
     """ Return a LinearSegmentedColormap
@@ -91,6 +96,32 @@ colors = [[49,140,231],
  [61,0,82],
  [51,0,102]]
 
+colors_error = [[0,0,255],
+[28,28,255],
+[57,57,255],
+[85,85,255],
+[113,113,255],
+[142,142,255],
+[170,170,255],
+[198,198,255],
+[227,227,255],
+[0,0,0],
+#[255,51,153],
+#[255,51,153],
+#[255,51,153],
+#[255,51,153],
+[227,255,227],
+[198,255,198],
+[170,255,170],
+[142,255,142],
+[113,255,113],
+[85,255,85],
+[57,255,57],
+[28,255,28],
+[0,255,0]]
+
+
+# plot density
 density = np.asarray([-100000,0,5,15,30,50,80,110,150,250,500,1000,2000,4000,8000,15000,20000,25000,30000,35000,40000,45000]).astype(np.float64)
 frontiers = density
 f = (frontiers-np.min(frontiers))/(np.max(frontiers)-np.min(frontiers))
@@ -110,6 +141,7 @@ fig = plt.figure()
 ax = plt.subplot(111)
 legend_labels = []
 legend_scatters = []
+N =0 
 for i,cl in enumerate(colors):
 	ci = np.asarray(cl)/255.0
 	d1 = density[i]
@@ -119,12 +151,73 @@ for i,cl in enumerate(colors):
 	di = d[(d>=d1) & (d<d2)]
 	si = s[(d>=d1) & (d<d2)]
 	ni = di.shape[0]
-	sci = plt.scatter(xi,yi,s=50,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+	N = N+ni
+	sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
 	legend_scatters.append(sci)
 	legend_labels.append(str(int(d1))+u' - '+str(int(d2))+u' habs/km²')
 
+print u'******** N : '+str(N)+' points'
 plt.xlabel('x Web Mercator (km)')
 plt.ylabel('y Web Mercator (km)')
-ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.90, 0.5),fontsize = 'small')
-plt.savefig(density_imagename,dpi=fig.dpi)
+ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.85, 0.5),fontsize = 'x-small')
+plt.savefig(density_imagename,dpi=1000)
 plt.show()
+
+if 'PREDICTION' in df.columns:
+	error = (d-p/s)/(p/s)*100
+	density_error = np.asarray([-10000000,-100,-50,-30,-20,-10,-5,-3,-2,-1,1,2,3,5,10,20,30,50,100,10000000]).astype(np.float64)
+	# plot density errors
+	frontiers = density_error
+	f = (frontiers-np.min(frontiers))/(np.max(frontiers)-np.min(frontiers))
+	color_sequence = []
+	color_sequence.append(np.asarray(colors_error[0])/255.0)
+	for i,cl in enumerate(colors_error):
+    		color_sequence.append(f[i])
+    		color_sequence.append(np.asarray(cl)/255.0)
+    		color_sequence.append(np.asarray(cl)/255.0)
+
+	color_sequence.append(f[-1])
+	color_sequence.append(np.asarray(colors_error[-1])/255.0)
+
+	cmap_density_error = make_colormap(color_sequence)
+
+	fig = plt.figure()
+	ax = plt.subplot(111)
+	legend_labels = []
+	legend_scatters = []
+	N = 0
+	for i,cl in enumerate(colors_error):
+		ci = np.asarray(cl)/255.0
+		e1 = density_error[i]
+		e2 = density_error[i+1]
+		xi = x[(error>=e1) & (error<e2)]
+		yi = y[(error>=e1) & (error<e2)]
+		di = d[(error>=e1) & (error<e2)]
+		si = s[(error>=e1) & (error<e2)]
+		ni = di.shape[0]
+		N = N+ni
+		sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+		legend_scatters.append(sci)
+		if i==0:
+			legend_labels.append(u'< '+str(int(e2))+u' %')
+		elif i==len(colors_error)-1:
+			legend_labels.append(u'> '+str(int(e1))+u' %')
+		else:
+			legend_labels.append(str(int(e1))+u' à '+str(int(e2))+u' %')
+
+	print u'******** N : '+str(N)+' points'
+	plt.xlabel('x Web Mercator (km)')
+	plt.ylabel('y Web Mercator (km)')
+	ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.85, 0.5),fontsize = 'x-small')
+
+	density_error_imagename = density_imagename[:-4]+u'_error.png'
+	plt.savefig(density_error_imagename,dpi=dpi)
+	plt.show()
+
+	density_error_histoname = density_imagename[:-4]+u'_error_histo.png'
+	fig = plt.figure();
+	h,b = np.histogram(error,range(-100,100,1))
+	plt.bar(b[:-1],h)
+	plt.xlabel('error bins (%)')
+	plt.savefig(density_error_histoname,dpi=dpi)
+	plt.show()
