@@ -62,13 +62,13 @@ usgs_file = sys.argv[2]
 year = sys.argv[3]
 
 nbins = 1024;
-verbose = 0;
-record = 0;
+verbose = 1;
+record = 1;
 
 folder = os.path.dirname(data_file);
 features_file = folder+"/ndvi_features.csv"
 features = codecs.open(features_file, 'w', 'utf-8')
-features.write('LIBMIN,'+','.join(str(i) for i in np.arange(nbins).tolist())+u',LAT,LONG,DENSITE,PMUN'+year+',SURFACE\n')
+features.write('LIBMIN,'+','.join(str(i) for i in np.arange(nbins).tolist())+u',LAT,LONG,DENSITE,PMUN'+year+',SURFACE,COVERING\n')
 
 data = pd.read_csv(data_file,encoding='utf-8',na_values="NaN",keep_default_na=False)
 data.dropna(how="any", inplace=True);
@@ -148,10 +148,14 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 		os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
 	    for band in [2,3,4,5]:
 		os.system('rm '+folder+'/'+ID+'/'+ID+'_proj_B'+str(band)+'_8.TIF');
-	
+
+	if os.path.isfile(folder+'/'+ID+'_QUALITY.TIF')==False:
+            os.popen('gdalwarp -t_srs EPSG:3857 '+ folder+'/'+ID+'/'+ID+'_BQA.TIF '+folder+"/"+ID+"_QUALITY.TIF");
+
 	if ID != IDprev:
 		ndvi_grey = (cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1).astype(np.float32))/(2**15-1)-1;
 		ndvi_grey[ndvi_grey>1]=1
+		quality = cv2.imread(folder+'/'+ID+'_QUALITY.TIF',-1);
 	if verbose:
 		print "ndvi min  :",np.min(ndvi_grey)
 		print "ndvi max  :",np.max(ndvi_grey)
@@ -187,15 +191,6 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 		ul_y = geo_t[3]
 		br_x = geo_t[0] + geo_t[1]*geo.RasterXSize
 		br_y = geo_t[3] + geo_t[5]*geo.RasterYSize
-		#ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-		#print "listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1"
-		#ul_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
-		#ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-		#ul_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
-		#br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-		#br_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
-		#br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-		#br_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_RGB.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
 		if verbose:
 			print "ul_y : ",ul_y
 			print "br_y : ",br_y
@@ -235,14 +230,6 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 	ul_y = geo_t[3]
 	br_x = geo_t[0] + geo_t[1]*geo.RasterXSize
 	br_y = geo_t[3] + geo_t[5]*geo.RasterYSize
-	#ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-	#ul_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
-	#ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-	#ul_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
-	#br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-	#br_x = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1")[1]);
-	#br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-	#br_y = float(commands.getstatusoutput("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2")[1]);
 	if verbose:
 		print "ul_y : ",ul_y
 		print "br_y : ",br_y
@@ -287,7 +274,53 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 		plt.savefig(folder_cities+'/'+name+'/'+name+'_ndvi_histo.png')
 		plt.gcf().clear()
 
-	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(lt))+u','+unicode(str(lg))+u','+unicode(str(de))+u','+unicode(str(p))+u','+unicode(str(s))+u'\n')
+	## FORM CLOUD COVERING ZOOM OF THE CITY
+        geo = gdal.Open(folder+"/"+ID+"_QUALITY.TIF")
+        geo_t = geo.GetGeoTransform()
+        ul_x = geo_t[0]
+        ul_y = geo_t[3]
+        br_x = geo_t[0] + geo_t[1]*geo.RasterXSize
+        br_y = geo_t[3] + geo_t[5]*geo.RasterYSize
+	if verbose:
+        	print "ul_y : ",ul_y
+        	print "br_y : ",br_y
+        	print "ul_x : ",ul_x
+        	print "br_x : ",br_x
+        [c_x,c_y]=Proj("+init=EPSG:3857 +units=m +no_defs")(lg,lt)
+	if verbose:
+        	print "c_y : ",c_y
+       		print "c_x : ",c_x
+        d = np.sqrt(s)*1000 # window size in meters 
+	if verbose:
+        	print "d : ",d
+        	print "h,w quality : ",quality.shape
+
+        x1 = int(float(c_x-d/2-ul_x)/(br_x-ul_x)*quality.shape[1])
+        y1 = int(float(c_y-d/2-ul_y)/(br_y-ul_y)*quality.shape[0])
+        x2 = int(float(c_x+d/2-ul_x)/(br_x-ul_x)*quality.shape[1])
+        y2 = int(float(c_y+d/2-ul_y)/(br_y-ul_y)*quality.shape[0])
+        if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) | (x2>quality.shape[1]) | (y2>quality.shape[0]) ):
+                print name+" not in "+ID+"..."
+                continue
+	if verbose:
+        	print "x1 : ",x1
+        	print "x2 : ",x2
+        	print "y1 : ",y1
+        	print "y2 : ",y2
+
+        zoom_quality = quality[y2:y1,x1:x2];
+	if verbose:
+        	print "zoom quality shape : ",zoom_quality.shape
+
+        zoom_quality_cloud = 65535*np.ones_like(zoom_quality)
+        zoom_quality_cloud[zoom_quality<49152]=49152
+        zoom_quality_cloud[zoom_quality<32768]=32768
+        zoom_quality_cloud[zoom_quality<16384]=16384
+	q = zoom_quality.mean()/65535.0
+	if record:
+		cv2.imwrite((folder_cities+'/'+name+'/'+name+'_quality.png').encode("utf-8"),zoom_quality);
+
+	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(lt))+u','+unicode(str(lg))+u','+unicode(str(de))+u','+unicode(str(p))+u','+unicode(str(s))+u','+unicode(str(q))+u'\n')
 	IDprev = ID
 features.close()
 

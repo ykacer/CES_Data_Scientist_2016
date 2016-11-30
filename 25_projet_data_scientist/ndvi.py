@@ -106,12 +106,18 @@ for ID,month in izip(image_names,image_months):
                 os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
             os.popen('gdalwarp -t_srs EPSG:3857 '+ folder+'/'+ID+'_RGB_temp.TIF '+folder+"/"+ID+"_RGB.TIF");
 	    os.system('rm '+folder+'/'+ID+'_RGB_temp.TIF')
+
+	if os.path.isfile(folder+'/'+ID+'_QUALITY.TIF')==False:
+            os.popen('gdalwarp -t_srs EPSG:3857 '+ folder+'/'+ID+'/'+ID+'_BQA.TIF '+folder+"/"+ID+"_QUALITY.TIF");
+
 	#continue;
         ndvi_grey = (cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1).astype(np.float32))/(2**15-1)-1;
         ndvi_grey[ndvi_grey>1]=1
         print "ndvi min  :",np.min(ndvi_grey)
         print "ndvi max  :",np.max(ndvi_grey)
 	rgb = cv2.imread(folder+'/'+ID+'_RGB.TIF',-1);
+	quality = cv2.imread(folder+'/'+ID+'_QUALITY.TIF',-1);
+
         if cmap_ndvi == []:
                 cdict = {}
 	        os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvi')
@@ -134,15 +140,6 @@ for ID,month in izip(image_names,image_months):
                 cmap_ndvi = make_colormap(seq)
 
         ## FORM RGB ZOOM OF THE CITY
-
-        #ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-        #ul_x = float(os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B2.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
-        #ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-        #ul_y = float(os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B2.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
-        #br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-        #br_x = float(os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B2.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
-        #br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-        #br_y = float(os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B2.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
 	geo = gdal.Open(folder+"/"+ID+"_RGB.TIF")
 	geo_t = geo.GetGeoTransform()
 	ul_x = geo_t[0]
@@ -175,16 +172,6 @@ for ID,month in izip(image_names,image_months):
         print "zoom rgb shape : ",zoom_rgb.shape
 
         ## FORM NDVI ZOOM OF THE CITY
-
-        #ul_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-        #ul_x = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
-        #ul_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_UL_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-        #ul_y = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Upper Left' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
-        #br_x = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_X_PRODUCT | cut -d' ' -f7").read());
-        #br_x = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f1").read());
-        #br_y = float(os.popen("cat "+folder+"/"+ID+"/"+ID+"_MTL.txt | grep CORNER_LR_PROJECTION_Y_PRODUCT | cut -d' ' -f7").read());
-        #br_y = float(os.popen("listgeo "+folder+"/"+ID+"_NDVI.TIF | grep 'Lower Right' | cut -d'(' -f2 | cut -d')' -f1 | cut -d',' -f2").read());
-	geo = gdal.Open(folder+"/"+ID+"_NDVI.TIF")
 	geo_t = geo.GetGeoTransform()
 	ul_x = geo_t[0]
 	ul_y = geo_t[3]
@@ -230,6 +217,44 @@ for ID,month in izip(image_names,image_months):
         plt.plot(bins[:-1],histo)
 	print folder+'/'+name+'/'+month+'_ndvi_histo.png'
         plt.savefig(folder+'/'+name+'/'+month+'_ndvi_histo.png')
+
+	## FORM CLOUD COVERING ZOOM OF THE CITY
+	geo = gdal.Open(folder+"/"+ID+"_QUALITY.TIF")
+	geo_t = geo.GetGeoTransform()
+	ul_x = geo_t[0]
+	ul_y = geo_t[3]
+        br_x = geo_t[0] + geo_t[1]*geo.RasterXSize
+        br_y = geo_t[3] + geo_t[5]*geo.RasterYSize
+
+        print "ul_y : ",ul_y
+        print "br_y : ",br_y
+        print "ul_x : ",ul_x
+        print "br_x : ",br_x
+        [c_x,c_y]=Proj("+init=EPSG:3857 +units=m +no_defs")(c_long,c_lat)
+        print "c_y : ",c_y
+        print "c_x : ",c_x
+        d = np.sqrt(surface)*1000 # window size in meters 
+        print "d : ",d
+        print "h,w quality : ",quality.shape
+        x1 = int(float(c_x-d/2-ul_x)/(br_x-ul_x)*rgb.shape[1])
+        y1 = int(float(c_y-d/2-ul_y)/(br_y-ul_y)*rgb.shape[0])
+        x2 = int(float(c_x+d/2-ul_x)/(br_x-ul_x)*rgb.shape[1])
+        y2 = int(float(c_y+d/2-ul_y)/(br_y-ul_y)*rgb.shape[0])
+	if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) | (x2>quality.shape[1]) | (y2>quality.shape[0]) ):
+		print name+" not in "+ID+"..."
+		continue
+        print "x1 : ",x1
+        print "x2 : ",x2
+        print "y1 : ",y1
+        print "y2 : ",y2
+        zoom_quality = quality[y2:y1,x1:x2];
+        print "zoom quality shape : ",zoom_quality.shape
+	zoom_quality_cloud = 65535*np.ones_like(zoom_quality)
+	zoom_quality_cloud[zoom_quality<49152]=49152
+	zoom_quality_cloud[zoom_quality<32768]=32768
+	zoom_quality_cloud[zoom_quality<16384]=16384
+        cv2.imwrite(folder+'/'+name+'/'+month+'_cloud_quality.png',zoom_quality_cloud);
+
 
 histo_per_month['density'] = densite
 histo_per_month['surface'] = surface
