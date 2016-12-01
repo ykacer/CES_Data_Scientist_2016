@@ -19,7 +19,7 @@ data.dropna(how='any',inplace=True)
 data = data[data.SURFACE != 0]
 print(str(data.shape[0])+" cities")
 
-variables = [v for v in data.columns if v not in ['INDEX','LIBMIN','PMUN','PMUN13','PMUN14','PMUN15','PMUN16','LAT','LONG','SURFACE','DENSITE']]
+variables = [v for v in data.columns if v.isdigit()]
 y = data['DENSITE'].as_matrix()
 X = data[variables].as_matrix();
 clf = joblib.load(model)
@@ -46,6 +46,7 @@ elif u'PMUN16' in data.columns:
 	year = u'16'
 if u'PMUN13' in data.columns:
 	year = u'13'
+
 print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
 os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
 
