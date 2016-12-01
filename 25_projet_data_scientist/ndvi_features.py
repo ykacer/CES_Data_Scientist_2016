@@ -62,8 +62,8 @@ usgs_file = sys.argv[2]
 year = sys.argv[3]
 
 nbins = 1024;
-verbose = 1;
-record = 1;
+verbose = 0;
+record = 0;
 
 folder = os.path.dirname(data_file);
 features_file = folder+"/ndvi_features.csv"
@@ -137,9 +137,6 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 	if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False:
 	    os.system('/usr/bin/python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_proj_B4.TIF '+folder+'/'+ID+'/'+ID+'_proj_B5.TIF '+folder+'/'+ID+'_NDVI.TIF')
 
-	#projection = os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B4.TIF | grep 'PCS =' | cut -c7-11").read()[:-1]
-	#print "projection : EPSG:",projection
-
 	if os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False:
 	    for band in [2,3,4]:
 		os.system('gdal_contrast_stretch -ndv 0 -linear-stretch 70 30 '+folder+'/'+ID+'/'+ID+'_proj_B'+str(band)+'.TIF '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
@@ -162,17 +159,17 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 	if cmap_ndvi == []:
 		cdict = {}
 		os.system('/usr/local/bin/landsat process '+folder+'/'+ID+' --ndvi')
-		#os.popen("gdalwarp -t_srs EPSG:"+projection+" ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF");
-		#os.popen("cp ~/landsat/processed/"+ID+"/"+ID+"_NDVI.TIF "+ folder+"/"+ID+"_NDVI.TIF")
 		if ID != IDprev:
 			ndvi = cv2.imread(folder+'/'+ID+'_NDVI.TIF',-1);
-		print ndvi_grey.shape
-		print ndvi.shape
+		if verbose:
+			print ndvi_grey.shape
+			print ndvi.shape
 		for j in np.arange(ndvi_grey.shape[0]):
 		    for i in np.arange(ndvi_grey.shape[1]):
 		        cdict[ndvi_grey[j,i]] = ndvi[j,i,:]/255.0
-		print "creating colormap for ndvi image"
-		print len(cdict.keys())
+		if verbose:
+			print "creating colormap for ndvi image"
+			print len(cdict.keys())
 		seq = [];
 		for i in np.arange(0,1.01,0.1):
 		    if int(255*i) in cdict.keys():
@@ -299,7 +296,7 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
         y1 = int(float(c_y-d/2-ul_y)/(br_y-ul_y)*quality.shape[0])
         x2 = int(float(c_x+d/2-ul_x)/(br_x-ul_x)*quality.shape[1])
         y2 = int(float(c_y+d/2-ul_y)/(br_y-ul_y)*quality.shape[0])
-        if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) | (x2>quality.shape[1]) | (y2>quality.shape[0]) ):
+        if ( (x1<0) | (x2<0) | (y1<0) | (y2<0) | (x2>=quality.shape[1]) | (y2>=quality.shape[0]) ):
                 print name+" not in "+ID+"..."
                 continue
 	if verbose:
@@ -312,13 +309,15 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 	if verbose:
         	print "zoom quality shape : ",zoom_quality.shape
 
-        zoom_quality_cloud = 65535*np.ones_like(zoom_quality)
-        zoom_quality_cloud[zoom_quality<49152]=49152
-        zoom_quality_cloud[zoom_quality<32768]=32768
-        zoom_quality_cloud[zoom_quality<16384]=16384
-	q = zoom_quality.mean()/65535.0
+        zoom_quality_cloud = np.zeros_like(zoom_quality).astype(np.float64)
+        zoom_quality_cloud[zoom_quality==61440]=1.0
+        zoom_quality_cloud[zoom_quality==59424]=1.0
+        zoom_quality_cloud[zoom_quality==57344]=1.0
+        zoom_quality_cloud[zoom_quality==56320]=1.0
+        zoom_quality_cloud[zoom_quality==53248]=1.0
+	q = 100.0*zoom_quality_cloud.mean()
 	if record:
-		cv2.imwrite((folder_cities+'/'+name+'/'+name+'_quality.png').encode("utf-8"),zoom_quality);
+		cv2.imwrite((folder_cities+'/'+name+'/'+name+'_quality.png').encode("utf-8"),65535.0*zoom_quality_cloud);
 
 	features.write(unicode(name)+u','+u",".join(unicode(str(i)) for i in histo.tolist())+u','+unicode(str(lt))+u','+unicode(str(lg))+u','+unicode(str(de))+u','+unicode(str(p))+u','+unicode(str(s))+u','+unicode(str(q))+u'\n')
 	IDprev = ID

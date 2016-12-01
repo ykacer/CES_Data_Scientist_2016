@@ -249,11 +249,15 @@ for ID,month in izip(image_names,image_months):
         print "y2 : ",y2
         zoom_quality = quality[y2:y1,x1:x2];
         print "zoom quality shape : ",zoom_quality.shape
-	zoom_quality_cloud = 65535*np.ones_like(zoom_quality)
-	zoom_quality_cloud[zoom_quality<49152]=49152
-	zoom_quality_cloud[zoom_quality<32768]=32768
-	zoom_quality_cloud[zoom_quality<16384]=16384
-        cv2.imwrite(folder+'/'+name+'/'+month+'_cloud_quality.png',zoom_quality_cloud);
+	zoom_quality_cloud = np.zeros_like(zoom_quality).astype(np.float64)
+        zoom_quality_cloud[zoom_quality==61440]=1.0
+        zoom_quality_cloud[zoom_quality==59424]=1.0
+        zoom_quality_cloud[zoom_quality==57344]=1.0
+        zoom_quality_cloud[zoom_quality==56320]=1.0
+        zoom_quality_cloud[zoom_quality==53248]=1.0
+	q = 100*zoom_quality_cloud.mean()
+	print "cloud covering : "+str(q)+"%"
+        cv2.imwrite(folder+'/'+name+'/'+month+'_cloud_quality.png',65535.0*zoom_quality_cloud);
 
 
 histo_per_month['density'] = densite
