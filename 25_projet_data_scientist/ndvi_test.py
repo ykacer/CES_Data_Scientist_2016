@@ -26,6 +26,7 @@ clf = joblib.load(model)
 yp = clf.predict(X)
 data['PREDICTION'] = yp
 error = 1-clf.score(X,y)
+data['ERROR'] = error
 print("error : "+str(error))
 
 try:
