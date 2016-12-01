@@ -33,14 +33,11 @@ if log:
 
 if year==u'13':
     df = df[df.PMUN13 != 0]
-
-if year==u'14':
+elif year==u'14':
     df = df[df.PMUN14 != 0]
-
-if year==u'15':
+elif year==u'15':
     df = df[df.PMUN15 != 0]
-
-if year==u'16':
+elif year==u'16':
     df = df[df.PMUN16 != 0]
 
 name = df['LIBMIN'].tolist()
@@ -50,7 +47,6 @@ x = np.array([Proj(init="EPSG:3857")(longi,lat)[0] for lat,longi in izip(lt,lg)]
 y = np.array([Proj(init="EPSG:3857")(longi,lat)[1] for lat,longi in izip(lt,lg)]).astype(np.int)/1000.0
 s = df[u'SURFACE'].as_matrix().astype(np.float64)
 p = df[u'PMUN'+year].as_matrix().astype(np.float64)
-
 
 if 'PREDICTION' in df.columns:
     d = df['PREDICTION'].as_matrix()
@@ -258,6 +254,20 @@ if 'PREDICTION' in df.columns:
 	plt.xlabel('error bins (%)')
 	plt.savefig(density_error_histoname,dpi=dpi)
 	plt.show()
+
+if 'CLASSIFICATION' in df.columns:
+    categorization = [500,2000,5000,10000,13000]
+    nc = len(categorization)
+    target_names = []
+    target_names.append(u'0 - '+str(categorization[0])+u' habs/km²')
+    for i in np.arange(nc-1):
+        c1 = str(categorization[i])
+        c2 = str(categorization[i+1])
+        target_names.append(c1+u' - '+c2+u' habs/km²')
+    target_names.append(u'> '+str(categorization[-1])+u' habs/km²')
+
+
+
 
 if 'COVERING' in df.columns:
 	cloud_covering = np.asarray([0,1,2,5,10,13,20,25,30,50,100]).astype(np.float64)
