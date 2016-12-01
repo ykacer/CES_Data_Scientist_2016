@@ -87,7 +87,7 @@ param_grid = {'C':[10.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
-info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predictX), y))
+info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predictX), y)
 results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Random Forest Classification")
@@ -106,20 +106,21 @@ grid.fit(X,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
 results.append(['Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-print("* Neural Network Classification")
+print("* TensorFlow Neural Network Classification")
 def make_model():
     model = Sequential()
     model.add(Dense(output_dim=1204,input_dim=512,init='uniform',activation='relu'))
     model.add(Dense(512, init='uniform', activation='relu'))
-    model.add(Dense(6, init='uniform', activation='softmax'))
+    model.add(Dense(nc+1, init='uniform', activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
 cl = KerasClassifier(make_model, nb_epoch=200)
 param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
-grid.fit(X,to_categorical(y,6))
-results.append(['Neural Network Classification',scores,best_score_,best_params_,""])
+grid.fit(X,to_categorical(y,nc+1))
+info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X),to_categorical(y,nc+1)))
+results.append(['Neural Network Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 try:
     os.mkdir('model_classification')
