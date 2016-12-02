@@ -14,22 +14,42 @@ import matplotlib.colors as mcolors
 import matplotlib as mpl
 c = mcolors.ColorConverter().to_rgb
 
+from sklearn import metrics
+
 from pyproj import Proj
 
-cities_file = sys.argv[1]
-folder = os.path.dirname(cities_file)
-year = sys.argv[2]
+#cities_file = 'Pays-Bas/test/Random_Forest_Regression_prediction.csv'
+#year = u'14'
+#model = 'Random_Forest_classification'
+#narg = 4
 
-if len(sys.argv)==4:
-	density_imagename = folder+u'/'+sys.argv[3]
-	log = codecs.open(density_imagename+'_log.txt','w','utf-8')
+#cities_file = 'Pays-Bas/test/Gradient_Boosting_Classification_prediction.csv'
+#year = u'14'
+#model = 'Gradient_Boosting_Classification'
+#narg = 4
+
+debugging = 0
+
+cities_file = sys.argv[1]
+year = sys.argv[2]
+model = sys.argv[-1]
+narg = len(sys.argv)
+
+folder = os.path.dirname(cities_file)
+if narg==4:
+	folder  = folder + u'/'+model+u'/'
+	try:
+		os.mkdir(folder)
+	except:
+		pass
+	density_regression = folder+u'/'+model+u'.png'
+	log = codecs.open(folder+u'/'+model+u'_log.txt','w','utf-8')
+else:
+	log = None
 
 df = pd.read_csv(cities_file,encoding='utf-8')
 df.dropna(how='any',inplace=True)
 df = df[df.SURFACE != 0]
-print str(df.shape[0])+" cities"
-if log:
-    log.write(str(df.shape[0])+" cities\n")
 
 if year==u'13':
     df = df[df.PMUN13 != 0]
@@ -40,6 +60,10 @@ elif year==u'15':
 elif year==u'16':
     df = df[df.PMUN16 != 0]
 
+print str(df.shape[0])+" cities"
+if log:
+    log.write(str(df.shape[0])+" cities\n")
+
 name = df['LIBMIN'].tolist()
 lg = df[u'LONG'].as_matrix()
 lt = df[u'LAT'].as_matrix()
@@ -49,18 +73,19 @@ s = df[u'SURFACE'].as_matrix().astype(np.float64)
 p = df[u'PMUN'+year].as_matrix().astype(np.float64)
 
 if 'PREDICTION' in df.columns:
-    d = df['PREDICTION'].as_matrix()
-    print "prediction max : ",d.max(),u"habs/km²"
-    print "prediction min : ",d.min(),u"habs/km²"
+    yr = df['PREDICTION'].as_matrix()
+    print "prediction max : ",yr.max(),u"habs/km²"
+    print "prediction min : ",yr.min(),u"habs/km²"
     if log:
-	log.write("prediction max : "+str(d.max())+u"habs/km²\n")
-        log.write("prediction min : "+str(d.min())+u"habs/km²\n")
-else:
-    d = p/s
-    density_imagename = folder+u'/density.png'
+	log.write("prediction max : "+str(yr.max())+u"habs/km²\n")
+        log.write("prediction min : "+str(yr.min())+u"habs/km²\n")
 
-print "density max : ",(p/s).max(),u"habs/km²"
-print "density min : ",(p/s).min(),u"habs/km²"
+d = p/s
+density = folder+u'/density.png'
+density_cat = folder+u'/density_cat.png'
+
+print "density max : ",d.max(),u"habs/km²"
+print "density min : ",d.min(),u"habs/km²"
 if log:
     log.write("density max : "+str((p/s).max())+u"habs/km²\n")
     log.write("density min : "+str((p/s).min())+u"habs/km²\n")
@@ -72,22 +97,6 @@ dpi = 1000
 size_pt = 50
 if (y.max()-y.min())>1000:
     size_pt = 5
-
-def make_colormap(seq):
-    """ Return a LinearSegmentedColormap
-        seq: a sequence of floats and RGB-tuples. The floats should be increasing
-        and in the interval (0,1).
-    """
-    seq = [(None,) * 3, 0.0] + list(seq) + [1.0, (None,) * 3]
-    cdict = {'red': [], 'green': [], 'blue': []}
-    for i, item in enumerate(seq):
-        if isinstance(item, float):
-            r1, g1, b1 = seq[i - 1]
-            r2, g2, b2 = seq[i + 1]
-            cdict['red'].append([item, r1, r2])
-            cdict['green'].append([item, g1, g2])
-            cdict['blue'].append([item, b1, b2])
-    return mcolors.LinearSegmentedColormap('CustomMap', cdict)
 
 colors = [[49,140,231],
  [255,255,153],
@@ -148,21 +157,7 @@ colors_covering = [[210,210,210],
 
 
 # plot density
-density = np.asarray([-100000,0,5,15,30,50,80,110,150,250,500,1000,2000,4000,8000,15000,20000,25000,30000,35000,40000,45000]).astype(np.float64)
-frontiers = density
-f = (frontiers-np.min(frontiers))/(np.max(frontiers)-np.min(frontiers))
-color_sequence = []
-color_sequence.append(np.asarray(colors[0])/255.0)
-for i,cl in enumerate(colors):
-    color_sequence.append(f[i])
-    color_sequence.append(np.asarray(cl)/255.0)
-    color_sequence.append(np.asarray(cl)/255.0)
-
-color_sequence.append(f[-1])
-color_sequence.append(np.asarray(colors[-1])/255.0)
-
-cmap_density = make_colormap(color_sequence)
-
+densities = np.asarray([-100000,0,5,15,30,50,80,110,150,250,500,1000,2000,4000,8000,15000,20000,25000,30000,35000,40000,45000]).astype(np.float64)
 fig = plt.figure()
 ax = plt.subplot(111)
 legend_labels = []
@@ -170,8 +165,8 @@ legend_scatters = []
 N =0 
 for i,cl in enumerate(colors):
 	ci = np.asarray(cl)/255.0
-	d1 = density[i]
-	d2 = density[i+1]
+	d1 = densities[i]
+	d2 = densities[i+1]
 	xi = x[(d>=d1) & (d<d2)]
 	yi = y[(d>=d1) & (d<d2)]
 	di = d[(d>=d1) & (d<d2)]
@@ -185,12 +180,100 @@ for i,cl in enumerate(colors):
 print u'******** N : '+str(N)+' points'
 plt.xlabel('x Web Mercator (km)')
 plt.ylabel('y Web Mercator (km)')
-ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.85, 0.5),fontsize = 'x-small')
-plt.savefig(density_imagename,dpi=1000)
-plt.show()
+ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.83, 0.5),fontsize = 'xx-small')
+plt.savefig(density,dpi=1000)
+if debugging:
+	plt.show()
+
+# plot cat density
+categorization = [0,500,2000,5000,10000,13000]
+nc = len(categorization)
+dc = -1*np.ones(d.shape)
+categorization_r = list(reversed(categorization))
+for i,n in enumerate(d):
+        if n>categorization_r[0]:
+            dc[i] = 5
+        elif n>categorization_r[1]:
+            dc[i] = 4
+        elif n>categorization_r[2]:
+            dc[i] = 3
+        elif n>categorization_r[3]:
+            dc[i] = 2
+        elif n>categorization_r[4]:
+            dc[i] = 1
+        else:
+            dc[i] = 0
+
+fig = plt.figure()
+ax = plt.subplot(111)
+legend_labels = []
+legend_scatters = []
+N = 0
+for i in np.arange(nc-1):
+    ci = np.asarray(colors[1:][int(1.0*i/nc*len(colors))])/255.0
+    e1 = categorization[i]
+    e2 = categorization[i+1]
+    xi = x[dc==i]
+    yi = y[dc==i]
+    di = d[dc==i]
+    si = s[dc==i]
+    ni = di.shape[0]
+    N = N+ni
+    sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+    legend_scatters.append(sci)
+    legend_labels.append(str(int(e1))+u' - '+str(int(e2))+u' habs/km²')
+
+xi = x[dc==(nc-1)]
+yi = y[dc==(nc-1)]
+di = d[dc==(nc-1)]
+si = s[dc==(nc-1)]
+ni = di.shape[0]
+N = N+ni
+ci = np.asarray(colors[-1])/255.0
+sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+legend_scatters.append(sci)
+legend_labels.append(u'> '+str(categorization[-1])+u' habs/km²')
+print u'******** N : '+str(N)+' points'
+plt.xlabel('x Web Mercator (km)')
+plt.ylabel('y Web Mercator (km)')
+ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.83, 0.5),fontsize = 'xx-small')
+plt.savefig(density_cat,dpi=1000)
+if debugging:
+	plt.show()
+plt.clf()
 
 if 'PREDICTION' in df.columns:
-	error = (d-p/s)/(p/s)*100
+	# plot density prediction
+	fig = plt.figure()
+	ax = plt.subplot(111)
+	legend_labels = []
+	legend_scatters = []
+	N =0
+	for i,cl in enumerate(colors):
+        	ci = np.asarray(cl)/255.0
+        	d1 = densities[i]
+        	d2 = densities[i+1]
+        	xi = x[(yr>=d1) & (yr<d2)]
+        	yi = y[(yr>=d1) & (yr<d2)]
+        	di = d[(yr>=d1) & (yr>d2)]
+        	si = s[(yr>=d1) & (yr<d2)]
+        	ni = xi.shape[0]
+       		N = N+ni
+        	sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+        	legend_scatters.append(sci)
+        	legend_labels.append(str(int(d1))+u' - '+str(int(d2))+u' habs/km²')
+	
+	print u'******** N : '+str(N)+' points'
+	plt.xlabel('x Web Mercator (km)')
+	plt.ylabel('y Web Mercator (km)')
+	ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.83, 0.5),fontsize = 'xx-small')
+	density_prediction = density[:-4]+u'_prediction.png'
+	plt.savefig(density_prediction,dpi=1000)
+	if debugging:
+		plt.show()
+	plt.clf()
+	# plot density prediction error
+	error = (yr-d)/d*100
 	imin = np.argmin(error)
 	imax = np.argmax(error)
 	print "error max :",error.max(),"% for city ",name[imax],"(truth:",(p/s)[imax],u"habs/km²,predicted:",d[imax],u"habs/km²)"
@@ -198,22 +281,8 @@ if 'PREDICTION' in df.columns:
 	if log:
 		log.write("error max :"+str(error.max())+"% for city "+name[imax]+"(truth:"+str((p/s)[imax])+u"habs/km²,predicted:"+str(d[imax])+u"habs/km²)\n")
 		log.write("error min :"+str(error.min())+"% for city "+name[imin]+"(truth:"+str((p/s)[imin])+u"habs/km²,predicted:"+str(d[imin])+u"habs/km²)\n")
-	density_error = np.asarray([-10000000,-100,-50,-30,-20,-10,-5,-3,-2,-1,1,2,3,5,10,20,30,50,100,10000000]).astype(np.float64)
+	densities_error = np.asarray([-10000000,-100,-50,-30,-20,-10,-5,-3,-2,-1,1,2,3,5,10,20,30,50,100,10000000]).astype(np.float64)
 	# plot density errors
-	frontiers = density_error
-	f = (frontiers-np.min(frontiers))/(np.max(frontiers)-np.min(frontiers))
-	color_sequence = []
-	color_sequence.append(np.asarray(colors_error[0])/255.0)
-	for i,cl in enumerate(colors_error):
-    		color_sequence.append(f[i])
-    		color_sequence.append(np.asarray(cl)/255.0)
-    		color_sequence.append(np.asarray(cl)/255.0)
-
-	color_sequence.append(f[-1])
-	color_sequence.append(np.asarray(colors_error[-1])/255.0)
-
-	cmap_density_error = make_colormap(color_sequence)
-
 	fig = plt.figure()
 	ax = plt.subplot(111)
 	legend_labels = []
@@ -221,8 +290,8 @@ if 'PREDICTION' in df.columns:
 	N = 0
 	for i,cl in enumerate(colors_error):
 		ci = np.asarray(cl)/255.0
-		e1 = density_error[i]
-		e2 = density_error[i+1]
+		e1 = densities_error[i]
+		e2 = densities_error[i+1]
 		xi = x[(error>=e1) & (error<e2)]
 		yi = y[(error>=e1) & (error<e2)]
 		di = d[(error>=e1) & (error<e2)]
@@ -237,55 +306,112 @@ if 'PREDICTION' in df.columns:
 			legend_labels.append(u'> '+str(int(e1))+u' %')
 		else:
 			legend_labels.append(str(int(e1))+u' à '+str(int(e2))+u' %')
-
+		
 	print u'******** N : '+str(N)+' points'
 	plt.xlabel('x Web Mercator (km)')
 	plt.ylabel('y Web Mercator (km)')
-	ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.85, 0.5),fontsize = 'x-small')
-
-	density_error_imagename = density_imagename[:-4]+u'_error.png'
-	plt.savefig(density_error_imagename,dpi=dpi)
-	plt.show()
-
-	density_error_histoname = density_imagename[:-4]+u'_error_histo.png'
+	ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.83, 0.5),fontsize = 'small')
+	density_error = density[:-4]+u'_error.png'
+	plt.savefig(density_error,dpi=dpi)
+	if debugging:
+		plt.show()
+	plt.clf()
+	density_error_histo = density[:-4]+u'_error_histo.png'
 	fig = plt.figure();
 	h,b = np.histogram(error,range(-100,100,1))
 	plt.bar(b[:-1],h)
 	plt.xlabel('error bins (%)')
-	plt.savefig(density_error_histoname,dpi=dpi)
-	plt.show()
+	plt.savefig(density_error_histo,dpi=dpi)
+	if debugging:
+		plt.show()
+	plt.clf()
 
 if 'CLASSIFICATION' in df.columns:
-    categorization = [500,2000,5000,10000,13000]
+    #plot classification density
+    yc = df['CLASSIFICATION'].as_matrix().astype(np.int64)
+    categorization = [0,500,2000,5000,10000,13000]
     nc = len(categorization)
+    for i in np.arange(nc):
+        print("categorie "+str(i)+": "+str((yc==i).sum())+" predicted samples")
     target_names = []
-    target_names.append(u'0 - '+str(categorization[0])+u' habs/km²')
     for i in np.arange(nc-1):
         c1 = str(categorization[i])
         c2 = str(categorization[i+1])
         target_names.append(c1+u' - '+c2+u' habs/km²')
+    
     target_names.append(u'> '+str(categorization[-1])+u' habs/km²')
+    fig = plt.figure()
+    ax = plt.subplot(111)
+    legend_labels = []
+    legend_scatters = []
+    N = 0
+    for i in np.arange(nc-1):
+        ci = np.asarray(colors[1:][int(1.0*i/nc*len(colors))])/255.0
+	e1 = categorization[i]
+	e2 = categorization[i+1]
+	xi = x[yc==i]
+	yi = y[yc==i]
+	yi = y[yc==i]
+	di = d[yc==i]
+	ni = di.shape[0]
+	N = N+ni
+	sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*20,edgecolor=[ci,]*3)
+	legend_scatters.append(sci)
+	legend_labels.append(str(int(e1))+u' - '+str(int(e2))+u' habs/km²')
+    xi = x[yc==(nc-1)]
+    yi = y[yc==(nc-1)]
+    di = d[yc==(nc-1)]
+    si = s[yc==(nc-1)]
+    ni = di.shape[0]
+    N = N+ni
+    ci = np.asarray(colors[-1])/255.0
+    sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+    legend_scatters.append(sci)
+    legend_labels.append(u'> '+str(categorization[-1])+u' habs/km²')
+    print u'******** N : '+str(N)+' points'
+    plt.xlabel('x Web Mercator (km)')
+    plt.ylabel('y Web Mercator (km)')
+    ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.83, 0.5),fontsize = 'xx-small')
+    density_classification = density[:-4]+u'_classification.png'
+    plt.savefig(density_classification,dpi=dpi)
+    if debugging:
+	plt.show()
+    plt.clf()
+    log.write(metrics.classification_report(dc, yc, labels=np.arange(nc).tolist(), target_names=target_names,digits=3))
+    log.write(np.array_str(metrics.confusion_matrix(dc, yc, labels=np.arange(nc).tolist())))
+    # plot density classification error
+    errorc = yc-dc
+    fig = plt.figure()
+    ax = plt.subplot(111)
+    legend_labels = []
+    legend_scatters = []
+    N = 0
+    for i in range(-(nc-1),nc,1):
+        ci = np.asarray(colors_error[int(1.0*(i+nc-1)/(2*(nc-1)+1)*len(colors_error))])/255.0
+        xi = x[errorc==i]
+        yi = y[errorc==i]
+        di = d[errorc==i]
+        si = s[errorc==i]
+        ni = di.shape[0]
+        N = N+ni
+        sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+        legend_scatters.append(sci)
+        legend_labels.append(str(int(i)))
 
-
-
+    print u'******** N : '+str(N)+' points'
+    plt.xlabel('x Web Mercator (km)')
+    plt.ylabel('y Web Mercator (km)')
+    ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.85, 0.5),fontsize = 'small')
+    density_classification_error = density[:-4]+'_classification_error.png'
+    plt.savefig(density_classification_error,dpi=1000)
+    if debugging:
+	plt.show()
+    plt.clf()
+    
 
 if 'COVERING' in df.columns:
-	cloud_covering = np.asarray([0,1,2,5,10,13,20,25,30,50,100]).astype(np.float64)
+	cloud_covering = np.asarray([0,1,2,5,10,13,20,25,30,50,100.01]).astype(np.float64)
 	# plot density errors
-	frontiers = cloud_covering
-	f = (frontiers-np.min(frontiers))/(np.max(frontiers)-np.min(frontiers))
-	color_sequence = []
-	color_sequence.append(np.asarray(colors_covering[0])/255.0)
-	for i,cl in enumerate(colors_covering):
-    		color_sequence.append(f[i])
-    		color_sequence.append(np.asarray(cl)/255.0)
-    		color_sequence.append(np.asarray(cl)/255.0)
-
-	color_sequence.append(f[-1])
-	color_sequence.append(np.asarray(colors_covering[-1])/255.0)
-
-	cmap_density_covering = make_colormap(color_sequence)
-
 	fig = plt.figure()
 	ax = plt.subplot(111)
 	legend_labels = []
@@ -304,32 +430,38 @@ if 'COVERING' in df.columns:
 		sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
 		legend_scatters.append(sci)
 		legend_labels.append(str(int(e1))+u' à '+str(int(e2))+u' %')
-
+	
 	print u'******** N : '+str(N)+' points'
 	plt.xlabel('x Web Mercator (km)')
 	plt.ylabel('y Web Mercator (km)')
-	ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.85, 0.5),fontsize = 'x-small')
-
-	density_covering_imagename = density_imagename[:-4]+u'_covering.png'
-	plt.savefig(density_covering_imagename,dpi=dpi)
-	plt.show()
-
-	density_covering_histoname = density_imagename[:-4]+u'_error_histo.png'
+	ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.85, 0.5),fontsize = 'small')
+	density_covering = density[:-4]+u'_covering.png'
+	plt.savefig(density_covering,dpi=dpi)
+	if debugging:
+		plt.show()
+	plt.clf()
+	density_covering_histo = density[:-4]+u'_covering_histo.png'
 	fig = plt.figure();
 	h,b = np.histogram(covering,range(0,100,1))
 	plt.bar(b[:-1],h)
 	plt.xlabel('cloud covering bins (%)')
-	plt.savefig(density_covering_histoname,dpi=dpi)
-	plt.show()
-
-	density_error_covering = density_imagename[:-4]+u'_error_covering.png'
+	plt.savefig(density_covering_histo,dpi=dpi)
+	if debugging:
+		plt.show()
+	plt.clf()
+	density_error_covering = density[:-4]+u'_error_covering.png'
 	if 'PREDICTION' in df.columns:
 		fig = plt.figure();
 		plt.scatter(covering,error);
 		plt.xlabel('cloud covering (%)')
 		plt.ylabel('error (%)')
 		plt.savefig(density_error_covering,dpi=dpi)
-		plt.show()
+		if debugging:
+			plt.show()
+		plt.clf()
+		
 
 if log:
 	log.close()
+
+

@@ -33,12 +33,20 @@ print(str(data.shape[0])+" cities")
 
 variables = [v for v in data.columns if v.isdigit()]
 if 'PMUN13' in data.columns:
+    year = u'13'
+    data = data[data.PMUN13 != 0]
     population = data['PMUN13'].as_matrix()
 elif 'PMUN14' in data.columns:
+    year = u'14'
+    data = data[data.PMUN14 != 0]
     population = data['PMUN14'].as_matrix()
 elif 'PMUN15' in data.columns:
+    year = u'15'
+    data = data[data.PMUN15 != 0]
     population = data['PMUN15'].as_matrix()
 elif 'PMUN16' in data.columns:
+    year = u'16'
+    data = data[data.PMUN16 != 0]
     population = data['PMUN16'].as_matrix()
 
 X = data[variables].as_matrix(); 
@@ -80,7 +88,7 @@ file_test_prediction = folder+u'/test/'+os.path.basename(model)[:-4]+u'_predicti
 data.to_csv(file_test_prediction,encoding='utf-8')
 
 
-#print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
-#os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
+print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
+os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
 
 

@@ -133,7 +133,7 @@ for res in results:
     joblib.dump(model,u'model_classification/'+name+u'.pkl')
     f = codecs.open(u'model_classification/'+name+u'_report.txt','w','utf8')
     f.write(res[-1]+u'\n\n')
-    f.write("error cv : "+str(1-res[3])+u'\n\n')
+    f.write("error cv : "+str((1-res[3])*100)+u'%\n\n')
     f.write(metrics.classification_report(y, model.predict(X), labels=np.arange(nc+1).tolist(), target_names=target_names,digits=3))
     f.close()
 

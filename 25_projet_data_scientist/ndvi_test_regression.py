@@ -48,7 +48,7 @@ elif u'PMUN16' in data.columns:
 if u'PMUN13' in data.columns:
 	year = u'13'
 
-print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
-os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
+print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4])
+os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4])
 
 
