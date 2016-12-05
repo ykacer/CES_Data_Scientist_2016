@@ -16,6 +16,7 @@ from sklearn.cross_validation import StratifiedKFold
 from sklearn import grid_search
 from sklearn import metrics
 from sklearn.externals import joblib
+from sklearn.preprocessing import StandardScaler
 
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
@@ -104,8 +105,8 @@ info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y)
 results.append(['Random Forest Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Gradient Boosting Classification")
-cl = GradientBoostingClassifier(learning_rate=0.45, n_estimators=40, min_samples_split=80,min_samples_leaf=20,max_depth=32, subsample=0.8, random_state=0)
-param_grid = {'max_features':range(14,40,3)}
+cl = GradientBoostingClassifier(learning_rate=0.45, n_estimators=40, min_samples_split=80,min_samples_leaf=20,max_depth=32,max_features=32, subsample=0.8, random_state=0)
+param_grid = {'n_estimators':40}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
@@ -119,15 +120,12 @@ grid.fit(X,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X),y))
 results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-
-
-
 print("* Neural Network Classifier")
 scaler = StandardScaler()  
 scaler.fit(X)  
 Xsc = scaler.transform(X)  
-cl = MLPClassifier(alpha=0.0001, batch_size='auto',learning_rate='constant',learning_rate_init=0.0001, power_t=0.5, max_iter=True, random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
-param_grid = {'hidden_layer_sizes':[(2048,)],'solver':['sgd']}
+cl = MLPClassifier(alpha=0.0001, batch_size='auto',learning_rate='constant',learning_rate_init=0.0001, power_t=0.5, random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=True,verbose=True)
+param_grid = {'hidden_layer_sizes':[(1024,)],'solver':['sgd']}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
@@ -147,14 +145,14 @@ param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,to_categorical(y,nc+1))
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X),to_categorical(y,nc+1)))
-results.append(['Neural Network Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+results.append(['Neural Network Classification TensorFlow',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 try:
     os.mkdir('model_classification')
 except:
     pass
 
-for res in results:
+for res in [results[-1]]:
     name = re.sub(u' ','_',res[0])
     model = res[6];
     joblib.dump(model,u'model_classification/'+name+u'.pkl')
