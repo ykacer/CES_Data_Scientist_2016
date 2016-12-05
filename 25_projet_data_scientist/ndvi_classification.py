@@ -104,8 +104,8 @@ info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y)
 results.append(['Random Forest Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Gradient Boosting Classification")
-cl = GradientBoostingClassifier(learning_rate=0.45, n_estimators=40, max_depth=32, max_features='sqrt', subsample=0.8, random_state=0)
-param_grid = {'min_samples_split':range(80,201,20),'min_samples_leaf':range(10,26,5)}
+cl = GradientBoostingClassifier(learning_rate=0.45, n_estimators=40, min_samples_split=80,min_samples_leaf=20,max_depth=32, subsample=0.8, random_state=0)
+param_grid = {'max_features':range(14,40,3)}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
