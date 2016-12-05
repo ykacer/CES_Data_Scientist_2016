@@ -89,7 +89,7 @@ verbose = 5
 
 print("* Support Vector Classification")
 cl = SVC(kernel='linear',class_weight='balanced',random_state=0,verbose=True)
-param_grid = {'C':[10.0]}
+param_grid = {'C':[1.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
@@ -106,7 +106,7 @@ results.append(['Random Forest Classification',grid.grid_scores_,grid.scorer_,gr
 
 print("* Gradient Boosting Classification")
 cl = GradientBoostingClassifier(learning_rate=0.45, n_estimators=40, min_samples_split=80,min_samples_leaf=20,max_depth=32,max_features=32, subsample=0.8, random_state=0)
-param_grid = {'n_estimators':40}
+param_grid = {'n_estimators':[40]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
@@ -124,8 +124,8 @@ print("* Neural Network Classifier")
 scaler = StandardScaler()  
 scaler.fit(X)  
 Xsc = scaler.transform(X)  
-cl = MLPClassifier(alpha=0.0001, batch_size='auto',learning_rate='constant',learning_rate_init=0.0001, power_t=0.5, random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=True,verbose=True)
-param_grid = {'hidden_layer_sizes':[(1024,)],'solver':['sgd']}
+cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='constant',learning_rate_init=0.0001, power_t=0.5, max_iter=50,random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
+param_grid = {'hidden_layer_sizes':[(2048,)],'solver':['lbfgs'],'alpha':[0.001,0.01,0.1,1.0,10.,100.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
