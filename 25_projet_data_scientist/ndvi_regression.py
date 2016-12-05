@@ -9,6 +9,7 @@ from sklearn.preprocessing import OneHotEncoder,LabelEncoder
 from sklearn.metrics import accuracy_score
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import ShuffleSplit
+from sklearn.cross_validation import StratifiedKFold
 from sklearn import grid_search
 
 from sklearn.preprocessing import StandardScaler  
@@ -50,7 +51,7 @@ y = p/s
 X = data[variables].as_matrix(); 
 
 print("Classification bench")
-cv = ShuffleSplit(y.size,n_iter=5,test_size=0.3) # cross-validation set
+cv = ShuffleSplit(y.size,n_iter=5,test_size=0.3)
 results = [];
 verbose = 2
 
@@ -105,10 +106,11 @@ grid.fit(X,y)
 results.append(['Random Forest Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Gradient Boosting Regressor")
-cl = GradientBoostingRegressor(learning_rate=0.5,n_estimators=140,random_state=0)
-param_grid = {'max_depth':range(5,25,2),'min_samples_split':range(10,400,20),'min_samples_leaf':range(10,400,20),'max_features':range(7,40,3),'subsample':[0.5,0.6,0.7,0.8,0.9]}
+yl = np.log(1+y)
+cl = GradientBoostingRegressor(learning_rate=0.01,max_depth=8,min_samples_split=200,min_samples_leaf=20,max_features='sqrt',subsample=0.8,random_state=0)
+param_grid = {'n_estimators':range(20,81,20)}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
-grid.fit(X,y)
+grid.fit(Xsc,yl)
 results.append(['Gradient Boosting Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Multi Layer Perceptron Regressor")
