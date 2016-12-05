@@ -12,12 +12,16 @@ from sklearn.preprocessing import OneHotEncoder,LabelEncoder
 from sklearn.metrics import accuracy_score
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import ShuffleSplit
+from sklearn.cross_validation import StratifiedKFold
 from sklearn import grid_search
 from sklearn import metrics
 from sklearn.externals import joblib
 
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
+from sklearn.neural_network import MLPClassifier
+
+from xgboost.sklearn import XGBClassifier
 
 from keras.models import Sequential
 from keras.layers import Dense
@@ -52,6 +56,7 @@ elif 'PMUN15' in data.columns:
 elif 'PMUN16' in data.columns:
     population = data['PMUN16'].as_matrix()
 
+df = df[df.SURFACE != 0]
 surface = data['SURFACE'].as_matrix()
 densite = population/surface;
 
@@ -77,12 +82,12 @@ for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((y==i).sum())+" samples")
 
 print("Classification bench")
-cv = ShuffleSplit(y.size,n_iter=5,test_size=0.3) # cross-validation set
+cv = StratifiedKFold(y,n_folds=5,random_state=0) # cross-validation set
 results = [];
-verbose = 2
+verbose = 5
 
 print("* Support Vector Classification")
-cl = SVC(kernel='linear',class_weight='balanced',verbose=True)
+cl = SVC(kernel='linear',class_weight='balanced',random_state=0,verbose=True)
 param_grid = {'C':[10.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
@@ -91,20 +96,42 @@ info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict
 results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Random Forest Classification")
-cl = RandomForestClassifier(max_depth=11,min_samples_split=40,min_samples_leaf=20,max_features=33,random_state=0)
-param_grid = {'n_estimators':[60]}
+cl = RandomForestClassifier(n_estimators=40,max_depth=15,min_samples_split=20,min_samples_leaf=20,max_features=35,random_state=0)
+param_grid = {'max_features':[15]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
 results.append(['Random Forest Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Gradient Boosting Classification")
-cl = GradientBoostingClassifier(n_estimators=70, max_depth=21, min_samples_split=210, min_samples_leaf=60, max_features=15, subsample=0.8, random_state=10)
-param_grid = {'learning_rate':[0.1]}
+cl = GradientBoostingClassifier(learning_rate=0.45, n_estimators=40, max_depth=32, max_features='sqrt', subsample=0.8, random_state=0)
+param_grid = {'min_samples_split':range(80,201,20),'min_samples_leaf':range(10,26,5)}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
 results.append(['Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+
+print("* Extreme Gradient Boosting Classification")
+cl = XGBClassifier(learning_rate =0.1,n_estimators=1000,max_depth=5,min_child_weight=1,gamma=0,subsample=0.8,colsample_bytree=0.8, objective='binary:logistic',nthread=4, scale_pos_weight=1, seed=0,silent=False)
+param_grid = {'learning_rate':[0.1]}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(X,y)
+info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X),y))
+results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+
+
+
+
+print("* Neural Network Classifier")
+scaler = StandardScaler()  
+scaler.fit(X)  
+Xsc = scaler.transform(X)  
+cl = MLPClassifier(alpha=0.0001, batch_size='auto',learning_rate='constant',learning_rate_init=0.0001, power_t=0.5, max_iter=True, random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
+param_grid = {'hidden_layer_sizes':[(2048,)],'solver':['sgd']}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(Xsc,y)
+info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
+results.append(['Neural Network Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* TensorFlow Neural Network Classification")
 def make_model():
@@ -118,7 +145,7 @@ def make_model():
 cl = KerasClassifier(make_model, nb_epoch=200)
 param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
-grid.fit(X,to_categorical(y,nc+1))
+grid.fit(Xsc,to_categorical(y,nc+1))
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X),to_categorical(y,nc+1)))
 results.append(['Neural Network Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
