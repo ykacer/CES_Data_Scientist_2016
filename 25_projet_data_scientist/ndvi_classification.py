@@ -17,12 +17,34 @@ from sklearn import grid_search
 from sklearn import metrics
 from sklearn.externals import joblib
 from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
-from sklearn.svm import SVC
+from sklearn.svm import SVC,LinearSVC
 from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
 from sklearn.neural_network import MLPClassifier
 
 from xgboost.sklearn import XGBClassifier
+
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.under_sampling import NearMiss
+from imblearn.under_sampling import CondensedNearestNeighbour
+from imblearn.under_sampling import OneSidedSelection
+from imblearn.under_sampling import NeighbourhoodCleaningRule
+from imblearn.under_sampling import TomekLinks
+from imblearn.under_sampling import ClusterCentroids
+from imblearn.under_sampling import EditedNearestNeighbours
+from imblearn.under_sampling import InstanceHardnessThreshold
+from imblearn.under_sampling import RepeatedEditedNearestNeighbours
+from imblearn.under_sampling import AllKNN
+
+from imblearn.over_sampling import RandomOverSampler
+from imblearn.over_sampling import SMOTE
+
+from imblearn.combine import SMOTETomek
+from imblearn.combine import SMOTEENN
+
+from imblearn.ensemble import EasyEnsemble
+from imblearn.ensemble import BalanceCascade
 
 from keras.models import Sequential
 from keras.layers import Dense
@@ -33,7 +55,7 @@ import re
 import os
 import codecs
 
-print("Formatting data")
+print("*** Formatting data")
 
 categorization = [500,2000,5000,10000,13000]
 nc = len(categorization)
@@ -47,6 +69,7 @@ for i in np.arange(nc-1):
 target_names.append(u'> '+str(categorization[-1])+u' habs/km²')
 
 data = pd.read_csv('France/ndvi_features.csv',dtype={'SURFACE':np.float64})
+data = data[data.SURFACE != 0]
 variables = [v for v in data.columns if v.isdigit()]
 if 'PMUN13' in data.columns:
     population = data['PMUN13'].as_matrix()
@@ -57,11 +80,17 @@ elif 'PMUN15' in data.columns:
 elif 'PMUN16' in data.columns:
     population = data['PMUN16'].as_matrix()
 
-df = df[df.SURFACE != 0]
 surface = data['SURFACE'].as_matrix()
 densite = population/surface;
-
+# reduction
 X = data[variables].as_matrix(); 
+scaler = StandardScaler()
+scaler.fit(X)
+Xsc = scaler.transform(X)
+# projection
+pca = PCA(n_components=512);
+Xpca = pca.fit_transform(Xsc);
+print("*** PCA explained variance : "+str(pca.explained_variance_ratio_.sum()))
 y = -1*np.ones(X.shape[0])
 
 categorization_r = list(reversed(categorization))
@@ -79,21 +108,29 @@ for i,n in enumerate(densite):
     else:
         y[i] = 0
 
+print('*** Classe Distribution :')
 for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((y==i).sum())+" samples")
 
-print("Classification bench")
+ROS = RandomOverSampler(ratio=0.3)
+Xo,yo = ROS.fit_sample(X,y)
+print('*** Classe Distribution (after oversampling):')
+for i in np.arange(nc+1):
+    print("categorie "+str(i)+": "+str((yo==i).sum())+" samples")
+
+print("*** Classification bench")
 cv = StratifiedKFold(y,n_folds=5,random_state=0) # cross-validation set
 results = [];
 verbose = 5
 
 print("* Support Vector Classification")
-cl = SVC(kernel='linear',class_weight='balanced',random_state=0,verbose=True)
-param_grid = {'C':[1.0]}
+cl = LinearSVC(class_weight='balanced',penalty='l1',dual=False,random_state=0,verbose=False)
+param_grid = {'C':[0.0001,0.001,0.01,0.1,1.0,10.0,100.0,1000.0,10000.0]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(X,y)
-info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
-info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predictX), y)
+#info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
+info=''
+info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
 results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Random Forest Classification")
@@ -121,11 +158,8 @@ info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X),y))
 results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Neural Network Classifier")
-scaler = StandardScaler()  
-scaler.fit(X)  
-Xsc = scaler.transform(X)  
-cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='constant',learning_rate_init=0.0001, power_t=0.5, max_iter=50,random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
-param_grid = {'hidden_layer_sizes':[(2048,)],'solver':['lbfgs'],'alpha':[0.001,0.01,0.1,1.0,10.,100.0]}
+cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='constant', power_t=0.5, max_iter=200,random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
+param_grid = {'hidden_layer_sizes':[(4096,)],'solver':['sgd'],'alpha':[0.001],'learning_rate_init':[0.0001,0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
