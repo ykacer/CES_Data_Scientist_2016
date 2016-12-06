@@ -50,6 +50,10 @@ s = data['SURFACE'].as_matrix();
 y = p/s
 X = data[variables].as_matrix(); 
 
+scaler = StandardScaler()  
+scaler.fit(X)  
+Xsc = scaler.transform(X)  
+
 print("Classification bench")
 cv = ShuffleSplit(y.size,n_iter=5,test_size=0.3)
 results = [];
@@ -107,17 +111,13 @@ results.append(['Random Forest Regression',grid.grid_scores_,grid.scorer_,grid.b
 
 print("* Gradient Boosting Regressor")
 yl = np.log(1+y)
-cl = GradientBoostingRegressor(learning_rate=0.01,max_depth=8,min_samples_split=200,min_samples_leaf=20,max_features='sqrt',subsample=0.8,random_state=0)
-param_grid = {'n_estimators':range(20,81,20)}
+cl = GradientBoostingRegressor(learning_rate=0.5,n_estimators=40,min_samples_split=200,min_samples_leaf=110,max_depth=8,subsample=0.8,random_state=0)
+param_grid = {'max_features':range(15,40,5)}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xsc,yl)
 results.append(['Gradient Boosting Regression',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
 
 print("* Multi Layer Perceptron Regressor")
-scaler = StandardScaler()  
-scaler.fit(X)  
-Xsc = scaler.transform(X)  
-
 cl = MLPRegressor(hidden_layer_sizes=(1400,700),alpha=0.0001,solver='sgd',learning_rate='adaptive',tol=0.0001,early_stopping=True,verbose=True)
 param_grid = {'learning_rate_init':[0.00001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
