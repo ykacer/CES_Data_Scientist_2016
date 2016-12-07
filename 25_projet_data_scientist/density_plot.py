@@ -37,13 +37,13 @@ narg = len(sys.argv)
 
 folder = os.path.dirname(cities_file)
 if narg==4:
-	folder  = folder + u'/'+model+u'/'
+	folder  = folder + u'/'+model[:-4]+u'/'
 	try:
 		os.mkdir(folder)
 	except:
 		pass
-	density_regression = folder+u'/'+model+u'.png'
-	log = codecs.open(folder+u'/'+model+u'_log.txt','w','utf-8')
+	density_regression = folder+u'/'+model[:-4]+u'.png'
+	log = codecs.open(folder+u'/'+model[:-4]+u'_log.txt','w','utf-8')
 else:
 	log = None
 
