@@ -168,17 +168,17 @@ grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),y))
 results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-print("* Neural Network Classifier")
+print("* Neural Network Classifier-oversampled")
 cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='constant', power_t=0.5, max_iter=200,random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
 param_grid = {'hidden_layer_sizes':[(2*n_components,)],'solver':['sgd'],'alpha':[0.001,0.01,0.1],'learning_rate_init':[0.0001,0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,yo)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
 info = info+u'\n\n'
-info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
+info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
 results.append(['Neural Network Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-print("* TensorFlow Neural Network Classification")
+print("* TensorFlow Neural Network Classification-oversampled")
 def make_model():
     model = Sequential()
     model.add(Dense(output_dim=1204,input_dim=n_components,init='uniform',activation='relu'))
@@ -187,22 +187,24 @@ def make_model():
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
-cl = KerasClassifier(make_model, nb_epoch=200)
+cl = KerasClassifier(make_model, nb_epoch=10)
 param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
-grid.fit(Xpca,to_categorical(y,nc+1))
-info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),to_categorical(y,nc+1)))
-results.append(['Neural Network Classification TensorFlow',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+grid.fit(Xo,to_categorical(yo,nc+1))
+info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
+info = info+u'\n\n'
+info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),y)))
+results.append(['Neural Network Classification TensorFlow-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 try:
     os.mkdir('model_classification')
 except:
     pass
 
-for res in [results[-1]]:
+for res in results:
     name = re.sub(u' ','_',res[0])
     model = res[6];
-    joblib.dump(model,u'model_classification/'+name+u'.pkl')
+    #joblib.dump(model,u'model_classification/'+name+u'.pkl')
     f = codecs.open(u'model_classification/'+name+u'_report.txt','w','utf8')
     f.write(res[-1]+u'\n\n')
     f.write(u'error cv : '+str((1-res[3])*100)+u'%\n\n')
