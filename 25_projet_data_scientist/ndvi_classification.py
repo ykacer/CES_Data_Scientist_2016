@@ -90,7 +90,8 @@ scaler.fit(X)
 Xsc = scaler.transform(X)
 
 # projection
-pca = PCA(n_components=600);
+n_components = 600;
+pca = PCA(n_components=n_components);
 Xpca = pca.fit_transform(Xsc);
 joblib.dump(pca,u'model_classification/PCA_classification.pkl')
 fpca = codecs.open(u'model_classification/PCA_classification.txt',u'w',u'utf8')
@@ -169,10 +170,12 @@ results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,gri
 
 print("* Neural Network Classifier")
 cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='constant', power_t=0.5, max_iter=200,random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
-param_grid = {'hidden_layer_sizes':[(1024,)],'solver':['sgd'],'alpha':[0.001],'learning_rate_init':[0.0001,0.001]}
+param_grid = {'hidden_layer_sizes':[(2*n_components,)],'solver':['sgd'],'alpha':[0.001,0.01,0.1],'learning_rate_init':[0.0001,0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,yo)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
+info = info+u'\n\n'
+info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(X), y))
 results.append(['Neural Network Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* TensorFlow Neural Network Classification")
