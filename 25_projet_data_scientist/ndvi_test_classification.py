@@ -72,6 +72,8 @@ for i,n in enumerate(densite):
 for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((y==i).sum())+" samples")
 
+pca = joblib.load(u'model_classification/PCA_classification.pkl')
+X = pca.transform(X)
 clf = joblib.load(model)
 yp = clf.predict(X)
 data['CLASSIFICATION'] = yp
@@ -90,5 +92,5 @@ data.to_csv(file_test_prediction,encoding='utf-8')
 
 print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
 os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
-
+print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
 
