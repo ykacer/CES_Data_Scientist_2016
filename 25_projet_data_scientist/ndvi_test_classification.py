@@ -132,7 +132,8 @@ colors = [[49,140,231],
 
 if compute_roc:
     # Compute ROC curve and ROC area for each class
-    yp = label_binarize(clf.predict(X), classes=np.arange(nc+1))
+    #yp = label_binarize(clf.predict(X), classes=np.arange(nc+1))
+    yp = clf.decision_function(X)
     yb = label_binarize(y, classes=np.arange(nc+1))
     n_classes = yb.shape[1]
     fpr = dict()

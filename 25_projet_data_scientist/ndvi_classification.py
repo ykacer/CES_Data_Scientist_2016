@@ -258,7 +258,8 @@ for res in [results[-6]]:
     f.write(metrics.classification_report(y, model.predict(Xpca), labels=np.arange(nc+1).tolist(), target_names=target_names,digits=3))
     f.close()
     # Compute ROC curve and ROC area for each class
-    yp = label_binarize(model.predict(Xpca), classes=np.arange(nc+1))
+    #yp = label_binarize(model.predict(Xpca), classes=np.arange(nc+1))
+    yp = model.decision_function(Xpca)
     yb = label_binarize(y, classes=np.arange(nc+1))
     n_classes = yb.shape[1]
     fpr = dict()
