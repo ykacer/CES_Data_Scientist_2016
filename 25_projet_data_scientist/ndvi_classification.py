@@ -9,14 +9,14 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder,LabelEncoder
 
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score,roc_curve,auc
 from sklearn.cross_validation import cross_val_score
 from sklearn.cross_validation import ShuffleSplit
 from sklearn.cross_validation import StratifiedKFold
 from sklearn import grid_search
 from sklearn import metrics
 from sklearn.externals import joblib
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler,label_binarize
 from sklearn.decomposition import PCA
 
 from sklearn.svm import SVC,LinearSVC
@@ -51,6 +51,11 @@ from keras.layers import Dense
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.np_utils import to_categorical
 
+from scipy import interp
+
+import matplotlib.pyplot as plt
+
+from itertools import cycle
 import re
 import os
 import codecs
@@ -117,6 +122,8 @@ for i,n in enumerate(densite):
     else:
         y[i] = 0
 
+n_cl = nc+1
+
 print('*** Classe Distribution :')
 for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((y==i).sum())+" samples")
@@ -135,8 +142,15 @@ results = [];
 verbose = 5
 
 print("* Support Vector Classification")
-cl = LinearSVC(class_weight='balanced',penalty='l1',dual=False,random_state=0,verbose=False)
-param_grid = {'C':[0.00001,0.0001,0.001,0.01,0.1,1.0,10.0,100.0,1000.0,10000.0]}
+n_samples = X.shape[0]
+#classes = [unicode(str(i)) for i in np.arange(nc+1).tolist()]
+classes = np.arange(nc+1).tolist()
+C = 0.001
+weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
+class_weight = dict(zip(classes,weights))
+class_weight[1] = 2.0*class_weight[1]
+cl = LinearSVC(C=C,class_weight=class_weight,dual=False,random_state=0,verbose=False)
+param_grid = {'penalty':['l2']}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
@@ -196,17 +210,46 @@ info = info+u'\n\n'
 info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),y)))
 results.append(['Neural Network Classification TensorFlow-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
+
+colors = [[49,140,231],
+ [255,255,153],
+ [255,232,139],
+ [246,209,125],
+ [241,185,111],
+ [236,162,97],
+ [232,139,83],
+ [227,116,70],
+ [227,116,70],
+ [218,70,42],
+ [213,46,28],
+ [209,23,14],
+ [204,0,0],
+ [170,0,0],
+ [136,0,0],
+ [102,0,0],
+ [92,0,20],
+ [82,0,41],
+ [71,0,61],
+ [61,0,82],
+ [51,0,102]]
+
 try:
     os.mkdir('model_classification')
 except:
     pass
 
-for res in results:
+for res in [results[-6]]:
     name = re.sub(u' ','_',res[0])
     model = res[6];
-    #joblib.dump(model,u'model_classification/'+name+u'.pkl')
-    f = codecs.open(u'model_classification/'+name+u'_report.txt','w','utf8')
+    folder_model = u'model_classification/'+name+'/'
+    try:
+        os.mkdir(folder_model)
+    except:
+        pass
+    joblib.dump(model,folder_model+name+u'.pkl')
+    f = codecs.open(folder_model+name+u'_report.txt','w','utf8')
     f.write(res[-1]+u'\n\n')
+    f.write(u'score cv : '+str(res[3]*100)+u'%\n\n')
     f.write(u'error cv : '+str((1-res[3])*100)+u'%\n\n')
     f.write(u'grid scores : \n')
     for gs in res[1]:
@@ -214,6 +257,66 @@ for res in results:
     f.write(u'\n')
     f.write(metrics.classification_report(y, model.predict(Xpca), labels=np.arange(nc+1).tolist(), target_names=target_names,digits=3))
     f.close()
-
-
-	
+    # Compute ROC curve and ROC area for each class
+    yp = label_binarize(model.predict(Xpca), classes=np.arange(nc+1))
+    yb = label_binarize(y, classes=np.arange(nc+1))
+    n_classes = yb.shape[1]
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(n_classes):
+        fpr[i], tpr[i], _ = roc_curve(yb[:, i], yp[:, i])
+        roc_auc[i] = auc(fpr[i], tpr[i]) 
+    # Compute micro-average ROC curve and ROC area
+    fpr["micro"], tpr["micro"], _ = roc_curve(yb.ravel(), yp.ravel())
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    # First aggregate all false positive rates
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))   
+    # Then interpolate all ROC curves at this points
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(n_classes):
+        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+    # Finally average it and compute AUC
+    mean_tpr /= n_classes
+    fpr["macro"] = all_fpr
+    tpr["macro"] = mean_tpr
+    roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+    # Plot mean ROC curves
+    lw = 2
+    plt.figure()
+    plt.plot(fpr["micro"], tpr["micro"],
+             label='micro-average ROC curve (area = {0:0.2f})'
+                   ''.format(roc_auc["micro"]),
+             color='blue', linewidth=4)
+    plt.plot(fpr["macro"], tpr["macro"],
+             label='macro-average ROC curve (area = {0:0.2f})'
+                   ''.format(roc_auc["macro"]),
+             color='green', linewidth=4)
+    plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC curves')
+    plt.legend(loc="lower right",fontsize = 'medium')
+    plt.savefig(folder_model+name+u'_roc_mean.png',dpi=1000)
+    #plt.show()
+    # Plot all ROC curves
+    plt.figure()
+    for i in range(n_classes):
+            ci = np.asarray(colors[1:][int(1.0*i/(nc+1)*len(colors))])/255.0
+            plt.plot(fpr[i], tpr[i], color=ci, lw=lw,
+                 label='ROC curve of class {0} (area = {1:0.2f})'
+                 ''.format(i, roc_auc[i]))
+    plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC curves')
+    plt.legend(loc="lower right",fontsize = 'medium')
+    plt.savefig(folder_model+name+u'_roc.png',dpi=1000)
+    #plt.show()
