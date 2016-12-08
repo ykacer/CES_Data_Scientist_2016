@@ -9,6 +9,12 @@ import pandas as pd
 import numpy as np
 
 from sklearn.externals import joblib
+from sklearn.preprocessing import label_binarize
+from sklearn.metrics import accuracy_score,roc_curve,auc
+
+from scipy import interp
+
+import matplotlib.pyplot as plt
 
 import sys
 import os
@@ -82,15 +88,110 @@ data['ERROR'] = error
 print("error : "+str(error)+"%")
 
 try:
-	os.mkdir(folder+u'/test')
+	os.mkdir(folder+u'/test/')
 except:
 	pass
 
-file_test_prediction = folder+u'/test/'+os.path.basename(model)[:-4]+u'_prediction.csv'
+folder_model = folder+u'/test/'+os.path.basename(model)[:-4]+'/'
+try:
+	os.mkdir(folder_model)
+except:
+	pass
+
+file_test_prediction = folder_model+os.path.basename(model)[:-4]+u'_prediction.csv'
 data.to_csv(file_test_prediction,encoding='utf-8')
 
 
-print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
+#print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
 os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
-print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
+
+
+compute_roc = True
+
+colors = [[49,140,231],
+ [255,255,153],
+ [255,232,139],
+ [246,209,125],
+ [241,185,111],
+ [236,162,97],
+ [232,139,83],
+ [227,116,70],
+ [227,116,70],
+ [218,70,42],
+ [213,46,28],
+ [209,23,14],
+ [204,0,0],
+ [170,0,0],
+ [136,0,0],
+ [102,0,0],
+ [92,0,20],
+ [82,0,41],
+ [71,0,61],
+ [61,0,82],
+ [51,0,102]]
+
+if compute_roc:
+    # Compute ROC curve and ROC area for each class
+    yp = label_binarize(clf.predict(X), classes=np.arange(nc+1))
+    yb = label_binarize(y, classes=np.arange(nc+1))
+    n_classes = yb.shape[1]
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(n_classes):
+        fpr[i], tpr[i], _ = roc_curve(yb[:, i], yp[:, i])
+        roc_auc[i] = auc(fpr[i], tpr[i]) 
+    # Compute micro-average ROC curve and ROC area
+    fpr["micro"], tpr["micro"], _ = roc_curve(yb.ravel(), yp.ravel())
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    # First aggregate all false positive rates
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))   
+    # Then interpolate all ROC curves at this points
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(n_classes):
+        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+    # Finally average it and compute AUC
+    mean_tpr /= n_classes
+    fpr["macro"] = all_fpr
+    tpr["macro"] = mean_tpr
+    roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+    # Plot mean ROC curves
+    lw = 2
+    plt.figure()
+    plt.plot(fpr["micro"], tpr["micro"],
+             label='micro-average ROC curve (area = {0:0.2f})'
+                   ''.format(roc_auc["micro"]),
+             color='blue', linewidth=4)
+    plt.plot(fpr["macro"], tpr["macro"],
+             label='macro-average ROC curve (area = {0:0.2f})'
+                   ''.format(roc_auc["macro"]),
+             color='green', linewidth=4)
+    plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC curves')
+    plt.legend(loc="lower right",fontsize = 'medium')
+    plt.savefig(folder_model+os.path.basename(model)[:-4]+u'_roc_mean.png',dpi=1000)
+    plt.show()
+    # Plot all ROC curves
+    plt.figure()
+    for i in range(n_classes):
+            ci = np.asarray(colors[1:][int(1.0*i/(nc+1)*len(colors))])/255.0
+            plt.plot(fpr[i], tpr[i], color=ci, lw=lw,
+                 label='ROC curve of class {0} (area = {1:0.2f})'
+                 ''.format(i, roc_auc[i]))
+    plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC curves')
+    plt.legend(loc="lower right",fontsize = 'medium')
+    plt.savefig(folder_model+os.path.basename(model)[:-4]+u'_roc.png',dpi=1000)
+    plt.show()
 
