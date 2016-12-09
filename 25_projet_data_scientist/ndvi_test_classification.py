@@ -12,6 +12,8 @@ from sklearn.externals import joblib
 from sklearn.preprocessing import label_binarize
 from sklearn.metrics import accuracy_score,roc_curve,auc
 
+from keras.models import load_model
+
 from scipy import interp
 
 import matplotlib.pyplot as plt
@@ -80,10 +82,19 @@ for i in np.arange(nc+1):
 
 pca = joblib.load(u'model_classification/PCA_classification.pkl')
 X = pca.transform(X)
-clf = joblib.load(model)
-yp = clf.predict(X)
+
+if model[-3:] == 'pkl':
+    clf = joblib.load(model)
+    yp = clf.predict(X)
+elif model[-2:] == 'h5':
+    clf = load_model(model)
+    yp = np.argmax(clf.predict(X),axis=1)
+
 data['CLASSIFICATION'] = yp
-error = 100*(1-clf.score(X,y))
+if model[-3:] == 'pkl':
+    error = 100*(1-clf.score(X,y))
+elif model[-2:] == 'h5':
+    error = 100*(1-clf.evaluate(X,label_binarize(y,np.arange(nc+1)))[1])
 data['ERROR'] = error
 print("error : "+str(error)+"%")
 
@@ -101,10 +112,9 @@ except:
 file_test_prediction = folder_model+os.path.basename(model)[:-4]+u'_prediction.csv'
 data.to_csv(file_test_prediction,encoding='utf-8')
 
-
 #print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
-os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
-
+#os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
+os.system(u'python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
 
 compute_roc = True
 
@@ -132,8 +142,13 @@ colors = [[49,140,231],
 
 if compute_roc:
     # Compute ROC curve and ROC area for each class
-    #yp = label_binarize(clf.predict(X), classes=np.arange(nc+1))
-    yp = clf.decision_function(X)
+    
+    if model[-3:] == 'pkl':
+        yp = clf.decision_function(X)
+    elif model[-2:] == 'h5':
+        yp = clf.predict_proba(X)
+    else:
+        yp = label_binarize(clf.predict(X), classes=np.arange(nc+1))
     yb = label_binarize(y, classes=np.arange(nc+1))
     n_classes = yb.shape[1]
     fpr = dict()
@@ -178,7 +193,7 @@ if compute_roc:
     plt.title('ROC curves')
     plt.legend(loc="lower right",fontsize = 'medium')
     plt.savefig(folder_model+os.path.basename(model)[:-4]+u'_roc_mean.png',dpi=1000)
-    plt.show()
+    #plt.show()
     # Plot all ROC curves
     plt.figure()
     for i in range(n_classes):
@@ -194,5 +209,5 @@ if compute_roc:
     plt.title('ROC curves')
     plt.legend(loc="lower right",fontsize = 'medium')
     plt.savefig(folder_model+os.path.basename(model)[:-4]+u'_roc.png',dpi=1000)
-    plt.show()
+    #plt.show()
 
