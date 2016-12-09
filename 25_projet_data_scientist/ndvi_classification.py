@@ -7,7 +7,7 @@
 from __future__ import print_function
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import OneHotEncoder,LabelEncoder
+from sklearn.preprocessing import OneHotEncoder,LabelEncoder, label_binarize
 
 from sklearn.metrics import accuracy_score,roc_curve,auc
 from sklearn.cross_validation import cross_val_score
@@ -93,6 +93,7 @@ X = data[variables].as_matrix();
 scaler = StandardScaler()
 scaler.fit(X)
 Xsc = scaler.transform(X)
+joblib.dump(scaler,u'model_classification/Scaler_classification.pkl')
 
 # projection
 n_components = 600;
@@ -141,6 +142,14 @@ cvo = StratifiedKFold(yo,n_folds=5,random_state=0) # cross-validation set
 results = [];
 verbose = 5
 
+def compute_mean_score(y,yp,nc):
+    mean_scores_per_category = np.zeros(nc+1)
+    for ic in np.arange(nc+1):
+	ni = (y==ic).sum()
+	pi = ((yp==ic) & (y==ic)).sum()
+        mean_scores_per_category[ic] = 100.0*pi/ni
+    return mean_scores_per_category
+
 print("* Support Vector Classification")
 n_samples = X.shape[0]
 #classes = [unicode(str(i)) for i in np.arange(nc+1).tolist()]
@@ -148,6 +157,9 @@ classes = np.arange(nc+1).tolist()
 C = 0.001
 weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
 class_weight = dict(zip(classes,weights))
+class_weight[1] = 2.5*class_weight[1]
+class_weight[2] = 1.25*class_weight[2]
+class_weight[3] = 2.0*class_weight[3]
 
 class_weight0 = class_weight.copy()
 class_weight0[1] = 2.5*class_weight[1]
@@ -184,8 +196,16 @@ grid.fit(Xpca,y)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
 info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
 results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
+
+print("* Support Vector Classification-oversampling")
 cl = LinearSVC(class_weight='balanced',dual=False,random_state=0,verbose=False)
 param_grid = {'penalty':['l2'],'C':[0.0001,0.001,0.01,0.1]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
@@ -193,8 +213,21 @@ grid.fit(Xo,yo)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
 info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
 info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
-results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+results.append(['Support Vector Classification-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+
 
 print("* Random Forest Classification")
 cl = RandomForestClassifier(n_estimators=40,max_depth=15,min_samples_split=20,min_samples_leaf=20,max_features=35,random_state=0)
@@ -202,6 +235,12 @@ param_grid = {'max_features':[15]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
 results.append(['Random Forest Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Gradient Boosting Classification")
@@ -210,6 +249,12 @@ param_grid = {'n_estimators':[40]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
 results.append(['Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Extreme Gradient Boosting Classification")
@@ -218,17 +263,36 @@ param_grid = {'learning_rate':[0.1]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),y))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
 results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Neural Network Classifier-oversampling")
 cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='constant', power_t=0.5, max_iter=200,random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
-param_grid = {'hidden_layer_sizes':[(2*n_components,)],'solver':['sgd'],'alpha':[0.001,0.01,0.1],'learning_rate_init':[0.0001,0.001]}
+param_grid = {'hidden_layer_sizes':[(2*n_components,)],'solver':['sgd'],'alpha':[0.001],'learning_rate_init':[0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,yo)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
 info = info+u'\n\n'
+mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
 info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
-results.append(['Neural Network Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+results.append(['Neural Network Classification-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* TensorFlow Neural Network Classification-oversampling")
 def make_model():
@@ -243,9 +307,20 @@ cl = KerasClassifier(make_model, nb_epoch=10)
 param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,to_categorical(yo,nc+1))
-info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
+info = np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)))
 info = info+u'\n\n'
-info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),y)))
+mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
 results.append(['Neural Network Classification TensorFlow-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
@@ -276,7 +351,7 @@ try:
 except:
     pass
 
-for res in results:
+for res in [results[-1]]:
     name = re.sub(u' ','_',res[0])
     model = res[6];
     folder_model = u'model_classification/'+name+'/'
