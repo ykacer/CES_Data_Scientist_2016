@@ -28,6 +28,17 @@ from pyproj import Proj
 #model = 'Gradient_Boosting_Classification'
 #narg = 4
 
+def compute_mean_score(y,yp,nc):
+    mean_scores_per_category = np.zeros(nc+1)
+    for ic in np.arange(nc+1):
+	ni = (y==ic).sum()
+	pi = ((yp==ic) & (y==ic)).sum()
+        if ni!=0:
+            mean_scores_per_category[ic] = 100.0*pi/ni
+        else:
+            mean_scores_per_category[ic] = -1
+    return mean_scores_per_category
+
 debugging = 0
 
 cities_file = sys.argv[1]
@@ -378,6 +389,13 @@ if 'CLASSIFICATION' in df.columns:
 	plt.show()
     plt.clf()
     log.write(metrics.classification_report(dc, yc, labels=np.arange(nc).tolist(), target_names=target_names,digits=3))
+    info = '\n\n'
+    mean_scores = compute_mean_score(dc,yc,nc-1)
+    for i in np.arange(nc):
+        info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
+    info = info+u'\n\n'
+    info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+    log.write(info)
     log.write(np.array_str(metrics.confusion_matrix(dc, yc, labels=np.arange(nc).tolist())))
     # plot density classification error
     errorc = yc-dc

@@ -147,7 +147,10 @@ def compute_mean_score(y,yp,nc):
     for ic in np.arange(nc+1):
 	ni = (y==ic).sum()
 	pi = ((yp==ic) & (y==ic)).sum()
-        mean_scores_per_category[ic] = 100.0*pi/ni
+        if ni!=0:
+            mean_scores_per_category[ic] = 100.0*pi/ni
+        else:
+            mean_scores_per_category[ic] = -1
     return mean_scores_per_category
 
 print("* Support Vector Classification")
@@ -199,9 +202,9 @@ info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
@@ -216,16 +219,16 @@ info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict
 info = info+u'\n\n'
 mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Support Vector Classification-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
@@ -238,9 +241,9 @@ info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Random Forest Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Gradient Boosting Classification")
@@ -252,9 +255,9 @@ info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Extreme Gradient Boosting Classification")
@@ -268,7 +271,7 @@ mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(mean_scores.mean())+'%\n\n'
 results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Neural Network Classifier-oversampling")
@@ -280,18 +283,18 @@ info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), y
 info = info+u'\n\n'
 mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Neural Network Classification-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* TensorFlow Neural Network Classification-oversampling")
@@ -311,16 +314,16 @@ info = np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)
 info = info+u'\n\n'
 mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 info = info+np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
-info = info+u'mean score per class : '+str(mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Neural Network Classification TensorFlow-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
