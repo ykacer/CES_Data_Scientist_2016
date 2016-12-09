@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.externals import joblib
-from sklearn.preprocessing import label_binarize
+from sklearn.preprocessing import StandardScaler,label_binarize
 from sklearn.metrics import accuracy_score,roc_curve,auc
 
 from keras.models import load_model
@@ -81,7 +81,9 @@ for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((y==i).sum())+" samples")
 
 pca = joblib.load(u'model_classification/PCA_classification.pkl')
-X = pca.transform(X)
+scaler = joblib.load(u'model_classification/Scaler_classification.pkl')
+Xsc = scaler.transform(X)
+X = pca.transform(Xsc)
 
 if model[-3:] == 'pkl':
     clf = joblib.load(model)
@@ -113,8 +115,8 @@ file_test_prediction = folder_model+os.path.basename(model)[:-4]+u'_prediction.c
 data.to_csv(file_test_prediction,encoding='utf-8')
 
 #print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
-#os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
-os.system(u'python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
+os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
+#os.system(u'python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
 
 compute_roc = True
 
@@ -143,9 +145,9 @@ colors = [[49,140,231],
 if compute_roc:
     # Compute ROC curve and ROC area for each class
     
-    if model[-3:] == 'pkl':
+    if 'decision_functon' in dir(clf):
         yp = clf.decision_function(X)
-    elif model[-2:] == 'h5':
+    elif 'predict_proba' in dir(clf):
         yp = clf.predict_proba(X)
     else:
         yp = label_binarize(clf.predict(X), classes=np.arange(nc+1))
