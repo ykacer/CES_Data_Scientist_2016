@@ -148,13 +148,51 @@ classes = np.arange(nc+1).tolist()
 C = 0.001
 weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
 class_weight = dict(zip(classes,weights))
-class_weight[1] = 2.0*class_weight[1]
-cl = LinearSVC(C=C,class_weight=class_weight,dual=False,random_state=0,verbose=False)
-param_grid = {'penalty':['l2']}
+
+class_weight0 = class_weight.copy()
+class_weight0[1] = 2.5*class_weight[1]
+class_weight0[2] = 2.5*class_weight[2]
+class_weight0[3] = 2.5*class_weight[3]
+class_weight0[4] = 2.5*class_weight[4]
+class_weight0[5] = 2.5*class_weight[5]
+
+class_weight1 = class_weight.copy()
+class_weight1[1] = 5.0*class_weight[1]
+class_weight1[2] = 5.0*class_weight[2]
+class_weight1[3] = 5.0*class_weight[3]
+class_weight1[4] = 5.0*class_weight[4]
+class_weight1[5] = 5.0*class_weight[5]
+
+class_weight2 = class_weight.copy()
+class_weight2[1] = 10*class_weight[1]
+class_weight2[2] = 12*class_weight[2]
+class_weight2[3] = 13*class_weight[3]
+class_weight2[4] = 15*class_weight[4]
+class_weight2[5] = 15*class_weight[5]
+
+class_weight3 = class_weight.copy()
+class_weight3[1] = 1.0*class_weight[1]
+class_weight3[2] = 1.2*class_weight[2]
+class_weight3[3] = 1.3*class_weight[3]
+class_weight3[4] = 1.5*class_weight[4]
+class_weight3[5] = 1.5*class_weight[5]
+
+cl = LinearSVC(C=C,dual=False,random_state=0,verbose=False)
+param_grid = {'penalty':['l2'],'class_weight':[class_weight0,class_weight1,class_weight2,class_weight3]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
+info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
+results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+
+cl = LinearSVC(class_weight='balanced',dual=False,random_state=0,verbose=False)
+param_grid = {'penalty':['l2'],'C':[0.0001,0.001,0.01,0.1]}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
+grid.fit(Xo,yo)
+#info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
+info=''
+info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
 info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
 results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
@@ -182,7 +220,7 @@ grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),y))
 results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-print("* Neural Network Classifier-oversampled")
+print("* Neural Network Classifier-oversampling")
 cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='constant', power_t=0.5, max_iter=200,random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
 param_grid = {'hidden_layer_sizes':[(2*n_components,)],'solver':['sgd'],'alpha':[0.001,0.01,0.1],'learning_rate_init':[0.0001,0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
@@ -192,7 +230,7 @@ info = info+u'\n\n'
 info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
 results.append(['Neural Network Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-print("* TensorFlow Neural Network Classification-oversampled")
+print("* TensorFlow Neural Network Classification-oversampling")
 def make_model():
     model = Sequential()
     model.add(Dense(output_dim=1204,input_dim=n_components,init='uniform',activation='relu'))
@@ -238,7 +276,7 @@ try:
 except:
     pass
 
-for res in [results[-6]]:
+for res in results:
     name = re.sub(u' ','_',res[0])
     model = res[6];
     folder_model = u'model_classification/'+name+'/'
@@ -246,7 +284,11 @@ for res in [results[-6]]:
         os.mkdir(folder_model)
     except:
         pass
-    joblib.dump(model,folder_model+name+u'.pkl')
+    try:
+        joblib.dump(model,folder_model+name+u'.pkl')
+    except:
+         model.model.save(folder_model+name+u'.h5')
+        
     f = codecs.open(folder_model+name+u'_report.txt','w','utf8')
     f.write(res[-1]+u'\n\n')
     f.write(u'score cv : '+str(res[3]*100)+u'%\n\n')
@@ -258,8 +300,12 @@ for res in [results[-6]]:
     f.write(metrics.classification_report(y, model.predict(Xpca), labels=np.arange(nc+1).tolist(), target_names=target_names,digits=3))
     f.close()
     # Compute ROC curve and ROC area for each class
-    #yp = label_binarize(model.predict(Xpca), classes=np.arange(nc+1))
-    yp = model.decision_function(Xpca)
+    if 'decision_functon' in dir(model):
+        yp = model.decision_function(Xpca)
+    elif 'predict_proba' in dir(model):
+        yp = model.predict_proba(Xpca)
+    else:
+        yp = label_binarize(model.predict(Xpca), classes=np.arange(nc+1))
     yb = label_binarize(y, classes=np.arange(nc+1))
     n_classes = yb.shape[1]
     fpr = dict()
