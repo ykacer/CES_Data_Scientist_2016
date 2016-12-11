@@ -1,0 +1,7 @@
+\beamer@endinputifotherversion {3.24pt}
+\select@language {french}
+\beamer@sectionintoc {1}{Summary}{2}{0}{1}
+\beamer@sectionintoc {2}{Presentation}{3}{0}{2}
+\beamer@sectionintoc {3}{Landsat-8 satellite imagery}{4}{0}{3}
+\beamer@subsectionintoc {3}{1}{Covering}{4}{0}{3}
+\beamer@subsectionintoc {3}{2}{Georeferencing}{5}{0}{3}
