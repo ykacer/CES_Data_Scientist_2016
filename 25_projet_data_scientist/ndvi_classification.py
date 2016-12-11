@@ -209,8 +209,16 @@ results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,g
 
 
 print("* Support Vector Classification-oversampling")
-cl = LinearSVC(class_weight='balanced',dual=False,random_state=0,verbose=False)
-param_grid = {'penalty':['l2'],'C':[0.0001,0.001,0.01,0.1]}
+n_sampleso = Xo.shape[0]
+#classes = [unicode(str(i)) for i in np.arange(nc+1).tolist()]
+classeso = np.arange(nc+1).tolist()
+weightso = 1.0*n_sampleso / (n_cl * np.bincount(yo.astype(np.int64)))
+class_weighto = dict(zip(classeso,weightso))
+class_weighto[0] = 1.1*class_weighto[0]
+class_weighto[1] = 1.1*class_weighto[1]
+Co = 0.1
+cl = LinearSVC(C=Co,dual=False,random_state=0,verbose=False)
+param_grid = {'penalty':['l2'],'class_weight':[class_weighto]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,yo)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
@@ -374,6 +382,9 @@ for res in [results[-1]]:
     f.write(u'grid scores : \n')
     for gs in res[1]:
         f.write(u'\t'+str(gs)+u'\n')
+    f.write(u'\n')
+    f.write(u'best params : \n')
+    f.write(str(results[4]))
     f.write(u'\n')
     f.write(metrics.classification_report(y, model.predict(Xpca), labels=np.arange(nc+1).tolist(), target_names=target_names,digits=3))
     f.close()
