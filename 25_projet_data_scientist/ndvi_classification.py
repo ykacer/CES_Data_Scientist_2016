@@ -46,7 +46,7 @@ from imblearn.combine import SMOTEENN
 from imblearn.ensemble import EasyEnsemble
 from imblearn.ensemble import BalanceCascade
 
-from keras.model import Sequential
+from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.np_utils import to_categorical
@@ -100,7 +100,7 @@ Xsc = scaler.transform(X)
 joblib.dump(scaler,u'model_classification/Scaler_classification.pkl')
 
 # projection
-n_components = 600;
+n_components = 608;
 pca = PCA(n_components=n_components);
 Xpca = pca.fit_transform(Xsc);
 joblib.dump(pca,u'model_classification/PCA_classification.pkl')
@@ -158,7 +158,7 @@ def compute_mean_score(y,yp,nc):
     return mean_scores_per_category
 
 print("* Support Vector Classification")
-n_samples = X.shape[0]
+n_samples = X.shape[]
 #classes = [unicode(str(i)) for i in np.arange(nc+1).tolist()]
 classes = np.arange(nc+1).tolist()
 C = 0.001
@@ -321,7 +321,7 @@ def make_model():
 cl = KerasClassifier(make_model, nb_epoch=10)
 param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
-grid.fit(Xo,to_categorical(yo,nc+1))
+grid.fit(Xo,to_categorical(yo,n_cl))
 info = np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
@@ -338,10 +338,10 @@ info = info+u'\n\n'
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Neural Network Classification TensorFlow-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-print("* Convolutional Neural Network Regression (Keras)")
+print("* TensorFlow Convolutional Neural Network Classification")
 def make_cnn(loss='categorical_crossentropy',optimizer='adam'):
     model = Sequential()
-    model.add(Convolution1D(1,16,subsample_length=16,border_mode='same',input_shape=(X.shape[1],1)))
+    model.add(Convolution1D(1,19,subsample_length=19,border_mode='same',input_shape=(n_components,1)))
     model.add(Activation('relu'))
     model.add(MaxPooling1D(pool_length=2))
     model.add(Convolution1D(32, 3, border_mode='same',input_shape=(1,32)))
@@ -362,14 +362,33 @@ def make_cnn(loss='categorical_crossentropy',optimizer='adam'):
     model.add(Dropout(0.5))
     model.add(Dense(n_cl))
     model.add(Activation('softmax'))
+    model.compile(loss=loss, optimizer=optimizer, metrics=['accuracy'])
     return model
 
 cl = KerasClassifier(make_cnn, nb_epoch=100)
 optimizers = [SGD(lr=0.001, decay=1e-3, momentum=0.9, nesterov=True)]
-param_grid = {'batch_size':[100],'optimizer':optimizers}
+#param_grid = {'batch_size':[100],'optimizer':optimizers}
+param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
-grid.fit(X.reshape(X.shape + (1,)),to_categorical(y,n_cl))
-results.append(['Convolutional Neural Network Regression (Keras)',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,""])
+grid.fit(Xo.reshape(Xo.shape + (1,)),to_categorical(yo,n_cl))
+
+info = np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo.reshape(Xo.shape + (1,)))))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo.reshape(Xo.shape + (1,))),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
+
+info = info+u'\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+info = info+np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca.reshape(Xpca.shape + (1,)))))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca.reshape(Xpca.shape + (1,))),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
+
+info = info+u'\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+results.append(['Convolutional Neural Network Classification TensorFlow',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
 colors = [[49,140,231],
@@ -411,7 +430,6 @@ for res in [results[-1]]:
         joblib.dump(model,folder_model+name+u'.pkl')
     except:
          model.model.save(folder_model+name+u'.h5')
-        
     f = codecs.open(folder_model+name+u'_report.txt','w','utf8')
     f.write(res[-1]+u'\n\n')
     f.write(u'score cv : '+str(res[3]*100)+u'%\n\n')
@@ -423,13 +441,20 @@ for res in [results[-1]]:
     f.write(u'best params : \n')
     f.write(str(results[4]))
     f.write(u'\n')
-    f.write(metrics.classification_report(y, model.predict(Xpca), labels=np.arange(nc+1).tolist(), target_names=target_names,digits=3))
+    try:
+        yhat = model.predict(Xpca)
+    except:
+        yhat = model.predict(Xpca.reshape(Xpca.shape + (1,)))
+    f.write(metrics.classification_report(y, yhat, labels=np.arange(nc+1).tolist(), target_names=target_names,digits=3))
     f.close()
     # Compute ROC curve and ROC area for each class
     if 'decision_functon' in dir(model):
         yp = model.decision_function(Xpca)
     elif 'predict_proba' in dir(model):
-        yp = model.predict_proba(Xpca)
+	try:
+        	yp = model.predict_proba(Xpca)
+	except:
+		yp =  model.predict_proba(Xpca.reshape(Xpca.shape + (1,)))
     else:
         yp = label_binarize(model.predict(Xpca), classes=np.arange(nc+1))
     yb = label_binarize(y, classes=np.arange(nc+1))

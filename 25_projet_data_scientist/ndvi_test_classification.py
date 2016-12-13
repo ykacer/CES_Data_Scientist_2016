@@ -90,13 +90,19 @@ if model[-3:] == 'pkl':
     yp = clf.predict(X)
 elif model[-2:] == 'h5':
     clf = load_model(model)
-    yp = np.argmax(clf.predict(X),axis=1)
+    try:
+        yp = np.argmax(clf.predict(X),axis=1)
+    except:
+        yp = np.argmax(clf.predict(X.reshape(X.shape + (1,))),axis=1)
 
 data['CLASSIFICATION'] = yp
 if model[-3:] == 'pkl':
     error = 100*(1-clf.score(X,y))
 elif model[-2:] == 'h5':
-    error = 100*(1-clf.evaluate(X,label_binarize(y,np.arange(nc+1)))[1])
+    try:
+        error = 100*(1-clf.evaluate(X,label_binarize(y,np.arange(nc+1)))[1])
+    except:
+        error = 100*(1-clf.evaluate(X.reshape(X.shape + (1,)),label_binarize(y,np.arange(nc+1)))[1])
 data['ERROR'] = error
 print("error : "+str(error)+"%")
 
@@ -104,19 +110,21 @@ try:
 	os.mkdir(folder+u'/test/')
 except:
 	pass
-
-folder_model = folder+u'/test/'+os.path.basename(model)[:-4]+'/'
+print(model)
+print(os.path.basename(model))
+print(os.path.basename(model)[:str.rfind(os.path.basename(model),'.')])
+folder_model = folder+u'/test/'+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+'/'
 try:
 	os.mkdir(folder_model)
 except:
 	pass
 
-file_test_prediction = folder_model+os.path.basename(model)[:-4]+u'_prediction.csv'
+file_test_prediction = folder_model+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'_prediction.csv'
 data.to_csv(file_test_prediction,encoding='utf-8')
 
 #print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
-os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
-#os.system(u'python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:-4]+u'.png')
+os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
+#os.system(u'python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
 
 compute_roc = True
 
@@ -148,9 +156,15 @@ if compute_roc:
     if 'decision_functon' in dir(clf):
         yp = clf.decision_function(X)
     elif 'predict_proba' in dir(clf):
-        yp = clf.predict_proba(X)
+        try:
+            yp = clf.predict_proba(X)
+        except:
+            yp = clf.predict_proba(X.reshape(X.shape + (1,)))
     else:
-        yp = label_binarize(clf.predict(X), classes=np.arange(nc+1))
+        try:
+            yp = label_binarize(clf.predict(X), classes=np.arange(nc+1))
+        except:
+            yp = label_binarize(clf.predict(X.reshape(X.shape + (1,))), classes=np.arange(nc+1))
     yb = label_binarize(y, classes=np.arange(nc+1))
     n_classes = yb.shape[1]
     fpr = dict()
@@ -194,7 +208,7 @@ if compute_roc:
     plt.ylabel('True Positive Rate')
     plt.title('ROC curves')
     plt.legend(loc="lower right",fontsize = 'medium')
-    plt.savefig(folder_model+os.path.basename(model)[:-4]+u'_roc_mean.png',dpi=1000)
+    plt.savefig(folder_model+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'_roc_mean.png',dpi=1000)
     #plt.show()
     # Plot all ROC curves
     plt.figure()
@@ -210,6 +224,6 @@ if compute_roc:
     plt.ylabel('True Positive Rate')
     plt.title('ROC curves')
     plt.legend(loc="lower right",fontsize = 'medium')
-    plt.savefig(folder_model+os.path.basename(model)[:-4]+u'_roc.png',dpi=1000)
+    plt.savefig(folder_model+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'_roc.png',dpi=1000)
     #plt.show()
 
