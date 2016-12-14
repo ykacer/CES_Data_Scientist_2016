@@ -22,6 +22,7 @@ from sklearn.decomposition import PCA
 from sklearn.svm import SVC,LinearSVC
 from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 from xgboost.sklearn import XGBClassifier
 
@@ -133,7 +134,7 @@ print('*** Classe Distribution :')
 for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((y==i).sum())+" samples")
 
-ROS = RandomOverSampler(ratio=0.4)
+ROS = RandomOverSampler(ratio=0.3)
 Xo,yo = ROS.fit_sample(Xpca,y)
 print('*** Classe Distribution (after oversampling):')
 for i in np.arange(nc+1):
@@ -141,7 +142,7 @@ for i in np.arange(nc+1):
 
 print("*** Classification bench")
 cv = StratifiedKFold(y,n_folds=5,random_state=0) # cross-validation set
-cvo = StratifiedKFold(yo,n_folds=5,random_state=0) # cross-validation set
+cvo = StratifiedKFold(yo,n_folds=5,random_state=1) # cross-validation set
 
 results = [];
 verbose = 5
@@ -202,7 +203,7 @@ grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
-info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
+info = info + np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
@@ -227,14 +228,14 @@ grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,yo)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
-info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
+info = info + np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
 for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
-info = info + np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
+info = info + np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
@@ -249,7 +250,7 @@ cl = RandomForestClassifier(n_estimators=40,max_depth=15,min_samples_split=20,mi
 param_grid = {'max_features':[15]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
-info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
+info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
@@ -263,12 +264,13 @@ cl = GradientBoostingClassifier(learning_rate=0.45, n_estimators=40, min_samples
 param_grid = {'n_estimators':[40]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
-info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
-info = info+u'\n\n'
+info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+info = info+u"\n\n"
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
-info = info+u'\n\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+u"%\n"
+
+info = info+u"\n\n"
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
@@ -277,7 +279,7 @@ cl = XGBClassifier(learning_rate =0.1,n_estimators=1000,max_depth=5,min_child_we
 param_grid = {'learning_rate':[0.1]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
-info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca),y))
+info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
@@ -291,7 +293,7 @@ cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='const
 param_grid = {'hidden_layer_sizes':[(2*n_components,)],'solver':['sgd'],'alpha':[0.001],'learning_rate_init':[0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,yo)
-info = np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xo), yo))
+info = np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
 for i in np.arange(nc+1):
@@ -299,7 +301,7 @@ for i in np.arange(nc+1):
 
 info = info+u'\n\n'
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
-info = info+np.array_str(metrics.confusion_matrix(grid.best_estimator_.predict(Xpca), y))
+info = info+np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
@@ -365,11 +367,15 @@ def make_cnn(loss='categorical_crossentropy',optimizer='adam'):
     model.compile(loss=loss, optimizer=optimizer, metrics=['accuracy'])
     return model
 
-cl = KerasClassifier(make_cnn, nb_epoch=100)
-optimizers = [SGD(lr=0.001, decay=1e-3, momentum=0.9, nesterov=True)]
+cl = KerasClassifier(make_cnn, nb_epoch=50)
+sample_weight = np.ones_like(yo)
+sample_weight[yo==1]=2.0
+#optimizers = [Nadam(),Adam(),Adagrad(),SGD(lr=0.001, decay=1e-3, momentum=0.9, nesterov=True),RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)]
+#optimizers = [RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)]
 #param_grid = {'batch_size':[100],'optimizer':optimizers}
 param_grid = {'batch_size':[100]}
-grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid = grid_search.GridSearchCV(cl,param_grid,fit_params={'sample_weight':sample_weight},cv=cvo,verbose=verbose)
+
 grid.fit(Xo.reshape(Xo.shape + (1,)),to_categorical(yo,n_cl))
 
 info = np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo.reshape(Xo.shape + (1,)))))
@@ -389,6 +395,21 @@ for i in np.arange(nc+1):
 info = info+u'\n\n'
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Convolutional Neural Network Classification TensorFlow',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+
+
+print("* Nearest Neighboors")
+cl = KNeighborsClassifier()
+param_grid = {'n_neighboors':[180],'weights':['uniform'],'algorithm':['auto'],'leaf_size':[30],'p':[2]}
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(Xpca,y)
+info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+info = info+u'\n\n'
+mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
+info = info+u'\n\n'
+info = info+u'mean error per class : '+str(mean_scores.mean())+'%\n\n'
+results.append(['Nearest Neighboors Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
 colors = [[49,140,231],
@@ -439,7 +460,7 @@ for res in [results[-1]]:
         f.write(u'\t'+str(gs)+u'\n')
     f.write(u'\n')
     f.write(u'best params : \n')
-    f.write(str(results[4]))
+    f.write(str(res[4]))
     f.write(u'\n')
     try:
         yhat = model.predict(Xpca)
