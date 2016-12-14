@@ -134,7 +134,7 @@ print('*** Classe Distribution :')
 for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((y==i).sum())+" samples")
 
-ROS = RandomOverSampler(ratio=0.3)
+ROS = RandomOverSampler(ratio=0.5)
 Xo,yo = ROS.fit_sample(Xpca,y)
 print('*** Classe Distribution (after oversampling):')
 for i in np.arange(nc+1):
@@ -220,7 +220,7 @@ classeso = np.arange(nc+1).tolist()
 weightso = 1.0*n_sampleso / (n_cl * np.bincount(yo.astype(np.int64)))
 class_weighto = dict(zip(classeso,weightso))
 class_weighto[0] = 1.1*class_weighto[0]
-class_weighto[1] = 1.1*class_weighto[1]
+class_weighto[1] = 1.4*class_weighto[1]
 Co = 0.1
 cl = LinearSVC(C=Co,dual=False,random_state=0,verbose=False)
 param_grid = {'penalty':['l2'],'class_weight':[class_weighto]}
@@ -229,19 +229,21 @@ grid.fit(Xo,yo)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
 info = info + np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)))
-info = info+u'\n\n'
+info = info+u"\n\n"
 mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
-info = info+u'\n\n'
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
+
+info = info+u"\n\n"
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
 info = info + np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
-info = info+u'\n\n'
+info = info+u"\n\n"
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
-info = info+u'\n\n'
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
+
+info = info+u"\n\n"
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
 results.append(['Support Vector Classification-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
@@ -399,16 +401,17 @@ results.append(['Convolutional Neural Network Classification TensorFlow',grid.gr
 
 print("* Nearest Neighboors")
 cl = KNeighborsClassifier()
-param_grid = {'n_neighboors':[180],'weights':['uniform'],'algorithm':['auto'],'leaf_size':[30],'p':[2]}
+param_grid = {'n_neighbors':[100,120,140,180,200,220,240],'weights':['uniform','distance'],'algorithm':['auto'],'leaf_size':[30],'p':[2]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
-info = info+u'\n\n'
+info = info+u"\n\n"
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
-info = info+u'\n\n'
-info = info+u'mean error per class : '+str(mean_scores.mean())+'%\n\n'
+    info = info+target_names[i]+': '+str(mean_scores[i])+"%\n"
+
+info = info+u"\n\n"
+info = info+u'mean error per class : '+str(mean_scores.mean())+"%\n\n"
 results.append(['Nearest Neighboors Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
