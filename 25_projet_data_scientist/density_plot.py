@@ -93,7 +93,7 @@ if 'PREDICTION' in df.columns:
 
 d = p/s
 density = folder+u'/density.png'
-density_cat = folder+u'/density_cat.png'
+density_cat = folder+u'/density_ground_truth.png'
 
 print "density max : ",d.max(),u"habs/km²"
 print "density min : ",d.min(),u"habs/km²"
