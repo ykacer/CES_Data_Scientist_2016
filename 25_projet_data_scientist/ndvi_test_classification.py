@@ -111,8 +111,6 @@ try:
 except:
 	pass
 print(model)
-print(os.path.basename(model))
-print(os.path.basename(model)[:str.rfind(os.path.basename(model),'.')])
 folder_model = folder+u'/test/'+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+'/'
 try:
 	os.mkdir(folder_model)
