@@ -169,34 +169,6 @@ class_weight[1] = 2.5*class_weight[1]
 class_weight[2] = 1.25*class_weight[2]
 class_weight[3] = 2.0*class_weight[3]
 
-class_weight0 = class_weight.copy()
-class_weight0[1] = 2.5*class_weight[1]
-class_weight0[2] = 2.5*class_weight[2]
-class_weight0[3] = 2.5*class_weight[3]
-class_weight0[4] = 2.5*class_weight[4]
-class_weight0[5] = 2.5*class_weight[5]
-
-class_weight1 = class_weight.copy()
-class_weight1[1] = 5.0*class_weight[1]
-class_weight1[2] = 5.0*class_weight[2]
-class_weight1[3] = 5.0*class_weight[3]
-class_weight1[4] = 5.0*class_weight[4]
-class_weight1[5] = 5.0*class_weight[5]
-
-class_weight2 = class_weight.copy()
-class_weight2[1] = 10*class_weight[1]
-class_weight2[2] = 12*class_weight[2]
-class_weight2[3] = 13*class_weight[3]
-class_weight2[4] = 15*class_weight[4]
-class_weight2[5] = 15*class_weight[5]
-
-class_weight3 = class_weight.copy()
-class_weight3[1] = 1.0*class_weight[1]
-class_weight3[2] = 1.2*class_weight[2]
-class_weight3[3] = 1.3*class_weight[3]
-class_weight3[4] = 1.5*class_weight[4]
-class_weight3[5] = 1.5*class_weight[5]
-
 cl = LinearSVC(C=C,dual=False,random_state=0,verbose=False)
 param_grid = {'penalty':['l2'],'class_weight':[class_weight]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
@@ -222,9 +194,18 @@ weightso = 1.0*n_sampleso / (n_cl * np.bincount(yo.astype(np.int64)))
 class_weighto = dict(zip(classeso,weightso))
 class_weighto[0] = 1.1*class_weighto[0]
 class_weighto[1] = 1.6*class_weighto[1]
+
+class_weighto1 = dict(zip(classeso,weightso))
+class_weighto1[0] = 1.3*class_weighto1[0]
+class_weighto1[1] = 1.6*class_weighto1[1]
+
+class_weighto2 = dict(zip(classeso,weightso))
+class_weighto2[0] = 1.6*class_weighto2[0]
+class_weighto2[1] = 1.6*class_weighto2[1]
+
 Co = 0.1
 cl = LinearSVC(C=Co,dual=False,random_state=0,verbose=False)
-param_grid = {'penalty':['l2'],'class_weight':[class_weighto]}
+param_grid = {'penalty':['l2'],'class_weight':[class_weighto,class_weighto1,class_weighto2]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,yo)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
@@ -402,7 +383,7 @@ results.append(['Convolutional Neural Network Classification TensorFlow',grid.gr
 
 print("* Nearest Neighboors")
 cl = KNeighborsClassifier()
-param_grid = {'n_neighbors':[20,25,30,35,40],'weights':['uniform','distance'],'algorithm':['auto'],'leaf_size':[10,20,30,40],'p':[1,2]}
+param_grid = {'n_neighbors':[20],'weights':['uniform','distance'],'algorithm':['auto'],'leaf_size':[10,20,30,40,50],'p':[1,2]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
