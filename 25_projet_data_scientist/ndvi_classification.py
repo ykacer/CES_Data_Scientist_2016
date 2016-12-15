@@ -159,7 +159,7 @@ def compute_mean_score(y,yp,nc):
     return mean_scores_per_category
 
 print("* Support Vector Classification")
-n_samples = X.shape[]
+n_samples = X.shape[0]
 #classes = [unicode(str(i)) for i in np.arange(nc+1).tolist()]
 classes = np.arange(nc+1).tolist()
 C = 0.001
@@ -198,18 +198,19 @@ class_weight3[4] = 1.5*class_weight[4]
 class_weight3[5] = 1.5*class_weight[5]
 
 cl = LinearSVC(C=C,dual=False,random_state=0,verbose=False)
-param_grid = {'penalty':['l2'],'class_weight':[class_weight0,class_weight1,class_weight2,class_weight3]}
+param_grid = {'penalty':['l2'],'class_weight':[class_weight]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
 info = info + np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
-info = info+u'\n\n'
+info = info+u"\n\n"
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
-info = info+u'\n\n'
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
+
+info = info+u"\n\n"
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
 results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
@@ -220,7 +221,7 @@ classeso = np.arange(nc+1).tolist()
 weightso = 1.0*n_sampleso / (n_cl * np.bincount(yo.astype(np.int64)))
 class_weighto = dict(zip(classeso,weightso))
 class_weighto[0] = 1.1*class_weighto[0]
-class_weighto[1] = 1.4*class_weighto[1]
+class_weighto[1] = 1.6*class_weighto[1]
 Co = 0.1
 cl = LinearSVC(C=Co,dual=False,random_state=0,verbose=False)
 param_grid = {'penalty':['l2'],'class_weight':[class_weighto]}
@@ -401,7 +402,7 @@ results.append(['Convolutional Neural Network Classification TensorFlow',grid.gr
 
 print("* Nearest Neighboors")
 cl = KNeighborsClassifier()
-param_grid = {'n_neighbors':[100,120,140,180,200,220,240],'weights':['uniform','distance'],'algorithm':['auto'],'leaf_size':[30],'p':[2]}
+param_grid = {'n_neighbors':[20,25,30,35,40],'weights':['uniform','distance'],'algorithm':['auto'],'leaf_size':[10,20,30,40],'p':[1,2]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
