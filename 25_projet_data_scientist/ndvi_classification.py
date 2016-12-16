@@ -82,12 +82,16 @@ data = pd.read_csv('France/ndvi_features.csv',dtype={'SURFACE':np.float64})
 data = data[data.SURFACE != 0]
 variables = [v for v in data.columns if v.isdigit()]
 if 'PMUN13' in data.columns:
+    data = data[data.PMUN13 != 0]
     population = data['PMUN13'].as_matrix()
 elif 'PMUN14' in data.columns:
+    data = data[data.PMUN14 != 0]
     population = data['PMUN14'].as_matrix()
 elif 'PMUN15' in data.columns:
+    data = data[data.PMUN15 != 0]
     population = data['PMUN15'].as_matrix()
 elif 'PMUN16' in data.columns:
+    data = data[data.PMUN16 != 0]
     population = data['PMUN16'].as_matrix()
 
 surface = data['SURFACE'].as_matrix()
@@ -97,8 +101,8 @@ densite = population/surface;
 X = data[variables].as_matrix(); 
 scaler = StandardScaler()
 scaler.fit(X)
-Xsc = scaler.transform(X)
 joblib.dump(scaler,u'model_classification/Scaler_classification.pkl')
+Xsc = scaler.transform(X)
 
 # projection
 n_components = 608;
@@ -134,8 +138,15 @@ print('*** Classe Distribution :')
 for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((y==i).sum())+" samples")
 
-ROS = RandomOverSampler(ratio=0.5)
-Xo,yo = ROS.fit_sample(Xpca,y)
+#ROS = RandomOverSampler(ratio=0.5)
+#Xo,yo = ROS.fit_sample(Xpca,y)
+
+Xo = Xpca;
+yo = y;
+for i in np.arange(nc):
+    SMO = SMOTE(ratio=0.5,random_state=0);
+    Xo,yo = SMO.fit_sample(Xo,yo)
+
 print('*** Classe Distribution (after oversampling):')
 for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((yo==i).sum())+" samples")
@@ -160,15 +171,13 @@ def compute_mean_score(y,yp,nc):
 
 print("* Support Vector Classification")
 n_samples = X.shape[0]
-#classes = [unicode(str(i)) for i in np.arange(nc+1).tolist()]
 classes = np.arange(nc+1).tolist()
 C = 0.001
 weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
 class_weight = dict(zip(classes,weights))
-class_weight[1] = 2.5*class_weight[1]
-class_weight[2] = 1.25*class_weight[2]
+class_weight[1] = 2.0*class_weight[1]
+class_weight[2] = 2.0*class_weight[2]
 class_weight[3] = 2.0*class_weight[3]
-
 cl = LinearSVC(C=C,dual=False,random_state=0,verbose=False)
 param_grid = {'penalty':['l2'],'class_weight':[class_weight]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
@@ -188,7 +197,6 @@ results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,g
 
 print("* Support Vector Classification-oversampling")
 n_sampleso = Xo.shape[0]
-#classes = [unicode(str(i)) for i in np.arange(nc+1).tolist()]
 classeso = np.arange(nc+1).tolist()
 weightso = 1.0*n_sampleso / (n_cl * np.bincount(yo.astype(np.int64)))
 class_weighto = dict(zip(classeso,weightso))
@@ -205,10 +213,9 @@ class_weighto2[1] = 1.6*class_weighto2[1]
 
 Co = 0.1
 cl = LinearSVC(C=Co,dual=False,random_state=0,verbose=False)
-param_grid = {'penalty':['l2'],'class_weight':[class_weighto,class_weighto1,class_weighto2]}
+param_grid = {'penalty':['l2'],'class_weight':[class_weighto1]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
 grid.fit(Xo,yo)
-#info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
 info = info + np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)))
 info = info+u"\n\n"
@@ -264,15 +271,16 @@ param_grid = {'learning_rate':[0.1]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
-info = info+u'\n\n'
+info = info+u"\n\n";
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+'%\n'
-info = info+u'\n\n'
-info = info+u'mean error per class : '+str(mean_scores.mean())+'%\n\n'
+    info = info+target_names[i]+": "+str(mean_scores[i])+"%\n";
+
+info = info+u"\n\n"
+info = info+u'mean error per class : '+str(mean_scores.mean())+"%\n\n"
 results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-print("* Neural Network Classifier-oversampling")
+print("* Neural Network Classification-oversampling")
 cl = MLPClassifier(activation='logistic', batch_size='auto',learning_rate='constant', power_t=0.5, max_iter=200,random_state=0,tol=0.0001,momentum=0.9,nesterovs_momentum=True,early_stopping=False,verbose=True)
 param_grid = {'hidden_layer_sizes':[(2*n_components,)],'solver':['sgd'],'alpha':[0.001],'learning_rate_init':[0.001]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
@@ -351,26 +359,26 @@ def make_cnn(loss='categorical_crossentropy',optimizer='adam'):
     model.compile(loss=loss, optimizer=optimizer, metrics=['accuracy'])
     return model
 
-cl = KerasClassifier(make_cnn, nb_epoch=50)
-sample_weight = np.ones_like(yo)
-sample_weight[yo==1]=2.0
+cl = KerasClassifier(make_cnn, nb_epoch=20)
+n_samples = X.shape[0]
+classes = np.arange(nc+1).tolist()
+weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
+weights = np.log(1+weights)
+class_weight = dict(zip(classes,weights))
+class_weight[2] = 2.0*class_weight[2] 
+class_weight[3] = 2.0*class_weight[3] 
+class_weight[4] = 2.0*class_weight[4] 
+class_weight[5] = 2.0*class_weight[5] 
 #optimizers = [Nadam(),Adam(),Adagrad(),SGD(lr=0.001, decay=1e-3, momentum=0.9, nesterov=True),RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)]
-#optimizers = [RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)]
+#optimizers = [SGD(lr=0.001, decay=1e-3, momentum=0.9, nesterov=True)]
+#optimizers = [Adam(lr=0.005)]
 #param_grid = {'batch_size':[100],'optimizer':optimizers}
 param_grid = {'batch_size':[100]}
-grid = grid_search.GridSearchCV(cl,param_grid,fit_params={'sample_weight':sample_weight},cv=cvo,verbose=verbose)
+grid = grid_search.GridSearchCV(cl,param_grid,fit_params={'class_weight':class_weight},cv=cv,verbose=verbose)
 
-grid.fit(Xo.reshape(Xo.shape + (1,)),to_categorical(yo,n_cl))
+grid.fit(Xpca.reshape(Xpca.shape + (1,)),to_categorical(y,n_cl))
 
-info = np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo.reshape(Xo.shape + (1,)))))
-info = info+u'\n\n'
-mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo.reshape(Xo.shape + (1,))),nc)
-for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
-
-info = info+u'\n\n'
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
-info = info+np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca.reshape(Xpca.shape + (1,)))))
+info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca.reshape(Xpca.shape + (1,)))))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca.reshape(Xpca.shape + (1,))),nc)
 for i in np.arange(nc+1):
@@ -381,21 +389,31 @@ info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Convolutional Neural Network Classification TensorFlow',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
-print("* Nearest Neighboors")
+print("* Nearest Neighboors-oversampling")
 cl = KNeighborsClassifier()
-param_grid = {'n_neighbors':[20],'weights':['uniform','distance'],'algorithm':['auto'],'leaf_size':[10,20,30,40,50],'p':[1,2]}
+param_grid = {'n_neighbors':[5],'weights':['distance'],'algorithm':['auto'],'leaf_size':[10],'p':[3]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
-grid.fit(Xpca,y)
-info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+grid.fit(Xo,yo)
+ypred = grid.best_estimator_.predict(Xo)
+info = np.array_str(metrics.confusion_matrix(yo,ypred))
 info = info+u"\n\n"
-mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+mean_scores = compute_mean_score(yo,ypred,nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(mean_scores[i])+"%\n"
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
 
 info = info+u"\n\n"
-info = info+u'mean error per class : '+str(mean_scores.mean())+"%\n\n"
-results.append(['Nearest Neighboors Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
+info = info+u"\n\n"
+ypred = grid.best_estimator_.predict(Xpca)
+info = info+np.array_str(metrics.confusion_matrix(y,ypred))
+info = info+u"\n\n"
+mean_scores = compute_mean_score(y,ypred,nc)
+for i in np.arange(nc+1):
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
 
+info = info+u"\n\n"
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
+results.append(['Nearest Neighboors Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 colors = [[49,140,231],
  [255,255,153],
@@ -435,7 +453,11 @@ for res in [results[-1]]:
     try:
         joblib.dump(model,folder_model+name+u'.pkl')
     except:
-         model.model.save(folder_model+name+u'.h5')
+        try:
+            model.model.save(folder_model+name+u'.h5')
+        except:
+            with open(folder_model+name+u'.pkl','wb') as fid:
+                cPickle.dump(model,fid)
     f = codecs.open(folder_model+name+u'_report.txt','w','utf8')
     f.write(res[-1]+u'\n\n')
     f.write(u'score cv : '+str(res[3]*100)+u'%\n\n')
