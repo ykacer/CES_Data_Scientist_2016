@@ -1,0 +1,18 @@
+
+
+score cv : -3.35069605361e+25
+
+error cv : 3.35069605361e+25
+
+score total : 0.0212688285862
+
+error total : 0.978731171414
+
+grid scores : 
+	mean: -33506960536058134532194304.00000, std: 27204038363157101837025280.00000, params: {'fit_intercept': False}
+
+best params : 
+{'fit_intercept': False}
+
+best estimator : 
+{'scoring': None, 'estimator__normalize': False, 'n_jobs': 1, 'verbose': 2, 'estimator__fit_intercept': True, 'fit_params': {}, 'estimator__copy_X': True, 'refit': True, 'iid': True, 'estimator': LinearRegression(copy_X=True, fit_intercept=True, n_jobs=1, normalize=False), 'error_score': 'raise', 'estimator__n_jobs': 1, 'param_grid': {'fit_intercept': [False]}, 'cv': ShuffleSplit(34190, n_iter=5, test_size=0.3, random_state=0), 'pre_dispatch': '2*n_jobs'}

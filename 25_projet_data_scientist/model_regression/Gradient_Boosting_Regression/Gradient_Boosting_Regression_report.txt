@@ -1,0 +1,27 @@
+
+
+score cv : 0.242512276351
+
+error cv : 0.757487723649
+
+score total : 0.60069816273
+
+error total : 0.39930183727
+
+grid scores : 
+	mean: 0.20645, std: 0.02501, params: {'max_features': 15}
+	mean: 0.20129, std: 0.04675, params: {'max_features': 20}
+	mean: 0.21925, std: 0.00276, params: {'max_features': 25}
+	mean: 0.20723, std: 0.04252, params: {'max_features': 30}
+	mean: 0.24251, std: 0.03613, params: {'max_features': 35}
+
+best params : 
+{'max_features': 35}
+
+best estimator : 
+{'n_jobs': 1, 'verbose': 2, 'estimator__max_features': None, 'estimator__max_depth': 8, 'estimator__alpha': 0.9, 'param_grid': {'max_features': [15, 20, 25, 30, 35]}, 'cv': ShuffleSplit(34190, n_iter=5, test_size=0.3, random_state=0), 'scoring': None, 'estimator__criterion': 'friedman_mse', 'estimator__max_leaf_nodes': None, 'estimator__init': None, 'estimator__verbose': 0, 'pre_dispatch': '2*n_jobs', 'estimator__loss': 'ls', 'estimator__min_samples_leaf': 110, 'fit_params': {}, 'estimator__min_samples_split': 200, 'estimator__warm_start': False, 'refit': True, 'iid': True, 'estimator__min_weight_fraction_leaf': 0.0, 'estimator__n_estimators': 40, 'estimator__presort': 'auto', 'estimator__min_impurity_split': 1e-07, 'estimator__learning_rate': 0.5, 'estimator__random_state': 0, 'estimator': GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
+             learning_rate=0.5, loss='ls', max_depth=8, max_features=None,
+             max_leaf_nodes=None, min_impurity_split=1e-07,
+             min_samples_leaf=110, min_samples_split=200,
+             min_weight_fraction_leaf=0.0, n_estimators=40, presort='auto',
+             random_state=0, subsample=0.8, verbose=0, warm_start=False), 'error_score': 'raise', 'estimator__subsample': 0.8}

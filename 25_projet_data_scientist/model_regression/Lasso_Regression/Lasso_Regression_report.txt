@@ -1,0 +1,29 @@
+
+
+score cv : 0.0351981753724
+
+error cv : 0.964801824628
+
+score total : 0.0463548822146
+
+error total : 0.953645117785
+
+grid scores : 
+	mean: -0.12648, std: 0.19021, params: {'alpha': 0.01, 'fit_intercept': True}
+	mean: -642.56770, std: 1081.66699, params: {'alpha': 0.01, 'fit_intercept': False}
+	mean: -0.06332, std: 0.14645, params: {'alpha': 0.1, 'fit_intercept': True}
+	mean: -557.82046, std: 1002.01240, params: {'alpha': 0.1, 'fit_intercept': False}
+	mean: 0.00787, std: 0.06133, params: {'alpha': 1.0, 'fit_intercept': True}
+	mean: -4.91885, std: 9.14232, params: {'alpha': 1.0, 'fit_intercept': False}
+	mean: 0.03520, std: 0.01978, params: {'alpha': 10.0, 'fit_intercept': True}
+	mean: -0.01551, std: 0.02061, params: {'alpha': 10.0, 'fit_intercept': False}
+	mean: 0.03062, std: 0.00803, params: {'alpha': 100.0, 'fit_intercept': True}
+	mean: -0.01875, std: 0.00793, params: {'alpha': 100.0, 'fit_intercept': False}
+
+best params : 
+{'alpha': 10.0, 'fit_intercept': True}
+
+best estimator : 
+{'estimator__normalize': False, 'estimator__precompute': False, 'verbose': 2, 'n_jobs': 1, 'estimator__alpha': 1.0, 'param_grid': {'alpha': [0.01, 0.1, 1.0, 10.0, 100.0], 'fit_intercept': [True, False]}, 'cv': ShuffleSplit(34190, n_iter=5, test_size=0.3, random_state=0), 'estimator__positive': False, 'scoring': None, 'estimator__copy_X': True, 'pre_dispatch': '2*n_jobs', 'fit_params': {}, 'estimator__selection': 'cyclic', 'estimator__warm_start': False, 'estimator__max_iter': 1000, 'refit': True, 'iid': True, 'estimator__fit_intercept': True, 'estimator__random_state': None, 'estimator': Lasso(alpha=1.0, copy_X=True, fit_intercept=True, max_iter=1000,
+   normalize=False, positive=False, precompute=False, random_state=None,
+   selection='cyclic', tol=0.0001, warm_start=False), 'error_score': 'raise', 'estimator__tol': 0.0001}

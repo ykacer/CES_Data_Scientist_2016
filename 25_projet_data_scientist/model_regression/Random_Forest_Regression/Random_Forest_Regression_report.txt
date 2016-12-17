@@ -1,0 +1,22 @@
+
+
+score cv : 0.212331648914
+
+error cv : 0.787668351086
+
+score total : 0.43240223653
+
+error total : 0.56759776347
+
+grid scores : 
+	mean: 0.21233, std: 0.01596, params: {'n_estimators': 160}
+
+best params : 
+{'n_estimators': 160}
+
+best estimator : 
+{'n_jobs': 1, 'verbose': 2, 'estimator__max_features': 17, 'estimator__max_depth': 13, 'param_grid': {'n_estimators': [160]}, 'cv': ShuffleSplit(34190, n_iter=5, test_size=0.3, random_state=0), 'scoring': None, 'estimator__criterion': 'mse', 'estimator__max_leaf_nodes': None, 'estimator__verbose': 0, 'estimator__n_jobs': 1, 'estimator__min_samples_leaf': 10, 'estimator__oob_score': False, 'fit_params': {}, 'estimator__min_samples_split': 10, 'estimator__warm_start': False, 'refit': True, 'iid': True, 'estimator__bootstrap': True, 'estimator__min_weight_fraction_leaf': 0.0, 'estimator__n_estimators': 10, 'pre_dispatch': '2*n_jobs', 'estimator__min_impurity_split': 1e-07, 'estimator__random_state': 0, 'estimator': RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=13,
+           max_features=17, max_leaf_nodes=None, min_impurity_split=1e-07,
+           min_samples_leaf=10, min_samples_split=10,
+           min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,
+           oob_score=False, random_state=0, verbose=0, warm_start=False), 'error_score': 'raise'}

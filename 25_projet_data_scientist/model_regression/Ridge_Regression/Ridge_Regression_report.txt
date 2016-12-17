@@ -1,0 +1,32 @@
+
+
+score cv : 0.00536460117843
+
+error cv : 0.994635398822
+
+score total : 0.0601566120069
+
+error total : 0.939843387993
+
+grid scores : 
+	mean: -49.58131, std: 61.39458, params: {'alpha': 0.001, 'fit_intercept': True}
+	mean: -3014.67598, std: 802.42512, params: {'alpha': 0.001, 'fit_intercept': False}
+	mean: -10.39472, std: 13.84261, params: {'alpha': 0.01, 'fit_intercept': True}
+	mean: -3003.96387, std: 784.96238, params: {'alpha': 0.01, 'fit_intercept': False}
+	mean: -1.87905, std: 1.77576, params: {'alpha': 0.1, 'fit_intercept': True}
+	mean: -2910.82812, std: 660.28181, params: {'alpha': 0.1, 'fit_intercept': False}
+	mean: -0.64471, std: 0.43115, params: {'alpha': 1.0, 'fit_intercept': True}
+	mean: -2080.62004, std: 388.22345, params: {'alpha': 1.0, 'fit_intercept': False}
+	mean: -0.21118, std: 0.24937, params: {'alpha': 10.0, 'fit_intercept': True}
+	mean: -582.92943, std: 411.84636, params: {'alpha': 10.0, 'fit_intercept': False}
+	mean: -0.06685, std: 0.15319, params: {'alpha': 100.0, 'fit_intercept': True}
+	mean: -38.48738, std: 50.03719, params: {'alpha': 100.0, 'fit_intercept': False}
+	mean: 0.00536, std: 0.06237, params: {'alpha': 1000.0, 'fit_intercept': True}
+	mean: -0.68972, std: 0.86057, params: {'alpha': 1000.0, 'fit_intercept': False}
+
+best params : 
+{'alpha': 1000.0, 'fit_intercept': True}
+
+best estimator : 
+{'estimator__solver': 'auto', 'estimator__normalize': False, 'n_jobs': 1, 'verbose': 2, 'estimator__fit_intercept': True, 'fit_params': {}, 'estimator__max_iter': None, 'estimator__copy_X': True, 'estimator__random_state': None, 'refit': True, 'pre_dispatch': '2*n_jobs', 'iid': True, 'estimator': Ridge(alpha=1.0, copy_X=True, fit_intercept=True, max_iter=None,
+   normalize=False, random_state=None, solver='auto', tol=0.001), 'error_score': 'raise', 'scoring': None, 'estimator__alpha': 1.0, 'param_grid': {'alpha': [0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0], 'fit_intercept': [True, False]}, 'cv': ShuffleSplit(34190, n_iter=5, test_size=0.3, random_state=0), 'estimator__tol': 0.001}

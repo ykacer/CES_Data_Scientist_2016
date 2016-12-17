@@ -1,0 +1,18 @@
+
+
+score cv : 0.118145261541
+
+error cv : 0.881854738459
+
+score total : 0.118145261541
+
+error total : 0.881854738459
+
+grid scores : 
+	mean: 129.32078, std: 5.83446, params: {'optimizer': <keras.optimizers.SGD object at 0x7f5f27c96950>, 'batch_size': 200}
+
+best params : 
+{'optimizer': <keras.optimizers.SGD object at 0x7f5f27c96950>, 'batch_size': 200}
+
+best estimator : 
+{'scoring': None, 'n_jobs': 1, 'verbose': 2, 'fit_params': {}, 'estimator__nb_epoch': 200, 'refit': True, 'iid': True, 'estimator': <keras.wrappers.scikit_learn.KerasRegressor object at 0x7f5f27faedd0>, 'error_score': 'raise', 'estimator__build_fn': <function make_cnn at 0x7f5edcebc488>, 'param_grid': {'optimizer': [<keras.optimizers.SGD object at 0x7f5f27c96950>], 'batch_size': [200]}, 'cv': ShuffleSplit(34190, n_iter=5, test_size=0.3, random_state=0), 'pre_dispatch': '2*n_jobs'}

@@ -1,0 +1,75 @@
+
+
+score cv : 0.027265799095
+
+error cv : 0.972734200905
+
+score total : 0.0528756451443
+
+error total : 0.947124354856
+
+grid scores : 
+	mean: 0.02716, std: 0.02946, params: {'epsilon': 0, 'C': 0.0001}
+	mean: 0.02716, std: 0.02947, params: {'epsilon': 0.1, 'C': 0.0001}
+	mean: 0.02716, std: 0.02947, params: {'epsilon': 0.2, 'C': 0.0001}
+	mean: 0.02717, std: 0.02946, params: {'epsilon': 0.5, 'C': 0.0001}
+	mean: 0.02719, std: 0.02945, params: {'epsilon': 1, 'C': 0.0001}
+	mean: 0.02721, std: 0.02944, params: {'epsilon': 2, 'C': 0.0001}
+	mean: 0.02727, std: 0.02939, params: {'epsilon': 4, 'C': 0.0001}
+	mean: -0.00641, std: 0.07679, params: {'epsilon': 0, 'C': 0.001}
+	mean: -0.00641, std: 0.07678, params: {'epsilon': 0.1, 'C': 0.001}
+	mean: -0.00641, std: 0.07679, params: {'epsilon': 0.2, 'C': 0.001}
+	mean: -0.00639, std: 0.07673, params: {'epsilon': 0.5, 'C': 0.001}
+	mean: -0.00651, std: 0.07694, params: {'epsilon': 1, 'C': 0.001}
+	mean: -0.00630, std: 0.07647, params: {'epsilon': 2, 'C': 0.001}
+	mean: -0.00615, std: 0.07603, params: {'epsilon': 4, 'C': 0.001}
+	mean: -0.09344, std: 0.17957, params: {'epsilon': 0, 'C': 0.01}
+	mean: -0.09294, std: 0.18034, params: {'epsilon': 0.1, 'C': 0.01}
+	mean: -0.09347, std: 0.17947, params: {'epsilon': 0.2, 'C': 0.01}
+	mean: -0.09276, std: 0.18026, params: {'epsilon': 0.5, 'C': 0.01}
+	mean: -0.09225, std: 0.17794, params: {'epsilon': 1, 'C': 0.01}
+	mean: -0.09121, std: 0.17794, params: {'epsilon': 2, 'C': 0.01}
+	mean: -0.09133, std: 0.17782, params: {'epsilon': 4, 'C': 0.01}
+	mean: -0.30514, std: 0.30280, params: {'epsilon': 0, 'C': 0.1}
+	mean: -0.27084, std: 0.28219, params: {'epsilon': 0.1, 'C': 0.1}
+	mean: -0.25812, std: 0.28474, params: {'epsilon': 0.2, 'C': 0.1}
+	mean: -0.25197, std: 0.26594, params: {'epsilon': 0.5, 'C': 0.1}
+	mean: -0.23886, std: 0.28335, params: {'epsilon': 1, 'C': 0.1}
+	mean: -0.20897, std: 0.25308, params: {'epsilon': 2, 'C': 0.1}
+	mean: -0.18384, std: 0.25586, params: {'epsilon': 4, 'C': 0.1}
+	mean: -0.74786, std: 0.48091, params: {'epsilon': 0, 'C': 1.0}
+	mean: -0.64572, std: 0.43531, params: {'epsilon': 0.1, 'C': 1.0}
+	mean: -0.52718, std: 0.42418, params: {'epsilon': 0.2, 'C': 1.0}
+	mean: -0.39281, std: 0.31974, params: {'epsilon': 0.5, 'C': 1.0}
+	mean: -0.37963, std: 0.33965, params: {'epsilon': 1, 'C': 1.0}
+	mean: -0.30387, std: 0.28653, params: {'epsilon': 2, 'C': 1.0}
+	mean: -0.27251, std: 0.28908, params: {'epsilon': 4, 'C': 1.0}
+	mean: -0.99694, std: 0.63545, params: {'epsilon': 0, 'C': 10.0}
+	mean: -0.90101, std: 0.64294, params: {'epsilon': 0.1, 'C': 10.0}
+	mean: -0.63234, std: 0.50677, params: {'epsilon': 0.2, 'C': 10.0}
+	mean: -0.53161, std: 0.43208, params: {'epsilon': 0.5, 'C': 10.0}
+	mean: -0.39278, std: 0.35058, params: {'epsilon': 1, 'C': 10.0}
+	mean: -0.30647, std: 0.31096, params: {'epsilon': 2, 'C': 10.0}
+	mean: -0.29959, std: 0.28762, params: {'epsilon': 4, 'C': 10.0}
+	mean: -2.15050, std: 2.39978, params: {'epsilon': 0, 'C': 100.0}
+	mean: -1.14775, std: 0.74749, params: {'epsilon': 0.1, 'C': 100.0}
+	mean: -0.80239, std: 0.45419, params: {'epsilon': 0.2, 'C': 100.0}
+	mean: -0.55158, std: 0.42945, params: {'epsilon': 0.5, 'C': 100.0}
+	mean: -0.40030, std: 0.32376, params: {'epsilon': 1, 'C': 100.0}
+	mean: -0.33930, std: 0.31352, params: {'epsilon': 2, 'C': 100.0}
+	mean: -0.24961, std: 0.29548, params: {'epsilon': 4, 'C': 100.0}
+	mean: -1.31852, std: 0.88218, params: {'epsilon': 0, 'C': 1000.0}
+	mean: -1.33600, std: 1.35563, params: {'epsilon': 0.1, 'C': 1000.0}
+	mean: -0.68089, std: 0.53312, params: {'epsilon': 0.2, 'C': 1000.0}
+	mean: -0.42556, std: 0.31813, params: {'epsilon': 0.5, 'C': 1000.0}
+	mean: -0.41741, std: 0.31804, params: {'epsilon': 1, 'C': 1000.0}
+	mean: -0.33775, std: 0.28836, params: {'epsilon': 2, 'C': 1000.0}
+	mean: -0.25581, std: 0.29543, params: {'epsilon': 4, 'C': 1000.0}
+
+best params : 
+{'epsilon': 4, 'C': 0.0001}
+
+best estimator : 
+{'estimator__epsilon': 0.0, 'scoring': None, 'n_jobs': 1, 'verbose': 2, 'estimator__fit_intercept': True, 'fit_params': {}, 'estimator__random_state': 0, 'estimator__C': 1.0, 'estimator__max_iter': 1000, 'refit': True, 'iid': True, 'estimator': LinearSVR(C=1.0, dual=False, epsilon=0.0, fit_intercept=True,
+     intercept_scaling=1.0, loss='squared_epsilon_insensitive',
+     max_iter=1000, random_state=0, tol=0.0001, verbose=False), 'estimator__verbose': False, 'error_score': 'raise', 'pre_dispatch': '2*n_jobs', 'estimator__dual': False, 'param_grid': {'epsilon': [0, 0.1, 0.2, 0.5, 1, 2, 4], 'C': [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0]}, 'estimator__intercept_scaling': 1.0, 'cv': ShuffleSplit(34190, n_iter=5, test_size=0.3, random_state=0), 'estimator__loss': 'squared_epsilon_insensitive', 'estimator__tol': 0.0001}

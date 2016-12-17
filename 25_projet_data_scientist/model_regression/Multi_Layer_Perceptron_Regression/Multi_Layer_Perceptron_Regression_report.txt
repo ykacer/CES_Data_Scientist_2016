@@ -1,0 +1,24 @@
+
+
+score cv : 0.416193087419
+
+error cv : 0.583806912581
+
+score total : 0.896872887429
+
+error total : 0.103127112571
+
+grid scores : 
+	mean: 0.41619, std: 0.04365, params: {'learning_rate_init': 0.001}
+
+best params : 
+{'learning_rate_init': 0.001}
+
+best estimator : 
+{'estimator__epsilon': 1e-08, 'n_jobs': 1, 'estimator__hidden_layer_sizes': (1000, 1000, 600), 'verbose': 2, 'estimator__early_stopping': False, 'estimator__nesterovs_momentum': True, 'estimator__alpha': 0.0001, 'param_grid': {'learning_rate_init': [0.001]}, 'estimator__shuffle': True, 'scoring': None, 'estimator__learning_rate_init': 0.001, 'estimator__activation': 'relu', 'estimator__verbose': False, 'pre_dispatch': '2*n_jobs', 'fit_params': {}, 'estimator__solver': 'adam', 'estimator__warm_start': False, 'estimator__max_iter': 200, 'refit': True, 'iid': True, 'cv': ShuffleSplit(34190, n_iter=5, test_size=0.3, random_state=0), 'estimator__beta_2': 0.999, 'estimator__beta_1': 0.9, 'estimator__power_t': 0.5, 'estimator__learning_rate': 'constant', 'estimator__random_state': None, 'estimator__batch_size': 'auto', 'estimator__momentum': 0.9, 'estimator': MLPRegressor(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(1000, 1000, 600), learning_rate='constant',
+       learning_rate_init=0.001, max_iter=200, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=0.0001, validation_fraction=0.1,
+       verbose=False, warm_start=False), 'error_score': 'raise', 'estimator__validation_fraction': 0.1, 'estimator__tol': 0.0001}
