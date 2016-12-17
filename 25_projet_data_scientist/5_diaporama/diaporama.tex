@@ -56,7 +56,7 @@
 \begin{itemize}
 \item Population census is expensive using conventional methods\\
   \begin{itemize}
-  \item 180 millions euros in France (\href{http://www.assemblee-nationale.fr/13/rap-info/i1246.asp}{officials,1999)}\\ 
+  \item 180 millions euros in France (\href{http://www.assemblee-nationale.fr/13/rap-info/i1246.asp}{officials,1999})\\ 
   \end{itemize}
 \item How High-resolution satellites images could explain human density?\\
 \item How to transform HR satellite images to explain human density?\\
@@ -71,7 +71,9 @@
 \end{frame}
 
 \begin{frame}
-Total earth covering defined by path,row grid pattern and achieved every 16 days
+\begin{itemize}
+\item Total earth covering defined by path,row grid pattern and achieved every 16 days
+\end{itemize}
 \begin{figure}
   \includegraphics[scale=0.13]{images/covering/wrs.png}
   \caption{Landsat-8 grid covering (path,row) for Virginia ($USA$) }
@@ -84,25 +86,28 @@ Total earth covering defined by path,row grid pattern and achieved every 16 days
 \end{frame}
 
 \begin{frame}
-Landsat-8 images are georeferenced : each pixel has (x,y) coordinates in a certain Projection Coordinates 
-System (\begin{itshape}UTM Mercator\end{itshape})\\
+\begin{itemize}
+ \item Landsat-8 images are georeferenced which means each pixel has (x,y) meter coordinates in a certain Projection Coordinates 
+System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{itshape})
+\end{itemize}
 \begin{columns}
 
 \begin{column}{5cm}
 \begin{figure}
   \includegraphics[scale=0.2]{images/georeferencing/Thonon_landsat.png}
-  \caption{Landsat-8 grid covering (path,row) for Virginia ($USA$) }
+  \caption{Landsat-8 Eastern-France image path=$196$,row=$028$ georeferenced in $UTM$ system (image containing city Thonon-les-Bains)}
 \end{figure}
 \end{column}
 
 \begin{column}{5cm}
 \begin{block}{coordinates}
- %\begin{itemize}
-  %\item [upper left point] t\\
-  %\item [upper right point] a\\
-  %\item [bottom right point] x\\
-  %\item [bottom left point] i\\
-  %\end{itemize}
+ \begin{itemize}
+  \item upper-left (,)\\
+  \item upper-right (,)\\
+  \item bottom-right (,)\\
+  \item bottom-left (,)\\
+  \item center (,)\\
+  \end{itemize}
  \end{block}
 \end{column}
 
@@ -111,37 +116,95 @@ System (\begin{itshape}UTM Mercator\end{itshape})\\
 \end{frame}
 
 \begin{frame}
-Landast-8 georeferencing can be checked comparing with another georeferenced source like $IGN$ using a $SIG$ (open source $QGIS$).\\
-\begin{columns}
- \begin{column}{3cm}
-    \begin{figure}
-        \includegraphics[scale=0.13]{images/georeferencing/ign-points-Thonon.png}
-        \caption{IGN georeferenced image from $Lambert$ $93$ }
-    \end{figure}
-  \end{column}
- \begin{column}{2cm}
-    \begin{figure}
-        \includegraphics[scale=0.09]{images/georeferencing/qgis-resultat.png}
-        \caption{IGN georeferenced image to $UTM$ $Mercator$}
-    \end{figure}
-  \end{column}
- \begin{column}{5cm}
-    \begin{figure}
-        \includegraphics[scale=0.09]{images/georeferencing/qgis-superposition0.png}
-        \caption{IGN georeferenced image ($UTM$ $Mercator$) superposed with Landsat-8 georeferenced image ($UTM$ $Mercator$) }
-    \end{figure}
- \end{column}
+\begin{itemize}
+ \item Landast-8 georeferencing can be checked comparing with another georeferenced source like $IGN$ using a $SIG$ (open source $QGIS$).
+\end{itemize}
+
+\begin{columns}[t]
+\begin{column}{0.30\textwidth}
+%\begin{overlayarea}{\linewidth}{0.0cm}
+%  \centering
+%  \par
+%\end{overlayarea}
+\begin{overlayarea}{\linewidth}{3cm}
+  \centering\vfill
+  \includegraphics[height=2.5cm,width=2.5cm]{images/georeferencing/ign-points-Thonon.png}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{2cm}
+  \centering
+  \scriptsize IGN image georeferenced in $Lambert$ $93$ system\par
+\end{overlayarea}
+\end{column}
+\begin{column}{0.30\textwidth}
+%\begin{overlayarea}{\linewidth}{0.0cm}
+%  \centering
+%  \par
+%\end{overlayarea}
+\begin{overlayarea}{\linewidth}{3cm}
+  \centering\vfill
+  \includegraphics[height=2.5cm,width=2.5cm]{images/georeferencing/qgis-resultat.png}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{2cm}
+  \centering
+  \scriptsize Then IGN image is tranformed to be georeferenced in $UTM$ system\par
+\end{overlayarea}
+\end{column}
+\begin{column}{0.30\textwidth}
+%\begin{overlayarea}{\linewidth}{0.0cm}
+%  \centering
+%  \par
+%\end{overlayarea}
+\begin{overlayarea}{\linewidth}{3cm}
+  \centering\vfill
+  \includegraphics[height=2.5cm,width=2.5cm]{images/georeferencing/qgis-superposition0.png}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{2cm}
+  \centering
+  \scriptsize Superposition of IGN and Landsat-8 images both georeferenced in $UTM$ system\par
+\end{overlayarea}
+\end{column}
 \end{columns}
+
 \end{frame}
 
-\subsection{Importing images}
-\begin{frame}
- 
-\end{frame}
+\section{Importing Data}
 
 \subsection{Image query}
 \begin{frame}
+ \begin{itemize}
+ \item Query images from \href{https://earthexplorer.usgs.gov/}{\begin{itshape}U.S geological Survey\end{itshape}} website
+ \begin{itemize}
+  \item cloud covering \ 20\%\\
+  \item day acquisition\\
+  \item between May, 2013 and September, 2013\\ 
+ \end{itemize}
  
+\end{itemize}
+
+\begin{columns}[t]
+\begin{column}{0.50\textwidth}
+\begin{overlayarea}{\linewidth}{4cm}
+  \centering\vfill
+  \includegraphics[scale=0.17]{images/importing/france-selection.png}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{1cm}
+  \centering
+  \scriptsize Polygon selection on $USGS$ website\par
+\end{overlayarea}
+\end{column}
+
+\begin{column}{0.50\textwidth}
+\begin{overlayarea}{\linewidth}{4cm}
+  \centering\vfill
+  \includegraphics[scale=0.25]{images/importing/france-covering.png}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{1cm}
+  \centering
+  \scriptsize Resulted images georeferenced in $UTM$ system\par
+\end{overlayarea}
+\end{column}
+\end{columns}
+
 \end{frame}
 
 \subsection{Image bands}
