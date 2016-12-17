@@ -1,7 +1,16 @@
 \beamer@endinputifotherversion {3.24pt}
 \select@language {french}
-\beamer@sectionintoc {1}{Summary}{2}{0}{1}
-\beamer@sectionintoc {2}{Presentation}{3}{0}{2}
-\beamer@sectionintoc {3}{Landsat-8 satellite imagery}{4}{0}{3}
-\beamer@subsectionintoc {3}{1}{Covering}{4}{0}{3}
-\beamer@subsectionintoc {3}{2}{Georeferencing}{5}{0}{3}
+\beamer@sectionintoc {1}{Presentation}{3}{0}{1}
+\beamer@sectionintoc {2}{Landsat-8 imagery}{5}{0}{2}
+\beamer@subsectionintoc {2}{1}{Earth Covering}{5}{0}{2}
+\beamer@subsectionintoc {2}{2}{Image Georeferencement}{7}{0}{2}
+\beamer@subsectionintoc {2}{3}{Importing images}{10}{0}{2}
+\beamer@subsectionintoc {2}{4}{Image query}{11}{0}{2}
+\beamer@subsectionintoc {2}{5}{Image bands}{12}{0}{2}
+\beamer@sectionintoc {3}{Importing labels}{13}{0}{3}
+\beamer@sectionintoc {4}{Vegetation index extraction}{14}{0}{4}
+\beamer@subsectionintoc {4}{1}{NDVI extraction}{14}{0}{4}
+\beamer@subsectionintoc {4}{2}{NDVI evolution}{15}{0}{4}
+\beamer@subsectionintoc {4}{3}{Data to Machine Learning}{16}{0}{4}
+\beamer@sectionintoc {5}{Supervised Regression}{17}{0}{5}
+\beamer@sectionintoc {6}{Supervised Classification}{18}{0}{6}
