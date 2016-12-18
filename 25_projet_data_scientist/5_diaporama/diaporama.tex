@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
+\usepackage{adjustbox}
 
 % figures
 \setbeamerfont{caption}{size=\tiny}
@@ -26,7 +27,7 @@
 
 \author{Youcef Kacer}
 
-\institute{www.github.com/ykacer}
+\institute{\href{http://www.github.com/ykacer/}{www.github.com/ykacer}}
 
 \date{2017,January 25\textsuperscript{th}}
 
@@ -71,13 +72,23 @@
 \end{frame}
 
 \begin{frame}
+
 \begin{itemize}
 \item Total earth covering defined by path,row grid pattern and achieved every 16 days
 \end{itemize}
-\begin{figure}
-  \includegraphics[scale=0.13]{images/covering/wrs.png}
-  \caption{Landsat-8 grid covering (path,row) for Virginia ($USA$) }
-\end{figure}
+\begin{columns}
+\begin{column}{\textwidth}
+\begin{overlayarea}{\linewidth}{4cm}
+  \centering\vfill
+  \includegraphics[scale=0.2]{images/covering/wrs.png}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{1cm}
+  \centering
+  \tiny Landsat-8 grid covering (path,row) for Virginia ($USA$)\par
+\end{overlayarea}
+\end{column}
+\end{columns}
+
 \end{frame}
 
 \subsection{Image Georeferencement}
@@ -90,27 +101,34 @@
  \item Landsat-8 images are georeferenced which means each pixel has (x,y) meter coordinates in a certain Projection Coordinates 
 System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{itshape})
 \end{itemize}
-\begin{columns}
 
-\begin{column}{5cm}
-\begin{figure}
+\begin{columns}
+\begin{column}{0.30\textwidth}
+\begin{overlayarea}{\linewidth}{5cm}
+  \centering\vfill
   \includegraphics[scale=0.2]{images/georeferencing/Thonon_landsat.png}
-  \caption{Landsat-8 Eastern-France image path=$196$,row=$028$ georeferenced in $UTM$ system (image containing city Thonon-les-Bains)}
-\end{figure}
+\end{overlayarea}
+\end{column}
+\begin{column}{0.30\textwidth}
+\begin{overlayarea}{\linewidth}{1cm}
+  \centering
+  \tiny Landsat-8 Eastern-France image path=$196$,row=$028$ georeferenced in $UTM$ system (image containing city Thonon-les-Bains)\par
+\end{overlayarea}
 \end{column}
 
-\begin{column}{5cm}
-\begin{block}{coordinates}
+\begin{column}{0.30\textwidth}
+\begin{block}{\scriptsize UTM corner coordinates}
+{\scriptsize
  \begin{itemize}
   \item upper-left (,)\\
   \item upper-right (,)\\
   \item bottom-right (,)\\
   \item bottom-left (,)\\
   \item center (,)\\
-  \end{itemize}
- \end{block}
+ \end{itemize}
+}
+\end{block}
 \end{column}
-
 \end{columns}
 
 \end{frame}
@@ -174,7 +192,7 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
  \begin{itemize}
  \item Query images from \href{https://earthexplorer.usgs.gov/}{\begin{itshape}U.S geological Survey\end{itshape}} website
  \begin{itemize}
-  \item cloud covering \ 20\%\\
+  \item cloud covering $\le$ 20\%\\
   \item day acquisition\\
   \item between May, 2013 and September, 2013\\ 
  \end{itemize}
@@ -200,7 +218,7 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 \end{overlayarea}
 \begin{overlayarea}{\linewidth}{1cm}
   \centering
-  \scriptsize Resulted images georeferenced in $UTM$ system\par
+  \scriptsize 68 resulting datasets georeferenced in $UTM$ system\par
 \end{overlayarea}
 \end{column}
 \end{columns}
@@ -209,29 +227,347 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 
 \subsection{Image bands}
 \begin{frame}
+ \begin{itemize}
+  \item Landsat-8 dataset is composed of 
+  \begin{itemize}
+   \item 11 bands (OLI/TRS sensors) + 1 quality band (cloudyness of each pixel)
+   \item Possible combinaison of bands to extract information (bands 4 and 5 for vegetation presence)
+ \end{itemize}
+\end{itemize}
  
+\begin{columns}
+\begin{column}{0.80\textwidth}
+\begin{overlayarea}{\linewidth}{4cm}
+  \centering\vfill
+  \includegraphics[scale=0.13]{images/bands/landsat8_bands.jpg}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{1cm}
+  \centering
+  \scriptsize \href{http://landsat.gsfc.nasa.gov/sentinel-2a-launches-our-compliments-our-complements/}{Landsat-8 bands (OLI/TIRS sensors)}\par
+\end{overlayarea}
+\end{column}
+\end{columns}
 \end{frame}
 
 \section{Importing labels}
+
+\subsection{Importing densities}
 \begin{frame}
- 
+ \begin{itemize}
+  \item Take cities surfaces and densities from 2013 official census (\href{http://www.insee.fr/fr/ppp/bases-de-donnees/recensement/populations-legales/pages2015/zip/HIST_POP_COM_RP13.zip}{INSEE})
+  \item Take cities latitude and longitude from Google geolocator (\href{https://geopy.readthedocs.io/en/1.10.0/}{Python API})
+ \end{itemize}
+
+\begin{columns}
+\begin{column}{0.80\textwidth}
+\begin{overlayarea}{\linewidth}{3cm}
+\begin{table}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+{\LARGE
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+name & latitude (degrees) & longitude (degrees) & surface (km\textsuperscript{2}) & density (habs/km\textsuperscript{2}) \\
+\hline
+Ozan & 46.391534 & 4.915265 & 6.6 & 98.3\\
+\hline 
+Cormoranche-sur-Sa\^{o}ne & 46.240532 & 4.830863 & 9 & 118.9\\
+\hline 
+Paris & 48.856614 & 2.352222 & 105.4 & 21153.9\\
+\hline
+Lyon & 45.764043 & 4.835659 & 47.87 & 10459.8\\
+\hline
+Tours & 47.394144 & 0.68484 & 34.67 & 3888.2\\
+\hline
+Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9\\
+\hline 
+... & ... & ... & ... & ... \\
+\hline
+\end{tabular}
+}
+\end{adjustbox}
+\end{center}
+\end{table}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{1cm}
+  \centering
+  \scriptsize34190 cities (instances)\par
+\end{overlayarea}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+\subsection{Categorize densities to Classification}
+\begin{frame}
+\begin{itemize}
+ \item Categorize densities applying clustering (Otsu mutli-thresholding)
+\end{itemize}
+
+\begin{columns}
+ \begin{column}{0.50\textwidth}
+  \begin{overlayarea}{\linewidth}{3cm}
+  \centering\vfill
+  \includegraphics[scale=0.2]{images/labels/densite_histo_otsu_zoom.jpg}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny Density histogram (habs/km\textsuperscript{2})\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.50\textwidth}
+  \begin{overlayarea}{\linewidth}{3cm}
+  {\tiny
+    \begin{itemize}
+    \item[catégory 1:] density between 0 and 500
+    \item[catégory 2:] density between 500 and 2000
+    \item[catégory 3:] density between 2000 and 5000
+    \item[catégory 4:] density between 5000 and 10000
+    \item[catégory 5:] density between 10000 and 13000
+    \item[catégory 6:] density greater than 13000 
+    \end{itemize}
+  }
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+
+\begin{table}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+{\tiny
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+name & latitude (degrees) & longitude (degrees) & surface (km\textsuperscript{2}) & density (habs/km\textsuperscript{2}) & density (category)\\
+\hline
+Ozan & 46.391534 & 4.915265 & 6.6 & 98.3 & 1\\
+\hline 
+Cormoranche-sur-saone & 46.240532 & 4.830863 & 9 & 118.9 & 1\\
+\hline 
+Paris & 48.856614 & 2.352222 & 105.4 & 21153.9 & 6\\
+\hline
+Lyon & 45.764043 & 4.835659 & 47.87 & 10459.8 & 5\\
+\hline
+Tours & 47.394144 & 0.68484 & 34.67 & 3888.2 & 3\\
+\hline
+Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9 & 1\\
+\hline 
+... & ... & ... & ... & ... & ...\\
+\hline
+\end{tabular}
+}
+\end{adjustbox}
+\end{center}
+\end{table}
+
 \end{frame}
 
 \section{Vegetation index extraction}
 
 \subsection{NDVI extraction}
 \begin{frame}
+\begin{itemize}
+{
+ \item Compute Normalized Difference Vegetation Indice using bands 4 (Red) and 5 (Near-Infra-Red) for each dataset :
+ \item Values between -1 and 1
+ \item $\leq 0$ for water, snow and cloud
+ \item $0$ for  ground without vegetation
+ \item $\geq 0$ ground vegetation
+}
+\end{itemize}
+{\scriptsize \[NDVI=\frac{NIR-R}{NIR+R}\]}
+\begin{columns}
+ \begin{column}{0.33\textwidth}
+  \begin{overlayarea}{\linewidth}{2cm}
+  \centering\vfill
+  \includegraphics[scale=0.15]{images/Paris/05_rgb.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny RGB (Paris,May 2013) \par
+  \end{overlayarea}
+ \end{column}
+  \begin{column}{0.33\textwidth}
+  \begin{overlayarea}{\linewidth}{2cm}
+  \centering\vfill
+  \centerline{
+  \includegraphics[scale=0.15]{images/Paris/05_ndvi.png}
+  \includegraphics[scale=0.13]{images/colormap.png}
+  }
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny NDVI (Paris,May 2013) \par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.33\textwidth}
+  \begin{overlayarea}{\linewidth}{2cm}
+  \centering\vfill
+  \includegraphics[scale=0.12]{images/Paris/05_ndvi_histo.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny NDVI (1024 bins)-histogram (Paris,May 2013) \par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
 
 \end{frame}
 
 \subsection{NDVI evolution}
 \begin{frame}
 
+\begin{columns}
+ \begin{column}{0.75\textwidth}
+ 
+ \begin{overlayarea}{\linewidth}{2cm}
+ \begin{itemize}
+ \item NDVI histogram could explain human density
+ \begin{itemize}
+  \item \scriptsize low ndvi mode for high density (poor vegetation)
+  \item \scriptsize high ndvi mode for low density (rich vegetation)
+ \end{itemize}
+ \end{itemize}
+ \end{overlayarea}
+
+  \begin{overlayarea}{\linewidth}{4.5cm}
+  \centering\vfill
+  \includegraphics[scale=0.17]{images/ndvi/ndvi_categorie.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny NDVI (1024 bins)-histograms (French cities, July 2013) \par
+  \end{overlayarea}
+  
+ \end{column}
+ \begin{column}{0.25\textwidth}
+ 
+ \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering\vfill
+  \includegraphics[scale=0.17]{images/Brignancourt/07_ndvi.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny NDVI (Brignancourt,July 2013) \par
+  \end{overlayarea}
+  
+  \begin{overlayarea}{\linewidth}{0.9cm}
+  \centering\vfill
+  \includegraphics[scale=0.17]{images/Louvres/07_ndvi.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny NDVI (Louvres,July 2013) \par
+  \end{overlayarea}
+  
+  \begin{overlayarea}{\linewidth}{1.2cm}
+  \centering\vfill
+  \includegraphics[scale=0.17]{images/Abbeville/07_ndvi.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny NDVI (Abbeville,July 2013) \par
+  \end{overlayarea}
+  
+  \begin{overlayarea}{\linewidth}{1.6cm}
+  \centering\vfill
+  \includegraphics[scale=0.17]{images/Lyon/07_ndvi.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny NDVI (Lyon,July 2013) \par
+  \end{overlayarea}  
+ \end{column}
+
+\end{columns}
+
+
 \end{frame}
 
 \subsection{Data to Machine Learning}
 \begin{frame}
+ \begin{itemize}
+  \item Explanatory variables : NDVI (1024 bins)-histograms of the 34190 cities
+  \item Predictable variable : density of the 34190 cities for regresion
+  \item Predictable variable : density category of the 34190 cities for classification
+ \end{itemize}
  
+\begin{columns}
+\begin{column}{0.8\textwidth}
+\begin{table}
+\begin{center}
+\begin{adjustbox}{max width=0.9\textwidth}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+
+\hline 
+nom &  bin-1 & bin-2 & ... & bin-511 & bin-512 &... & bin-1023 & bin-1024 & densité (habs/km\textsuperscript{2})  & density (category)\\
+\hline 
+Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 93.0 & 1\\
+\hline 
+Cormoranche-sur-Sa\^{o}ne & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 107.0 & 1\\
+\hline 
+Paris & 0 & 0 & ... & 1953 & 1815 & ... & 0 & 0 & 21288.0 & 6\\
+\hline
+Lyon & 0 & 0 & ... & 1099 & 1032 & ... & 0 & 0 & 460.0 & 5\\
+\hline
+Tours & 0 & 0 & ... & 268 & 238 & ... & 0 & 0 & 3888.0 & 3\\
+\hline
+Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.0 & 1\\
+\hline 
+... & ... & ... & ... & ... & ... & ... & ... & ... & ... & ... \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{center}
+\end{table}
+\end{column}
+\begin{column}{0.35\textwidth}
+{\tiny
+\begin{alertblock}{Very imbalanced data for classification!}
+\begin{table}
+ \begin{tabular}{|c|c|}
+  \hline
+  category & number of samples\\
+  \hline
+  1 & 32533\\
+  \hline
+  2 & 1252\\
+  \hline
+  3 & 288\\
+  \hline
+  4 & 78\\
+  \hline
+  5 & 15\\
+  \hline
+  6 & 24 \\
+  \hline
+ \end{tabular}
+\end{table}
+\end{alertblock}
+}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Supervised Classification}
+
+\subsection{Support-Vector Machine}
+\begin{frame}
+
+\end{frame}
+
+\subsection{Neural Network}
+\begin{frame}
+
+\end{frame}
+
+\subsection{Convolutional Neural Network}
+\begin{frame}
+
+\end{frame}
+
+\subsection{K-Nearest Neighboors}
+\begin{frame}
+
 \end{frame}
 
 \section{Supervised Regression}
@@ -239,9 +575,5 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 
 \end{frame}
 
-\section{Supervised Classification}
-\begin{frame}
-
-\end{frame}
 
 \end{document}
