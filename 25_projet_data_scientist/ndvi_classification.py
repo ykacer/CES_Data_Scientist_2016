@@ -106,7 +106,7 @@ Xsc = scaler.transform(X)
 
 # projection
 n_components = 608;
-pca = PCA(n_components=n_components);
+pca = PCA(n_components=n_components,random_state=0);
 Xpca = pca.fit_transform(Xsc);
 joblib.dump(pca,u'model_classification/PCA_classification.pkl')
 fpca = codecs.open(u'model_classification/PCA_classification.txt',u'w',u'utf8')
