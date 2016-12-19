@@ -15,6 +15,9 @@
 \setbeamertemplate{itemize subitem}[triangle] % Pour le deuxième niveau
 \setbeamertemplate{itemize subsubitem}[circle] % Pour le troisième niveau
 
+\setbeamerfont{section in toc}{size=\scriptsize}
+\setbeamerfont{subsection in toc}{size=\tiny}
+
 % links
 \definecolor{links}{HTML}{2A1B81}
 \hypersetup{colorlinks,linkcolor=,urlcolor=links}
@@ -308,7 +311,7 @@ Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9\\
  \begin{column}{0.50\textwidth}
   \begin{overlayarea}{\linewidth}{3cm}
   \centering\vfill
-  \includegraphics[scale=0.2]{images/labels/densite_histo_otsu_zoom.jpg}
+  \includegraphics[scale=0.25]{images/labels/densite_histo_otsu_zoom.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
   \centering
@@ -550,9 +553,87 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.0 & 1\\
 
 \section{Supervised Classification}
 
-\subsection{Support-Vector Machine}
+\subsection{Support-Vector Machine (Gaussian Kernel)}
 \begin{frame}
+\begin{itemize}
+ \item Overcome imbalanced data by increasing regularization parameter $C_{i}$ for minority classes $i$ :  $C_{i} = 10000/n_{i}$\\
+ \item Cross-validated (stratified 5-folds) gamma coefficient ($\gamma = 0.001$)
+\end{itemize}
+\begin{columns}[b]
 
+\begin{column}{0.7\textwidth}
+\begin{overlayarea}{\linewidth}{4cm}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.7\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{3} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{4} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+\end{overlayarea}
+\begin{overlayarea}{\linewidth}{0.5cm}
+  \centering
+  \tiny confusion matrix after refitting\par
+\end{overlayarea}  
+\end{column}
+\begin{column}{0.3\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+ {\scriptsize
+  \begin{block}{best cross-validation score}
+   93\%
+  \end{block}
+  }
+ \end{overlayarea}
+ \begin{overlayarea}{\linewidth}{1cm}
+  {\small
+  \begin{block}{mean score per class after refitting}
+   \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.7\textwidth}
+    \begin{tabular}{|c|c|}
+      \hline
+      \textbf{category} & \textbf{mean score}\\
+      \hline
+      \textbf{1} & 100\% \\
+      \hline
+      \textbf{2} & 100\% \\
+      \hline
+      \textbf{3} & 100\% \\
+      \hline
+      \textbf{4} & 100\% \\
+      \hline
+      \textbf{5} & 100\% \\
+      \hline
+      \textbf{6} & 100\% \\
+      \hline
+    \end{tabular}
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+  \end{block}
+  }
+ \end{overlayarea}
+
+
+\end{column}
+
+\end{columns}
 \end{frame}
 
 \subsection{Neural Network}
@@ -570,7 +651,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.0 & 1\\
 
 \end{frame}
 
-\section{Supervised Regression}
+\section{Testing classification}
 \begin{frame}
 
 \end{frame}
