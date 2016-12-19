@@ -1,0 +1,57 @@
+[[32533     0     0     0     0     0]
+ [    0 16266     0     0     0     0]
+ [    0     0 16266     0     0     0]
+ [    0     0     0 16266     0     0]
+ [    0     0     0     0 16266     0]
+ [    0     0     0     0     0 16266]]
+
+0 - 500 habs/km²: 0.0%
+500 - 2000 habs/km²: 0.0%
+2000 - 5000 habs/km²: 0.0%
+5000 - 10000 habs/km²: 0.0%
+10000 - 13000 habs/km²: 0.0%
+> 13000 habs/km²: 0.0%
+
+
+mean error per class : 0.0%
+
+
+
+[[32533     0     0     0     0     0]
+ [    0  1252     0     0     0     0]
+ [    0     0   288     0     0     0]
+ [    0     0     0    78     0     0]
+ [    0     0     0     0    15     0]
+ [    0     0     0     0     0    24]]
+
+0 - 500 habs/km²: 0.0%
+500 - 2000 habs/km²: 0.0%
+2000 - 5000 habs/km²: 0.0%
+5000 - 10000 habs/km²: 0.0%
+10000 - 13000 habs/km²: 0.0%
+> 13000 habs/km²: 0.0%
+
+
+mean error per class : 0.0%
+
+
+
+score cv : 94.7411523837%
+
+error cv : 5.25884761626%
+
+grid scores : 
+	mean: 0.94741, std: 0.00355, params: {'n_neighbors': 5, 'weights': 'distance', 'leaf_size': 10, 'algorithm': 'auto', 'p': 3}
+
+best params : 
+{'n_neighbors': 5, 'weights': 'distance', 'leaf_size': 10, 'algorithm': 'auto', 'p': 3}
+                        precision    recall  f1-score   support
+
+      0 - 500 habs/km²      1.000     1.000     1.000     32533
+   500 - 2000 habs/km²      1.000     1.000     1.000      1252
+  2000 - 5000 habs/km²      1.000     1.000     1.000       288
+ 5000 - 10000 habs/km²      1.000     1.000     1.000        78
+10000 - 13000 habs/km²      1.000     1.000     1.000        15
+      > 13000 habs/km²      1.000     1.000     1.000        24
+
+           avg / total      1.000     1.000     1.000     34190
