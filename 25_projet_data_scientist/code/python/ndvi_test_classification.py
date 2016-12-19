@@ -121,7 +121,7 @@ file_test_prediction = folder_model+os.path.basename(model)[:str.rfind(os.path.b
 data.to_csv(file_test_prediction,encoding='utf-8')
 
 #print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
-os.system(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
+os.system(u'~/anaconda2/bin/python code/python/plot/density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
 #os.system(u'python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
 
 compute_roc = True
