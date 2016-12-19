@@ -366,7 +366,7 @@ if 'CLASSIFICATION' in df.columns:
 	di = d[yc==i]
 	ni = di.shape[0]
 	N = N+ni
-	sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*20,edgecolor=[ci,]*3)
+	sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*30,edgecolor=[ci,]*3)
 	legend_scatters.append(sci)
 	legend_labels.append(str(int(e1))+u' - '+str(int(e2))+u' habs/km²')
     xi = x[yc==(nc-1)]
