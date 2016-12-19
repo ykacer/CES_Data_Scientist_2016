@@ -101,15 +101,15 @@ densite = population/surface;
 X = data[variables].as_matrix(); 
 scaler = StandardScaler()
 scaler.fit(X)
-joblib.dump(scaler,u'model_classification/Scaler_classification.pkl')
+joblib.dump(scaler,u'../../model_classification/Scaler_classification.pkl')
 Xsc = scaler.transform(X)
 
 # projection
 n_components = 608;
 pca = PCA(n_components=n_components,random_state=0);
 Xpca = pca.fit_transform(Xsc);
-joblib.dump(pca,u'model_classification/PCA_classification.pkl')
-fpca = codecs.open(u'model_classification/PCA_classification.txt',u'w',u'utf8')
+joblib.dump(pca,u'../../model_classification/PCA_classification.pkl')
+fpca = codecs.open(u'../../model_classification/PCA_classification.txt',u'w',u'utf8')
 fpca.write(u'PCA explained variance : '+str(pca.explained_variance_ratio_.sum()*100)+u'%\n')
 fpca.close()
 
@@ -172,7 +172,7 @@ def compute_mean_score(y,yp,nc):
 print("* Support Vector Classification")
 n_samples = X.shape[0]
 classes = np.arange(nc+1).tolist()
-C = 0.01
+C = 0.1
 weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
 class_weight = dict(zip(classes,weights))
 #class_weight[1] = 2.0*class_weight[1]
