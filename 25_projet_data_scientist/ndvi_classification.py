@@ -78,7 +78,7 @@ for i in np.arange(nc-1):
 
 target_names.append(u'> '+str(categorization[-1])+u' habs/km²')
 
-data = pd.read_csv('France/ndvi_features.csv',dtype={'SURFACE':np.float64})
+data = pd.read_csv('data/France/ndvi_features.csv',dtype={'SURFACE':np.float64})
 data = data[data.SURFACE != 0]
 variables = [v for v in data.columns if v.isdigit()]
 if 'PMUN13' in data.columns:
@@ -172,14 +172,14 @@ def compute_mean_score(y,yp,nc):
 print("* Support Vector Classification")
 n_samples = X.shape[0]
 classes = np.arange(nc+1).tolist()
-C = 0.001
+C = 0.01
 weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
 class_weight = dict(zip(classes,weights))
-class_weight[1] = 2.0*class_weight[1]
-class_weight[2] = 2.0*class_weight[2]
-class_weight[3] = 2.0*class_weight[3]
-cl = LinearSVC(C=C,dual=False,random_state=0,verbose=False)
-param_grid = {'penalty':['l2'],'class_weight':[class_weight]}
+#class_weight[1] = 2.0*class_weight[1]
+#class_weight[2] = 2.0*class_weight[2]
+#class_weight[3] = 2.0*class_weight[3]
+cl = SVC(kernel='rbf',C=C,random_state=0,verbose=False)
+param_grid = {'class_weight':[class_weight]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
