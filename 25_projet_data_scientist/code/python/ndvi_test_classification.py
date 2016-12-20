@@ -151,7 +151,7 @@ colors = [[49,140,231],
 if compute_roc:
     # Compute ROC curve and ROC area for each class
     
-    if 'decision_functon' in dir(clf):
+    if 'decision_function' in dir(clf):
         yp = clf.decision_function(X)
     elif 'predict_proba' in dir(clf):
         try:
