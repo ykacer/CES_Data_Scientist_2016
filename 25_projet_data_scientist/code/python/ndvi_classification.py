@@ -152,8 +152,8 @@ for i in np.arange(nc+1):
     print("categorie "+str(i)+": "+str((yo==i).sum())+" samples")
 
 print("*** Classification bench")
-cv = StratifiedKFold(y,n_folds=5,random_state=0) # cross-validation set
-cvo = StratifiedKFold(yo,n_folds=5,random_state=1) # cross-validation set
+cv = StratifiedKFold(y,n_folds=3,random_state=0) # cross-validation set
+cvo = StratifiedKFold(yo,n_folds=3,random_state=1) # cross-validation set
 
 results = [];
 verbose = 5
@@ -169,30 +169,28 @@ def compute_mean_score(y,yp,nc):
             mean_scores_per_category[ic] = -1
     return mean_scores_per_category
 
-print("* Support Vector Classification")
+print("* Support Vector Gaussian Classification")
 n_samples = X.shape[0]
 classes = np.arange(nc+1).tolist()
-C = 0.1
+C = 1000000.0
 weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
 class_weight = dict(zip(classes,weights))
-#class_weight[1] = 2.0*class_weight[1]
-#class_weight[2] = 2.0*class_weight[2]
-#class_weight[3] = 2.0*class_weight[3]
-cl = SVC(kernel='rbf',C=C,random_state=0,verbose=False)
-param_grid = {'class_weight':[class_weight]}
+cl = SVC(kernel='rbf',random_state=0,verbose=False)
+param_grid = {'gamma':[0.1],'class_weight':[class_weight]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
+ypred = grid.best_estimator_.predict(Xpca)
 #info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
-info = info + np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+info = info + np.array_str(metrics.confusion_matrix(y,ypred))
 info = info+u"\n\n"
-mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+mean_scores = compute_mean_score(y,ypred,nc)
 for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
 
 info = info+u"\n\n"
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
-results.append(['Support Vector Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+results.append(['Support Vector Gaussian Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
 print("* Support Vector Classification-oversampling")
@@ -211,7 +209,7 @@ class_weighto2 = dict(zip(classeso,weightso))
 class_weighto2[0] = 1.6*class_weighto2[0]
 class_weighto2[1] = 1.6*class_weighto2[1]
 
-Co = 0.1
+Co = 1.0
 cl = LinearSVC(C=Co,dual=False,random_state=0,verbose=False)
 param_grid = {'penalty':['l2'],'class_weight':[class_weighto1]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
@@ -476,7 +474,7 @@ for res in [results[-1]]:
     f.write(metrics.classification_report(y, yhat, labels=np.arange(nc+1).tolist(), target_names=target_names,digits=3))
     f.close()
     # Compute ROC curve and ROC area for each class
-    if 'decision_functon' in dir(model):
+    if 'decision_function' in dir(model):
         yp = model.decision_function(Xpca)
     elif 'predict_proba' in dir(model):
 	try:
