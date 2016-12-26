@@ -404,7 +404,18 @@ if 'CLASSIFICATION' in df.columns:
     legend_labels = []
     legend_scatters = []
     N = 0
-    for i in range(-(nc-1),nc,1):
+    for i in range(0,nc):
+        ci = np.asarray(colors_error[int(1.0*(i+nc-1)/(2*(nc-1)+1)*len(colors_error))])/255.0
+        xi = x[errorc==i]
+        yi = y[errorc==i]
+        di = d[errorc==i]
+        si = s[errorc==i]
+        ni = di.shape[0]
+        N = N+ni
+        sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+        legend_scatters.append(sci)
+        legend_labels.append(str(int(i)))
+    for i in list(reversed(range(-(nc-1),0))):
         ci = np.asarray(colors_error[int(1.0*(i+nc-1)/(2*(nc-1)+1)*len(colors_error))])/255.0
         xi = x[errorc==i]
         yi = y[errorc==i]
