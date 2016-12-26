@@ -104,7 +104,7 @@ if log:
 if 'COVERING' in df.columns:
     covering = df['COVERING'].as_matrix()
 
-dpi = 1000
+dpi = 500
 size_pt = 50
 if (y.max()-y.min())>1000:
     size_pt = 5
@@ -192,7 +192,7 @@ print u'******** N : '+str(N)+' points'
 plt.xlabel('x Web Mercator (km)')
 plt.ylabel('y Web Mercator (km)')
 ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.83, 0.5),fontsize = 'xx-small')
-plt.savefig(density,dpi=1000)
+plt.savefig(density,dpi=dpi)
 if debugging:
 	plt.show()
 
@@ -248,7 +248,7 @@ print u'******** N : '+str(N)+' points'
 plt.xlabel('x Web Mercator (km)')
 plt.ylabel('y Web Mercator (km)')
 ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.83, 0.5),fontsize = 'xx-small')
-plt.savefig(density_cat,dpi=1000)
+plt.savefig(density_cat,dpi=dpi)
 if debugging:
 	plt.show()
 plt.clf()
@@ -432,7 +432,7 @@ if 'CLASSIFICATION' in df.columns:
     plt.ylabel('y Web Mercator (km)')
     ax.legend(legend_scatters,legend_labels,loc='center left', bbox_to_anchor=(0.85, 0.5),fontsize = 'small')
     density_classification_error = density[:-4]+'_classification_error.png'
-    plt.savefig(density_classification_error,dpi=1000)
+    plt.savefig(density_classification_error,dpi=500)
     if debugging:
 	plt.show()
     plt.clf()
