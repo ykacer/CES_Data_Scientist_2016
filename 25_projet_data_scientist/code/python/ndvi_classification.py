@@ -301,7 +301,7 @@ info = info+u'\n\n'
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
 results.append(['Neural Network Classification-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-print("* TensorFlow Neural Network Classification-oversampling")
+print("* TensorFlow Neural Network Classification")
 def make_model():
     model = Sequential()
     model.add(Dense(output_dim=1204,input_dim=n_components,init='uniform',activation='relu'))
@@ -310,25 +310,23 @@ def make_model():
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
-cl = KerasClassifier(make_model, nb_epoch=10)
+cl = KerasClassifier(make_model, nb_epoch=20)
+n_samples = Xpca.shape[0]
+classes = np.arange(nc+1).tolist()
+weights = 1.0*(y==0).sum() / (np.bincount(y.astype(np.int64)))
+class_weight = dict(zip(classes,weights))
 param_grid = {'batch_size':[100]}
-grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
-grid.fit(Xo,to_categorical(yo,n_cl))
-info = np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)))
-info = info+u'\n\n'
-mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
-for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
-info = info+u'\n\n'
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
-info = info+np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
-info = info+u'\n\n'
+grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
+grid.fit(Xpca,to_categorical(y,n_cl))
+info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+info = info+u"\n\n"
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
-info = info+u'\n\n'
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
-results.append(['Neural Network Classification TensorFlow-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
+    info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
+
+info = info+u"\n\n"
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
+results.append(['Neural Network Classification TensorFlow',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* TensorFlow Convolutional Neural Network Classification")
 def make_cnn(loss='categorical_crossentropy',optimizer='adam'):
@@ -336,7 +334,7 @@ def make_cnn(loss='categorical_crossentropy',optimizer='adam'):
     model.add(Convolution1D(1,19,subsample_length=19,border_mode='same',input_shape=(n_components,1)))
     model.add(Activation('relu'))
     model.add(MaxPooling1D(pool_length=2))
-    model.add(Convolution1D(32, 3, border_mode='same',input_shape=(1,32)))
+    model.add(Convolution1D(32, 3, border_mode='same',input_shape=(32,1)))
     model.add(Activation('relu'))
     model.add(Convolution1D(32, 3))
     model.add(Activation('relu'))
@@ -357,21 +355,17 @@ def make_cnn(loss='categorical_crossentropy',optimizer='adam'):
     model.compile(loss=loss, optimizer=optimizer, metrics=['accuracy'])
     return model
 
-cl = KerasClassifier(make_cnn, nb_epoch=20)
-n_samples = X.shape[0]
+cl = KerasClassifier(make_cnn, nb_epoch=80)
+n_samples = Xpca.shape[0]
 classes = np.arange(nc+1).tolist()
-weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
-weights = np.log(1+weights)
+weights = 1.0*(y==0).sum() / (np.bincount(y.astype(np.int64)))
+#weights = [1.0, 2.0, 3.0, 3.0, 3.0, 3.0]
 class_weight = dict(zip(classes,weights))
-class_weight[2] = 2.0*class_weight[2] 
-class_weight[3] = 2.0*class_weight[3] 
-class_weight[4] = 2.0*class_weight[4] 
-class_weight[5] = 2.0*class_weight[5] 
 #optimizers = [Nadam(),Adam(),Adagrad(),SGD(lr=0.001, decay=1e-3, momentum=0.9, nesterov=True),RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)]
-#optimizers = [SGD(lr=0.001, decay=1e-3, momentum=0.9, nesterov=True)]
+optimizers = [SGD(lr=0.0001, decay=1e-3, momentum=0.9, nesterov=True)]
 #optimizers = [Adam(lr=0.005)]
-#param_grid = {'batch_size':[100],'optimizer':optimizers}
-param_grid = {'batch_size':[100]}
+param_grid = {'batch_size':[100],'optimizer':optimizers}
+#param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,fit_params={'class_weight':class_weight},cv=cv,verbose=verbose)
 
 grid.fit(Xpca.reshape(Xpca.shape + (1,)),to_categorical(y,n_cl))
