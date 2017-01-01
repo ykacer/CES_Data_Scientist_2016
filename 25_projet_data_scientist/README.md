@@ -91,7 +91,7 @@ Now, simply run :
 
  `python code/python/core/ndvi_features.py data/Japan/p_s_c_japan.csv data/Japan/LANDSAT_8_XXXXXX_clean.csv 15`
 
-the number '15' correspond to the header name 'PMUN15' we talked about when formatting metadata.
+the number '15' is optional and corresponds to the header name 'PMUN15' we talked about when formatting metadata.
 The script will download each datasets and form corresponding NDVI image.
 You should obtain `data/Japan/ndvi_features.csv` containing 1024-size NDVI vector for each city, the explanatory variables if you want.
 
@@ -106,4 +106,4 @@ A new folder `data/Japan/test/Neural_Network_Classification-oversampling` will t
 * `density_ground_truth.png` (available only if true population is provided in medatada csv file)
 * `density_classification.png` for the predictions made by the model. 
 
-Note that here, the ground truth correspond to 2007 Japan Government Institute while the prediction corresponds to 2015 landsat-8 images.
+Note that here, the ground truth correspond to 2007 Japan Government Institute while the prediction corresponds here to 2015 landsat-8 images.
