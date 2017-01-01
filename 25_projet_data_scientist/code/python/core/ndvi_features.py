@@ -134,14 +134,14 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 	if os.path.isdir(folder_cities+'/'+name) == False:
 		os.mkdir(folder_cities+'/'+name)
 	
-	if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False | os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False:
+	if (os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False) | (os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False):
 		os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B2.TIF '+folder+'/'+ID+'/'+ID+'_proj_B2.TIF ');
 		os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B3.TIF '+folder+'/'+ID+'/'+ID+'_proj_B3.TIF ');
 		os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_proj_B4.TIF ');
 		os.popen("gdalwarp -t_srs EPSG:3857 "+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'/'+ID+'_proj_B5.TIF ');
 
 	if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False:
-	    os.system('/usr/bin/python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_proj_B4.TIF '+folder+'/'+ID+'/'+ID+'_proj_B5.TIF '+folder+'/'+ID+'_NDVI.TIF')
+	    os.system('/usr/bin/python code/python/core/ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_proj_B4.TIF '+folder+'/'+ID+'/'+ID+'_proj_B5.TIF '+folder+'/'+ID+'_NDVI.TIF')
 
 	if os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False:
 	    for band in [2,3,4]:
