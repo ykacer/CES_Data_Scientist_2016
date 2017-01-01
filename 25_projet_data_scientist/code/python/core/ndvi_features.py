@@ -59,7 +59,10 @@ cmap_ndvi = make_colormap([blue,f[0],blue,cyan,f[2],red,yellow,f[4],yellow,light
 
 data_file = sys.argv[1]
 usgs_file = sys.argv[2]
-year = sys.argv[3]
+if len(sys.argv)>3:
+    year = sys.argv[3]
+else:
+    year = ""
 
 nbins = 1024;
 verbose = 0;
@@ -74,13 +77,16 @@ data = pd.read_csv(data_file,encoding='utf-8',na_values="NaN",keep_default_na=Fa
 data.dropna(how="any", inplace=True);
 print data.shape
 cities = {}
-cities['latitude'] = np.array(data[u'LAT'])
-cities['longitude'] = np.array(data[u'LONG'])
+cities['latitude'] = np.array(data[u'LAT']).astype(np.float64)
+cities['longitude'] = np.array(data[u'LONG']).astype(np.float64)
 cities['nom'] = list(data[u'LIBMIN'])
-cities['surface'] = list(data[u'SURFACE'])
-cities['population'] = np.array(data[u'PMUN'+year])
+cities['surface'] = list(np.array(data[u'SURFACE']).astype(np.float64))
+if year == "":
+    cities['population'] = np.zeros_like(cities['latitude'])
+else:
+    cities['population'] = np.array(data[u'PMUN'+year]).astype(np.int64)
 cities['densite'] =  cities['population']/cities['surface']
-cities['surface'] = np.array(data[u'SURFACE'])
+cities['surface'] = np.array(data[u'SURFACE']).astype(np.float64)
 
 data = pd.read_csv(usgs_file,sep=',',header=0,encoding='utf-8',usecols=np.arange(42,53))
 images = {}
