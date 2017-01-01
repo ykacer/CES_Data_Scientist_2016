@@ -1,4 +1,4 @@
-# High-résolution satellite images for human density prediction
+# High-resolution satellite images for human density prediction
 
 Here after, we describe step by step how to build a human density map prediction for a certain country using one of our built predictive model.
 In this tutorial, we use Japan as example, feel free to send an email at [youcef.kacer@gmail.com](youcef.kacer@gmail.com) if you face any problem, or directly open an [issue](http://github.com/ykacer/CES_Data_Scientist_2016/issues).
