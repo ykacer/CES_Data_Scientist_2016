@@ -89,7 +89,7 @@ We can verify that this last file contains datasets that covers all the territor
 
 Now, simply run :
 
- `python code/python/core/ndvi_features.py data/Japan/p_s_c_japan.csv data/Japan/LANDSAT_8_XXXXXX.csv 15`
+ `python code/python/core/ndvi_features.py data/Japan/p_s_c_japan.csv data/Japan/LANDSAT_8_XXXXXX_clean.csv 15`
 
 the number '15' correspond to the header name 'PMUN15' we talked about when formatting metadata.
 The script will download each datasets and form corresponding NDVI image.
