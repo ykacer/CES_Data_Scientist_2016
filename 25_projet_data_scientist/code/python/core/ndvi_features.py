@@ -150,7 +150,7 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 	    for band in [2,3,4]:
 		os.system('rm '+folder+'/'+ID+'_B'+str(band)+'_8.TIF');
 	    for band in [2,3,4,5]:
-		os.system('rm '+folder+'/'+ID+'/'+ID+'_proj_B'+str(band)+'_8.TIF');
+		os.system('rm '+folder+'/'+ID+'/'+ID+'_proj_B'+str(band)+'.TIF');
 
 	if os.path.isfile(folder+'/'+ID+'_QUALITY.TIF')==False:
             os.popen('gdalwarp -t_srs EPSG:3857 '+ folder+'/'+ID+'/'+ID+'_BQA.TIF '+folder+"/"+ID+"_QUALITY.TIF");
