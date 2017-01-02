@@ -93,7 +93,7 @@ for ID,month in izip(image_names,image_months):
 	
         projection = os.popen("listgeo "+folder+"/"+ID+"/"+ID+"_B4.TIF | grep 'PCS =' | cut -c7-11").read()[:-1]
         if os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False:
-            os.system('/usr/bin/python ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'_NDVI_temp.TIF')
+            os.system('/usr/bin/python code/python/core/ndvi_computation.py '+folder+'/'+ID+'/'+ID+'_B4.TIF '+folder+'/'+ID+'/'+ID+'_B5.TIF '+folder+'/'+ID+'_NDVI_temp.TIF')
             print "native projection : EPSG:",projection
             print "target projection : EPSG:3857"
             os.popen('gdalwarp -t_srs EPSG:3857 '+ folder+'/'+ID+'_NDVI_temp.TIF '+folder+"/"+ID+"_NDVI.TIF");
