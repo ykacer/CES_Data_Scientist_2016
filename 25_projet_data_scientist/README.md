@@ -3,6 +3,13 @@
 Here after, we describe step by step how to build a human density map prediction for a certain country using one of our built predictive model.
 In this tutorial, we use Japan as example, feel free to send an email at [youcef.kacer@gmail.com](youcef.kacer@gmail.com) if you face any problem, or directly open an [issue](http://github.com/ykacer/CES_Data_Scientist_2016/issues).
 
+## Python required packages
+* pyproj (to convert long,lat from degrees to coordinates positions)
+* osgeo (to form NDVI and RGB satellite image)
+* landsat-util (to download landsat data)
+* scikit-learn (to use built model for density prediction)
+* opencv (for I/O image)
+
 ## Bring metadata
 First of all, we need a list of Japanese cities with their surfaces in km² (and optionally populations, only useful to compute error on prediction).
 [Wikipedia](https://en.wikipedia.org/wiki/List_of_cities_in_Japan) brings us such a table taken from Japan Institute from 2007.
