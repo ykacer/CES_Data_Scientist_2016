@@ -68,9 +68,12 @@
 \end{frame}
 
 \section{Landsat-8 imagery}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
 
 \subsection{Earth Covering}
-\begin{frame}[label=Covering]
+\begin{frame}
 \tableofcontents[currentsubsection]
 \end{frame}
 
@@ -189,8 +192,15 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 \end{frame}
 
 \section{Importing Data}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
 
 \subsection{Image query}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
 \begin{frame}
  \begin{itemize}
  \item Query images from \href{https://earthexplorer.usgs.gov/}{\begin{itshape}U.S geological Survey\end{itshape}} website with criterias:
@@ -230,6 +240,10 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 
 \subsection{Image bands}
 \begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
+\begin{frame}
  \begin{itemize}
   \item Landsat-8 dataset is composed of 
   \begin{itemize}
@@ -253,8 +267,15 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 \end{frame}
 
 \section{Importing labels}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
 
 \subsection{Importing densities}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
 \begin{frame}
  \begin{itemize}
   \item Take cities surfaces and densities from 2013 official census (\href{http://www.insee.fr/fr/ppp/bases-de-donnees/recensement/populations-legales/pages2015/zip/HIST_POP_COM_RP13.zip}{INSEE})
@@ -302,6 +323,10 @@ Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9\\
 \end{frame}
 
 \subsection{Categorize densities to Classification}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
 \begin{frame}
 \begin{itemize}
  \item Categorize densities applying clustering (Otsu mutli-thresholding)
@@ -365,8 +390,15 @@ Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9 & 1\\
 \end{frame}
 
 \section{Vegetation index extraction}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
 
 \subsection{NDVI extraction}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
 \begin{frame}
 \begin{itemize}
 {
@@ -417,6 +449,10 @@ Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9 & 1\\
 \end{frame}
 
 \subsection{NDVI evolution}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
 \begin{frame}
 
 \begin{columns}
@@ -488,6 +524,10 @@ Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9 & 1\\
 
 \subsection{Data to Machine Learning}
 \begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
+\begin{frame}
  \begin{itemize}
   \item Explanatory variables : NDVI (1024 bins)-histograms of the 34190 cities
   \item Predictable variable : density of the 34190 cities for regresion
@@ -552,8 +592,15 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 \end{frame}
 
 \section{Supervised Classification}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
 
 % \subsection{K-Nearest Neighbors}
+% \begin{frame}
+% \tableofcontents[currentsubsection]
+% \end{frame}
+% 
 % \begin{frame}
 % \begin{itemize}
 %  \item Overcome imbalanced data by 
@@ -671,6 +718,9 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 % \end{frame}
 
 \subsection{Neural Network}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
 
 \begin{frame}
 \begin{itemize}
@@ -901,8 +951,15 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 
 
 \section{Testing classification}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
 
 \subsection{Data}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
 \begin{frame}
 \begin{itemize}
 {\scriptsize
@@ -1312,6 +1369,9 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 % \end{frame}
 
 \subsection{Neural Network}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
 
 \begin{frame}
 \begin{columns}
