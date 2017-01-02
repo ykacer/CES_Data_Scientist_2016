@@ -47,14 +47,14 @@
 \logo{\includegraphics[height=5mm]{images/logo/TelecomParisTech_logo_200_01.png}}
 \end{frame}
 
-% \begin{frame}
-% \tableofcontents
-% \end{frame}
+\begin{frame}
+\tableofcontents
+\end{frame}
 
 \section{Presentation}
-% \begin{frame}
-% \tableofcontents[currentsection]
-% \end{frame}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
 
 \begin{frame}
 \begin{itemize}
@@ -70,9 +70,9 @@
 \section{Landsat-8 imagery}
 
 \subsection{Earth Covering}
-% \begin{frame}[label=Covering]
-% \tableofcontents[currentsubsection]
-% \end{frame}
+\begin{frame}[label=Covering]
+\tableofcontents[currentsubsection]
+\end{frame}
 
 \begin{frame}
 
@@ -95,9 +95,9 @@
 \end{frame}
 
 \subsection{Image Georeferencement}
-% \begin{frame}
-% \tableofcontents[currentsubsection]
-% \end{frame}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
 
 \begin{frame}
 \begin{itemize}
@@ -119,18 +119,18 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 \end{overlayarea}
 \end{column}
 
-\begin{column}{0.30\textwidth}
-% \begin{block}{\scriptsize UTM corner coordinates}
-% {\scriptsize
-%  \begin{itemize}
-%   \item upper-left (,)\\
-%   \item upper-right (,)\\
-%   \item bottom-right (,)\\
-%   \item bottom-left (,)\\
-%   \item center (,)\\
-%  \end{itemize}
-% }
-% \end{block}
+\begin{column}{0.50\textwidth}
+\begin{block}{\scriptsize UTM corner coordinates (meters)}
+{\tiny
+ \begin{itemize}
+  \item upper-left (486202.777, 5958940.580)\\
+  \item lower-left (486202.777, 5610657.403)\\
+  \item upper-right (828135.467, 5958940.580)\\
+  \item lower-right (828135.467, 5610657.403)\\
+  \item center (657169.122, 5784798.992)\\
+ \end{itemize}
+}
+\end{block}
 \end{column}
 \end{columns}
 
@@ -138,7 +138,7 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 
 \begin{frame}
 \begin{itemize}
- \item Landast-8 georeferencement can be checked comparing with another georeferenced source like $IGN$ using a $SIG$ (open source $QGIS$).
+ \item Landsat-8 georeferencement can be checked comparing with another georeferenced source like $IGN$ using a $SIG$ (open source $QGIS$).
 \end{itemize}
 
 \begin{columns}[t]
@@ -642,7 +642,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 %     {\tiny 
 %     \begin{tabular}{|c|c|}
 %       \hline
-%       \multicolumn{2}{|c|}{\begin{bf}Mean score per class after reffiting\end{bf}} \\
+%       \multicolumn{2}{|c|}{\begin{bf}Mean score per class after refitting\end{bf}} \\
 %       \hline
 %       \textbf{category} & \textbf{mean score}\\
 %       \hline
@@ -658,7 +658,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 %       \hline
 %       \textbf{6} & 100\% \\
 %       \hline
-%       \textbf{mean} & 100\% \\
+%       \textbf{total} & 100\% \\
 %       \hline
 %     \end{tabular}
 %     }
@@ -677,7 +677,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \item Overcome imbalanced data by 
   \begin{itemize}
   {\scriptsize
-    \item Majoring error by weights to penalize error on minority class, during back-propagation : $w_i=\frac{n_1}{n_i}$.
+    \item Majoring error by weights to amplify error on minority class : $w_i=\frac{n_1}{n_i}$.
   }
   \end{itemize}
  \end{itemize}
@@ -747,7 +747,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
     {\tiny 
     \begin{tabular}{|c|c|}
       \hline
-      \multicolumn{2}{|c|}{\begin{bf}Mean score per class after reffiting\end{bf}} \\
+      \multicolumn{2}{|c|}{\begin{bf}Mean score per class after refitting\end{bf}} \\
       \hline
       \textbf{category} & \textbf{mean score}\\
       \hline
@@ -763,7 +763,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
       \hline
       \textbf{6} & 100\% \\
       \hline
-      \textbf{mean} & 90.51\% \\
+      \textbf{total} & 90.51\% \\
       \hline
     \end{tabular}
     }
@@ -774,6 +774,122 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 \end{columns}
 \end{frame}
 
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.50]{images/France/nn/density_classification_error.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny France density classification error ($y_{pred}-y_{true}$)\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.50]{images/France/nn/density_covering.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny France cloudyness\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+{\tiny
+\begin{itemize}
+\item Green points shows that a lot of low densities (category 1) are predicted as high densities (categorie 5/6) (see Corsica). 
+\item This can be related to cloudyness that provides zero values for NDVI like high densities does:
+\end{itemize}
+\begin{columns}
+
+
+ \begin{column}{0.12\textwidth}
+ \textbf{Silvareccio}\\
+ cloudyness : 49.5\%\\
+ true : 1\\
+ pred : 6\\
+ error: 5\\
+ \end{column}
+ \begin{column}{0.1\textwidth}
+  \begin{overlayarea}{\linewidth}{1.3cm}
+    \centering\vfill
+    \includegraphics[scale=0.60]{images/Silvareccio/08_rgb.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny rgb \par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.1\textwidth}
+  \begin{overlayarea}{\linewidth}{1.3cm}
+    \centering\vfill
+    \includegraphics[scale=0.60]{images/Silvareccio/08_ndvi.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny ndvi \par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.12\textwidth}
+  \begin{overlayarea}{\linewidth}{1.3cm}
+    \centering\vfill
+    \includegraphics[scale=0.07]{images/Silvareccio/08_ndvi_histo.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny histogram \par
+  \end{overlayarea}
+ \end{column}
+ 
+ 
+ \begin{column}{0.07\textwidth}
+ \end{column}
+ 
+ \begin{column}{0.12\textwidth}
+ \textbf{Porri}\\
+ cloudyness : 0.0\%\\
+ true : 1\\
+ pred : 1\\
+ error: 0\\
+ \end{column}
+ \begin{column}{0.1\textwidth}
+  \begin{overlayarea}{\linewidth}{1.3cm}
+    \centering\vfill
+    \includegraphics[scale=0.60]{images/Porri/08_rgb.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny rgb \par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.1\textwidth}
+  \begin{overlayarea}{\linewidth}{1.3cm}
+    \centering\vfill
+    \includegraphics[scale=0.60]{images/Porri/08_ndvi.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny ndvi \par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.12\textwidth}
+  \begin{overlayarea}{\linewidth}{1.3cm}
+    \centering\vfill
+    \includegraphics[scale=0.07]{images/Porri/08_ndvi_histo.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny histogram \par
+  \end{overlayarea}
+ \end{column}
+ 
+ 
+\end{columns}
+}
+\end{frame}
+
 % \subsection{Support-Vector Machine (Gaussian Kernel)}
 % \begin{frame}
 % \begin{itemize}
@@ -782,10 +898,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 % \end{itemize}
 % \end{frame}
 
-% \subsection{Convolutional Neural Network}
-% \begin{frame}
-% 
-% \end{frame}
+
 
 \section{Testing classification}
 
@@ -961,17 +1074,17 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 %     \hline
 %      & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
 %     \hline
-%     \textbf{1} & 32533 & 0 & 0 & 0 & 0 & 0\\
+%     \textbf{1} & 1411 & 396 & 33 & 8 & 3 & 6\\
 %     \hline
-%     \textbf{2} & 0 & 1252 & 0 & 0 & 0 & 0\\
+%     \textbf{2} & 114 & 268 & 40 & 6 & 0 & 0\\
 %     \hline
-%     \textbf{3} & 0 & 0 & 288 & 0 & 0 & 0\\
+%     \textbf{3} & 1 & 35 & 16 & 5 & 0 & 0\\
 %     \hline
-%     \textbf{4} & 0 & 0 & 0 & 78 & 0 & 0\\
+%     \textbf{4} & 1 & 4 & 2 & 0 & 1 & 1\\
 %     \hline
-%     \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
+%     \textbf{5} & 0 & 0 & 0 & 0 & 1 & 0\\
 %     \hline
-%     \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
+%     \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
 %     \hline
 %   \end{tabular}
 %   }
@@ -992,19 +1105,19 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 %       \hline
 %       \textbf{category} & \textbf{mean score}\\
 %       \hline
-%       \textbf{1} & 100\% \\
+%       \textbf{1} & 75.98\% \\
 %       \hline
-%       \textbf{2} & 100\% \\
+%       \textbf{2} & 62.62\% \\
 %       \hline
-%       \textbf{3} & 100\% \\
+%       \textbf{3} & 28.08\% \\
 %       \hline
-%       \textbf{4} & 100\% \\
+%       \textbf{4} & 0\% \\
 %       \hline
 %       \textbf{5} & 100\% \\
 %       \hline
-%       \textbf{6} & 100\% \\
+%       \textbf{6} & - \\
 %       \hline
-%       \textbf{mean} & 100\% \\
+%       \textbf{total} & 72.11\% \\
 %       \hline
 %     \end{tabular}
 %     }
@@ -1052,17 +1165,17 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 %     \hline
 %      & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
 %     \hline
-%     \textbf{1} & 32533 & 0 & 0 & 0 & 0 & 0\\
+%     \textbf{1} & 351 & 48 & 7 & 0 & 0 & 0\\
 %     \hline
-%     \textbf{2} & 0 & 1252 & 0 & 0 & 0 & 0\\
+%     \textbf{2} & 59 & 71 & 19 & 4 & 1 & 0\\
 %     \hline
-%     \textbf{3} & 0 & 0 & 288 & 0 & 0 & 0\\
+%     \textbf{3} & 1 & 6 & 5 & 2 & 0 & 0\\
 %     \hline
-%     \textbf{4} & 0 & 0 & 0 & 78 & 0 & 0\\
+%     \textbf{4} & 0 & 0 & 2 & 3 & 2 & 0\\
 %     \hline
-%     \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
+%     \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
 %     \hline
-%     \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
+%     \textbf{6} & 0 & 0 & 2 & 3 & 0 & 2\\
 %     \hline
 %   \end{tabular}
 %   }
@@ -1083,19 +1196,19 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 %       \hline
 %       \textbf{category} & \textbf{mean score}\\
 %       \hline
-%       \textbf{1} & 100\% \\
+%       \textbf{1} & 86.46\% \\
 %       \hline
-%       \textbf{2} & 100\% \\
+%       \textbf{2} & 46.11\% \\
 %       \hline
-%       \textbf{3} & 100\% \\
+%       \textbf{3} & 35.72\% \\
 %       \hline
-%       \textbf{4} & 100\% \\
+%       \textbf{4} & 42.86\% \\
 %       \hline
-%       \textbf{5} & 100\% \\
+%       \textbf{5} & 0\% \\
 %       \hline
-%       \textbf{6} & 100\% \\
+%       \textbf{6} & 28.57\% \\
 %       \hline
-%       \textbf{mean} & 100\% \\
+%       \textbf{total} & 73.35\% \\
 %       \hline
 %     \end{tabular}
 %     }
@@ -1143,17 +1256,17 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 %     \hline
 %      & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
 %     \hline
-%     \textbf{1} & 32533 & 0 & 0 & 0 & 0 & 0\\
+%     \textbf{1} & 187 & 38 & 9 & 0 & 0 & 0\\
 %     \hline
-%     \textbf{2} & 0 & 1252 & 0 & 0 & 0 & 0\\
+%     \textbf{2} & 41 & 46 & 28 & 4 & 0 & 2\\
 %     \hline
-%     \textbf{3} & 0 & 0 & 288 & 0 & 0 & 0\\
+%     \textbf{3} & 2 & 6 & 16 & 6 & 1 & 0\\
 %     \hline
-%     \textbf{4} & 0 & 0 & 0 & 78 & 0 & 0\\
+%     \textbf{4} & 0 & 0 & 1 & 1 & 0 & 0\\
 %     \hline
-%     \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
+%     \textbf{5} & 0 & 0 & 0 & 0 & 0 & 0\\
 %     \hline
-%     \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
+%     \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
 %     \hline
 %   \end{tabular}
 %   }
@@ -1174,19 +1287,19 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 %       \hline
 %       \textbf{category} & \textbf{mean score}\\
 %       \hline
-%       \textbf{1} & 100\% \\
+%       \textbf{1} & 79.92\% \\
 %       \hline
-%       \textbf{2} & 100\% \\
+%       \textbf{2} & 38.02\% \\
 %       \hline
-%       \textbf{3} & 100\% \\
+%       \textbf{3} & 51.61\% \\
 %       \hline
-%       \textbf{4} & 100\% \\
+%       \textbf{4} & 50\% \\
 %       \hline
-%       \textbf{5} & 100\% \\
+%       \textbf{5} & - \\
 %       \hline
-%       \textbf{6} & 100\% \\
+%       \textbf{6} & - \\
 %       \hline
-%       \textbf{mean} & 100\% \\
+%       \textbf{total} & 64.44\% \\
 %       \hline
 %     \end{tabular}
 %     }
@@ -1457,11 +1570,11 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
       \hline
       \textbf{4} & 50.0\% \\
       \hline
-      \textbf{5} & - \% \\
+      \textbf{5} & - \\
       \hline
-      \textbf{6} & - \% \\
+      \textbf{6} & - \\
       \hline
-      \textbf{mean} & 74.48\% \\
+      \textbf{total} & 74.48\% \\
       \hline
     \end{tabular}
     }
