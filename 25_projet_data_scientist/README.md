@@ -46,27 +46,27 @@ Now, we need to query images from USGS website. Be sure that you get a (free) lo
 
 First, make a polygon containing Japan and put a data time range big enough to contain a summer period :
 <p align="center">
-  <img src="data/Japon/japon-selection.png" width="450"/>
+  <img src="data/Japon/japon-selection.png" width="750"/>
 </p>
 
 Be sure that you enable a large amount of data results into Results Options window (from 100 to 500 could be enough) :
 <p align="center">
-  <img src="data/Japon/japon-selection2.png" width="450"/>
+  <img src="data/Japon/japon-selection2.png" width="750"/>
 </p>
 
 Then, specify the nature of datasets needed (sensors OLI/TIRS)
 <p align="center">
-  <img src="data/Japon/japon-datasets.png" width="450"/>
+  <img src="data/Japon/japon-datasets.png" width="750"/>
 </p>
 
 Add some conditions to your queries in terms of cloud covering (<20%) and day/night selection (day):
 <p align="center">
-  <img src="data/Japon/japon-criteria.png" width="450"/>
+  <img src="data/Japon/japon-criteria.png" width="750"/>
 </p>
 
 Finally get your results and export it as a CSV file
 <p align="center">
-  <img src="data/Japon/japon-results.png" width="450"/>
+  <img src="data/Japon/japon-results.png" width="750"/>
 </p>
 
 You should get a zip file whose name has the form of `LANDSAT_8_XXXXXX.zip`, unzip the containing into `data/Japan` folder.
@@ -82,7 +82,7 @@ We can verify that this last file contains datasets that covers all the territor
 
  The resulting image is `data/Japan/covering-selection.png` and you should verify that the territory is well covered (if no, enlarge the time range, or increase the cloudyness from 20% to 30%)
 <p align="center">
-  <img src="data/Japon/covering-selection.png" width="450"/>
+  <img src="data/Japon/covering-selection.png" width="750"/>
 </p>
 
 ## Compute NDVI (vegetal indice) histogram for each city
