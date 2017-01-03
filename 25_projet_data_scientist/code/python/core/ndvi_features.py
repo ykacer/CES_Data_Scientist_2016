@@ -124,7 +124,7 @@ for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitu
 	ID = images['ID'][nearest_dataset]
 
 	#print "\nprocessing "+folder+'/'+ID+' for city '+name+'...'
-	if os.path.isdir(folder+'/'+ID) == False:
+	if (os.path.isdir(folder+'/'+ID) == False) & (os.path.isfile(folder+'/'+ID+'_NDVI.TIF')==False) & (os.path.isfile(folder+'/'+ID+'_RGB.TIF')==False):
 		os.system('/usr/local/bin/landsat download '+ID+' --bands 2345 --dest '+folder)
 		if os.path.isfile(folder+'/'+ID+'.tar.bz') == True:
 			os.mkdir(folder+'/'+ID)
