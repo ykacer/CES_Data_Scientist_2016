@@ -117,7 +117,7 @@ IDprev = ""
 for (name,lt,lg,de,p,s) in izip(cities['nom'],cities['latitude'],cities['longitude'],cities['densite'],cities['population'],cities['surface']):
 	name = re.sub('\/','-',name)
 	if (lt<lat_min) | (lt>lat_max) | (lg<long_min) | (lg>long_max):
-		print "Warning : "+name+" not in any of the provided Landsat datasets..."
+                print "Warning : "+name+" (long:"+str(lg)+",lat:"+str(lt)+") not in any of the provided Landsat datasets..."
 		continue;
 
 	nearest_dataset = np.argmin((lt-images['Clat'])**2+(lg-images['Clong'])**2)
