@@ -404,6 +404,8 @@ if 'CLASSIFICATION' in df.columns:
     legend_labels = []
     legend_scatters = []
     N = 0
+    for ie in range(-(nc-1),nc):
+        print "error="+str(ie)+" : "+str((errorc==ie).sum())+" samples"
     for i in range(0,nc):
         ci = np.asarray(colors_error[int(1.0*(i+nc-1)/(2*(nc-1)+1)*len(colors_error))])/255.0
         xi = x[errorc==i]
