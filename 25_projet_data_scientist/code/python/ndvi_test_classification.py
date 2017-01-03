@@ -29,6 +29,7 @@ for i in np.arange(nc-1):
     c1 = str(categorization[i])
     c2 = str(categorization[i+1])
     target_names.append(c1+u' - '+c2+u' habs/km²')
+
 target_names.append(u'> '+str(categorization[-1])+u' habs/km²')
 
 file_test = sys.argv[1]
@@ -44,18 +45,22 @@ variables = [v for v in data.columns if v.isdigit()]
 if 'PMUN13' in data.columns:
     year = u'13'
     data = data[data.PMUN13 != 0]
+    data = data[data.PMUN13<10e11]
     population = data['PMUN13'].as_matrix()
 elif 'PMUN14' in data.columns:
     year = u'14'
     data = data[data.PMUN14 != 0]
+    data = data[data.PMUN14<10e11]
     population = data['PMUN14'].as_matrix()
 elif 'PMUN15' in data.columns:
     year = u'15'
     data = data[data.PMUN15 != 0]
+    data = data[data.PMUN15<10e11]
     population = data['PMUN15'].as_matrix()
 elif 'PMUN16' in data.columns:
     year = u'16'
     data = data[data.PMUN16 != 0]
+    data = data[data.PMUN16<10e11]
     population = data['PMUN16'].as_matrix()
 else:
     ground_truth_available = False
@@ -130,9 +135,9 @@ except:
 file_test_prediction = folder_model+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'_prediction.csv'
 data.to_csv(file_test_prediction,encoding='utf-8')
 
-#print(u'~/anaconda2/bin/python density_plot.py '+file_test_prediction+u' '+year)
-os.system(u'~/anaconda2/bin/python code/python/plot/density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
-#os.system(u'python density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
+#print(u'~/anaconda2/bin/python code/python/plot/density_plot.py '+file_test_prediction+u' '+year)
+#os.system(u'~/anaconda2/bin/python code/python/plot/density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
+os.system(u'python code/python/plot/density_plot.py '+file_test_prediction+u' '+year+u' '+os.path.basename(model)[:str.rfind(os.path.basename(model),'.')]+u'.png')
 
 compute_roc = True
 
