@@ -1,16 +1,12 @@
 #TP MapReduce/Spark
 
 
-## Creation d'un index inversé à partir du crawling d'un repertoire Wikipedia minimale, accessible en localhost via un serveur Apache.
+# Creation d'un index inversé à partir du crawling d'un repertoire Wikipedia minimale, accessible en localhost via un serveur Apache.
 
-Bonjour Pierre,
 
-Je vous prie de trouver en pièce jointe le dossier compressé de mes fichiers répondant au TP MapReduce/Spark (module Calcul Distribué du CES Data Scientist 2016)
-
-Vous trouverez les fichiers suivants :
 ## Description
 
-    * stop_words.txt : liste des mots pour le stemming
+    * stop_words.txt : liste des mots à retirer pour le stemming
 
 ### partie 1: HBASE->HDFS->HADOOP MapReduce->HDFS->HBASE
 
@@ -30,9 +26,3 @@ Vous trouverez les fichiers suivants :
 
     * TP_Spark_Hbase/1_wikiFromHBaseToSpark.py : recupère directement la table Hbase 'simplewiki', lance les fonctions Spark map/reduce pour créer l'index inversé, puis enregistre cet index directement dans une table Hbase 'indexwikiFromSpark2'
 
-
-Par avance, merci.
-
-Cordialement,
-
-Youcef KACER
