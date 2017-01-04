@@ -114,3 +114,8 @@ A new folder `data/Japan/test/Neural_Network_Classification-oversampling` will t
 * `density_classification.png` for the predictions made by the model. 
 
 Note that here, the ground truth correspond to 2007 Japan Government Institute while the prediction corresponds here to 2015 landsat-8 images.
+
+<p align="center">
+  <img src="data/Japon/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png" width="750"/>
+  <img src="data/Japon/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png" width="750"/>
+</p>
