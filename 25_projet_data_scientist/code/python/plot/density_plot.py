@@ -105,9 +105,9 @@ if 'COVERING' in df.columns:
     covering = df['COVERING'].as_matrix()
 
 dpi = 500
-size_pt = 50
+size_pt = 35
 if (y.max()-y.min())>1000:
-    size_pt = 5
+    size_pt = 12
 
 colors = [[49,140,231],
  [255,255,153],
@@ -406,7 +406,7 @@ if 'CLASSIFICATION' in df.columns:
     N = 0
     for ie in range(-(nc-1),nc):
         print "error="+str(ie)+" : "+str((errorc==ie).sum())+" samples"
-    for i in range(0,nc):
+    for i in [0]:
         ci = np.asarray(colors_error[int(1.0*(i+nc-1)/(2*(nc-1)+1)*len(colors_error))])/255.0
         xi = x[errorc==i]
         yi = y[errorc==i]
@@ -417,8 +417,8 @@ if 'CLASSIFICATION' in df.columns:
         sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
         legend_scatters.append(sci)
         legend_labels.append(str(int(i)))
-    for i in list(reversed(range(-(nc-1),0))):
-        ci = np.asarray(colors_error[int(1.0*(i+nc-1)/(2*(nc-1)+1)*len(colors_error))])/255.0
+    for i in range(1,nc):
+        ci = np.asarray(colors_error[1+int(1.0*(i+nc-1)/(2*(nc-1)+1)*len(colors_error))])/255.0
         xi = x[errorc==i]
         yi = y[errorc==i]
         di = d[errorc==i]
@@ -428,6 +428,17 @@ if 'CLASSIFICATION' in df.columns:
         sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
         legend_scatters.append(sci)
         legend_labels.append(str(int(i)))
+	j=-i
+	ci = np.asarray(colors_error[int(1.0*(j+nc-1)/(2*(nc-1)+1)*len(colors_error))])/255.0
+        xi = x[errorc==j]
+        yi = y[errorc==j]
+        di = d[errorc==j]
+        si = s[errorc==j]
+        ni = di.shape[0]
+        N = N+ni
+        sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+        legend_scatters.append(sci)
+        legend_labels.append(str(int(j)))
 
     print u'******** N : '+str(N)+' points'
     plt.xlabel('x Web Mercator (km)')
