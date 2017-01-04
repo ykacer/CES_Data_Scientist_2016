@@ -26,26 +26,11 @@ from sklearn.neighbors import KNeighborsClassifier
 
 from xgboost.sklearn import XGBClassifier
 
-from imblearn.under_sampling import RandomUnderSampler
-from imblearn.under_sampling import NearMiss
-from imblearn.under_sampling import CondensedNearestNeighbour
-from imblearn.under_sampling import OneSidedSelection
-from imblearn.under_sampling import NeighbourhoodCleaningRule
-from imblearn.under_sampling import TomekLinks
-from imblearn.under_sampling import ClusterCentroids
-from imblearn.under_sampling import EditedNearestNeighbours
-from imblearn.under_sampling import InstanceHardnessThreshold
-from imblearn.under_sampling import RepeatedEditedNearestNeighbours
-from imblearn.under_sampling import AllKNN
-
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.over_sampling import SMOTE
 
 from imblearn.combine import SMOTETomek
 from imblearn.combine import SMOTEENN
-
-from imblearn.ensemble import EasyEnsemble
-from imblearn.ensemble import BalanceCascade
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
@@ -172,11 +157,12 @@ def compute_mean_score(y,yp,nc):
 print("* Support Vector Gaussian Classification")
 n_samples = X.shape[0]
 classes = np.arange(nc+1).tolist()
-C = 1000000.0
+C = 1.0
 weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
 class_weight = dict(zip(classes,weights))
-cl = SVC(kernel='rbf',decision_function_shape='ovr',probability=True,random_state=0,verbose=False)
-param_grid = {'gamma':[0.1],'class_weight':[class_weight]}
+#cl = SVC(kernel='rbf',decision_function_shape='ovr',probability=True,random_state=0,verbose=False)
+cl = SVC(kernel='rbf',random_state=0,verbose=False)
+param_grid = {'gamma':[0.0001],'class_weight':[class_weight]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 ypred = grid.best_estimator_.predict(Xpca)
