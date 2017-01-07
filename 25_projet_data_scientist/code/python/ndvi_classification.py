@@ -154,6 +154,7 @@ def compute_mean_score(y,yp,nc):
             mean_scores_per_category[ic] = -1
     return mean_scores_per_category
 
+
 print("* Support Vector Gaussian Classification")
 n_samples = X.shape[0]
 classes = np.arange(nc+1).tolist()
@@ -166,7 +167,6 @@ param_grid = {'gamma':[0.0001],'class_weight':[class_weight]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 ypred = grid.best_estimator_.predict(Xpca)
-#info = "percentage of support vectors : "+1.0*len(grid.best_estimator_.support_)/y.size+"%\n"
 info=''
 info = info + np.array_str(metrics.confusion_matrix(y,ypred))
 info = info+u"\n\n"
@@ -176,48 +176,9 @@ for i in np.arange(nc+1):
 
 info = info+u"\n\n"
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Support Vector Gaussian Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
-
-print("* Support Vector Classification-oversampling")
-n_sampleso = Xo.shape[0]
-classeso = np.arange(nc+1).tolist()
-weightso = 1.0*n_sampleso / (n_cl * np.bincount(yo.astype(np.int64)))
-class_weighto = dict(zip(classeso,weightso))
-class_weighto[0] = 1.1*class_weighto[0]
-class_weighto[1] = 1.6*class_weighto[1]
-
-class_weighto1 = dict(zip(classeso,weightso))
-class_weighto1[0] = 1.3*class_weighto1[0]
-class_weighto1[1] = 1.6*class_weighto1[1]
-
-class_weighto2 = dict(zip(classeso,weightso))
-class_weighto2[0] = 1.6*class_weighto2[0]
-class_weighto2[1] = 1.6*class_weighto2[1]
-
-Co = 1.0
-cl = LinearSVC(C=Co,dual=False,random_state=0,verbose=False)
-param_grid = {'penalty':['l2'],'class_weight':[class_weighto1]}
-grid = grid_search.GridSearchCV(cl,param_grid,cv=cvo,verbose=verbose)
-grid.fit(Xo,yo)
-info=''
-info = info + np.array_str(metrics.confusion_matrix(yo,grid.best_estimator_.predict(Xo)))
-info = info+u"\n\n"
-mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
-for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
-
-info = info+u"\n\n"
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
-info = info + np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
-info = info+u"\n\n"
-mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
-for i in np.arange(nc+1):
-    info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
-
-info = info+u"\n\n"
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
-results.append(['Support Vector Classification-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
 print("* Random Forest Classification")
@@ -225,6 +186,7 @@ cl = RandomForestClassifier(n_estimators=40,max_depth=15,min_samples_split=20,mi
 param_grid = {'max_features':[15]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
+ypred = grid.best_estimator_.predict(Xpca);
 info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
 info = info+u'\n\n'
 mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
@@ -232,6 +194,7 @@ for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 info = info+u'\n\n'
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Random Forest Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Gradient Boosting Classification")
@@ -239,29 +202,33 @@ cl = GradientBoostingClassifier(learning_rate=0.45, n_estimators=40, min_samples
 param_grid = {'n_estimators':[40]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
-info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+ypred = grid.best_estimator_.predict(Xpca);
+info = np.array_str(metrics.confusion_matrix(y,ypred))
 info = info+u"\n\n"
-mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+mean_scores = compute_mean_score(y,ypred,nc)
 for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(100-mean_scores[i])+u"%\n"
 
 info = info+u"\n\n"
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Extreme Gradient Boosting Classification")
-cl = XGBClassifier(learning_rate =0.1,n_estimators=1000,max_depth=5,min_child_weight=1,gamma=0,subsample=0.8,colsample_bytree=0.8, objective='binary:logistic',nthread=4, scale_pos_weight=1, seed=0,silent=False)
+cl = XGBClassifier(learning_rate =0.1,n_estimators=200,max_depth=3,min_child_weight=5,gamma=0,subsample=0.8,colsample_bytree=0.8, objective='binary:logistic',nthread=4, scale_pos_weight=1, reg_lambda=10.0, seed=0,silent=True)
 param_grid = {'learning_rate':[0.1]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
-info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+ypred = grid.best_estimator_.predict(Xpca)
+info = np.array_str(metrics.confusion_matrix(y,ypred))
 info = info+u"\n\n";
-mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+mean_scores = compute_mean_score(y,ypred,nc)
 for i in np.arange(nc+1):
-    info = info+target_names[i]+": "+str(mean_scores[i])+"%\n";
+    info = info+target_names[i]+": "+str(100-mean_scores[i])+"%\n";
 
 info = info+u"\n\n"
-info = info+u'mean error per class : '+str(mean_scores.mean())+"%\n\n"
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Extreme Gradient Boosting Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* Neural Network Classification-oversampling")
@@ -275,16 +242,18 @@ mean_scores = compute_mean_score(yo,grid.best_estimator_.predict(Xo),nc)
 for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 
+ypred = grid.best_estimator_.predict(Xpca);
 info = info+u'\n\n'
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
-info = info+np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+info = info+np.array_str(metrics.confusion_matrix(y,ypred))
 info = info+u'\n\n'
-mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+mean_scores = compute_mean_score(y,ypred,nc)
 for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 
 info = info+u'\n\n'
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Neural Network Classification-oversampling',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* TensorFlow Neural Network Classification")
@@ -304,14 +273,16 @@ class_weight = dict(zip(classes,weights))
 param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,to_categorical(y,n_cl))
-info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca)))
+ypred = grid.best_estimator_.predict(Xpca)
+info = np.array_str(metrics.confusion_matrix(y,ypred))
 info = info+u"\n\n"
-mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca),nc)
+mean_scores = compute_mean_score(y,ypred,nc)
 for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(100-mean_scores[i])+"%\n"
 
 info = info+u"\n\n"
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Neural Network Classification TensorFlow',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 print("* TensorFlow Convolutional Neural Network Classification")
@@ -353,17 +324,18 @@ optimizers = [SGD(lr=0.0001, decay=1e-3, momentum=0.9, nesterov=True)]
 param_grid = {'batch_size':[100],'optimizer':optimizers}
 #param_grid = {'batch_size':[100]}
 grid = grid_search.GridSearchCV(cl,param_grid,fit_params={'class_weight':class_weight},cv=cv,verbose=verbose)
-
 grid.fit(Xpca.reshape(Xpca.shape + (1,)),to_categorical(y,n_cl))
+ypred = grid.best_estimator_.predict(Xpca.reshape(Xpca.shape + (1,)))
 
-info = np.array_str(metrics.confusion_matrix(y,grid.best_estimator_.predict(Xpca.reshape(Xpca.shape + (1,)))))
+info = np.array_str(metrics.confusion_matrix(y,ypred));
 info = info+u'\n\n'
-mean_scores = compute_mean_score(y,grid.best_estimator_.predict(Xpca.reshape(Xpca.shape + (1,))),nc)
+mean_scores = compute_mean_score(y,ypred,nc)
 for i in np.arange(nc+1):
     info = info+target_names[i]+': '+str(100-mean_scores[i])+'%\n'
 
 info = info+u'\n\n'
-info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n'
+info = info+u'mean error per class : '+str(100-mean_scores.mean())+'%\n\n';
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Convolutional Neural Network Classification TensorFlow',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 
@@ -381,6 +353,7 @@ for i in np.arange(nc+1):
 
 info = info+u"\n\n"
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred));
 info = info+u"\n\n"
 ypred = grid.best_estimator_.predict(Xpca)
 info = info+np.array_str(metrics.confusion_matrix(y,ypred))
@@ -391,6 +364,7 @@ for i in np.arange(nc+1):
 
 info = info+u"\n\n"
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
+info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Nearest Neighboors Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
 
 colors = [[49,140,231],
