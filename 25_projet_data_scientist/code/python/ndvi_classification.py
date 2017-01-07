@@ -163,7 +163,7 @@ weights = 1.0*n_samples / (n_cl * np.bincount(y.astype(np.int64)))
 class_weight = dict(zip(classes,weights))
 #cl = SVC(kernel='rbf',decision_function_shape='ovr',probability=True,random_state=0,verbose=False)
 cl = SVC(kernel='rbf',random_state=0,verbose=False)
-param_grid = {'gamma':[0.0001],'class_weight':[class_weight]}
+param_grid = {'gamma':[0.01],'class_weight':[class_weight]}
 grid = grid_search.GridSearchCV(cl,param_grid,cv=cv,verbose=verbose)
 grid.fit(Xpca,y)
 ypred = grid.best_estimator_.predict(Xpca)
@@ -178,8 +178,6 @@ info = info+u"\n\n"
 info = info+u'mean error per class : '+str(100-mean_scores.mean())+"%\n\n"
 info = info+u'mean error : '+str(100-100*metrics.accuracy_score(y,ypred))+"%\n\n";
 results.append(['Support Vector Gaussian Classification',grid.grid_scores_,grid.scorer_,grid.best_score_,grid.best_params_,grid.get_params(),grid.best_estimator_,info])
-
-
 
 print("* Random Forest Classification")
 cl = RandomForestClassifier(n_estimators=40,max_depth=15,min_samples_split=20,min_samples_leaf=20,max_features=35,random_state=0)
