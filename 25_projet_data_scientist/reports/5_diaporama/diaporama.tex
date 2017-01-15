@@ -405,8 +405,8 @@ Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9 & 1\\
  \item Compute Normalized Difference Vegetation Indice using bands 4 (Red) and 5 (Near-Infra-Red) for each dataset :
  \item Values between -1 and 1
  \item $\leq 0$ for water, snow and cloud
- \item $= 0$ for  ground without vegetation
- \item $\geq 0$ for ground vegetation
+ \item $\leq 0.2$ for  ground without vegetation
+ \item $\geq 0.2$ for ground vegetation
 }
 \end{itemize}
 {\scriptsize \[NDVI=\frac{NIR-R}{NIR+R}\]}
@@ -596,126 +596,224 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 \tableofcontents[currentsection]
 \end{frame}
 
-% \subsection{K-Nearest Neighbors}
-% \begin{frame}
-% \tableofcontents[currentsubsection]
-% \end{frame}
-% 
-% \begin{frame}
-% \begin{itemize}
-%  \item Overcome imbalanced data by 
-%   \begin{itemize}
-%   {\scriptsize
-%     \item Oversampling minority classes using SMOTE technique (Synthetic Minority Oversampling TEchnique) 
-%       \begin{columns}
-%       \begin{column}{0.5\textwidth}
-%       \centering\vfill
-%       \includegraphics[scale=0.17]{images/oversampling/smote.png}
-%       \end{column}
-%       \begin{column}{0.5\textwidth}
-%       {\tiny
-%       Let's $x_{i}$,$x_{i1}$, $x_{i2}$, $x_{i3}$ and $x_{i4}$ be points of minority class $i$ and $y_{jk}$ the points of 
-%       majority class $j$ , choose each new sample $r_{l}$ for class $i$ that maximizes $\sum \limits_{\underset{}{k=1}}^{n_{j}} (y_{jk}-r_{l})^2$
-%       }
-%       \end{column}
-%     \end{columns}
-%     \item Run training on obtained balanced data.
-%   }
-%   \end{itemize}
-%  \end{itemize}
-%  \begin{itemize}
-%   \item Best cross-validation (stratified 3-folds) of $94.74$\% obtained for number of neighboors $k = 5$. 
-%  \end{itemize}
-% \end{frame}
-% 
-% \begin{frame}
-% \begin{columns}
-%  \begin{column}{0.5\textwidth}
-%   \begin{overlayarea}{\linewidth}{4cm}
-%     \centering\vfill
-%     \includegraphics[scale=0.50]{images/France/density_ground_truth.png}
-%   \end{overlayarea}
-%   \begin{overlayarea}{\linewidth}{0.5cm}
-%     \centering
-%     \tiny France density category - ground truth\par
-%   \end{overlayarea}
-%  \end{column}
-%  \begin{column}{0.5\textwidth}
-%   \begin{overlayarea}{\linewidth}{4cm}
-%     \centering\vfill
-%     \includegraphics[scale=0.50]{images/France/knn/density_classification.png}
-%   \end{overlayarea}
-%   \begin{overlayarea}{\linewidth}{0.5cm}
-%     \centering
-%     \tiny France density category - prediction\par
-%   \end{overlayarea}
-%  \end{column}
-% \end{columns}
-% 
-% \begin{columns}
-% \begin{column}{0.7\textwidth}
-%   \begin{table}
-%   \begin{center}
-%   \begin{adjustbox}{max width=0.6\textwidth}
-%   {\tiny
-%   \begin{tabular}{|c|c|c|c|c|c|c|}
-%     \hline
-%     \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix after refitting\end{bf}}} \\
-%     \hline
-%      & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
-%     \hline
-%     \textbf{1} & 32533 & 0 & 0 & 0 & 0 & 0\\
-%     \hline
-%     \textbf{2} & 0 & 1252 & 0 & 0 & 0 & 0\\
-%     \hline
-%     \textbf{3} & 0 & 0 & 288 & 0 & 0 & 0\\
-%     \hline
-%     \textbf{4} & 0 & 0 & 0 & 78 & 0 & 0\\
-%     \hline
-%     \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
-%     \hline
-%     \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
-%     \hline
-%   \end{tabular}
-%   }
-%   \end{adjustbox}
-%   \end{center}
-%   \end{table}
-% \end{column}
-% \begin{column}{0.5\textwidth}
-%    \begin{table}
-%     \begin{center}
-%     \begin{adjustbox}{max width=0.5\textwidth}
-%     {\tiny 
-%     \begin{tabular}{|c|c|}
-%       \hline
-%       \multicolumn{2}{|c|}{\begin{bf}Mean score per class after refitting\end{bf}} \\
-%       \hline
-%       \textbf{category} & \textbf{mean score}\\
-%       \hline
-%       \textbf{1} & 100\% \\
-%       \hline
-%       \textbf{2} & 100\% \\
-%       \hline
-%       \textbf{3} & 100\% \\
-%       \hline
-%       \textbf{4} & 100\% \\
-%       \hline
-%       \textbf{5} & 100\% \\
-%       \hline
-%       \textbf{6} & 100\% \\
-%       \hline
-%       \textbf{total} & 100\% \\
-%       \hline
-%     \end{tabular}
-%     }
-%     \end{adjustbox}
-%     \end{center}
-%   \end{table}
-% \end{column}
-% 
-% \end{columns}
-% \end{frame}
+\subsection{K-Nearest Neighbors}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+ \item Overcome imbalanced data by 
+  \begin{itemize}
+  {\scriptsize
+    \item Oversampling minority classes using SMOTE technique (Synthetic Minority Oversampling TEchnique) 
+      \begin{columns}
+      \begin{column}{0.5\textwidth}
+      \centering\vfill
+      \includegraphics[scale=0.17]{images/oversampling/smote.png}
+      \end{column}
+      \begin{column}{0.5\textwidth}
+      {\tiny
+      Let's $x_{i}$,$x_{i1}$, $x_{i2}$, $x_{i3}$ and $x_{i4}$ be points of minority class $i$ and $y_{jk}$ the points of 
+      majority class $j$ , choose each new sample $r_{l}$ for class $i$ that maximizes $\sum \limits_{\underset{}{k=1}}^{n_{j}} (y_{jk}-r_{l})^2$
+      }
+      \end{column}
+    \end{columns}
+    \item Run training on obtained balanced data.
+  }
+  \end{itemize}
+ \end{itemize}
+ \begin{itemize}
+  \item Best cross-validation (stratified 3-folds) of $94.74$\% obtained for number of neighboors $k = 5$. 
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/France/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny France density category - ground truth\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/France/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny France density category - prediction\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+
+\begin{columns}
+\begin{column}{0.6\textwidth}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.6\textwidth}
+  {
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 32533 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 0 & 1252 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{3} & 0 & 0 & 288 & 0 & 0 & 0\\
+    \hline
+    \textbf{4} & 0 & 0 & 0 & 78 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
+    \hline
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+\end{column}
+\begin{column}{0.6\textwidth}
+   \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.6\textwidth}
+    {
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting\end{bf}} \\
+      \hline
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+      \hline
+      \textbf{1} & 100\% & 100\% & 1.0 & 32533\\
+      \hline
+      \textbf{2} & 100\% & 100\% & 1.0 & 1252\\
+      \hline
+      \textbf{3} & 100\% & 100\% & 1.0 & 288\\
+      \hline
+      \textbf{4} & 100\% & 100\% & 1.0 & 78\\
+      \hline
+      \textbf{5} & 100\% & 100\% & 1.0 & 15\\
+      \hline
+      \textbf{6} & 100\% & 100\% & 1.0 & 24\\
+      \hline
+      \textbf{total} & 100\% & 100\% & 1.0 & 34190\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+\end{column}
+
+\end{columns}
+\end{frame}
+
+
+\subsection{Support-Vector Machine (Gaussian Kernel)}
+\begin{frame}
+\begin{itemize}
+ \item Overcome imbalanced data by increasing regularization parameter $C_{i}$ for minority classes $i$ :  $C_{i} = n/n_{i}$
+ \item Cross-validated (stratified 3-folds) gamma coefficient ($\gamma = 0.01$)
+\end{itemize}
+\end{frame}
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/France/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny France density category - ground truth\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/France/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny France density category - prediction\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+
+\begin{columns}
+\begin{column}{0.6\textwidth}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.6\textwidth}
+  {\tiny
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 28569 & 3632 & 251 & 51 & 27 & 3\\
+    \hline
+    \textbf{2} & 77 & 1021 & 139 & 11 & 1 & 3\\
+    \hline
+    \textbf{3} & 1 & 25 & 254 & 7 & 0 & 1\\
+    \hline
+    \textbf{4} & 0 & 0 & 3 & 75 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
+    \hline
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+\end{column}
+\begin{column}{0.6\textwidth}
+   \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.6\textwidth}
+    {\tiny 
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting\end{bf}} \\
+      \hline
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score}& \textbf{n}\\
+      \hline
+      \textbf{1} & 99.7\% & 87.8\% & 0.934 & 32533\\
+      \hline
+      \textbf{2} & 21.8\% & 81.5\% & 0.344 & 1252\\
+      \hline
+      \textbf{3} & 39.3\% & 88.2\% & 0.543 & 288\\
+      \hline
+      \textbf{4} & 52.1\% & 96.2\% & 0.676 & 78\\
+      \hline
+      \textbf{5} & 34.9\% & 100.0\% & 0.517 & 15\\
+      \hline
+      \textbf{6} & 77.4\% & 100.0\% & 0.873 & 24\\
+      \hline
+      \textbf{total} & 96.2\% & 87.6\% & 0.908 & 34190\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+\end{column}
+\end{columns}
+\end{frame}
+
+
 
 \subsection{Neural Network}
 \begin{frame}
@@ -733,6 +831,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{itemize}
  \begin{itemize}
   \item Best cross-validation (stratified 3-folds) of $92.26$\% with one layer (1200 neurons), SGD learning rate of $0.001$ and penalization of $0.001$. 
+  \item Early stopping activation to avoid overfitting (i.e. stop iterative training when no more decrease in validation error)
  \end{itemize}
 \end{frame}
 
@@ -741,7 +840,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/France/density_ground_truth.png}
+    \includegraphics[scale=0.25]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -751,7 +850,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/France/nn/density_classification.png}
+    \includegraphics[scale=0.25]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -761,7 +860,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 \end{columns}
 
 \begin{columns}
-\begin{column}{0.7\textwidth}
+\begin{column}{0.6\textwidth}
   \begin{table}
   \begin{center}
   \begin{adjustbox}{max width=0.6\textwidth}
@@ -790,30 +889,30 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \end{center}
   \end{table}
 \end{column}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.6\textwidth}
    \begin{table}
     \begin{center}
-    \begin{adjustbox}{max width=0.5\textwidth}
+    \begin{adjustbox}{max width=0.6\textwidth}
     {\tiny 
-    \begin{tabular}{|c|c|}
+    \begin{tabular}{|c|c|c|c|c|}
       \hline
-      \multicolumn{2}{|c|}{\begin{bf}Mean score per class after refitting\end{bf}} \\
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
       \hline
-      \textbf{category} & \textbf{mean score}\\
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
       \hline
-      \textbf{1} & 91.42\% \\
+      \textbf{1} & 99.3\% & 91.4\% & 0.952 & 32533\\
       \hline
-      \textbf{2} & 68.13\% \\
+      \textbf{2} & 26.9\% & 68.1\% & 0.385 & 1252\\
       \hline
-      \textbf{3} & 91.95\% \\
+      \textbf{3} & 30.6\% & 81.9\% & 0.446 & 288\\
       \hline
-      \textbf{4} & 97.64\% \\
+      \textbf{4} & 37.4\% & 97.4\% & 0.541 & 78\\
       \hline
-      \textbf{5} & 100\% \\
+      \textbf{5} & 34.9\% & 100.0\% & 0.517 & 15\\
       \hline
-      \textbf{6} & 100\% \\
+      \textbf{6} & 45.3\% & 100.0\% & 0.623 & 24\\
       \hline
-      \textbf{total} & 90.51\% \\
+      \textbf{total} & 95.9\% & 90.5\% & 0.926 & 34190\\
       \hline
     \end{tabular}
     }
@@ -829,7 +928,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/France/nn/density_classification_error.png}
+    \includegraphics[scale=0.25]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification_error.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -839,7 +938,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/France/nn/density_covering.png}
+    \includegraphics[scale=0.25]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_covering.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -939,14 +1038,6 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 \end{columns}
 }
 \end{frame}
-
-% \subsection{Support-Vector Machine (Gaussian Kernel)}
-% \begin{frame}
-% \begin{itemize}
-%  \item Overcome imbalanced data by increasing regularization parameter $C_{i}$ for minority classes $i$ :  $C_{i} = 10000/n_{i}$
-%  \item Cross-validated (stratified 5-folds) gamma coefficient ($\gamma = 0.001$)
-% \end{itemize}
-% \end{frame}
 
 
 
@@ -1093,280 +1184,566 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 
 \end{frame}
 
-% \subsection{K-Nearest Neighbors}
-% 
-% \begin{frame}
-% \begin{columns}
-%  \begin{column}{0.5\textwidth}
-%   \begin{overlayarea}{\linewidth}{4cm}
-%     \centering\vfill
-%     \includegraphics[scale=0.50]{images/Switzerland/density_ground_truth.png}
-%   \end{overlayarea}
-%   \begin{overlayarea}{\linewidth}{0.5cm}
-%     \centering
-%     \tiny Switzerland density category - ground truth\par
-%   \end{overlayarea}
-%  \end{column}
-%  \begin{column}{0.5\textwidth}
-%   \begin{overlayarea}{\linewidth}{4cm}
-%     \centering\vfill
-%     \includegraphics[scale=0.50]{images/Switzerland/knn/density_classification.png}
-%   \end{overlayarea}
-%   \begin{overlayarea}{\linewidth}{0.5cm}
-%     \centering
-%     \tiny Switzerland density category - prediction\par
-%   \end{overlayarea}
-%  \end{column}
-% \end{columns}
-% \begin{columns}
-%  \begin{column}{0.5\textwidth}
-%  \begin{overlayarea}{\linewidth}{2cm}
-%   \begin{table}
-%   \begin{center}
-%   \begin{adjustbox}{max width=0.7\textwidth}
-%   {\tiny
-%   \begin{tabular}{|c|c|c|c|c|c|c|}
-%     \hline
-%     \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
-%     \hline
-%      & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
-%     \hline
-%     \textbf{1} & 1411 & 396 & 33 & 8 & 3 & 6\\
-%     \hline
-%     \textbf{2} & 114 & 268 & 40 & 6 & 0 & 0\\
-%     \hline
-%     \textbf{3} & 1 & 35 & 16 & 5 & 0 & 0\\
-%     \hline
-%     \textbf{4} & 1 & 4 & 2 & 0 & 1 & 1\\
-%     \hline
-%     \textbf{5} & 0 & 0 & 0 & 0 & 1 & 0\\
-%     \hline
-%     \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
-%     \hline
-%   \end{tabular}
-%   }
-%   \end{adjustbox}
-%   \end{center}
-%   \end{table}
-%  \end{overlayarea}
-%  \end{column}
-%  \begin{column}{0.5\textwidth}
-%  \begin{overlayarea}{\linewidth}{2cm}
-%   \begin{table}
-%     \begin{center}
-%     \begin{adjustbox}{max width=0.4\textwidth}
-%     {\tiny 
-%     \begin{tabular}{|c|c|}
-%       \hline
-%       \multicolumn{2}{|c|}{\begin{bf}Mean score per class\end{bf}} \\
-%       \hline
-%       \textbf{category} & \textbf{mean score}\\
-%       \hline
-%       \textbf{1} & 75.98\% \\
-%       \hline
-%       \textbf{2} & 62.62\% \\
-%       \hline
-%       \textbf{3} & 28.08\% \\
-%       \hline
-%       \textbf{4} & 0\% \\
-%       \hline
-%       \textbf{5} & 100\% \\
-%       \hline
-%       \textbf{6} & - \\
-%       \hline
-%       \textbf{total} & 72.11\% \\
-%       \hline
-%     \end{tabular}
-%     }
-%     \end{adjustbox}
-%     \end{center}
-%   \end{table}
-%   \end{overlayarea}
-% \end{column}
-% \end{columns}
-% \end{frame}
-% 
-% \begin{frame}
-% \begin{columns}
-%  \begin{column}{0.5\textwidth}
-%   \begin{overlayarea}{\linewidth}{4cm}
-%     \centering\vfill
-%     \includegraphics[scale=0.50]{images/Belgium/density_ground_truth.png}
-%   \end{overlayarea}
-%   \begin{overlayarea}{\linewidth}{0.5cm}
-%     \centering
-%     \tiny Belgium density category - ground truth\par
-%   \end{overlayarea}
-%  \end{column}
-%  \begin{column}{0.5\textwidth}
-%   \begin{overlayarea}{\linewidth}{4cm}
-%     \centering\vfill
-%     \includegraphics[scale=0.50]{images/Belgium/knn/density_classification.png}
-%   \end{overlayarea}
-%   \begin{overlayarea}{\linewidth}{0.5cm}
-%     \centering
-%     \tiny Belgium density category - prediction\par
-%   \end{overlayarea}
-%  \end{column}
-% \end{columns}
-% \begin{columns}
-%  \begin{column}{0.5\textwidth}
-%  \begin{overlayarea}{\linewidth}{2cm}
-%   \begin{table}
-%   \begin{center}
-%   \begin{adjustbox}{max width=0.7\textwidth}
-%   {\tiny
-%   \begin{tabular}{|c|c|c|c|c|c|c|}
-%     \hline
-%     \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
-%     \hline
-%      & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
-%     \hline
-%     \textbf{1} & 351 & 48 & 7 & 0 & 0 & 0\\
-%     \hline
-%     \textbf{2} & 59 & 71 & 19 & 4 & 1 & 0\\
-%     \hline
-%     \textbf{3} & 1 & 6 & 5 & 2 & 0 & 0\\
-%     \hline
-%     \textbf{4} & 0 & 0 & 2 & 3 & 2 & 0\\
-%     \hline
-%     \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
-%     \hline
-%     \textbf{6} & 0 & 0 & 2 & 3 & 0 & 2\\
-%     \hline
-%   \end{tabular}
-%   }
-%   \end{adjustbox}
-%   \end{center}
-%   \end{table}
-%  \end{overlayarea}
-%  \end{column}
-%  \begin{column}{0.5\textwidth}
-%  \begin{overlayarea}{\linewidth}{2cm}
-%   \begin{table}
-%     \begin{center}
-%     \begin{adjustbox}{max width=0.4\textwidth}
-%     {\tiny 
-%     \begin{tabular}{|c|c|}
-%       \hline
-%       \multicolumn{2}{|c|}{\begin{bf}Mean score per class\end{bf}} \\
-%       \hline
-%       \textbf{category} & \textbf{mean score}\\
-%       \hline
-%       \textbf{1} & 86.46\% \\
-%       \hline
-%       \textbf{2} & 46.11\% \\
-%       \hline
-%       \textbf{3} & 35.72\% \\
-%       \hline
-%       \textbf{4} & 42.86\% \\
-%       \hline
-%       \textbf{5} & 0\% \\
-%       \hline
-%       \textbf{6} & 28.57\% \\
-%       \hline
-%       \textbf{total} & 73.35\% \\
-%       \hline
-%     \end{tabular}
-%     }
-%     \end{adjustbox}
-%     \end{center}
-%   \end{table}
-%   \end{overlayarea}
-% \end{column}
-% \end{columns}
-% \end{frame}
-% 
-% \begin{frame}
-% \begin{columns}
-%  \begin{column}{0.5\textwidth}
-%   \begin{overlayarea}{\linewidth}{4cm}
-%     \centering\vfill
-%     \includegraphics[scale=0.50]{images/Netherlands/density_ground_truth.png}
-%   \end{overlayarea}
-%   \begin{overlayarea}{\linewidth}{0.5cm}
-%     \centering
-%     \tiny Netherlands density category - ground truth\par
-%   \end{overlayarea}
-%  \end{column}
-%  \begin{column}{0.5\textwidth}
-%   \begin{overlayarea}{\linewidth}{4cm}
-%     \centering\vfill
-%     \includegraphics[scale=0.50]{images/Netherlands/knn/density_classification.png}
-%   \end{overlayarea}
-%   \begin{overlayarea}{\linewidth}{0.5cm}
-%     \centering
-%     \tiny Netherlands density category - prediction\par
-%   \end{overlayarea}
-%  \end{column}
-% \end{columns}
-% \begin{columns}
-%  \begin{column}{0.5\textwidth}
-%  \begin{overlayarea}{\linewidth}{2cm}
-%   \begin{table}
-%   \begin{center}
-%   \begin{adjustbox}{max width=0.7\textwidth}
-%   {\tiny
-%   \begin{tabular}{|c|c|c|c|c|c|c|}
-%     \hline
-%     \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
-%     \hline
-%      & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
-%     \hline
-%     \textbf{1} & 187 & 38 & 9 & 0 & 0 & 0\\
-%     \hline
-%     \textbf{2} & 41 & 46 & 28 & 4 & 0 & 2\\
-%     \hline
-%     \textbf{3} & 2 & 6 & 16 & 6 & 1 & 0\\
-%     \hline
-%     \textbf{4} & 0 & 0 & 1 & 1 & 0 & 0\\
-%     \hline
-%     \textbf{5} & 0 & 0 & 0 & 0 & 0 & 0\\
-%     \hline
-%     \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
-%     \hline
-%   \end{tabular}
-%   }
-%   \end{adjustbox}
-%   \end{center}
-%   \end{table}
-%  \end{overlayarea}
-%  \end{column}
-%  \begin{column}{0.5\textwidth}
-%  \begin{overlayarea}{\linewidth}{2cm}
-%   \begin{table}
-%     \begin{center}
-%     \begin{adjustbox}{max width=0.4\textwidth}
-%     {\tiny 
-%     \begin{tabular}{|c|c|}
-%       \hline
-%       \multicolumn{2}{|c|}{\begin{bf}Mean score per class\end{bf}} \\
-%       \hline
-%       \textbf{category} & \textbf{mean score}\\
-%       \hline
-%       \textbf{1} & 79.92\% \\
-%       \hline
-%       \textbf{2} & 38.02\% \\
-%       \hline
-%       \textbf{3} & 51.61\% \\
-%       \hline
-%       \textbf{4} & 50\% \\
-%       \hline
-%       \textbf{5} & - \\
-%       \hline
-%       \textbf{6} & - \\
-%       \hline
-%       \textbf{total} & 64.44\% \\
-%       \hline
-%     \end{tabular}
-%     }
-%     \end{adjustbox}
-%     \end{center}
-%   \end{table}
-%   \end{overlayarea}
-% \end{column}
-% \end{columns}
-% \end{frame}
+
+\subsection{Nearest Neighbors}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Suisse/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Switzerland density category - ground truth\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Suisse/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Switzerland density category - prediction\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+\begin{columns}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.6\textwidth}
+  {\tiny
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 1411 & 396 & 33 & 8 & 3 & 6\\
+    \hline
+    \textbf{2} & 114 & 268 & 40 & 6 & 0 & 0\\
+    \hline
+    \textbf{3} & 1 & 35 & 16 & 5 & 0 & 0\\
+    \hline
+    \textbf{4} & 1 & 4 & 2 & 0 & 1 & 1\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 1 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+ \end{overlayarea}
+ \end{column}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.6\textwidth}
+   {\tiny
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+      \hline
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
+      \hline
+      \textbf{1} & 92.4\% & 76.0\% & 0.834 & 1857\\
+      \hline
+      \textbf{2} & 38.1\% & 62.6\% & 0.474 & 428\\
+      \hline
+      \textbf{3} & 17.6\% & 28.1\% & 0.216 & 57\\
+      \hline
+      \textbf{4} & 0.0\% & 0.0\% & 0.000 & 9\\
+      \hline
+      \textbf{5} & 20.0\% & 100.0\% & 0.333 & 1 \\
+      \hline
+      \textbf{6} & - & - & - & 0\\
+      \hline
+      \textbf{total} & 80.3\% & 72.1\% & 0.750 & 2352\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+  \end{overlayarea}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Belgique/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Belgium density category - ground truth\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Belgique/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Belgium density category - prediction\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+\begin{columns}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.6\textwidth}
+  {\tiny
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 351 & 48 & 7 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 59 & 71 & 19 & 4 & 1 & 0\\
+    \hline
+    \textbf{3} & 1 & 6 & 5 & 2 & 0 & 0\\
+    \hline
+    \textbf{4} & 0 & 0 & 2 & 3 & 2 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 2 & 3 & 0 & 4\\
+    \hline
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+ \end{overlayarea}
+ \end{column}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.6\textwidth}
+    {\tiny
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+      \hline
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+      \hline
+      \textbf{1} & 85.4\% & 86.5\% & 0.859 & 406\\
+      \hline
+      \textbf{2} & 56.8\% & 46.1\% & 0.509 & 154\\
+      \hline
+      \textbf{3} & 13.9\% & 35.7\% & 0.200 & 14\\
+      \hline
+      \textbf{4} & 25.0\% & 42.9\% & 0.316 & 7\\
+      \hline
+      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
+      \hline
+      \textbf{6} & 100.0 & 28.6 & 0.444 & 7\\
+      \hline
+      \textbf{total} & 75.5\% & 73.3\% & 0.739 & 589\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+  \end{overlayarea}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Pays-Bas/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Netherlands density category - ground truth\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Pays-Bas/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Netherlands density category - prediction\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+\begin{columns}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.6\textwidth}
+  {\tiny
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 187 & 38 & 9 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 41 & 46 & 28 & 4 & 0 & 2\\
+    \hline
+    \textbf{3} & 2 & 6 & 16 & 6 & 1 & 0\\
+    \hline
+    \textbf{4} & 0 & 0 & 1 & 1 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+ \end{overlayarea}
+ \end{column}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.6\textwidth}
+    {\tiny 
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+      \hline
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+      \hline
+      \textbf{1} & 81.3\% & 79.9\% & 0.806 & 234\\
+      \hline
+      \textbf{2} & 51.1\% & 38.0\% & 0.436 & 121\\
+      \hline
+      \textbf{3} & 29.6\% & 51.6\% & 0.376 & 31\\
+      \hline
+      \textbf{4} & 9.1\% & 50.0\% & 0.154 & 2\\
+      \hline
+      \textbf{5} & - & - & - & 0\\
+      \hline
+      \textbf{6} & - & - & - & 0\\
+      \hline
+      \textbf{total} & 67.4\% & 64.4\% & 0.653 & 388\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+  \end{overlayarea}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+\subsection{Support Vector Machine (Gaussian Kernel)}
+\begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Suisse/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Switzerland density category - ground truth\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Suisse/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Switzerland density category - prediction\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+\begin{columns}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.6\textwidth}
+  {\tiny
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 1471 & 381 & 3 & 1 & 1 & 0\\
+    \hline
+    \textbf{2} & 114 & 296 & 17 & 0 & 1 & 0\\
+    \hline
+    \textbf{3} & 5 & 37 & 14 & 1 & 0 & 0\\
+    \hline
+    \textbf{4} & 1 & 0 & 6 & 0 & 1 & 1\\
+    \hline
+    \textbf{5} & 1 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+ \end{overlayarea}
+ \end{column}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.6\textwidth}
+   {\tiny
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+      \hline
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
+      \hline
+      \textbf{1} & 92.4\% & 79.2\% & 0.853 & 1857\\
+      \hline
+      \textbf{2} & 41.5\% & 69.2\% & 0.519 & 428\\
+      \hline
+      \textbf{3} & 35.0\% & 24.6\% & 0.289 & 57\\
+      \hline
+      \textbf{4} & 0.0\% & 0.0\% & 0.000 & 9\\
+      \hline
+      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1 \\
+      \hline
+      \textbf{6} & - & - & - & 0\\
+      \hline
+      \textbf{total} & 81.3\% & 75.7\% & 0.775 & 2352\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+  \end{overlayarea}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Belgique/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Belgium density category - ground truth\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Belgique/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Belgium density category - prediction\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+\begin{columns}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.6\textwidth}
+  {\tiny
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 378 & 28 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 88 & 59 & 6 & 1 & 0 & 0\\
+    \hline
+    \textbf{3} & 2 & 7 & 3 & 2 & 0 & 0\\
+    \hline
+    \textbf{4} & 1 & 1 & 3 & 1 & 0 & 1\\
+    \hline
+    \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 1 & 1 & 0 & 1 & 0 & 4\\
+    \hline
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+ \end{overlayarea}
+ \end{column}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.6\textwidth}
+    {\tiny
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+      \hline
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+      \hline
+      \textbf{1} & 80.4\% & 93.1\% & 0.863 & 406\\
+      \hline
+      \textbf{2} & 61.5\% & 38.3\% & 0.472 & 154\\
+      \hline
+      \textbf{3} & 23.1\% & 21.4\% & 0.222 & 14\\
+      \hline
+      \textbf{4} & 20.0\% & 14.3\% & 0.167 & 7\\
+      \hline
+      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
+      \hline
+      \textbf{6} & 80.0 & 57.1 & 0.667 & 7\\
+      \hline
+      \textbf{total} & 73.2\% & 75.6\% & 0.733 & 589\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+  \end{overlayarea}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Pays-Bas/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Netherlands density category - ground truth\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.25]{../../data/Pays-Bas/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny Netherlands density category - prediction\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+\begin{columns}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+  \begin{center}
+  \begin{adjustbox}{max width=0.6\textwidth}
+  {\tiny
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{\tiny \begin{bf}Confusion matrix\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 233 & 1 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 80 & 32 & 8 & 1 & 0 & 0\\
+    \hline
+    \textbf{3} & 12 & 8 & 7 & 4 & 0 & 0\\
+    \hline
+    \textbf{4} & 2 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \end{center}
+  \end{table}
+ \end{overlayarea}
+ \end{column}
+ \begin{column}{0.6\textwidth}
+ \begin{overlayarea}{\linewidth}{2cm}
+  \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.6\textwidth}
+    {\tiny 
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+      \hline
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+      \hline
+      \textbf{1} & 71.3\% & 99.6\% & 0.831 & 234\\
+      \hline
+      \textbf{2} & 78.0\% & 26.4\% & 0.395 & 121\\
+      \hline
+      \textbf{3} & 46.7\% & 22.6\% & 0.304 & 31\\
+      \hline
+      \textbf{4} & 0.0\% & 0.0\% & 0.000 & 2\\
+      \hline
+      \textbf{5} & - & - & - & 0\\
+      \hline
+      \textbf{6} & - & - & - & 0\\
+      \hline
+      \textbf{total} & 71.0\% & 70.1\% & 0.648 & 388\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+  \end{overlayarea}
+\end{column}
+\end{columns}
+\end{frame}
+
+
 
 \subsection{Neural Network}
 \begin{frame}
@@ -1378,7 +1755,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/Switzerland/density_ground_truth.png}
+    \includegraphics[scale=0.25]{../../data/Suisse/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -1388,7 +1765,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/Switzerland/nn/density_classification.png}
+    \includegraphics[scale=0.25]{../../data/Suisse/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -1397,11 +1774,11 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{column}
 \end{columns}
 \begin{columns}
- \begin{column}{0.5\textwidth}
+ \begin{column}{0.6\textwidth}
  \begin{overlayarea}{\linewidth}{2cm}
   \begin{table}
   \begin{center}
-  \begin{adjustbox}{max width=0.7\textwidth}
+  \begin{adjustbox}{max width=0.6\textwidth}
   {\tiny
   \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
@@ -1428,31 +1805,31 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \end{table}
  \end{overlayarea}
  \end{column}
- \begin{column}{0.5\textwidth}
+ \begin{column}{0.6\textwidth}
  \begin{overlayarea}{\linewidth}{2cm}
   \begin{table}
     \begin{center}
-    \begin{adjustbox}{max width=0.4\textwidth}
-    {\tiny 
-    \begin{tabular}{|c|c|}
+    \begin{adjustbox}{max width=0.6\textwidth}
+   {\tiny
+    \begin{tabular}{|c|c|c|c|c|}
       \hline
-      \multicolumn{2}{|c|}{\begin{bf}Mean score per class\end{bf}} \\
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
       \hline
-      \textbf{category} & \textbf{mean score}\\
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
       \hline
-      \textbf{1} & 86.21\% \\
+      \textbf{1} & 90.8\% & 86.2\% & 0.885 & 1857\\
       \hline
-      \textbf{2} & 58.18\% \\
+      \textbf{2} & 47.1\% & 58.2\% & 0.520 & 428\\
       \hline
-      \textbf{3} & 28.07\% \\
+      \textbf{3} & 34.8\% & 28.1\% & 0.311 & 57\\
       \hline
-      \textbf{4} & 11.11\% \\
+      \textbf{4} & 10.0\% & 11.1\% & 0.105 & 9\\
       \hline
-      \textbf{5} & 0\% \\
+      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1 \\
       \hline
-      \textbf{6} & - \\
+      \textbf{6} & - & - & - & 0\\
       \hline
-      \textbf{total} & 79.38\% \\
+      \textbf{total} & 81.1\% & 79.4\% & 0.801 & 2352\\
       \hline
     \end{tabular}
     }
@@ -1469,7 +1846,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/Belgium/density_ground_truth.png}
+    \includegraphics[scale=0.25]{../../data/Belgique/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -1479,7 +1856,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/Belgium/nn/density_classification.png}
+    \includegraphics[scale=0.25]{../../data/Belgique/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -1488,11 +1865,11 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{column}
 \end{columns}
 \begin{columns}
- \begin{column}{0.5\textwidth}
+ \begin{column}{0.6\textwidth}
  \begin{overlayarea}{\linewidth}{2cm}
   \begin{table}
   \begin{center}
-  \begin{adjustbox}{max width=0.7\textwidth}
+  \begin{adjustbox}{max width=0.6\textwidth}
   {\tiny
   \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
@@ -1519,31 +1896,31 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \end{table}
  \end{overlayarea}
  \end{column}
- \begin{column}{0.5\textwidth}
+ \begin{column}{0.6\textwidth}
  \begin{overlayarea}{\linewidth}{2cm}
   \begin{table}
     \begin{center}
-    \begin{adjustbox}{max width=0.4\textwidth}
-    {\tiny 
-    \begin{tabular}{|c|c|}
+    \begin{adjustbox}{max width=0.6\textwidth}
+    {\tiny
+    \begin{tabular}{|c|c|c|c|c|}
       \hline
-      \multicolumn{2}{|c|}{\begin{bf}Mean score per class\end{bf}} \\
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
       \hline
-      \textbf{category} & \textbf{mean score}\\
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
       \hline
-      \textbf{1} & 89.41\% \\
+      \textbf{1} & 82.9\% & 89.4\% & 0.860 & 406\\
       \hline
-      \textbf{2} & 38.96\% \\
+      \textbf{2} & 55.0\% & 39.0\% & 0.456 & 154\\
       \hline
-      \textbf{3} & 42.86\% \\
+      \textbf{3} & 20.0\% & 42.9\% & 0.273 & 14\\
       \hline
-      \textbf{4} & 28.57\% \\
+      \textbf{4} & 33.3\% & 28.6\% & 0.308 & 7\\
       \hline
-      \textbf{5} & 0\% \\
+      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
       \hline
-      \textbf{6} & 57.14\% \\
+      \textbf{6} & 100.0 & 57.1 & 0.727 & 7\\
       \hline
-      \textbf{total} & 73.85\% \\
+      \textbf{total} & 73.6\% & 73.9\% & 0.731 & 589\\
       \hline
     \end{tabular}
     }
@@ -1560,7 +1937,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/Netherlands/density_ground_truth.png}
+    \includegraphics[scale=0.25]{../../data/Pays-Bas/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -1570,7 +1947,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.50]{images/Netherlands/nn/density_classification.png}
+    \includegraphics[scale=0.25]{../../data/Pays-Bas/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -1579,11 +1956,11 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{column}
 \end{columns}
 \begin{columns}
- \begin{column}{0.5\textwidth}
+ \begin{column}{0.6\textwidth}
  \begin{overlayarea}{\linewidth}{2cm}
   \begin{table}
   \begin{center}
-  \begin{adjustbox}{max width=0.7\textwidth}
+  \begin{adjustbox}{max width=0.6\textwidth}
   {\tiny
   \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
@@ -1610,31 +1987,31 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \end{table}
  \end{overlayarea}
  \end{column}
- \begin{column}{0.5\textwidth}
+ \begin{column}{0.6\textwidth}
  \begin{overlayarea}{\linewidth}{2cm}
   \begin{table}
     \begin{center}
-    \begin{adjustbox}{max width=0.4\textwidth}
+    \begin{adjustbox}{max width=0.6\textwidth}
     {\tiny 
-    \begin{tabular}{|c|c|}
+    \begin{tabular}{|c|c|c|c|c|}
       \hline
-      \multicolumn{2}{|c|}{\begin{bf}Mean score per class\end{bf}} \\
+      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
       \hline
-      \textbf{category} & \textbf{mean score}\\
+      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
       \hline
-      \textbf{1} & 96.01\% \\
+      \textbf{1} & 80.2\% & 97.0\% & 0.878 & 234\\
       \hline
-      \textbf{2} & 38.84\% \\
+      \textbf{2} & 81.0\% & 38.8\% & 0.525 & 121\\
       \hline
-      \textbf{3} & 45.16\% \\
+      \textbf{3} & 45.2\% & 45.2\% & 0.452 & 31\\
       \hline
-      \textbf{4} & 50.0\% \\
+      \textbf{4} & 6.7\% & 50\% & 0.118 & 2\\
       \hline
-      \textbf{5} & - \\
+      \textbf{5} & - & - & - & 0\\
       \hline
-      \textbf{6} & - \\
+      \textbf{6} & - & - & - & 0\\
       \hline
-      \textbf{total} & 74.48\% \\
+      \textbf{total} & 77.3\% & 74.5\% & 0.730 & 388\\
       \hline
     \end{tabular}
     }
