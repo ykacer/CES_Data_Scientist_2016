@@ -376,7 +376,7 @@ if 'CLASSIFICATION' in df.columns:
     ni = di.shape[0]
     N = N+ni
     ci = np.asarray(colors[-1])/255.0
-    sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*10,edgecolor=[ci,]*3)
+    sci = plt.scatter(xi,yi,s=size_pt,marker='o',facecolor=[ci,]*20,edgecolor=[ci,]*3)
     legend_scatters.append(sci)
     legend_labels.append(u'> '+str(categorization[-1])+u' habs/km²')
     print u'******** N : '+str(N)+' points'
