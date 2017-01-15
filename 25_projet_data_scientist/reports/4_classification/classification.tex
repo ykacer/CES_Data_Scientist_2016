@@ -15,11 +15,11 @@
 
 \title{%
   Projet de Sciences des Données \\
-  \large Explotation d'images satellites haute-résolution \\pour la prévision d'indicateurs socio-économiques \\
+  \large Explotation d'images satellitaires \\pour la prediction de densité humaine\\
     }
 
 \author{\textsc{Youcef} - \textsc{Kacer}}
-\date{22 Novembre 2016}
+\date{25 Janvier 2017}
 
 \begin{document}
  
@@ -29,14 +29,14 @@
 
 \frontmatter
 \chapter{Introduction}
-Dans ce document, nous présentons les premiers résultats de régression et de classification des communes françaises, à partir de leur histogramme de $NDVI$. 
-Nous cherchons ainsi à prédire la densité de population de chaque commune.\\
-Nous verrons comment ont été selectionnées les scènes \begin{itshape}Landsat-8\end{itshape} pour le territoire français à partir desquelles on extrait le $NDVI$ de chaque commune.\\
-Ensuite, nous présenterons d'abord le problème d'apprentissage comme un problème de régression où on cherche à prédire la densité comme valeur continue, à partir
-des histogrammes de $NDVI$ des communes. Puis, nous simplifierons le problème en catégorisant la densité, nous ramenant ainsi à un problème de classification.\\
-Les techniques d'apprentissage utilisées seront très variées et on s'attachera à les comparer entre elles via un critère de performance.
+Dans ce document, nous proposons une méthode de prédiction de la densité de population à partir d'images satellites.
+Elle repose sur la classification par apprentissage automatique des communes françaises, à partir de leur histogramme de $NDVI$. 
+Nous verrons comment ont été selectionnées et vérifiées les scènes du satellite \begin{itshape}Landsat-8\end{itshape} pour le territoire français à partir desquelles on extrait le $NDVI$ de chaque commune.\\
+Nous verrons comment ont été récupérées les méta-données des communes permettant leur localisation et leur labelisation en terme de densité (vérité terrain).
+Une fois toutes les données nécessaires à notre disposition, nous appliquerons plusieurs classifieurs dont nous testerons la généralisation à d'autres communes (Suisse, Belgique et Pays-Bas).
 
 \mainmatter
+ 
 \chapter{Données Landsat-8 pour la France métropolitaine}
 
 Une scène \begin{itshape}Landsat-8\end{itshape} correspond à une certaine zone de la Terre couverte périodiquement (16 jours) par le satellite. 
@@ -64,7 +64,7 @@ nuageuse supérieure à 10\%
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{images/LC82000242013271LGN00.jpg}
+\includegraphics[scale=0.18]{images/LC82000242013271LGN00.jpg}
 \end{center}
 \caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $200$,$024$ (region Nord-Pas-de-Calais) - couverture nuageuse de 20.00\% }
 \label{cloud1}
@@ -73,7 +73,7 @@ nuageuse supérieure à 10\%
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{images/LC82030252013196LGN00.jpg}
+\includegraphics[scale=0.18]{images/LC82030252013196LGN00.jpg}
 \end{center}
 \caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $203$,$025$ (région des îles anglo-normandes) - couverture nuageuse de 18.30\%}
 \label{cloud3}
@@ -81,15 +81,15 @@ nuageuse supérieure à 10\%
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{images/LC81950262013156LGN00.jpg}
+\includegraphics[scale=0.18]{images/LC81950262013156LGN00.jpg}
 \end{center}
-% \caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $195$,$026$ (poînte strasbourgeoise) - couverture nuageuse de 13.00\%}
+\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $195$,$026$ (poînte strasbourgeoise) - couverture nuageuse de 13.00\%}
 \label{cloud4}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.2]{images/LC81950282013204LGN00.jpg}
+\includegraphics[scale=0.18]{images/LC81950282013204LGN00.jpg}
 \end{center}
 \caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $203$,$028$ (frontière franco-italo-suisse) - couverture nuageuse de 12.60\%}
 \label{cloud5}
@@ -100,7 +100,7 @@ On voit donc que les scènes ayant une forte couverture nuageuse sont :
 \item[-] soit des scènes contenant beaucoup de domaine maritime
 \item[-] soit des scènes limitrophes de pays voisins. 
 \end{description}
-La présence de nuage devrait donc avoir une faible impacte sur le $NDVI$ des communes françaises.
+La présence de nuage devrait donc avoir globalement une faible impacte sur le $NDVI$ des communes françaises.
 \clearpage
 
 la figure \ref{couverture} présente toutes les scènes après projection en Web Mercator (EPSG:3857) (repère absolu).
@@ -112,7 +112,216 @@ la figure \ref{couverture} présente toutes les scènes après projection en Web
 \caption{Concaténation des 70 scènes Lansat-8 après projection en Web Mercator (EPSG:3857)}
 \label{couverture}
 \end{figure}
+
+
+\chapter{Géoréférencement d'images aériennes}
+\section{Principe}\label{principe_geo}
+
+Une première méthode pour le géoréférencement d'une image dans un certain système de coordonnées, nécessite la connaissance 
+des coordonnées d'un 
+certain nombre de points de l'image dans ce système de coordonnées, ce sont les \begin{itshape}points d'amers\end{itshape}.
+A partir de ces points, une transformation d'un certain ordre est appliquée aux autres points de l'image afin de leur attribuer 
+des coordonnées dans ce système.\\
+Les images de prise de vue aérienne peuvent être livrées déjà géoréférencées dans un certain système de coordonnées géographiques, 
+c'est le niveau 2 de rectification dans la nomenclature du cours de Jean-Marie Nicolas \cite{Nicolas:2014}.\\
+
+\section{Les systèmes de géoréférencement}
+
+Il en existe une multitude dont le nom est codifié par l'\begin{itshape}European Petroleum Survey Group\end{itshape} depuis 1985.\\
+A titre d'exemple, l'$IGN$ (\begin{itshape}Institut Géographique National\end{itshape}) géoréférence ces images via plusieurs
+systèmes de géoréférencement possibles dont:\\
+
+\begin{itemize}
+
+\item[-] \begin{itshape}NTF 93/Lambert 93\end{itshape} dont le code est \begin{itshape}EPSG:2154\end{itshape}.\\
+\item[-] \begin{itshape}NTF Paris/Lambert zone II étendu\end{itshape} dont le code est \begin{itshape}EPSG:27572\end{itshape}.\\
+ 
+\end{itemize}
+
+Les images du satellite \begin{itshape}Landsat-8\end{itshape} sont géoréférencées dans le système 
+\begin{itshape}WGS84/Mercator\end{itshape} dont le code $EPSG$ dépend
+de la zone $UTM$ (\begin{itshape}Universe Transverse Mercator\end{itshape}) où l'on se situe dans le globe 
+(par exemple \begin{itshape}EPSG:32631\end{itshape} pour la zone \begin{itshape}UTM\end{itshape} $31N$ contenant la commune de
+ \begin{itshape}Thonon-Les-Bains\end{itshape}).\\ 
+Dans la section qui suit, nous proposons une méthode pour vérifier la fiabilité du géoréférencement
+ des images du satellite \begin{itshape}LANDSAT-8\end{itshape}.
+ 
+\section{Géoréférencement des images Landsat-8}
+
+le site de l'$USGS$ (\begin{itshape}U.S. Geological Survey\end{itshape}) \cite{landsat8} qui met à disposition les images
+satellitaires de \begin{itshape}LANDSAT-8\end{itshape}, ne précise pas la méthode utilisée pour leur géoréférencement.
+Mais on peut toutefois vérifier sa fiabilité en comparant une image de ce satellite avec une image de 
+l'$IGN$.\\
+En effet, il suffirait de récupérer une image d'une certaine zone au format \begin{itshape}GeoTIFF\end{itshape}, 
+donc géoréférencé, de l'$IGN$ et de la superposer
+à une image \begin{itshape}LANDSAT-8\end{itshape} contenant la même zone. Toutefois, le géoréférencement de l'image $IGN$ étant différent
+de celui de l'image \begin{itshape}LANDSAT-8\end{itshape}, il faudrait afficher la première dans le géoréférencement de la seconde.\\
+Seulement, le site de l'$IGN$ ne propose des images géoréférencées qu'à l'achat, mais nous pouvons contourner cela en récupérant une 
+image non géoréférencé, qu'on géoréférencerait ensuite via un logiciel $SIG$, $QGIS$ en l'occurence.\\
+
+\subsection{Création d'une image de l'IGN géoréférencée}
+
+Le portail de l'IGN \cite{ign-portail} permet de parcourir le globe en affichant instantanément les coordonnées des points dans 
+plusieurs systèmes de coordonnées possibles. La figure \ref{ign-portail} montre l'interface du portail affichant la commune de
+\begin{itshape}Thonon-Les-Bains\end{itshape} en coordonnées \begin{itshape}NTF 93/Lambert 93\end{itshape}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{images/georeferencing/ign-portail-Thonon.png}
+\end{center}
+\caption{Portail de l'$IGN$ - commune de Thonon-Les-Bains en coordonnées NTF93/Lambert93 \cite{ign-portail}}
+\label{ign-portail}
+\end{figure}
+
 \clearpage
+
+La manipulation consiste à prendre un snapshot du portail pour cette zone, en y inscrivant au préalable les coordonnées de 
+plusieurs points via l'outil de marquage et d'annotation du portail. La figure \ref{ign-points} montre ainsi six points 
+dont on a indiqué les coordonnées en \begin{itshape}NTF 93/Lambert 93\end{itshape}. Ces points vont jouer le rôle des 
+\begin{itshape}points d'amers\end{itshape} décrits plus haut dans le principe de géoréférencement \ref{principe_geo}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/georeferencing/ign-points-Thonon.png}
+\end{center}
+\caption{image non-géoréférencé de l'$IGN$ - commune de Thonon-Les-Bains et six points de contr\^{o}le en coordonnées NTF93/Lambert93}
+\label{ign-points}
+\end{figure}
+
+\clearpage
+
+Le logiciel libre $QGIS$ \cite{QGIS_software} permet de géoréférencer une image dans le même système de coordonnées que des points de
+contr\^{o}le préalablement renseignés dans l'outil.\\
+Pour commencer, il faut ouvrir un projet dans la fen\^{e}tre principale et renseigner le système de projection dans lequel on souhaite visualiser
+les images géoréférencées (on parle de \begin{itshape}raster\end{itshape}). On choisit ici le système de projection
+\begin{itshape}EPSG:32631\end{itshape} car c'est celui dans lequel les images \begin{itshape}Landsat-8\end{itshape} (dans la zone $UTM$ 
+de \begin{itshape}Thonon-Les-Bains\end{itshape}) sont projetées et
+sur lequel on projetera notre snapshot IGN une fois géoréférencé, pour comparaison.\\
+La figure \ref{qgis-projet} montre la manipulation dans les propriétés du projet.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{images/georeferencing/qgis-projet.png}
+\end{center}
+\caption{Projet $QGIS$ et système de projection}
+\label{qgis-projet}
+\end{figure}
+
+\clearpage
+
+Ensuite, via l'onglet \og Raster > Géoréférencer > Géoréférencer\fg{}, on ouvre 
+une nouvelle fen\^{e}tre dédiée au géoréférencement à partir de laquelle on charge notre snapshot \ref{qgis-georef} 
+(onglet \og Ajouter un raster \fg{}).\\
+L'outil demande alors de renseigner un système de projection pour le géoréférencement, on selectionne celui correspondant 
+à nos points d'amers, soit \begin{itshape}NTF 93/Lambert 93\end{itshape} (\begin{itshape}EPSG:2154\end{itshape}).
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{images/georeferencing/qgis-georef.png}
+\end{center}
+\caption{Projet $QGIS$ et chargement d'une image non-géoréférencé pour géoréférencement}
+\label{qgis-georef}
+\end{figure}
+
+\clearpage
+
+Une fois le snapshot chargé, on renseigne les points de contr\^{o}le correspondant aux croix rouges sur le snapshot via l'onglet 
+\og Ajouter un point \fg{}, dans la fenêtre de géoréférencement. On ajoute tour à tour les six points en renseignant
+les coordonnées des points. La figure \ref{qgis-points} montre ainsi la fen\^{e}tre de géoréférencement contenant le snapshot 
+et le tableau des points de contr\^{o}le en bas.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{images/georeferencing/qgis-points.png}
+\end{center}
+\caption{Projet $QGIS$ et renseignement des points de contr\^{o}le dans la fen\^{e}tre de géoréférencement}
+\label{qgis-points}
+\end{figure}
+
+\clearpage
+
+Maintenant que les points de renseignement sont donnés, on va définir la transformation à appliquer. Pour cela, on ouvre l'onglet
+ \og Paramètres > Tranformation \fg{}, qu'on renseigne comme dans la figure \ref{qgis-transformation}. Par ordre, 
+on renseigne le type de transformation, ici polynomiale du second degré. En effet, avec six points d'amers, on peut se permettre
+une transformation non linéaire d'ordre 2 en vertu de la formule \cite{Nicolas:2014}:
+
+\[P\ge\frac{(L+1)(L+2)}{2}\]
+
+où $L$ est le degré du polyn\^{o}me et $P$, le nombre de points d'amers nécessaires.\\
+On renseigne aussi le type de réechantillonnage des pixels, afin d'affecter une valeur aux pixels qui n'en auront pas
+après transformation. Et enfin, on renseigne le système de géoréférencement correspondant 
+à nos points d'amers, soit \begin{itshape}NTF 93/Lambert 93\end{itshape} (\begin{itshape}EPSG:2154\end{itshape}). On peut aussi
+ cocher la case \og charger dans QGIS lorsque terminé \fg{} afin d'avoir l'image géoréférencé directement
+ projeté dans le système de coordonnées du projet (\begin{itshape}EPSG:32631\end{itshape}).
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{images/georeferencing/qgis-transformation.png}
+\end{center}
+\caption{Projet $QGIS$ et renseignement de la transformation dans la fen\^{e}tre de géoréférencement}
+\label{qgis-transformation}
+\end{figure}
+
+\clearpage
+
+Il ne reste qu'à lancer la géoréférencement via la flèche verte dans la fen\^{e}tre de géoréférencement, cela va afficher
+notre snapshot dans le système de coordonnées \begin{itshape}EPSG:32631\end{itshape} \ref{qgis-resultat}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{images/georeferencing/qgis-resultat.png}
+\end{center}
+\caption{Projet $QGIS$ et affichage du raster géoéréférencé projeté dans la fen\^{e}tre principale}
+\label{qgis-resultat}
+\end{figure}
+
+\clearpage
+
+\subsection{Superposition d'un raster Landsat-8}
+
+A présent que notre snapshot IGN est géoréférencé et projeté dans le système de coordonnées de \begin{itshape}Landsat-8\end{itshape}
+(\begin{itshape}EPSG:32631\end{itshape}), on peut charger une image géoréférencé \begin{itshape}Landsat-8\end{itshape} contenant la 
+commune de \begin{itshape}Thonon-Les-Bains\end{itshape}. Pour cela, on a téléchargé les bandes 2,3,4 correspondantes et formé l'image 
+couleur  \ref{Thonon-landsat}. On peut vérifier que le système de géoréférencement de ces images est bien \begin{itshape}EPSG:32631\end{itshape} via la 
+commande \begin{itshape}listgeo\end{itshape}:\\
+
+\begin{center}
+listgeo LC81960282016252LGN00\_B2.TIF
+\end{center}
+
+qui renvoit bien ($PCS$ pour \begin{itshape}Projection Coordinate System\end{itshape}) :\\
+
+\begin{center}
+PCS = 32631 (WGS 84 / UTM zone 31N)\\
+\end{center}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{images/georeferencing/Thonon_landsat.png}
+\end{center}
+\caption{Image couleur à partir d'images géoréférencées Landsat-8 contenant la commune de Thonon-Les-Bains}
+\label{Thonon-landsat}
+\end{figure}
+
+\clearpage
+
+On peut alors charger cette image dans la fenêtre principale $QGIS$ via l'onglet \og Couche > Ajouter une couche > Ajouter une couche 
+raster \fg{}. On observe au final la superposition des deux rasters et dont on peut régler la transparence (sous-fen\^{e}tre \og couches \fg{}) 
+dans la fen\^{e}tre principale $QGIS$) \ref{qgis_super}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.3]{images/georeferencing/qgis-superposition0.png}
+\includegraphics[scale=0.3]{images/georeferencing/qgis-superposition.png}
+\end{center}
+\caption{Projet $QGIS$ et superposition des rasters IGN et Landsat-8 géoréférencés en EPSG:32631 - commune de Thonon-Les-Bains}
+\label{qgis_super}
+\end{figure}
+
+\clearpage
+
+On constate une assez bonne superposition des deux rasters, le géoréférencement du satellite \begin{itshape}Landsat-8\end{itshape} peut
+ donc \^{e}tre considéré comme convenable.
 
 \chapter{Extraction de l'histogramme de NDVI}
 
@@ -184,122 +393,6 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.0\\
 \clearpage
 
 Nous avons donc à présent des données sous forme de tableau prêt à être utiliser pour l'apprentissage supervisée.
-
-\chapter{Régression pour la prédiction de densité de population en fonction du NDVI}
-
-\section{Erreur de généralisation d'un modèle de régression}
-
-Nous avons testé plusieurs algorithmes (ou modèles) de régression, du plus simple (régression linéaire) au plus élaboré (forêt aléatoire d'arbres régressifs).
-Chacun de ces algorithmes est évalué par cross-validation. \\
-C'est-à-dire qu'on compose plusieurs sets à partir des échantillons de départ. Chaque set contient un sous ensemble
-aléatoire des échantillons pour l'entraînement de l'algorithme (70\% du total), le reste des echantillons (30\%) constitue l'ensemble de test
-et est utilisé pour calculer l'erreur commise par l'algorithme entrainé.\\
-Nous avons donc après cross-validation, un nombre d'erreurs égale au nombre de sets, dont on considère la moyenne et la variance.\\
-\begin{bf}Cette moyenne est alors l'erreur d'ajustement aux données commise par l'algorithme.\end{bf}\\
-\begin{bf}La variance mesure elle, la sensibilité de cette erreur à la fluctuation des données et donc la généralisation du modèle.\end{bf}\\
-Ces deux valeurs ne peuvent être simultanément aussi basses qu'on le souhaite : un modèle qui s'ajuste parfaitement aux données aura toujours du
-mal à généraliser cette ajustement à des données nouvelles. Inversement, un modèle comportant un léger biais saura s'adapter aux données nouvelles.\\
-\\
-Pour calculer l'erreur sur le sous-ensemble de test, nous utilisons le coefficient de détermination (souvent noté R\textsuperscript{2}) comme suit:
-
-\begin{equation}
-Erreur = 1 - R^{2} = \frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i-p_i)^2}{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i-\widehat{y})^2}
-\end{equation}
-
-avec:
-\begin{description}
-\item[-] ${y_i}$, l'ensemble des valeurs à prédire pour les échantillons de test.
-\item[-] ${p_i}$, l'ensemble des prédictions associées et calculées via le modèle entrainé.
-\item[-] $\widehat{y} = \sum \limits_{\underset{}{i=1}}^{n_{test}} y_i$, la moyenne des échantillons de test
-\end{description}
-Une telle erreur peut-\^{e}tre potentiellement supérieur à 1, auquel cas le modèle s'ajuste très mal aux données (il fait pire que l'estimateur constant 
-de moyenne). A l'opposé, plus l'erreur est proche de 0, mieux il s'ajuste aux données.
-
-\section{Comparatif de plusieurs algorithmes régressifs}
-
-Nous avons utilisé la librairie \begin{itshape}Scikit-learn\end{itshape}\cite{scikit-learn} sur \begin{itshape}Python\end{itshape} 
-pour l'implémentation de différents modèles régressifs. Le module \begin{itshape}GridSearchCV\end{itshape} permet de lancer
-la cross-validation d'un modèle de manière très simple.\\
-A noter que plus un algorithme est élaboré, plus il comporte d'hyperparamètres à régler. A titre d'exemple, la régression pénalisée (Ridge)
-ne comporte qu'un seul hyperparamètre, le coefficient de pénalisation. Alors que la for\^{e}t d'arbres aléatoires en comporte plus d'une dizaine
-(nombre d'arbres, profondeur des arbres, nombre de variables sélectionnées,...).\\
-L'erreur de généralisation que nous présentons pour chaque modèle 
-est celle qui utilise la meilleure combinaison d'hyperparamètres.\\
-Le nombre de sets pour la cross-validation a été fixé $5$.\\
-\\
-Le tableau \ref{regression_resultats_512} résume les résultats obtenus pour un histogramme de ndvi à $512$ bins.
-\begin{table}[H]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{|c|c|c|}
-\hline
-\multicolumn{3}{|c|}{\begin{bf}Régression (512 bins)\end{bf}} \\
-\hline 
-Modèle & Moyenne erreur de généralisation & Variance erreur de généralisation\\
-\hline 
-Régression & > 1 & > 1\\
-\hline 
-Régression Ridge ($\lambda=1000$) & ~ 1 & 0.005\\
-\hline 
-Régression Lasso ($\lambda=100$) & 0.960 & 0.030\\
-\hline 
-Régression ElasticNet ($\lambda=10,l=0.75$) & 0.963 & 0.020\\
-\hline
-Support Vector Régression à noyau gaussien & ~1 & 0.05\\
-\hline
-Réseau de neurones régressif & 0.677 & 0.08\\
-\hline
-For\^{e}t d'arbres aléatoires régressifs & 0.4926 & 0.037\\
-\hline
-Boosting d'arbres aléatoires régressifs & 0.739 & 0.009\\
-\hline
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Erreur de généralisation pour différents modèles régressifs}
-\label{regression_resultats_512}
-\end{table}
-
-Le tableau \ref{regression_resultats_1024} résume les résultats obtenus pour un histogramme de ndvi à $1024$ bins.
-\begin{table}[H]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{|c|c|c|}
-\hline
-\multicolumn{3}{|c|}{\begin{bf}Régression (1024 bins)\end{bf}} \\
-\hline 
-Modèle & Moyenne erreur de généralisation & Variance erreur de généralisation\\
-\hline 
-Régression & > 1 & > 1\\
-\hline 
-Régression Ridge ($\lambda=100$) & ~ 1 & 0.024\\
-\hline 
-Régression Lasso ($\lambda=100$) & 0.965 & 0.020\\
-\hline 
-Régression ElasticNet ($\lambda=100,l=0.75$) & 0.958 & 0.020\\
-\hline
-Support Vector Régression à noyau gaussien & ~1 & 0.05\\
-\hline
-Réseau de neurones régressif & 0.677 & 0.08\\
-\hline
-For\^{e}t d'arbres aléatoires régressifs & 0.4926 & 0.037\\
-\hline
-Boosting d'arbres aléatoires régressifs & 0.739 & 0.009\\
-\hline
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Erreur de généralisation pour différents modèles régressifs}
-\label{regression_resultats_1024}
-\end{table}
-
-On constate que le NDVI n'explique pas du tout la densité de manière linéaire, au vu des très mauvais scores obtenus pour la régression linéaire.\\
-Les Machines à Support de Vecteurs font aussi bien que l'estimateur de moyenne.\\
-Les arbres de décision permettent de diminuer l'erreur mais ne premettent toujours pas d'expliquer la densité.\\
-Comme nous le verrons dans la prochaine partie, la distribution de la densité comporte un petit nombre de valeurs très hautes, il serait donc intéressant
-de chercher à prédire le logarithme de la densité $d$ : $log(\alpha+d)$ avec $\alpha$, une constante strictement positive à régler.\\
-Cepandant, nous allons dans la prochaine partie laisser de côté le problème de la régression et simplifier le problème en nous
-rapportant à un problème de classification.\\
 
 \chapter{Classification pour la prédiction de densité de population en fonction du NDVI}
 
