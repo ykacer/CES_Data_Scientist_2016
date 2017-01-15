@@ -26,7 +26,7 @@
 \usetheme{Warsaw}
 
 
-\title[High-Res satellite images for human density prediction]{High-Resolution Landsat-8 satellite images \\for human density prediction}
+\title[Satellite images for human density prediction]{Landsat-8 satellite images \\for human density prediction}
 
 \author{Youcef Kacer}
 
@@ -62,8 +62,8 @@
   \begin{itemize}
   \item 180 millions euros in France (\href{http://www.assemblee-nationale.fr/13/rap-info/i1246.asp}{officials,1999})\\ 
   \end{itemize}
-\item How High-resolution satellites images could explain human density?\\
-\item How to transform HR satellite images to explain human density?\\
+\item How Satellites images could explain human density?\\
+\item How to transform satellite images to best explain human density?\\
 \end{itemize}
 \end{frame}
 
@@ -105,7 +105,7 @@
 \begin{frame}
 \begin{itemize}
  \item Landsat-8 images are georeferenced which means each pixel has (x,y) meter coordinates in a certain Projection Coordinates 
-System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{itshape})
+System (\begin{itshape}ex: UTM, Lambert 93, Web Mercator,...\end{itshape})
 \end{itemize}
 
 \begin{columns}
@@ -156,7 +156,7 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 \end{overlayarea}
 \begin{overlayarea}{\linewidth}{2cm}
   \centering
-  \scriptsize IGN image georeferenced in $Lambert$ $93$ system\par
+  \scriptsize IGN map georeferenced in $Lambert$ $93$ system\par
 \end{overlayarea}
 \end{column}
 \begin{column}{0.30\textwidth}
@@ -184,7 +184,7 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 \end{overlayarea}
 \begin{overlayarea}{\linewidth}{2cm}
   \centering
-  \scriptsize Superposition of IGN and Landsat-8 images both georeferenced in $UTM$ system\par
+  \scriptsize Superposition of IGN map and Landsat-8 image both georeferenced in $UTM$ system\par
 \end{overlayarea}
 \end{column}
 \end{columns}
@@ -216,7 +216,7 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 \begin{column}{0.50\textwidth}
 \begin{overlayarea}{\linewidth}{4cm}
   \centering\vfill
-  \includegraphics[scale=0.17]{images/importing/france-selection.png}
+  \includegraphics[scale=0.11]{../../data/France/france-selection.png}
 \end{overlayarea}
 \begin{overlayarea}{\linewidth}{1cm}
   \centering
@@ -227,7 +227,7 @@ System (\begin{itshape}ex: UTM, Lambert IV, Lambert 93, Web Mercator,...\end{its
 \begin{column}{0.50\textwidth}
 \begin{overlayarea}{\linewidth}{4cm}
   \centering\vfill
-  \includegraphics[scale=0.25]{images/importing/france-covering.png}
+  \includegraphics[scale=0.25]{../../data/France/covering-selection.png}
 \end{overlayarea}
 \begin{overlayarea}{\linewidth}{1cm}
   \centering
@@ -532,6 +532,7 @@ Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9 & 1\\
   \item Explanatory variables : NDVI (1024 bins)-histograms of the 34190 cities
   \item Predictable variable : density of the 34190 cities for regresion
   \item Predictable variable : density category of the 34190 cities for classification
+  \item Principal Component Analysis over 600 components (100\% of variance explained)
  \end{itemize}
  
 \begin{columns}
@@ -603,10 +604,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 
 \begin{frame}
 \begin{itemize}
- \item Overcome imbalanced data by 
-  \begin{itemize}
-  {\scriptsize
-    \item Oversampling minority classes using SMOTE technique (Synthetic Minority Oversampling TEchnique) 
+ \item Overcome imbalanced data by oversampling minority classe $C_{i}$, using SMOTE technique (Synthetic Minority Oversampling TEchnique) with a factor $n_{1}/n_{i}$
       \begin{columns}
       \begin{column}{0.5\textwidth}
       \centering\vfill
@@ -619,11 +617,6 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
       }
       \end{column}
     \end{columns}
-    \item Run training on obtained balanced data.
-  }
-  \end{itemize}
- \end{itemize}
- \begin{itemize}
   \item Best cross-validation (stratified 3-folds) of $94.74$\% obtained for number of neighboors $k = 5$. 
  \end{itemize}
 \end{frame}
@@ -657,7 +650,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \begin{table}
   \begin{center}
   \begin{adjustbox}{max width=0.6\textwidth}
-  {
+  {\tiny
   \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
     \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
@@ -683,35 +676,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \end{table}
 \end{column}
 \begin{column}{0.6\textwidth}
-   \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting\end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
-      \hline
-      \textbf{1} & 100\% & 100\% & 1.0 & 32533\\
-      \hline
-      \textbf{2} & 100\% & 100\% & 1.0 & 1252\\
-      \hline
-      \textbf{3} & 100\% & 100\% & 1.0 & 288\\
-      \hline
-      \textbf{4} & 100\% & 100\% & 1.0 & 78\\
-      \hline
-      \textbf{5} & 100\% & 100\% & 1.0 & 15\\
-      \hline
-      \textbf{6} & 100\% & 100\% & 1.0 & 24\\
-      \hline
-      \textbf{total} & 100\% & 100\% & 1.0 & 34190\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
+%    \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting\end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+%       \hline
+%       \textbf{1} & 100\% & 100\% & 1.0 & 32533\\
+%       \hline
+%       \textbf{2} & 100\% & 100\% & 1.0 & 1252\\
+%       \hline
+%       \textbf{3} & 100\% & 100\% & 1.0 & 288\\
+%       \hline
+%       \textbf{4} & 100\% & 100\% & 1.0 & 78\\
+%       \hline
+%       \textbf{5} & 100\% & 100\% & 1.0 & 15\\
+%       \hline
+%       \textbf{6} & 100\% & 100\% & 1.0 & 24\\
+%       \hline
+%       \textbf{total} & 100\% & 100\% & 1.0 & 34190\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/France/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification_roc.png}
 \end{column}
 
 \end{columns}
@@ -720,12 +715,17 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 
 \subsection{Support-Vector Machine (Gaussian Kernel)}
 \begin{frame}
+\tableofcontents[currentsubsection]
+\end{frame}
+
+\begin{frame}
 \begin{itemize}
- \item Overcome imbalanced data by increasing regularization parameter $C_{i}$ for minority classes $i$ :  $C_{i} = n/n_{i}$
- \item Cross-validated (stratified 3-folds) gamma coefficient ($\gamma = 0.01$)
+\item Overcome imbalanced data by increasing regularization parameter $C_{i}$ for minority classes $i$ :  $C_{i} = n/n_{i}$
+\item Best cross-validation (stratified 3-folds) of $84.07$\% obtained for $\gamma = 0.01$.
 \end{itemize}
 \end{frame}
 \begin{frame}
+
 \begin{columns}
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
@@ -780,35 +780,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \end{table}
 \end{column}
 \begin{column}{0.6\textwidth}
-   \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {\tiny 
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting\end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score}& \textbf{n}\\
-      \hline
-      \textbf{1} & 99.7\% & 87.8\% & 0.934 & 32533\\
-      \hline
-      \textbf{2} & 21.8\% & 81.5\% & 0.344 & 1252\\
-      \hline
-      \textbf{3} & 39.3\% & 88.2\% & 0.543 & 288\\
-      \hline
-      \textbf{4} & 52.1\% & 96.2\% & 0.676 & 78\\
-      \hline
-      \textbf{5} & 34.9\% & 100.0\% & 0.517 & 15\\
-      \hline
-      \textbf{6} & 77.4\% & 100.0\% & 0.873 & 24\\
-      \hline
-      \textbf{total} & 96.2\% & 87.6\% & 0.908 & 34190\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
+%    \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {\tiny 
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting\end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score}& \textbf{n}\\
+%       \hline
+%       \textbf{1} & 99.7\% & 87.8\% & 0.934 & 32533\\
+%       \hline
+%       \textbf{2} & 21.8\% & 81.5\% & 0.344 & 1252\\
+%       \hline
+%       \textbf{3} & 39.3\% & 88.2\% & 0.543 & 288\\
+%       \hline
+%       \textbf{4} & 52.1\% & 96.2\% & 0.676 & 78\\
+%       \hline
+%       \textbf{5} & 34.9\% & 100.0\% & 0.517 & 15\\
+%       \hline
+%       \textbf{6} & 77.4\% & 100.0\% & 0.873 & 24\\
+%       \hline
+%       \textbf{total} & 96.2\% & 87.6\% & 0.908 & 34190\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/France/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -822,16 +824,16 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 
 \begin{frame}
 \begin{itemize}
- \item Overcome imbalanced data by 
-  \begin{itemize}
+ \item Overcome imbalanced data by majoring error by weights to amplify error on minority class : $w_i=\frac{n_1}{n_i}$.
+  \item Best cross-validation (stratified 3-folds) of $92.26$\% obtained for :
   {\scriptsize
-    \item Majoring error by weights to amplify error on minority class : $w_i=\frac{n_1}{n_i}$.
+  \begin{itemize}
+    \item One layer of $1200$ neurons
+    \item Stochastic Gradient Descent learning rate of $0.001$ 
+    \item Penalization of $0.001$. 
+    \end{itemize}
   }
-  \end{itemize}
- \end{itemize}
- \begin{itemize}
-  \item Best cross-validation (stratified 3-folds) of $92.26$\% with one layer (1200 neurons), SGD learning rate of $0.001$ and penalization of $0.001$. 
-  \item Early stopping activation to avoid overfitting (i.e. stop iterative training when no more decrease in validation error)
+  \item Early stopping activation to avoid overfitting (i.e. stop iterative training when no more validation error decrease)
  \end{itemize}
 \end{frame}
 
@@ -890,35 +892,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \end{table}
 \end{column}
 \begin{column}{0.6\textwidth}
-   \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {\tiny 
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
-      \hline
-      \textbf{1} & 99.3\% & 91.4\% & 0.952 & 32533\\
-      \hline
-      \textbf{2} & 26.9\% & 68.1\% & 0.385 & 1252\\
-      \hline
-      \textbf{3} & 30.6\% & 81.9\% & 0.446 & 288\\
-      \hline
-      \textbf{4} & 37.4\% & 97.4\% & 0.541 & 78\\
-      \hline
-      \textbf{5} & 34.9\% & 100.0\% & 0.517 & 15\\
-      \hline
-      \textbf{6} & 45.3\% & 100.0\% & 0.623 & 24\\
-      \hline
-      \textbf{total} & 95.9\% & 90.5\% & 0.926 & 34190\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
+%    \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {\tiny 
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+%       \hline
+%       \textbf{1} & 99.3\% & 91.4\% & 0.952 & 32533\\
+%       \hline
+%       \textbf{2} & 26.9\% & 68.1\% & 0.385 & 1252\\
+%       \hline
+%       \textbf{3} & 30.6\% & 81.9\% & 0.446 & 288\\
+%       \hline
+%       \textbf{4} & 37.4\% & 97.4\% & 0.541 & 78\\
+%       \hline
+%       \textbf{5} & 34.9\% & 100.0\% & 0.517 & 15\\
+%       \hline
+%       \textbf{6} & 45.3\% & 100.0\% & 0.623 & 24\\
+%       \hline
+%       \textbf{total} & 95.9\% & 90.5\% & 0.926 & 34190\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1151,7 +1155,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \begin{column}{0.33\textwidth}
   \begin{overlayarea}{\linewidth}{3cm}
     \centering\vfill
-    \includegraphics[scale=0.20]{images/Switzerland/covering-selection.png}
+    \includegraphics[scale=0.20]{i../../data/Suisse/covering-selection.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{1cm}
     \centering
@@ -1161,7 +1165,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \begin{column}{0.33\textwidth}
    \begin{overlayarea}{\linewidth}{3cm}
     \centering\vfill
-    \includegraphics[scale=0.20]{images/Belgium/covering-selection.png}
+    \includegraphics[scale=0.20]{../../data/Belgique/covering-selection.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{1cm}
     \centering
@@ -1171,7 +1175,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \begin{column}{0.33\textwidth}
   \begin{overlayarea}{\linewidth}{3cm}
     \centering\vfill
-    \includegraphics[scale=0.20]{images/Netherlands/covering-selection.png}
+    \includegraphics[scale=0.20]{../../data/Pays-Bas/covering-selection.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{1cm}
     \centering
@@ -1246,37 +1250,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-   {\tiny
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
-      \hline
-      \textbf{1} & 92.4\% & 76.0\% & 0.834 & 1857\\
-      \hline
-      \textbf{2} & 38.1\% & 62.6\% & 0.474 & 428\\
-      \hline
-      \textbf{3} & 17.6\% & 28.1\% & 0.216 & 57\\
-      \hline
-      \textbf{4} & 0.0\% & 0.0\% & 0.000 & 9\\
-      \hline
-      \textbf{5} & 20.0\% & 100.0\% & 0.333 & 1 \\
-      \hline
-      \textbf{6} & - & - & - & 0\\
-      \hline
-      \textbf{total} & 80.3\% & 72.1\% & 0.750 & 2352\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
-  \end{overlayarea}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%    {\tiny
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
+%       \hline
+%       \textbf{1} & 92.4\% & 76.0\% & 0.834 & 1857\\
+%       \hline
+%       \textbf{2} & 38.1\% & 62.6\% & 0.474 & 428\\
+%       \hline
+%       \textbf{3} & 17.6\% & 28.1\% & 0.216 & 57\\
+%       \hline
+%       \textbf{4} & 0.0\% & 0.0\% & 0.000 & 9\\
+%       \hline
+%       \textbf{5} & 20.0\% & 100.0\% & 0.333 & 1 \\
+%       \hline
+%       \textbf{6} & - & - & - & 0\\
+%       \hline
+%       \textbf{total} & 80.3\% & 72.1\% & 0.750 & 2352\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Suisse/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1337,37 +1341,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {\tiny
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
-      \hline
-      \textbf{1} & 85.4\% & 86.5\% & 0.859 & 406\\
-      \hline
-      \textbf{2} & 56.8\% & 46.1\% & 0.509 & 154\\
-      \hline
-      \textbf{3} & 13.9\% & 35.7\% & 0.200 & 14\\
-      \hline
-      \textbf{4} & 25.0\% & 42.9\% & 0.316 & 7\\
-      \hline
-      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
-      \hline
-      \textbf{6} & 100.0 & 28.6 & 0.444 & 7\\
-      \hline
-      \textbf{total} & 75.5\% & 73.3\% & 0.739 & 589\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
-  \end{overlayarea}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {\tiny
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+%       \hline
+%       \textbf{1} & 85.4\% & 86.5\% & 0.859 & 406\\
+%       \hline
+%       \textbf{2} & 56.8\% & 46.1\% & 0.509 & 154\\
+%       \hline
+%       \textbf{3} & 13.9\% & 35.7\% & 0.200 & 14\\
+%       \hline
+%       \textbf{4} & 25.0\% & 42.9\% & 0.316 & 7\\
+%       \hline
+%       \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
+%       \hline
+%       \textbf{6} & 100.0 & 28.6 & 0.444 & 7\\
+%       \hline
+%       \textbf{total} & 75.5\% & 73.3\% & 0.739 & 589\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Belgique/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1428,37 +1432,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {\tiny 
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
-      \hline
-      \textbf{1} & 81.3\% & 79.9\% & 0.806 & 234\\
-      \hline
-      \textbf{2} & 51.1\% & 38.0\% & 0.436 & 121\\
-      \hline
-      \textbf{3} & 29.6\% & 51.6\% & 0.376 & 31\\
-      \hline
-      \textbf{4} & 9.1\% & 50.0\% & 0.154 & 2\\
-      \hline
-      \textbf{5} & - & - & - & 0\\
-      \hline
-      \textbf{6} & - & - & - & 0\\
-      \hline
-      \textbf{total} & 67.4\% & 64.4\% & 0.653 & 388\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
-  \end{overlayarea}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {\tiny 
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+%       \hline
+%       \textbf{1} & 81.3\% & 79.9\% & 0.806 & 234\\
+%       \hline
+%       \textbf{2} & 51.1\% & 38.0\% & 0.436 & 121\\
+%       \hline
+%       \textbf{3} & 29.6\% & 51.6\% & 0.376 & 31\\
+%       \hline
+%       \textbf{4} & 9.1\% & 50.0\% & 0.154 & 2\\
+%       \hline
+%       \textbf{5} & - & - & - & 0\\
+%       \hline
+%       \textbf{6} & - & - & - & 0\\
+%       \hline
+%       \textbf{total} & 67.4\% & 64.4\% & 0.653 & 388\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Pays-Bas/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1526,37 +1530,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-   {\tiny
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
-      \hline
-      \textbf{1} & 92.4\% & 79.2\% & 0.853 & 1857\\
-      \hline
-      \textbf{2} & 41.5\% & 69.2\% & 0.519 & 428\\
-      \hline
-      \textbf{3} & 35.0\% & 24.6\% & 0.289 & 57\\
-      \hline
-      \textbf{4} & 0.0\% & 0.0\% & 0.000 & 9\\
-      \hline
-      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1 \\
-      \hline
-      \textbf{6} & - & - & - & 0\\
-      \hline
-      \textbf{total} & 81.3\% & 75.7\% & 0.775 & 2352\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
-  \end{overlayarea}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%    {\tiny
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
+%       \hline
+%       \textbf{1} & 92.4\% & 79.2\% & 0.853 & 1857\\
+%       \hline
+%       \textbf{2} & 41.5\% & 69.2\% & 0.519 & 428\\
+%       \hline
+%       \textbf{3} & 35.0\% & 24.6\% & 0.289 & 57\\
+%       \hline
+%       \textbf{4} & 0.0\% & 0.0\% & 0.000 & 9\\
+%       \hline
+%       \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1 \\
+%       \hline
+%       \textbf{6} & - & - & - & 0\\
+%       \hline
+%       \textbf{total} & 81.3\% & 75.7\% & 0.775 & 2352\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Suisse/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1617,37 +1621,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {\tiny
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
-      \hline
-      \textbf{1} & 80.4\% & 93.1\% & 0.863 & 406\\
-      \hline
-      \textbf{2} & 61.5\% & 38.3\% & 0.472 & 154\\
-      \hline
-      \textbf{3} & 23.1\% & 21.4\% & 0.222 & 14\\
-      \hline
-      \textbf{4} & 20.0\% & 14.3\% & 0.167 & 7\\
-      \hline
-      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
-      \hline
-      \textbf{6} & 80.0 & 57.1 & 0.667 & 7\\
-      \hline
-      \textbf{total} & 73.2\% & 75.6\% & 0.733 & 589\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
-  \end{overlayarea}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {\tiny
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+%       \hline
+%       \textbf{1} & 80.4\% & 93.1\% & 0.863 & 406\\
+%       \hline
+%       \textbf{2} & 61.5\% & 38.3\% & 0.472 & 154\\
+%       \hline
+%       \textbf{3} & 23.1\% & 21.4\% & 0.222 & 14\\
+%       \hline
+%       \textbf{4} & 20.0\% & 14.3\% & 0.167 & 7\\
+%       \hline
+%       \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
+%       \hline
+%       \textbf{6} & 80.0 & 57.1 & 0.667 & 7\\
+%       \hline
+%       \textbf{total} & 73.2\% & 75.6\% & 0.733 & 589\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Belgique/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1708,37 +1712,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {\tiny 
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
-      \hline
-      \textbf{1} & 71.3\% & 99.6\% & 0.831 & 234\\
-      \hline
-      \textbf{2} & 78.0\% & 26.4\% & 0.395 & 121\\
-      \hline
-      \textbf{3} & 46.7\% & 22.6\% & 0.304 & 31\\
-      \hline
-      \textbf{4} & 0.0\% & 0.0\% & 0.000 & 2\\
-      \hline
-      \textbf{5} & - & - & - & 0\\
-      \hline
-      \textbf{6} & - & - & - & 0\\
-      \hline
-      \textbf{total} & 71.0\% & 70.1\% & 0.648 & 388\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
-  \end{overlayarea}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {\tiny 
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+%       \hline
+%       \textbf{1} & 71.3\% & 99.6\% & 0.831 & 234\\
+%       \hline
+%       \textbf{2} & 78.0\% & 26.4\% & 0.395 & 121\\
+%       \hline
+%       \textbf{3} & 46.7\% & 22.6\% & 0.304 & 31\\
+%       \hline
+%       \textbf{4} & 0.0\% & 0.0\% & 0.000 & 2\\
+%       \hline
+%       \textbf{5} & - & - & - & 0\\
+%       \hline
+%       \textbf{6} & - & - & - & 0\\
+%       \hline
+%       \textbf{total} & 71.0\% & 70.1\% & 0.648 & 388\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Pays-Bas/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1806,37 +1810,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-   {\tiny
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
-      \hline
-      \textbf{1} & 90.8\% & 86.2\% & 0.885 & 1857\\
-      \hline
-      \textbf{2} & 47.1\% & 58.2\% & 0.520 & 428\\
-      \hline
-      \textbf{3} & 34.8\% & 28.1\% & 0.311 & 57\\
-      \hline
-      \textbf{4} & 10.0\% & 11.1\% & 0.105 & 9\\
-      \hline
-      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1 \\
-      \hline
-      \textbf{6} & - & - & - & 0\\
-      \hline
-      \textbf{total} & 81.1\% & 79.4\% & 0.801 & 2352\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
-  \end{overlayarea}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%    {\tiny
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n} \\
+%       \hline
+%       \textbf{1} & 90.8\% & 86.2\% & 0.885 & 1857\\
+%       \hline
+%       \textbf{2} & 47.1\% & 58.2\% & 0.520 & 428\\
+%       \hline
+%       \textbf{3} & 34.8\% & 28.1\% & 0.311 & 57\\
+%       \hline
+%       \textbf{4} & 10.0\% & 11.1\% & 0.105 & 9\\
+%       \hline
+%       \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1 \\
+%       \hline
+%       \textbf{6} & - & - & - & 0\\
+%       \hline
+%       \textbf{total} & 81.1\% & 79.4\% & 0.801 & 2352\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+      \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Suisse/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1897,37 +1901,37 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
-    \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {\tiny
-    \begin{tabular}{|c|c|c|c|c|}
-      \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
-      \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
-      \hline
-      \textbf{1} & 82.9\% & 89.4\% & 0.860 & 406\\
-      \hline
-      \textbf{2} & 55.0\% & 39.0\% & 0.456 & 154\\
-      \hline
-      \textbf{3} & 20.0\% & 42.9\% & 0.273 & 14\\
-      \hline
-      \textbf{4} & 33.3\% & 28.6\% & 0.308 & 7\\
-      \hline
-      \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
-      \hline
-      \textbf{6} & 100.0 & 57.1 & 0.727 & 7\\
-      \hline
-      \textbf{total} & 73.6\% & 73.9\% & 0.731 & 589\\
-      \hline
-    \end{tabular}
-    }
-    \end{adjustbox}
-    \end{center}
-  \end{table}
-  \end{overlayarea}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {\tiny
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+%       \hline
+%       \textbf{1} & 82.9\% & 89.4\% & 0.860 & 406\\
+%       \hline
+%       \textbf{2} & 55.0\% & 39.0\% & 0.456 & 154\\
+%       \hline
+%       \textbf{3} & 20.0\% & 42.9\% & 0.273 & 14\\
+%       \hline
+%       \textbf{4} & 33.3\% & 28.6\% & 0.308 & 7\\
+%       \hline
+%       \textbf{5} & 0.0\% & 0.0\% & 0.000 & 1\\
+%       \hline
+%       \textbf{6} & 100.0 & 57.1 & 0.727 & 7\\
+%       \hline
+%       \textbf{total} & 73.6\% & 73.9\% & 0.731 & 589\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+       \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Belgique/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling_roc.png}
 \end{column}
 \end{columns}
 \end{frame}
@@ -1988,43 +1992,101 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \end{overlayarea}
  \end{column}
  \begin{column}{0.6\textwidth}
- \begin{overlayarea}{\linewidth}{2cm}
-  \begin{table}
+%   \begin{table}
+%     \begin{center}
+%     \begin{adjustbox}{max width=0.6\textwidth}
+%     {\tiny 
+%     \begin{tabular}{|c|c|c|c|c|}
+%       \hline
+%       \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+%       \hline
+%       \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+%       \hline
+%       \textbf{1} & 80.2\% & 97.0\% & 0.878 & 234\\
+%       \hline
+%       \textbf{2} & 81.0\% & 38.8\% & 0.525 & 121\\
+%       \hline
+%       \textbf{3} & 45.2\% & 45.2\% & 0.452 & 31\\
+%       \hline
+%       \textbf{4} & 6.7\% & 50\% & 0.118 & 2\\
+%       \hline
+%       \textbf{5} & - & - & - & 0\\
+%       \hline
+%       \textbf{6} & - & - & - & 0\\
+%       \hline
+%       \textbf{total} & 77.3\% & 74.5\% & 0.730 & 388\\
+%       \hline
+%     \end{tabular}
+%     }
+%     \end{adjustbox}
+%     \end{center}
+%   \end{table}
+       \centering\vfill
+      \includegraphics[scale=0.18]{../../data/Pays-Bas/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling_roc.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection{Discussion}
+\begin{itemize}
+ \item Training Area Under Curve
+ \begin{table}
     \begin{center}
-    \begin{adjustbox}{max width=0.6\textwidth}
-    {\tiny 
-    \begin{tabular}{|c|c|c|c|c|}
+    \begin{adjustbox}{max width=0.9\textwidth}
+    {\scriptsize
+    \begin{tabular}{|c|c|}
       \hline
-      \multicolumn{5}{|c|}{\begin{bf}precision and recall per class after refitting \end{bf}} \\
+      \multicolumn{2}{|c|}{\begin{bf} Mean AUC \end{bf}} \\
       \hline
-      \textbf{category} & \textbf{precision}  & \textbf{recall} & \textbf{f1-score} & \textbf{n}\\
+      \textbf{Classifier} & \textbf{France} \\
       \hline
-      \textbf{1} & 80.2\% & 97.0\% & 0.878 & 234\\
+      \textbf{Nearest Neighbors} & 1.00\\
       \hline
-      \textbf{2} & 81.0\% & 38.8\% & 0.525 & 121\\
+      \textbf{Support Vector Machine (Gaussian)} & 0.0\\
       \hline
-      \textbf{3} & 45.2\% & 45.2\% & 0.452 & 31\\
-      \hline
-      \textbf{4} & 6.7\% & 50\% & 0.118 & 2\\
-      \hline
-      \textbf{5} & - & - & - & 0\\
-      \hline
-      \textbf{6} & - & - & - & 0\\
-      \hline
-      \textbf{total} & 77.3\% & 74.5\% & 0.730 & 388\\
+      \textbf{Neural Network} & 0.95\\
       \hline
     \end{tabular}
     }
     \end{adjustbox}
     \end{center}
   \end{table}
-  \end{overlayarea}
-\end{column}
-\end{columns}
+  
+  \item Testing Area Under Curve
+ \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=0.9\textwidth}
+    {\scriptsize
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      \multicolumn{4}{|c|}{\begin{bf} Mean AUC\end{bf}} \\
+      \hline
+      \textbf{Classifier} & \textbf{Switzerland} & \textbf{Belgium} & \textbf{The Netherlands}\\
+      \hline
+      Nearest Neighbors & 0.89 & 0.87 & 0.85\\
+      \hline
+      Support Vector Machine (Gaussian) & 0.0 & 0.0 & 0.0\\
+      \hline
+      Neural Network & 0.97 & 0.97 & 0.96\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \end{center}
+  \end{table}
+  \item Nearest Neighbors clearly overfitted (important gap between training and testing)
+  \item Best Generalization for Neural Network
+  
+\end{itemize}
+
+\subsection{Conclusion}
+\begin{frame}
+ \begin{itemize}
+  \item Traininig France features possible with 16Go-RAM computer but impossible for bigger country like the USA => possible tranining using cluster-distributed features using Spark MLib or Hadoop XGBoost. 
+  \item Overcome local cloudyness with a finer NDVI using \begin{itshape}Sentinel II\end{itshape} satellite images.
+ \end{itemize}
+
 \end{frame}
 
-% \subsection{Support-Vector Machine (Gaussian Kernel)}
-
-% \subsection{Convolutional Neura Networks}
 
 \end{document}
