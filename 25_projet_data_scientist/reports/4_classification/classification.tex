@@ -10,7 +10,8 @@
 \usepackage{url}
 \usepackage{amsmath} % pour les cascades de fraction
 \usepackage{colortbl} % bfseries pour mettre une colonne en gras
-\usepackage[top=1cm, bottom=1cm, left=1cm, right=1cm]{geometry} % pour les marges
+\usepackage{float} % to force figure emplacement
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry} % pour les marges
 
 
 \title{%
@@ -32,8 +33,9 @@
 Dans ce document, nous proposons une méthode de prédiction de la densité de population à partir d'images satellites.
 Elle repose sur la classification par apprentissage automatique des communes françaises, à partir de leur histogramme de $NDVI$. 
 Nous verrons comment ont été selectionnées et vérifiées les scènes du satellite \begin{itshape}Landsat-8\end{itshape} pour le territoire français à partir desquelles on extrait le $NDVI$ de chaque commune.\\
-Nous verrons comment ont été récupérées les méta-données des communes permettant leur localisation et leur labelisation en terme de densité (vérité terrain).
-Une fois toutes les données nécessaires à notre disposition, nous appliquerons plusieurs classifieurs dont nous testerons la généralisation à d'autres communes (Suisse, Belgique et Pays-Bas).
+Nous verrons comment ont été récupérées les méta-données des communes permettant leur localisation et leur labelisation en terme de densité (vérité terrain).\\
+Une fois toutes les données nécessaires à notre disposition, nous allons extraire le $NDVI$ de toutes les communes auquel sera appliqués plusieurs classifieurs supervisés.
+Classifieurs dont nous testerons la généralisation à d'autres communes (Suisse, Belgique et Pays-Bas).
 
 \mainmatter
  
@@ -53,12 +55,10 @@ La figure \ref{selection_france} montre le polygone de sélection des scènes su
 \label{selection_france}
 \end{figure}
 
-\clearpage
-
-Cette période correspond à l'année des valeurs de densité de population à notre disposition pour l'ensemble des communes de France.\\
+Cette période correspond à l'année des valeurs de densité de population à notre disposition (et que nous présenterons plus tard) pour l'ensemble des communes de France.\\
 La période de Mai à Septembre est la plus courte permettant de couvrir tout le territoire métroplitain tout en conservant une occupation
 nuageuse inférieure à 20\%.
-Nous obtenons ainsi 70 scènes Landsat-8 chacune correspondant à un couple $path$,$row$ unique.\\
+Nous obtenons ainsi 70 scènes \begin{itshape}Landsat-8\end{itshape} chacune correspondant à un couple $path$,$row$ unique.\\
 Les figures \ref{cloud1},\ref{cloud3},\ref{cloud4} et \ref{cloud5} montrent des miniatures couleurs des 4 scènes parmi les 70, ayant une couverture 
 nuageuse supérieure à 10\%
 
@@ -69,7 +69,6 @@ nuageuse supérieure à 10\%
 \caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $200$,$024$ (region Nord-Pas-de-Calais) - couverture nuageuse de 20.00\% }
 \label{cloud1}
 \end{figure}
-
 
 \begin{figure}[H]
 \begin{center}
@@ -100,10 +99,10 @@ On voit donc que les scènes ayant une forte couverture nuageuse sont :
 \item[-] soit des scènes contenant beaucoup de domaine maritime
 \item[-] soit des scènes limitrophes de pays voisins. 
 \end{description}
-La présence de nuage devrait donc avoir globalement une faible impacte sur le $NDVI$ des communes françaises.
-\clearpage
+La présence de nuage devrait donc avoir globalement une faible impacte sur le $NDVI$ des communes françaises.\\
 
-la figure \ref{couverture} présente toutes les scènes après projection en Web Mercator (EPSG:3857) (repère absolu).
+la figure \ref{couverture} présente toutes les scènes après projection en Web Mercator (EPSG:3857). En effet, les images sont dites géoréférencées, c'est le 
+sujet du chapître suivant.
 
 \begin{figure}[H]
 \begin{center}
@@ -117,13 +116,19 @@ la figure \ref{couverture} présente toutes les scènes après projection en Web
 \chapter{Géoréférencement d'images aériennes}
 \section{Principe}\label{principe_geo}
 
-Une première méthode pour le géoréférencement d'une image dans un certain système de coordonnées, nécessite la connaissance 
+Concrètement le géoréférencement consiste à donner aux points 
+d'une image rectangulaire de prise de vue aérienne, des coordonnées géographiques dans un certain système de coordonnées
+via une transformation géométrique. 
+En effet, un point de l'image de départ, est simplement répéré par ses coordonnées de ligne et de colonne mais n'a aucune caractéristique
+géographique.\\
+Dans le cas de Landsat-8, ces coordonnées sont fournies dans le système \begin{itshape}UTM Mercator\end{itshape}. Et nous allons dans ce chapître, 
+vérifier si le géoréférencement de ces images est suffisamment précis\\
+
+Une méthode simple pour le géoréférencement d'une image dans un certain système de coordonnées, nécessite la connaissance 
 des coordonnées d'un 
 certain nombre de points de l'image dans ce système de coordonnées, ce sont les \begin{itshape}points d'amers\end{itshape}.
 A partir de ces points, une transformation d'un certain ordre est appliquée aux autres points de l'image afin de leur attribuer 
 des coordonnées dans ce système.\\
-Les images de prise de vue aérienne peuvent être livrées déjà géoréférencées dans un certain système de coordonnées géographiques, 
-c'est le niveau 2 de rectification dans la nomenclature du cours de Jean-Marie Nicolas \cite{Nicolas:2014}.\\
 
 \section{Les systèmes de géoréférencement}
 
@@ -157,9 +162,9 @@ donc géoréférencé, de l'$IGN$ et de la superposer
 à une image \begin{itshape}LANDSAT-8\end{itshape} contenant la même zone. Toutefois, le géoréférencement de l'image $IGN$ étant différent
 de celui de l'image \begin{itshape}LANDSAT-8\end{itshape}, il faudrait afficher la première dans le géoréférencement de la seconde.\\
 Seulement, le site de l'$IGN$ ne propose des images géoréférencées qu'à l'achat, mais nous pouvons contourner cela en récupérant une 
-image non géoréférencé, qu'on géoréférencerait ensuite via un logiciel $SIG$, $QGIS$ en l'occurence.\\
+image non géoréférencé, qu'on géoréférencerait ensuite via un logiciel $SIG$, $QGIS$ en l'occurence.
 
-\subsection{Création d'une image de l'IGN géoréférencée}
+\subsection{Création d'une carte géoréférencée de l'IGN}
 
 Le portail de l'IGN \cite{ign-portail} permet de parcourir le globe en affichant instantanément les coordonnées des points dans 
 plusieurs systèmes de coordonnées possibles. La figure \ref{ign-portail} montre l'interface du portail affichant la commune de
@@ -173,8 +178,6 @@ plusieurs systèmes de coordonnées possibles. La figure \ref{ign-portail} montr
 \label{ign-portail}
 \end{figure}
 
-\clearpage
-
 La manipulation consiste à prendre un snapshot du portail pour cette zone, en y inscrivant au préalable les coordonnées de 
 plusieurs points via l'outil de marquage et d'annotation du portail. La figure \ref{ign-points} montre ainsi six points 
 dont on a indiqué les coordonnées en \begin{itshape}NTF 93/Lambert 93\end{itshape}. Ces points vont jouer le rôle des 
@@ -184,19 +187,19 @@ dont on a indiqué les coordonnées en \begin{itshape}NTF 93/Lambert 93\end{itsh
 \begin{center}
 \includegraphics[scale=0.5]{images/georeferencing/ign-points-Thonon.png}
 \end{center}
-\caption{image non-géoréférencé de l'$IGN$ - commune de Thonon-Les-Bains et six points de contr\^{o}le en coordonnées NTF93/Lambert93}
+\caption{Carte non-géoréférencé de l'$IGN$ - commune de Thonon-Les-Bains et six points de contr\^{o}le en coordonnées NTF93/Lambert93}
 \label{ign-points}
 \end{figure}
 
 \clearpage
 
-Le logiciel libre $QGIS$ \cite{QGIS_software} permet de géoréférencer une image dans le même système de coordonnées que des points de
+Le logiciel libre $QGIS$ \cite{QGIS_software} permet de géoréférencer une image ou une carte dans le même système de coordonnées que des points de
 contr\^{o}le préalablement renseignés dans l'outil.\\
 Pour commencer, il faut ouvrir un projet dans la fen\^{e}tre principale et renseigner le système de projection dans lequel on souhaite visualiser
 les images géoréférencées (on parle de \begin{itshape}raster\end{itshape}). On choisit ici le système de projection
 \begin{itshape}EPSG:32631\end{itshape} car c'est celui dans lequel les images \begin{itshape}Landsat-8\end{itshape} (dans la zone $UTM$ 
 de \begin{itshape}Thonon-Les-Bains\end{itshape}) sont projetées et
-sur lequel on projetera notre snapshot IGN une fois géoréférencé, pour comparaison.\\
+sur lequel on projetera notre carte IGN une fois géoréférencé, pour comparaison.\\
 La figure \ref{qgis-projet} montre la manipulation dans les propriétés du projet.
 
 \begin{figure}[H]
@@ -210,7 +213,7 @@ La figure \ref{qgis-projet} montre la manipulation dans les propriétés du proj
 \clearpage
 
 Ensuite, via l'onglet \og Raster > Géoréférencer > Géoréférencer\fg{}, on ouvre 
-une nouvelle fen\^{e}tre dédiée au géoréférencement à partir de laquelle on charge notre snapshot \ref{qgis-georef} 
+une nouvelle fen\^{e}tre dédiée au géoréférencement à partir de laquelle on charge notre carte \ref{qgis-georef} 
 (onglet \og Ajouter un raster \fg{}).\\
 L'outil demande alors de renseigner un système de projection pour le géoréférencement, on selectionne celui correspondant 
 à nos points d'amers, soit \begin{itshape}NTF 93/Lambert 93\end{itshape} (\begin{itshape}EPSG:2154\end{itshape}).
@@ -222,8 +225,6 @@ L'outil demande alors de renseigner un système de projection pour le géoréfé
 \caption{Projet $QGIS$ et chargement d'une image non-géoréférencé pour géoréférencement}
 \label{qgis-georef}
 \end{figure}
-
-\clearpage
 
 Une fois le snapshot chargé, on renseigne les points de contr\^{o}le correspondant aux croix rouges sur le snapshot via l'onglet 
 \og Ajouter un point \fg{}, dans la fenêtre de géoréférencement. On ajoute tour à tour les six points en renseignant
@@ -237,8 +238,6 @@ et le tableau des points de contr\^{o}le en bas.
 \caption{Projet $QGIS$ et renseignement des points de contr\^{o}le dans la fen\^{e}tre de géoréférencement}
 \label{qgis-points}
 \end{figure}
-
-\clearpage
 
 Maintenant que les points de renseignement sont donnés, on va définir la transformation à appliquer. Pour cela, on ouvre l'onglet
  \og Paramètres > Tranformation \fg{}, qu'on renseigne comme dans la figure \ref{qgis-transformation}. Par ordre, 
@@ -254,7 +253,7 @@ après transformation. Et enfin, on renseigne le système de géoréférencement
  cocher la case \og charger dans QGIS lorsque terminé \fg{} afin d'avoir l'image géoréférencé directement
  projeté dans le système de coordonnées du projet (\begin{itshape}EPSG:32631\end{itshape}).
 
-\begin{figure}[H]
+\begin{figure}[!h]
 \begin{center}
 \includegraphics[scale=0.3]{images/georeferencing/qgis-transformation.png}
 \end{center}
@@ -262,20 +261,16 @@ après transformation. Et enfin, on renseigne le système de géoréférencement
 \label{qgis-transformation}
 \end{figure}
 
-\clearpage
-
 Il ne reste qu'à lancer la géoréférencement via la flèche verte dans la fen\^{e}tre de géoréférencement, cela va afficher
 notre snapshot dans le système de coordonnées \begin{itshape}EPSG:32631\end{itshape} \ref{qgis-resultat}.
 
-\begin{figure}[H]
+\begin{figure}[!h]
 \begin{center}
 \includegraphics[scale=0.3]{images/georeferencing/qgis-resultat.png}
 \end{center}
 \caption{Projet $QGIS$ et affichage du raster géoéréférencé projeté dans la fen\^{e}tre principale}
 \label{qgis-resultat}
 \end{figure}
-
-\clearpage
 
 \subsection{Superposition d'un raster Landsat-8}
 
@@ -295,6 +290,8 @@ qui renvoit bien ($PCS$ pour \begin{itshape}Projection Coordinate System\end{its
 PCS = 32631 (WGS 84 / UTM zone 31N)\\
 \end{center}
 
+\clearpage
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.4]{images/georeferencing/Thonon_landsat.png}
@@ -303,8 +300,6 @@ PCS = 32631 (WGS 84 / UTM zone 31N)\\
 \label{Thonon-landsat}
 \end{figure}
 
-\clearpage
-
 On peut alors charger cette image dans la fenêtre principale $QGIS$ via l'onglet \og Couche > Ajouter une couche > Ajouter une couche 
 raster \fg{}. On observe au final la superposition des deux rasters et dont on peut régler la transparence (sous-fen\^{e}tre \og couches \fg{}) 
 dans la fen\^{e}tre principale $QGIS$) \ref{qgis_super}
@@ -312,23 +307,342 @@ dans la fen\^{e}tre principale $QGIS$) \ref{qgis_super}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{images/georeferencing/qgis-superposition0.png}
-\includegraphics[scale=0.3]{images/georeferencing/qgis-superposition.png}
 \end{center}
 \caption{Projet $QGIS$ et superposition des rasters IGN et Landsat-8 géoréférencés en EPSG:32631 - commune de Thonon-Les-Bains}
 \label{qgis_super}
 \end{figure}
 
-\clearpage
-
 On constate une assez bonne superposition des deux rasters, le géoréférencement du satellite \begin{itshape}Landsat-8\end{itshape} peut
  donc \^{e}tre considéré comme convenable.
 
+\chapter{Métadonnées des communes françaises}
+
+\section{Géolocalisation, surface et population}
+
+Cette section présente la manière dont sont récupérées les données de communes françaises. En effet, nous avons besoin pour chacune d'elle  :
+\begin{itemize}
+  \item des longitude et latitude, qu'on convertira en coordonnées géographiques (\begin{itshape}UTM Mercator\end{itshape}) afin de repérer précisemment la commune.
+  \item de la surface, qui nous permettra d'identifier un périmètre carré de même surface, autour de la commune.
+  \item de sa population, ou de sa densité directement.
+\end{itemize}
+
+Les données de nom, de population et de surface de plus de 36000 comunes sont obtenues dans le fichier de recensement de l'INSEE de 2013 \cite{insee_pop2013}.\\
+Les données de géolocation (latitude et longitude) sont obtenues via l'API Python \begin{itshape}Geopy\end{itshape} \cite{geopy}. Elle permet d'instancier 
+le géolocalisateur de Google et de procéder à des requêtes pour chacune des communes.\\
+
+Ainsi, on obtient un tableau des métadonnées necessaires à la labélisation de nos communes en vue d'une classification supervisée \ref{tab_meta}.
+
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+{
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+name & latitude (degrees) & longitude (degrees) & surface (km\textsuperscript{2}) & density (habs/km\textsuperscript{2}) \\
+\hline
+Ozan & 46.391534 & 4.915265 & 6.6 & 98.3\\
+\hline 
+Cormoranche-sur-Sa\^{o}ne & 46.240532 & 4.830863 & 9 & 118.9\\
+\hline 
+Paris & 48.856614 & 2.352222 & 105.4 & 21153.9\\
+\hline
+Lyon & 45.764043 & 4.835659 & 47.87 & 10117.0\\
+\hline
+Tours & 47.394144 & 0.68484 & 34.67 & 3888.2\\
+\hline
+Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9\\
+\hline 
+... & ... & ... & ... & ... \\
+\hline
+\end{tabular}
+}
+\end{adjustbox}
+\end{center}
+\caption{Métadonnées liées aux communes françaises}
+\label{tab_meta}
+\end{table}
+
+Afin de nous rapporter à un problème de classification pour la prédiction de la densité, nous allons labelliser nos communes par catégorisation de leur distribution.
+Pour cela, on va rechercher le meilleur découpage de cette distribution par la méthode d'Otsu à multi-seuillage. Elle permet de déterminer le nombre de seuils et leurs
+ valeurs, qui permettent de minimiser la variance intra catégories et maximiser la variance inter catégories. C'est l'objet de la section qui suit.
+
+\section{Catégorisation de la densité}
+
+Il s'agit de découper l'intervalle de densité en une partition d'intervalles. La multi-binarisation d'Otsu permet de créer une telle partition en
+minimisant la variance au sein de chaque partition, tout en maximisant la variance inter-partition.\\
+La figure \ref{densite_histo} présente l'histogramme de densité de nos échantillons :
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{images/densite_histo.jpg}
+\includegraphics[scale=0.5]{images/densite_histo_zoom.jpg}
+\end{center}
+\caption{Histogramme des densités et son zoom}
+\label{densite_histo}
+\end{figure}
+
+On applique alors la méthode d'Otsu ($Matlab$) sur l'histogramme pour différentes valeurs en nombre de catégories (ou nombre de clusters si on voit la méthode comme
+une méthode de segmentation). On obtient à chaque fois un score reflétant la compacité des catégories créées. On obtient un score maximal pour un nombre de catégories de 6.\\
+La figure \ref{densite_histo_otsu} montre graphiquement les 5 seuils obtenus pour la segmentation  à 6 catégories.
+
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[scale=0.7]{images/labels/densite_histo_otsu_zoom.png}
+\end{center}
+\caption{Histogramme de densité (habs/km\textsuperscript{2})}
+\label{densite_histo_otsu}
+\end{figure}
+
+On obtient ainsi les six catégories suivantes \ref{tab_meta_categorie}.
+
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+{
+\begin{tabular}{|c|c|}
+    \hline 
+    \textbf{catégorie 1} & densité comprise entre 0 et 500 habs/km\textsuperscript{2}\\
+    \hline
+    \textbf{catégorie 2} & densité comprise entre 500 et habs/km\textsuperscript{2}\\
+    \hline
+    \textbf{catégorie 3} & densité comprise entre 2000 et 5000 habs/km\textsuperscript{2}\\
+    \hline
+    \textbf{catégorie 4} & densité comprise entre 5000 et 10000 habs/km\textsuperscript{2}\\
+    \hline
+    \textbf{catégorie 5} & densité comprise entre 10000 et 13000 habs/km\textsuperscript{2}\\
+    \hline
+    \textbf{catégorie 6} & densité supérieure à 13000 habs/km\textsuperscript{2}\\
+    \hline
+\end{tabular}
+}
+\end{adjustbox}
+\end{center}
+\caption{Catégorisation de la densité des communes françaises}
+\label{tab_meta_categorie}
+\end{table}
+
+D'où notre tableau final des métadonnées des communes françaises \ref{tab_meta_cat}
+
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+{
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+city & latitude (degrees) & longitude (degrees) & surface (km\textsuperscript{2}) & density (habs/km\textsuperscript{2}) & textbf{density (category)}\\
+\hline
+Ozan & 46.391534 & 4.915265 & 6.6 & 98.3 & 1\\
+\hline 
+Cormoranche-sur-saone & 46.240532 & 4.830863 & 9 & 118.9 & 1\\
+\hline 
+Paris & 48.856614 & 2.352222 & 105.4 & 21153.9 & 6\\
+\hline
+Lyon & 45.764043 & 4.835659 & 47.87 & 10117.0 & 5\\
+\hline
+Tours & 47.394144 & 0.68484 & 34.67 & 3888.2 & 3\\
+\hline
+Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9 & 1\\
+\hline 
+... & ... & ... & ... & ... & ...\\
+\hline
+\end{tabular}
+}
+\end{adjustbox}
+\end{center}
+\caption{Métadonnées liées aux communes françaises après labelisation}
+\label{tab_meta_cat}
+\end{table}
+
+
 \chapter{Extraction de l'histogramme de NDVI}
 
-Nous avons à notre disposition un fichier de $36700$ comunes françaises contenant entre autres caractéristiques, les latitude et longitude en degrés,
-la surface em km\textsuperscript{2}, la densité de population tel que recensée par l'INSEE en 2013 \cite{insee_pop2013}.\\
-Afin d'obtenir des longitudes et latitudes précises, nous les avons corrigés en utilisant une API $Python$ de géolocalisation: $geopy$ \cite{geopy}.\\
+\section{Calcul de l'indice de végétation par différence normalisée (NDVI)}
 
+Cet indice est calculé à partir des canaux
+rouge ($R$) et proche-infrarouge ($PIR$) via la formule : 
+
+\[NDVI=\frac{PIR-R}{PIR+R}\]
+
+Typiquement, l'eau, la neige et les nuages refléchissent plus dans le rouge que dans le proche-infrarouge, soit un $NDVI$ négatif\\
+Les sols nus réfléchissent tout autant dans les deux bandes d'où un NDVI nul\\
+En revanche, les sols revétus de végétaux refléchissent bien plus dans le proche infra-rouge, ce qui donne un $NDVI$ positif, et d'autant
+plus positif que la végétation est dense.\\
+Afin de calculer un tel indice sur les images \begin{itshape}Landsat-8\end{itshape}, nous utilisons les bandes géoréférencées $4$ et $5$ 
+qui jouent respectivement les r\^oles du rouge (\begin{itshape}0.85-0.88nm\end{itshape}) et du proche-infrarouge (\begin{itshape}0.64-0.67nm\end{itshape}).\\
+la librairie $gdal$ sur $python$ nous permet d'effectuer l'opération de différence normalisée sur des rasters pour produire une image de $NDVI$ géoréférencée ($GeoTIFF$).
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.45]{../3_ndvi/images/Chamonix/08_rgb.png}
+\includegraphics[scale=0.45]{../3_ndvi/images/Chamonix/08_ndvi.png}
+\includegraphics[scale=0.4]{../3_ndvi/images/colormap.png}
+}
+\begin{center}
+\includegraphics[scale=0.45]{images/Chamonix/08_ndvi_histo.png}
+\end{center}
+\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la commune de $Chamonix-Mont-Blanc$ sur un périmètre de $116$km\textsuperscript{2} au mois d'$Aout$}
+\label{chamonix_ndvi}
+\end{figure}
+
+La figure \ref{chamonix_ndvi} montre un $NDVI$ négatif au sud de la commune de Chamonix, ce qui correspond au glaciers du \begin{itshape}Mont-Blanc\end{itshape}\\
+
+\clearpage 
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.045]{../3_ndvi/images/Manaus/07_rgb.png}
+\includegraphics[scale=0.045]{../3_ndvi/images/Manaus/07_ndvi.png}
+\includegraphics[scale=0.4]{../3_ndvi/images/colormap.png}
+}
+\begin{center}
+\includegraphics[scale=0.45]{images/Manaus/07_ndvi_histo.png}
+\end{center}
+\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la ville de $Manaus$ ($Bresil$) sur un périmètre de $11000$km\textsuperscript{2} au mois de $Juillet$}
+\label{manaus_ndvi}
+\end{figure}
+
+La figure \ref{manaus_ndvi} montre un $NDVI$ supérieur à $0.5$ autour de la ville de Manaus au Brésil, ce qui correspond à la végétation dense de la for\^et amazonienne. Le fleuve
+du \begin{itshape}Rio Negro\end{itshape} apparait lui en négatif.\\
+
+\clearpage
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.45]{../3_ndvi/images/Paris/12_rgb.png}
+\includegraphics[scale=0.45]{../3_ndvi/images/Paris/12_ndvi.png}
+\includegraphics[scale=0.4]{../3_ndvi/images/colormap.png}
+}
+\begin{center}
+\includegraphics[scale=0.4]{../3_ndvi/images/Paris/12_ndvi_histo.png}
+\end{center}
+\caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la ville de $Paris$ sur un périmètre de $105$km\textsuperscript{2} au mois de $Decembre$}
+\label{paris_ndvi}
+\end{figure}
+
+La figure \ref{paris_ndvi} montre un $NDVI$ quasi nulle donc sans végétation, comme on peut s'y attendre dans une commune urbaine telle que Paris en période hivernale.\\
+
+\section{Evolution du NDVI en fonction de la densité de population}
+
+La figure \ref{ndvi_categorie} montre la superposition des courbes de $NDVI$ au mois de $Juillet$ pour plusieurs communes françaises :\\
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../3_ndvi/images/ndvi_categorie.png}
+}
+\caption{Superposition des courbes de $NDVI$ pour plusieurs communes françaises métropolitaines}
+\label{ndvi_categorie}
+\end{figure}
+\clearpage
+
+Nous observons donc que les communes les plus denses sont caractérisés par un spectre d'amplitude fort et distribué vers les basses fréquences. A mesure 
+qu'on se déplace vers les communes les moins denses, on constate une diminution d'amplitude et un déplacement de la distribution de $NDVI$ vers les
+hautes fréquences.\\
+Les figures \ref{ndvi_cat1},\ref{ndvi_cat2},\ref{ndvi_cat3} et \ref{ndvi_cat4} présentent les images de $NDVI$ pour ces commues.\\ 
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.6]{../3_ndvi/images/Lyon/07_rgb.png}
+\includegraphics[scale=0.6]{../3_ndvi/images/Lyon/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.6]{../3_ndvi/images/Montpellier/07_rgb.png}
+\includegraphics[scale=0.6]{../3_ndvi/images/Montpellier/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.6]{../3_ndvi/images/Amiens/07_rgb.png}
+\includegraphics[scale=0.6]{../3_ndvi/images/Amiens/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\caption{Image $NDVI$ et image couleur au mois de $Juillet$ pour les trois communes densément peuplées, de haut en bas respectivement :
+$Lyon$ ($10117$ habs/km\textsuperscript{2}),
+$Montpellier$ ($4524$ habs/km\textsuperscript{2}),
+$Amiens$ ($2689$ habs/km\textsuperscript{2}),
+}
+\label{ndvi_cat1}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.9]{../3_ndvi/images/Abbeville/07_rgb.png}
+\includegraphics[scale=0.9]{../3_ndvi/images/Abbeville/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.9]{../3_ndvi/images/Louvres/07_rgb.png}
+\includegraphics[scale=0.9]{../3_ndvi/images/Louvres/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=0.9]{../3_ndvi/images/Limours/07_rgb.png}
+\includegraphics[scale=0.9]{../3_ndvi/images/Limours/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\caption{Image $NDVI$ et image couleur au mois de $Juillet$ pour les trois communes de densité intermédiaire, de haut en bas respectivement :
+$Abbeville$ ($914$ habs/km\textsuperscript{2}),
+$Louvres$ ($824$ habs/km\textsuperscript{2}),
+$Limours$ ($453$ habs/km\textsuperscript{2}),
+}
+\label{ndvi_cat2}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=1.1]{../3_ndvi/images/Roissy-en-France/07_rgb.png}
+\includegraphics[scale=1.1]{../3_ndvi/images/Roissy-en-France/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=1.1]{../3_ndvi/images/Fontenay-en-Parisis/07_rgb.png}
+\includegraphics[scale=1.1]{../3_ndvi/images/Fontenay-en-Parisis/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=1.1]{../3_ndvi/images/Malay-le-Grand/07_rgb.png}
+\includegraphics[scale=1.1]{../3_ndvi/images/Malay-le-Grand/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\caption{Image $NDVI$ et image couleur au mois de $Juillet$ pour les trois communes peu denses, de haut en bas respectivement :
+$Roissy-en-France$ ($195$ habs/km\textsuperscript{2}),
+$Fontenay-en-Parisis$ ($176$ habs/km\textsuperscript{2}),
+$Malay-le-Grand$ ($63$ habs/km\textsuperscript{2}),
+}
+\label{ndvi_cat3}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=1.5]{../3_ndvi/images/Brignancourt/07_rgb.png}
+\includegraphics[scale=1.5]{../3_ndvi/images/Brignancourt/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=1.5]{../3_ndvi/images/Omiecourt/07_rgb.png}
+\includegraphics[scale=1.5]{../3_ndvi/images/Omiecourt/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\centerline{
+\includegraphics[scale=1.5]{../3_ndvi/images/Marieux/07_rgb.png}
+\includegraphics[scale=1.5]{../3_ndvi/images/Marieux/07_ndvi.png}
+\includegraphics[scale=0.3]{../3_ndvi/images/colormap.png}
+}
+\caption{Image $NDVI$ et image couleur au mois de $Juillet$ pour les trois communes peu denses, de haut en bas respectivement :
+$Brignancourt$ ($66$ habs/km\textsuperscript{2}),
+$Omiecourt$ ($43$ habs/km\textsuperscript{2}),
+$Marieux$ ($27$ habs/km\textsuperscript{2}),
+}
+\label{ndvi_cat4}
+\end{figure}
+
+Utiliser le NDVI à des fins de prédiction de densité présente donc un sens.
+
+\section{Données pour le Machine Learning}
+
+Nous avons à notre disposition un tableau de $34190$ comunes françaises métropolitaines contenant entre autres caractéristiques, les latitude et longitude en degrés,
+la surface em km\textsuperscript{2}. Ces informations vont nous permettrent d'extraire les variables explicatives de notre problème.\\
 La méthode d'extraction d'information du NDVI pour chaque commune se fait comme suit :
 \begin{description}
 \item[-] Pour une commune donnée, on projete ses latitude et longitude en Web Mercator. Les positions $x$,$y$ obtenues permettent d'aller récupérer 
@@ -336,11 +650,10 @@ la scéne \begin{itshape}Landsat-8\end{itshape} dont le centre est le plus proch
 permet d'éviter que la commune échoue sur un bord non couvert par une scène.
 \item[-] Puis, on découpe un carré de centre les coordonnées de la  commune, et d'aire égale à la surface de la commune.
 \item[-] On crée alors l'image de \begin{itshape}NDVI\end{itshape} correspondante
-\item[-] On calcule l'histogramme de l'image de \begin{itshape}NDVI\end{itshape} en prenant 512 bins uniformément répartis dans l'intervalle [-1 1].
+\item[-] On calcule l'histogramme de l'image de \begin{itshape}NDVI\end{itshape} en prenant 1024 bins uniformément répartis dans l'intervalle [-1 1].
 \item[-] On obtient ainsi un vecteur descripteur pour la commune
 \item[-] On réitère le procédé pour chacune des communes
 \end{description}
-
 
 Nous présentons le procédé à travers l'exemple ci-après \ref{ndvi_extraction} :
 \begin{figure}[H]
@@ -356,130 +669,27 @@ Nous présentons le procédé à travers l'exemple ci-après \ref{ndvi_extractio
 \label{ndvi_extraction}
 \end{figure}
 
-\clearpage
-
-Au final, nos données se présente sous la forme d'un tableau contenant à chaque ligne, l'histogramme d'une commune et sa densité. Avec un total
-de $36139$ communes métropolitaines.\ref{data_reg}.
+Au final, nos données se présente sous la forme d'un tableau contenant à chaque ligne, l'histogramme d'une commune et sa densité (catégorie). Avec un total
+de $34190$ communes métropolitaines.\ref{data_class}.
 
 \begin{table}[H]
 \begin{center}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|>{\bfseries}c|}
-
 \hline 
-nom &  bin-1 & bin-2 & ... & bin-255 & bin-256 &... & bin-511 & bin-512 & densité (habs/km\textsuperscript{2}) \\
-\hline 
-Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 93.0\\
-\hline 
-Cormoranche-sur-saone & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 107.0\\
-\hline 
-Paris & 0 & 0 & ... & 1953 & 1815 & ... & 0 & 0 & 21288.0\\
-\hline
-Lyon & 0 & 0 & ... & 1099 & 1032 & ... & 0 & 0 & 460.0\\
-\hline
-Tours & 0 & 0 & ... & 268 & 238 & ... & 0 & 0 & 3888.0\\
-\hline
-Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.0\\
-\hline 
-... & ... & ... & ... & ... & ... & ... & ... & ... & ... \\
-\hline
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Variables explicatives (histogramme de $NDVI$) et variable à prédire (densité) par régression, sous forme de tableau}
-\label{data_reg}
-\end{table}
-
-\clearpage
-
-Nous avons donc à présent des données sous forme de tableau prêt à être utiliser pour l'apprentissage supervisée.
-
-\chapter{Classification pour la prédiction de densité de population en fonction du NDVI}
-
-Les résultats de régression présentés au chapître précédent sont très perfectibles malgré l'utilisation d'algorithmes très puissants qui ont déjà fait leur
-preuve sur un certain nombre de challenges ($Kaggle$,$Hackathon$). Dès lors, on peut se demander si une simplification du problème permettrait de mieux lier
-le $NDVI$ à la densité. La régression ayant eu du mal à s'ajuster au données continue de densité, nous allons catégoriser celle-ci afin de nous ramener à un
-problème de classification.
-
-\section{Catégorisation}
-Il s'agit de découper l'intervalle de densité en une partition d'intervalles. La multi-binarisation d'Otsu permet de créer une telle partition en
-minimisant la variance au sein de chaque partition, tout en maximisant la variance inter-partition.\\
-La figure \ref{densite_histo} présente l'histogramme de densité de nos échantillons :
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{images/densite_histo.jpg}
-\includegraphics[scale=0.5]{images/densite_histo_zoom.jpg}
-\end{center}
-\caption{Histogramme des densités et son zoom}
-\label{densite_histo}
-\end{figure}
-\clearpage
-
-On applique alors la méthode d'Otsu ($Matlab$) sur l'histogramme pour différentes valeurs en nombre de catégories (ou nombre de clusters si on voit la méthode comme
-une méthode de segmentation). On obtient à chaque fois un score reflétant la compacité des catégories créées. La figure \ref{otsu} montre l'évolution du score
-pour différentes nombre de catégories :
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{images/densite_otsu_thresholding.jpg}
-\end{center}
-\caption{Score de catégorisation par Otsu pour différents nombre de catégories}
-\label{otsu}
-\end{figure}
-\clearpage
-
-On remarque que le score est maximal pour un nombre de catégories de 5.\\
-La figure \ref{densite_histo_otsu} montre les 4 seuils obtenus pour la segmentation à 5 catégories.
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{images/densite_histo_otsu.jpg}
-\includegraphics[scale=0.5]{images/densite_histo_otsu_zoom.jpg}
-\end{center}
-\caption{Histogramme des densités et son zoom avec seuils d'Otsu pour 5 catégories}
-\label{densite_histo_otsu}
-\end{figure}
-\clearpage
-
-Les 4 seuils obtenus sont par ordre croissant : $523$,$2091$,$5855$ et $13487$.\\
-Ainsi, en arrondissant ces valeurs, on créé 5 catégories pour nos échantillons:\\
-\begin{description}
- \item[catégorie 1:] densité comprise entre 0 et 500
- \item[catégorie 2:] densité comprise entre 500 et 2000
- \item[catégorie 3:] densité comprise entre 2000 et 5000
- \item[catégorie 4:] densité comprise entre 5000 et 13000
- \item[catégorie 5:] densité supérieure à 13000 
-\end{description}
-\clearpage
-
-Un tel découpage donne lieu à une distribution avec une grande disproportion entre les catégories, ce qui peut potentiellement perturber certains algorithmes de classification :\\
-\begin{description}
- \item[catégorie 1:] 20 échantillons
- \item[catégorie 2:] 102 échantillons
- \item[catégorie 3:] 286 échantillons
- \item[catégorie 4:] 1287 échantillons
- \item[catégorie 5:] 34443 échantillons
-\end{description}
-
-D'où le nouveau tableau obtenu en tenant compte cette fois de la catégorie comme variable à prédire \ref{data_class}:\\
-\begin{table}[H]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|>{\bfseries}c|}
-\hline 
-nom &  bin-1 & bin-2 & ... & bin-255 & bin-256 &... & bin-511 & bin-512 & densité (catégorie) \\
+nom &  bin-1 & bin-2 & ... & bin-511 & bin-512 &... & bin-1023 & bin-1024 & densité (catégorie) \\
 \hline 
 Ozan & 0 & 0 & ... & 1 & 5 & ... & 0 & 0 & 1\\
 \hline 
 Cormoranche-sur-saone & 0 & 0 & ... & 1 & 4 & ... & 0 & 0 & 1\\
 \hline 
-Paris & 0 & 0 & ... & 1953 & 1815 & ... & 0 & 0 & 5\\
+Paris & 0 & 0 & ... & 1953 & 1815 & ... & 0 & 0 & 6\\
 \hline
-Lyon & 0 & 0 & ... & 1099 & 1032 & ... & 0 & 0 & 1\\
+Lyon & 0 & 0 & ... & 1099 & 1032 & ... & 0 & 0 & 5\\
 \hline
 Tours & 0 & 0 & ... & 268 & 238 & ... & 0 & 0 & 3\\
 \hline
-Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 2\\
+Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1\\
 \hline 
 ... & ... & ... & ... & ... & ... & ... & ... & ... & ... \\
 \hline
@@ -490,52 +700,43 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 2\\
 \label{data_class}
 \end{table}
 
-\clearpage
- 
-\section{Erreur de généralisation d'un modèle de classification}
+Nous obtenons ainsi des données prêtes pour l'apprentissage automatique.
 
-L'idée est exactement la même que pour la régression à ceci près que la formule de calcul de l'erreur sur le sous-ensemble de test d'un set donné, est
-différente. En effet, les valeurs à prédire étant à présent catégorisées, on utilise l'erreur de précision dont la formule est décrite ci-après:\\
+
+\chapter{Classification pour la prédiction de densité de population en fonction du NDVI}
+ 
+\section{Score de précision d'un modèle de classification}
+
+Afin de juger de la performance d'un classifieur, on utilisera le score de précision dont la formule est décrite ci-après:\\
 
 \begin{equation}
-Erreur = \frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i \neq p_i)}{n_{test}}
+Score de précision = \frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i = p_i)}{n_{test}}
 \end{equation}
 
 avec:
 \begin{description}
-\item[-] ${y_i}$, l'ensemble des valeurs à prédire pour les échantillons de test.
+\item[-] ${y_i}$, l'ensemble des valeurs de densité (catégorie) à prédire pour les échantillons .
 \item[-] ${p_i}$, l'ensemble des prédictions associées et calculées via le modèle entrainé.
 \end{description}
 
-\section{Comparatif de plusieurs algorithmes régressifs} 
+\section{Cross validation}
 
-Ici encore, nous présentons les erreurs de classification pour différents modèles, chaque modèle étant utilisé avec sa meilleure combinaison
-d'hyperparamètres.\\
-\\
-Le tableau \ref{classification_resultats} résume les résultats obtenus.\\
-Le boosting d'arbres aléatoires suffit à très bien expliquer la relation entre le NDVI et la densité catégorisée (4,3\% d'erreur en généralisation)\\.
-\begin{table}[H]
-\begin{center}
-\begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{|c|c|}
-\hline
-\multicolumn{2}{|c|}{\begin{bf}Classification\end{bf}} \\
-\hline 
-Modèle & Erreur de généralisation \\
-\hline
-Boosting d'arbres aléatoires & 0.043\\
-\hline
-\end{tabular}
-\end{adjustbox}
-\end{center}
-\caption{Erreur de généralisation pour différents modèles de classification}
-\label{classification_resultats}
-\end{table}
-\clearpage
+\section{K Plus Proches Voisins}
+
+\section{Support Vector Machine à noyau gaussien}
+
+\section{Réseau de Neurones}
+
 
 \chapter{Test pour la prédiction de densité de population en fonction du NDVI}
 
-\section{Erreur de test pour la régression}
+\section{Données de test}
+
+\section{K Plus Proches Voisins}
+
+\section{Support Vector Machine à noyau gaussien}
+
+\section{Réseau de Neurones}
 
 Nous avons rassembler les informations de longitude, latitude et densité de population des communes de plusieurs pays européens : Belgique, 
 Luxembourg, Pays-Bas et Suisse.\\
@@ -553,7 +754,7 @@ Nous présentons ci-après la vérité-terrain et la prédiction de densité pou
 \caption{Test régressif de prédiction de densité pour la France (erreur $0.297$)}
 \label{test_france}
 \end{figure}
-\clearpage
+
 
 \begin{figure}[H]
 \begin{center}
@@ -563,7 +764,7 @@ Nous présentons ci-après la vérité-terrain et la prédiction de densité pou
 \caption{Test régressif de prédiction de densité pour la Belgique (erreur $0.439$)}
 \label{test_belgique}
 \end{figure}
-\clearpage
+
 
 \begin{figure}[H]
 \begin{center}
@@ -573,7 +774,7 @@ Nous présentons ci-après la vérité-terrain et la prédiction de densité pou
 \caption{Test régressif de prédiction de densité pour le Luxembourg (erreur $0.485$)}
 \label{test_luxembourg}
 \end{figure}
-\clearpage
+
 
 \begin{figure}[H]
 \begin{center}
@@ -583,7 +784,7 @@ Nous présentons ci-après la vérité-terrain et la prédiction de densité pou
 \caption{Test régressif de prédiction de densité pour les Pays-Bas (erreur $0.619$)}
 \label{test_pays-bas}
 \end{figure}
-\clearpage
+
 
 \begin{figure}[H]
 \begin{center}
@@ -593,21 +794,7 @@ Nous présentons ci-après la vérité-terrain et la prédiction de densité pou
 \caption{Test régressif de prédiction de densité pour la Suisse (erreur $0.616$)}
 \label{test_suisse}
 \end{figure}
-\clearpage
 
-
-%Paris 21288
-%Versailles 3289
-%Fontainebleau 89
-%Melun 4924
-%Albertville 1076
-%Annecy 3690
-%Chambéry 2731
-%Chamonix-Mont-Blanc 76
-%Bourg-en-Bresse 1680
-%Lyon 10117
-%Thonon-les-Bains 2092
-%Montpellier 4524
 \backmatter
 
 \listoftables
