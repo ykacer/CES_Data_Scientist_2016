@@ -153,7 +153,7 @@ Dans la section qui suit, nous proposons une méthode pour vérifier la fiabilit
  
 \section{Géoréférencement des images Landsat-8}
 
-le site de l'$USGS$ (\begin{itshape}U.S. Geological Survey\end{itshape}) \cite{landsat8} qui met à disposition les images
+Le site de l'$USGS$ (\begin{itshape}U.S. Geological Survey\end{itshape}) \cite{landsat8} qui met à disposition les images
 satellitaires de \begin{itshape}LANDSAT-8\end{itshape}, ne précise pas la méthode utilisée pour leur géoréférencement.
 Mais on peut toutefois vérifier sa fiabilité en comparant une image de ce satellite avec une image de 
 l'$IGN$.\\
@@ -338,7 +338,7 @@ Ainsi, on obtient un tableau des métadonnées necessaires à la labélisation d
 {
 \begin{tabular}{|c|c|c|c|c|}
 \hline 
-name & latitude (degrees) & longitude (degrees) & surface (km\textsuperscript{2}) & density (habs/km\textsuperscript{2}) \\
+name & latitude (degrés) & longitude (degrés) & surface (km\textsuperscript{2}) & densité (habs/km\textsuperscript{2}) \\
 \hline
 Ozan & 46.391534 & 4.915265 & 6.6 & 98.3\\
 \hline 
@@ -366,7 +366,7 @@ Afin de nous rapporter à un problème de classification pour la prédiction de 
 Pour cela, on va rechercher le meilleur découpage de cette distribution par la méthode d'Otsu à multi-seuillage. Elle permet de déterminer le nombre de seuils et leurs
  valeurs, qui permettent de minimiser la variance intra catégories et maximiser la variance inter catégories. C'est l'objet de la section qui suit.
 
-\section{Catégorisation de la densité}
+\section{Catégorisation de la densité}\label{cat}
 
 Il s'agit de découper l'intervalle de densité en une partition d'intervalles. La multi-binarisation d'Otsu permet de créer une telle partition en
 minimisant la variance au sein de chaque partition, tout en maximisant la variance inter-partition.\\
@@ -429,7 +429,7 @@ D'où notre tableau final des métadonnées des communes françaises \ref{tab_me
 {
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline 
-city & latitude (degrees) & longitude (degrees) & surface (km\textsuperscript{2}) & density (habs/km\textsuperscript{2}) & textbf{density (category)}\\
+city & latitude (degrés) & longitude (degrés) & surface (km\textsuperscript{2}) & densité (habs/km\textsuperscript{2}) & \textbf{densité (categories)}\\
 \hline
 Ozan & 46.391534 & 4.915265 & 6.6 & 98.3 & 1\\
 \hline 
@@ -469,7 +469,7 @@ En revanche, les sols revétus de végétaux refléchissent bien plus dans le pr
 plus positif que la végétation est dense.\\
 Afin de calculer un tel indice sur les images \begin{itshape}Landsat-8\end{itshape}, nous utilisons les bandes géoréférencées $4$ et $5$ 
 qui jouent respectivement les r\^oles du rouge (\begin{itshape}0.85-0.88nm\end{itshape}) et du proche-infrarouge (\begin{itshape}0.64-0.67nm\end{itshape}).\\
-la librairie $gdal$ sur $python$ nous permet d'effectuer l'opération de différence normalisée sur des rasters pour produire une image de $NDVI$ géoréférencée ($GeoTIFF$).
+la librairie $gdal$ \cite{dans-gdal} sur $python$ nous permet d'effectuer l'opération de différence normalisée sur des rasters pour produire une image de $NDVI$ géoréférencée ($GeoTIFF$).
 
 \begin{figure}[H]
 \centerline{
@@ -478,7 +478,7 @@ la librairie $gdal$ sur $python$ nous permet d'effectuer l'opération de différ
 \includegraphics[scale=0.4]{../3_ndvi/images/colormap.png}
 }
 \begin{center}
-\includegraphics[scale=0.45]{images/Chamonix/08_ndvi_histo.png}
+\includegraphics[scale=0.45]{../3_ndvi/images/Chamonix/08_ndvi_histo.png}
 \end{center}
 \caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la commune de $Chamonix-Mont-Blanc$ sur un périmètre de $116$km\textsuperscript{2} au mois d'$Aout$}
 \label{chamonix_ndvi}
@@ -495,7 +495,7 @@ La figure \ref{chamonix_ndvi} montre un $NDVI$ négatif au sud de la commune de 
 \includegraphics[scale=0.4]{../3_ndvi/images/colormap.png}
 }
 \begin{center}
-\includegraphics[scale=0.45]{images/Manaus/07_ndvi_histo.png}
+\includegraphics[scale=0.45]{../3_ndvi/images/Manaus/07_ndvi_histo.png}
 \end{center}
 \caption{Image couleur, image $NDVI$ et histogramme de $NDVI$ pour la ville de $Manaus$ ($Bresil$) sur un périmètre de $11000$km\textsuperscript{2} au mois de $Juillet$}
 \label{manaus_ndvi}
@@ -710,7 +710,7 @@ Nous obtenons ainsi des données prêtes pour l'apprentissage automatique.
 Afin de juger de la performance d'un classifieur, on utilisera le score de précision dont la formule est décrite ci-après:\\
 
 \begin{equation}
-Score de précision = \frac{\sum \limits_{\underset{}{i=1}}^{n_{test}} (y_i = p_i)}{n_{test}}
+précision = \frac{\sum \limits_{\underset{}{i=1}}^{n_{validation}} (y_i = p_i)}{n_{validation}}
 \end{equation}
 
 avec:
@@ -721,79 +721,898 @@ avec:
 
 \section{Cross validation}
 
+Le principe consiste à découper à plusieurs resprises (typiquement 3) et de manière aléatoire, l'ensemble des échantillons en :
+\begin{description}
+\item[-] une partie (70\% par exemple) dite d'entraînement, servant à entrainer le modèle.
+\item[-] une autre partie contenant le reste, dite de validation servant à calculer l'erreur (score de validation) que commet le modèle entrainé obtenu précédemment.
+\end{description}
+Ainsi, à plusieurs reprises, on obtient un score de validation avec des données aléatoirement selectionnées.
+La moyenne de ces scores de validation donne une estimation de la capacité de prédiction du classifieur, leur variance renseigne sur la sensibilité du classifieur au fluctuation des données.\\
+Par la suite, nous proposons l'utilisation de trois classifieurs dont nous donnerons les performances en cross-validation :
+\begin{description}
+\item[-] \begin{itshape}K-plus-proches-voisins\end{itshape}
+\item[-] \begin{itshape}Support-Vector-Machine\end{itshape}
+\item[-] \begin{itshape}Réseaux de Neurones\end{itshape}
+\end{description}
+
+
+\section{Métriques pour l'analyse des résultats}
+
+Afin d'aller plus en détails dans l'etude des classifieurs, on montrera pour chacun d'eux :
+\begin{description}
+ \item [-] La matrice de confusion qui premet d'observer le comportement des erreurs d'une classe donnée
+ \item[-] Les courbes ROC (Receiver Operating Characteristic) permettent de visualiser pour chaque classe, la probabilité de détection en fonction de la probabilité de fausse alarme (cela n'est possible que si le classifieur peut
+ fournir des probabilités d'appartenance à chaque classe lors de la prédiction, ce qui est le cas des classifieurs utilisés ici).
+ \item[-] l'AUC (Area Under Curve) est pour chaque classe, l'aire sous sa courbe ROC. Une valeur proche de 1 signifie une bonne performance en détection et en fausse alarme pour la classe donnée.
+\end{description}
+ 
+
+\section{Disproportion des classes}
+Ainsi que nous le présentons dans le tableau \ref{imbalanced}, il existe une forte disproportion entre les six différentes classes (un facteur de 2000 entre la catégorie 1 et la catégorie 5). 
+Cela devra être pris en compte afin de ne pas obtenir un classifieur constant prédisant la classe majoritaire.
+
+\begin{table}[H]
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+{
+\begin{tabular}{|c|c|}
+   \hline
+  catégorie & nombre d'échantillons\\
+  \hline
+  \textbf{1} & 32533\\
+  \hline
+  \textbf{2} & 1252\\
+  \hline
+  \textbf{3} & 288\\
+  \hline
+  \textbf{4} & 78\\
+  \hline
+  \textbf{5} & 15\\
+  \hline
+  \textbf{6} & 24 \\
+  \hline
+\end{tabular}
+}
+\end{adjustbox}
+\end{center}
+\caption{Nombre d'échantillons par classe pour les données de communes françaises}
+\label{imbalanced}
+\end{table}
+
 \section{K Plus Proches Voisins}
+
+\subsection{Suréchantillonage par synthétisation}
+Afin de surmonter la problème lié à la disproportion de classes, on va procéder à un suréchantillonnage des données minoritaires par synthéstisation. Le principe, connu sous le nom SMOTE \cite{smote} (pour 
+Synthetic Minority Oversampling TEchnique), consiste à créer une nouvelle donnée de la classe minoritaire sur la droite joignant deux points de cette classe, en choisissant celui qui maximise la distance aux autres classes.\\
+La figure \ref{smote} donne un aperçu graphique du procédé.
+
+\begin{figure}[H]
+ \begin{center}
+ \includegraphics[scale=0.3]{../5_diaporama/images/oversampling/smote.png}
+ \caption{Illustration de la technique SMOTE de suréchantillonage d'une classe minoritaire $i$}
+ \label{smote}
+ \end{center}
+\end{figure}
+
+Cette densification donne plus d'influence aux données de la classe minoritaire lors de l'attribution des $k$ voisins.\\
+
+\subsection{Résultats}
+
+Nous obtenons un score moyen de 94.74\% en cross-validation pour un nombre de voisins $k$ égal à $5$. \\
+Après ré-entrainement du classifieur sur tous les échantillons, on obtient les matrices de confusion \ref{knn_cm} et courbes ROC \ref{knn_roc} suivantes :
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 32533 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 0 & 1252 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{3} & 0 & 0 & 288 & 0 & 0 & 0\\
+    \hline
+    \textbf{4} & 0 & 0 & 0 & 78 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de K-plus-proches-voisins - France}
+  \label{knn_cm}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/France/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de K-plus-proches-voisins - France}
+ \label{knn_roc}
+\end{figure}
+
+On note une prediction parfaite (score de 100\%) lorsque le modèle est entrainé sur toutes les données. Cela alors qu'on avait un score de 94.74\% lors du découpage en entrainement/vaildation. Cela dénote une forte fluctuation 
+du score en fonction des données utilisées et donc une variance trop grande du classifieur (sur-apprentissage).
 
 \section{Support Vector Machine à noyau gaussien}
 
+\subsection{Régularisation}
+
+Ce classifieur cherche pour chaque classe, l'hyperplan qui la sépare des autres avec les marges les plus vastes possibles (on parle d'hyperplan optimal). Au préalable, on projète les données dans un espace de plus grande 
+dimension, potentiellement infini (c'est la cas du noyau gaussien) où les données pourront être linéairement séparables.\\
+Afin de forcer la bonne classification des classes minoritaires, il convient de donner de l'importance à celles-ci en pénalisant leurs mauvaises classifications. On le fait en attribuant un fort paramètre de régularisation 
+aux classes manioritaires lors de la recherche opérationelle de leur hyperplan optimal respectif.\\
+Ainsi, on prendra un paramètre de régularisation $C_{i}$ pour la classe $i$ inversement proportionnel au nombre d'échantillons $n_{i}$ de la classe $i$ : $C_{i} = \frac{n}{n_i}$.\\
+
+\subsection{Résultats}
+
+Nous obtenons un score moyen de 84.04\% en cross-validation pour un coefficient de noyau gaussien $\gamma = 0.01$. \\
+Après ré-entrainement du classifieur sur tous les échantillons, on obtient les matrices de confusion \ref{svm_cm} et courbes ROC \ref{svm_roc} suivantes :
+
+\begin{table}[H]
+  \begin{center}
+\begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 28569 & 3632 & 251 & 51 & 27 & 3\\
+    \hline
+    \textbf{2} & 77 & 1021 & 139 & 11 & 1 & 3\\
+    \hline
+    \textbf{3} & 1 & 25 & 254 & 7 & 0 & 1\\
+    \hline
+    \textbf{4} & 0 & 0 & 3 & 75 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \caption{Matrice de confusion pour le classifieur SVM gaussien - France}
+  \label{svm_cm}
+  \end{center}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/France/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification_roc.png}
+ \caption{Courbes ROC pour le classifieur SVM - France}
+ \label{svm_roc}
+ \end{center}
+\end{figure}
+
+On note cette fois-ci l'absence de surapprentissage. En effet, la valeur $\gamma=0.01$ utilisée évite la formation de frontière trop complexe, comme nous le montrons dans l'exemple simple
+suivant \ref{svm_exemple} créé via le site de la librairie \begin{itshape}LIBSVM\end{itshape}\cite{libsvm}.\\
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.5]{images/svm/svm_g_100.png}
+\includegraphics[scale=0.5]{images/svm/svm_g_001.png}
+ \caption{SVM à noyau gaussien avec $\gamma=100$ (sur-apprentissage) et avec $\gamma=0.01$ (pas de sur-apprentissage)}
+ \label{svm_exemple}
+ \end{center}
+\end{figure}
+
+Enfin, on peut aussi comparer la prédiction à la vérité terrain en affichant nos échantillons sur une carte \ref{svm_carte}.
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/France/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/France/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur SVM - France}
+\label{svm_carte}
+\end{figure}
+
 \section{Réseau de Neurones}
+
+\subsection{Pondération des erreurs de classification}
+
+Un réseau de neurones corrige ses coefficients par rétro-propagation des erreurs qu'il commet, cela de manière itérative sur les données. Afin de tenir compte de la rareté des échantillones de classe minoritaire, 
+il convient de pondérer les erreurs . Ainsi, on donnera plus de poids aux erreurs liées à la classe minoritaire en attribuant le facteur multiplicatif $w_i=\frac{n_1}{n_i}$ à la classe $i$.\\
+
+\subsection{Résultats}
+
+Nous obtenons un score moyen de 92.26\% en cross-validation pour une couche à $1200$ neurones. \\
+Après ré-entrainement du classifieur sur tous les échantillons, on obtient les matrices de confusion \ref{nn_cm} et courbes ROC \ref{nn_roc} suivantes :
+
+\begin{table}[H]
+  \begin{center}
+\begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 29743 & 2281 & 367 & 95 & 24 & 23\\
+    \hline
+    \textbf{2} & 207 & 853 & 164 & 23 & 2 & 3\\
+    \hline
+    \textbf{3} & 2 & 36 & 236 & 9 & 2 & 3\\
+    \hline
+    \textbf{4} & 0 & 0 & 2 & 76 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 15 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 24\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \caption{Matrice de confusion pour le classifieur Réseaux de Neurones - France}
+  \label{nn_cm}
+  \end{center}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling_roc.png}
+ \caption{Courbes ROC pour le classifieur Réseaux de Neurones - France}
+ \label{nn_roc}
+ \end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur Réseaux de Neurones - France}
+\label{nn_carte}
+\end{figure}
+
+On note là encore que le surapprentissage est évité. Cela en activant l'option dite de \og early stopping \fg{}. En effet, lorsque l'entrainement d'un algorithme se fait de manière itératif, il convient
+de calculer le score de validation à chaque itération (ou epoch) et stopper l'entrainement dès lors que le score de validation n'augmente plus. Sinon, on laisse le classifieur se spécifier sur les données d'entrainement
+au détriment d'une meilleure généralisation.
+La figure \ref{early} illustre le procédé.
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{images/earlystopping.png}
+}
+\caption{Illustration de l'option de \og early stopping \fg{} pour un algorithme à entrainement itératif}
+\label{early}
+\end{figure}
+
+
+\section{Influence nuageuse}
+
+Les résultats du Réseaux de Neurones montre que la couverture nuageuse a une certaine influence sur la prédiction.
+En effet, on remarque que la region corse, les côtes d'Armor et le Nord-Pas-de-Calais se voient prédire une densité très élevé (catégorie 5/6). Lorsque qu'on 
+affiche d'un côté la couverture nuageuse de chaque échantillon (via l'image de qualité fournit par \begin{itshape}Landsat-8\end{itshape}) et 
+l'erreur de prédiction, on constate une certaine corrélation \ref{nuage}.
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_covering.png}
+\includegraphics[scale=0.5]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification_error.png}
+}
+\caption{Couverture nuageuse en \% à gauche, erreur de classification $y_{pred}-y_{true}$  à droite}
+\label{nuage}
+\end{figure}
 
 
 \chapter{Test pour la prédiction de densité de population en fonction du NDVI}
 
 \section{Données de test}
 
+Nous avons pu récupérer les métadonnées nécessaires à la labélisation et l'extraction des features pour les communes de trois pays limitrophes de la France : Suisse \cite{suisse}, Belgique \cite{belgique}, Pays-Bas\cite{pays-bas}.\\
+Les tableaux \ref{suisse_data}, \ref{belgique_data} et \ref{pays-bas_data} montrent la distribution des catégories associées.
+
+   \begin{table}[H]
+   \begin{center}
+   \begin{adjustbox}{max width=0.5\textwidth}
+    \begin{tabular}{|c|c|}
+      \hline
+      \multicolumn{2}{|c|}{\begin{bf}Suisse (2013)\end{bf}} \\
+      \hline
+      \textbf{categorie} & \textbf{nombre d'échantillons}\\
+      \hline
+      \textbf{1} & 1857\\
+      \hline
+      \textbf{2} & 428\\
+      \hline
+      \textbf{3} & 57\\
+      \hline
+      \textbf{4} & 9\\
+      \hline
+      \textbf{5} & 1\\
+      \hline
+      \textbf{6} & 0 \\
+      \hline
+      \textbf{total} & 2352\\
+      \hline
+    \end{tabular}
+   \end{adjustbox}
+   \caption{Données des densités pour la Suisse (recensement 2013)}
+   \label{suisse_data}
+   \end{center}
+   \end{table}
+
+   \begin{table}[H]
+   \begin{center}
+   \begin{adjustbox}{max width=0.5\textwidth}
+    \begin{tabular}{|c|c|}
+      \hline
+      \multicolumn{2}{|c|}{\begin{bf}Belgique (2015)\end{bf}} \\
+      \hline
+      \textbf{categorie} & \textbf{nombre d'échantillons}\\
+      \hline
+      \textbf{1} & 406\\
+      \hline
+      \textbf{2} & 154\\
+      \hline
+      \textbf{3} & 14\\
+      \hline
+      \textbf{4} & 7\\
+      \hline
+      \textbf{5} & 1\\
+      \hline
+      \textbf{6} & 7\\
+      \hline
+      \textbf{total} & 589\\
+      \hline
+    \end{tabular}
+   \end{adjustbox}
+   \caption{Données des densités pour la Belgique (recensement 2015)}
+   \label{belgique_data}
+   \end{center}
+   \end{table}
+
+   \begin{table}[H]
+   \begin{center}
+   \begin{adjustbox}{max width=0.5\textwidth}
+    \begin{tabular}{|c|c|}
+      \hline
+      \multicolumn{2}{|c|}{\begin{bf}Pays-Bas (2014)\end{bf}} \\
+      \hline
+      \textbf{categorie} & \textbf{nombre d'échantillons}\\
+      \hline
+      \textbf{1} & 234\\
+      \hline
+      \textbf{2} & 121\\
+      \hline
+      \textbf{3} & 31\\
+      \hline
+      \textbf{4} & 1\\
+      \hline
+      \textbf{5} & 0\\
+      \hline
+      \textbf{6} & 0 \\
+      \hline
+      \textbf{total} & 388\\
+      \hline
+    \end{tabular}
+   \end{adjustbox}
+   \caption{Données des densités pour les Pays-Bas (recensement 2014)}
+   \label{pays-bas_data}
+   \end{center}
+   \end{table}
+   
+   
+ Par ailleurs, nous avons récupére les données \begin{itshape}Landsat-8\end{itshape} pour ces trois pays, à chaque fois pour l'année correspondante, entre Mai et Septembre. Nous montrons ci-après
+ la projection \begin{itshape}Web Mercator\end{itshape} des images récupérées.
+ 
+ \begin{figure}[H]
+ \begin{center}
+ \includegraphics[scale=0.60]{../../data/Suisse/covering-selection.png}
+ \caption{Projection Web Mercator des images Landsat-8 pour la Suisse}
+\label{suisse_landsat}
+\end{center}
+\end{figure}
+
+ \begin{figure}[H]
+ \begin{center}
+ \includegraphics[scale=0.60]{../../data/Belgique/covering-selection.png}
+ \caption{Projection Web Mercator des images Landsat-8 pour la Belgique}
+\label{belgique_landsat}
+\end{center}
+\end{figure}
+
+ \begin{figure}[H]
+ \begin{center}
+ \includegraphics[scale=0.60]{../../data/Pays-Bas/covering-selection.png}
+ \caption{Projection Web Mercator des images Landsat-8 pour les Pays-Bas}
+\label{pays-bas_landsat}
+\end{center}
+\end{figure}
+
+Dans ce qui suit, nous avons l'opportunité de tester la généralisation de nos trois classifieurs.\\
+Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusion, courbes ROC et AUC) en testant les commues suisses, belges et néerlandaises respectivement.
+
 \section{K Plus Proches Voisins}
+
+\subsection{Suisse}
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 1411 & 396 & 33 & 8 & 3 & 6\\
+    \hline
+    \textbf{2} & 114 & 268 & 40 & 6 & 0 & 0\\
+    \hline
+    \textbf{3} & 1 & 35 & 16 & 5 & 0 & 0\\
+    \hline
+    \textbf{4} & 1 & 4 & 2 & 0 & 1 & 1\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 1 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de K-plus-proches-voisins - Suisse}
+  \label{knn_cm_suisse}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Suisse/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de K-plus-proches-voisins - Suisse}
+ \label{knn_roc_suisse}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/Suisse/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Suisse/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Suisse}
+\label{nn_carte_suisse}
+\end{figure}
+
+
+\subsection{Belgique}
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 351 & 48 & 7 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 59 & 71 & 19 & 4 & 1 & 0\\
+    \hline
+    \textbf{3} & 1 & 6 & 5 & 2 & 0 & 0\\
+    \hline
+    \textbf{4} & 0 & 0 & 2 & 3 & 2 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 2 & 3 & 0 & 4\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de K-plus-proches-voisins - Belgique}
+  \label{knn_cm_belgique}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Belgique/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de K-plus-proches-voisins - Belgique}
+ \label{knn_roc_belgique}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/Belgique/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Belgique/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Belgique}
+\label{nn_carte_belgique}
+\end{figure}
+
+\subsection{Pays-Bas}
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 187 & 38 & 9 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 41 & 46 & 28 & 4 & 0 & 2\\
+    \hline
+    \textbf{3} & 2 & 6 & 16 & 6 & 1 & 0\\
+    \hline
+    \textbf{4} & 0 & 0 & 1 & 1 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de K-plus-proches-voisins - Pays-Bas}
+  \label{knn_cm_pays-bas}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Pays-Bas/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de K-plus-proches-voisins - Pays-Bas}
+ \label{knn_roc_pays-bas}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/Pays-Bas/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Pays-Bas/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Pays-Bas}
+\label{nn_carte_pays-bas}
+\end{figure}
+
 
 \section{Support Vector Machine à noyau gaussien}
 
+\subsection{Suisse}
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 1471 & 381 & 3 & 1 & 1 & 0\\
+    \hline
+    \textbf{2} & 114 & 296 & 17 & 0 & 1 & 0\\
+    \hline
+    \textbf{3} & 5 & 37 & 14 & 1 & 0 & 0\\
+    \hline
+    \textbf{4} & 1 & 0 & 6 & 0 & 1 & 1\\
+    \hline
+    \textbf{5} & 1 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de SVM - Suisse}
+  \label{svm_cm_suisse}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Suisse/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de SVM - Suisse}
+ \label{svm_roc_suisse}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/Suisse/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Suisse/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Suisse}
+\label{svm_carte_suisse}
+\end{figure}
+
+\subsection{Belgique}
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 378 & 28 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 88 & 59 & 6 & 1 & 0 & 0\\
+    \hline
+    \textbf{3} & 2 & 7 & 3 & 2 & 0 & 0\\
+    \hline
+    \textbf{4} & 1 & 1 & 3 & 1 & 0 & 1\\
+    \hline
+    \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 1 & 1 & 0 & 1 & 0 & 4\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de SVM - Belgique}
+  \label{svm_cm_belgique}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Belgique/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de SVM - Belgique}
+ \label{svm_roc_belgique}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/Belgique/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Belgique/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Belgique}
+\label{svm_carte_belgique}
+\end{figure}
+
+
+\subsection{Pays-Bas}
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 233 & 1 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 80 & 32 & 8 & 1 & 0 & 0\\
+    \hline
+    \textbf{3} & 12 & 8 & 7 & 4 & 0 & 0\\
+    \hline
+    \textbf{4} & 2 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de SVM - Pays-Bas}
+  \label{svm_cm_pays-bas}
+\end{table}
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Pays-Bas/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de SVM - Pays-Bas}
+ \label{svm_roc_pays-bas}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/Pays-Bas/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Pays-Bas/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Pays-Bas}
+\label{svm_carte_pays-bas}
+\end{figure}
+
+
 \section{Réseau de Neurones}
 
-Nous avons rassembler les informations de longitude, latitude et densité de population des communes de plusieurs pays européens : Belgique, 
-Luxembourg, Pays-Bas et Suisse.\\
-Nous avons ensuite extrait les histogrammes de ndvi de chaque commune et tester la prédiction par le modèle des For\^{e}t d'arbres aléatoires régressifs
-\ref{regression_resultats_1024}, où l'erreur de généralisation est la meilleure obtenue sur les données françaises ($0.4926$).\\
+\subsection{Suisse}
 
-Nous présentons ci-après la vérité-terrain et la prédiction de densité pour chacun de ces pays, sous forme de carte légendée \ref{test_france}
-,\ref{test_belgique},\ref{test_luxembourg},\ref{test_pays-bas},\ref{test_suisse}:\\
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 1601 & 244 & 7 & 4 & 1 & 0\\
+    \hline
+    \textbf{2} & 158 & 249 & 18 & 2 & 1 & 0\\
+    \hline
+    \textbf{3} & 2 & 36 & 16 & 3 & 0 & 0\\
+    \hline
+    \textbf{4} & 1 & 0 & 5 & 1 & 0 & 2\\
+    \hline
+    \textbf{5} & 1 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de Réseaux de Neurones - Suisse}
+  \label{nn_cm_suisse}
+\end{table}
 
 \begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.4]{images/france_ground_truth.png}
-\includegraphics[scale=0.4]{images/france_Random_Forest_Regression.png}
-\end{center}
-\caption{Test régressif de prédiction de densité pour la France (erreur $0.297$)}
-\label{test_france}
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Suisse/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de Réseaux de Neurones - Suisse}
+ \label{nn_roc_suisse}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/Suisse/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Suisse/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Suisse}
+\label{nn_carte_suisse}
 \end{figure}
 
 
+\subsection{Belgique}
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+    \textbf{1} & 363 & 41 & 2 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 73 & 60 & 19 & 2 & 0 & 0\\
+    \hline
+    \textbf{3} & 1 & 6 & 6 & 1 & 0 & 0\\
+    \hline
+    \textbf{4} & 1 & 0 & 2 & 2 & 2 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 2 & 0 & 1 & 0 & 4\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de Réseaux de Neurones - Belgique}
+  \label{nn_cm_belgique}
+\end{table}
+
 \begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{images/belgique_ground_truth.png}
-\includegraphics[scale=0.5]{images/belgique_Random_Forest_Regression.png}
-\end{center}
-\caption{Test régressif de prédiction de densité pour la Belgique (erreur $0.439$)}
-\label{test_belgique}
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Belgique/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de Réseaux de Neurones - Belgique}
+ \label{nn_roc_belgique}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{
+\includegraphics[scale=0.5]{../../data/Belgique/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Belgique/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Belgique}
+\label{nn_carte_belgique}
 \end{figure}
 
 
+\subsection{Pays-Bas}
+
+\begin{table}[H]
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{7}{|c|}{{ \begin{bf}Confusion matrix after refitting\end{bf}}} \\
+    \hline
+     & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6}\\
+    \hline
+    \textbf{1} & 277 & 5 & 2 & 0 & 0 & 0\\
+    \hline
+    \textbf{2} & 54 & 47 & 14 & 5 & 1 & 0\\
+    \hline
+    \textbf{3} & 2 & 6 & 14 & 9 & 0 & 0\\
+    \hline
+    \textbf{4} & 0 & 0 & 1 & 1 & 0 & 0\\
+    \hline
+    \textbf{5} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+    \textbf{6} & 0 & 0 & 0 & 0 & 0 & 0\\
+    \hline
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+  \caption{Matrice de confusion pour le classifieur de Réseaux de Neurones - Pays-Bas}
+  \label{nn_cm_pays-bas}
+\end{table}
+
 \begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{images/luxembourg_ground_truth.png}
-\includegraphics[scale=0.5]{images/luxembourg_Random_Forest_Regression.png}
-\end{center}
-\caption{Test régressif de prédiction de densité pour le Luxembourg (erreur $0.485$)}
-\label{test_luxembourg}
+ \begin{center}
+\includegraphics[scale=0.4]{../../data/Pays-Bas/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling_roc.png}
+ \end{center}
+ \caption{Courbes ROC pour le classifieur de Réseaux de Neurones - Pays-Bas}
+ \label{nn_roc_pays-bas}
 \end{figure}
 
-
 \begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{images/pays-bas_ground_truth.png}
-\includegraphics[scale=0.5]{images/pays-bas_Random_Forest_Regression.png}
-\end{center}
-\caption{Test régressif de prédiction de densité pour les Pays-Bas (erreur $0.619$)}
-\label{test_pays-bas}
+\centerline{
+\includegraphics[scale=0.5]{../../data/Pays-Bas/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
+\includegraphics[scale=0.5]{../../data/Pays-Bas/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
+}
+\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Pays-Bas}
+\label{nn_carte_pays-bas}
 \end{figure}
 
+\section{Interprétation}
 
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.5]{images/suisse_ground_truth.png}
-\includegraphics[scale=0.5]{images/suisse_Random_Forest_Regression.png}
-\end{center}
-\caption{Test régressif de prédiction de densité pour la Suisse (erreur $0.616$)}
-\label{test_suisse}
-\end{figure}
+Dans le tableau suivant \ref{resultats}, nous résumons les résultats de test obtenus :
+
+ \begin{table}
+    \begin{center}
+    \begin{adjustbox}{max width=\textwidth}
+    {\scriptsize
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+      \multicolumn{4}{|c|}{\begin{bf} AUC moyen\end{bf}} \\
+      \hline
+      \textbf{Classifieur} & \textbf{Suisse} & \textbf{Belgique} & \textbf{Pays-Bas}\\
+      \hline
+      K-plus-proches-voisins & 0.89 & 0.87 & 0.85\\
+      \hline
+      Support Vector Machine (noyau gaussien) & 0.94 & 0.95 & 0.94\\
+      \hline
+      Réseaux de Neurones & 0.97 & 0.97 & 0.96\\
+      \hline
+    \end{tabular}
+    }
+    \end{adjustbox}
+    \label{resultats}
+    \caption{AUC moyenné sur toutes les classes pour chaque classifieur et chaque pays de test}
+    \end{center}
+  \end{table}
+  
+ Les mauvais résultats obtenues pour le classifieur  de K-plus-proches-voisins confirment le surapprentissage 
+ évoqué précedemment.\\
+ Le classifieur qui présente le meilleur resultat en test est le Réseaux de Neurones.
+  
+  
+\chapter{Conclusion}
+
+Nous avons tenté de définir un modèle permettant d'expliquer la densité de population à partir d'images
+satellitaires. Nous avons procédé à une grande partie de \og feature engineering \fg{} à travers l'extraction 
+du $NDVI$ (indice végétal). Nous avons ensuite définit et entrainé plusieurs classifieurs. Cela en prenant soin à chaque
+fois, de proposer une manière de surmonter le problème de disproportion des classes, problème largement connu ailleurs
+notamment dans le domaine de la santé (malade/sain). Nous avons aussi pris soin de respecter le compromis biais-variance
+d'un classifieur afin de permettre sa généralisation. Généralisation qui a pu être testé à travers la 
+prédiction de densité sur d'autres térritoires que la France.\\
+Cependant, ce travail peut être amélioré de deux points de vue : 
+\begin{description}
+\item[-] d'un point de vue pratique, il serait intéressant de travauller sur des données plus voluminueuses et migrer 
+ainsi les features de $NDVI$ sur une architecture distribué.
+\item[-] d'un point de vue théorique en partant sur un calcul plus fin du NDVI, prenant en compte l'influence de 
+l'atmosphère.
+\end{description}
 
 \backmatter
 
