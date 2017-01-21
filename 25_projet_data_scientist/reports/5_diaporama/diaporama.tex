@@ -825,7 +825,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 \begin{frame}
 \begin{itemize}
  \item Overcome imbalanced data by majoring error by weights to amplify error on minority class : $w_i=\frac{n_1}{n_i}$.
-  \item Best cross-validation (stratified 3-folds) of $92.26$\% obtained for :
+  \item Best cross-validation (stratified 3-folds) of $90.46$\% obtained for :
   {\scriptsize
   \begin{itemize}
     \item One layer of $1200$ neurons
@@ -932,7 +932,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-    \includegraphics[scale=0.25]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification_error.png}
+%     \includegraphics[scale=0.25]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification_error.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -1331,7 +1331,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
     \hline
     \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
     \hline
-    \textbf{6} & 0 & 0 & 2 & 3 & 0 & 4\\
+    \textbf{6} & 0 & 0 & 2 & 3 & 0 & 2\\
     \hline
   \end{tabular}
   }
@@ -2040,11 +2040,11 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
       \hline
       \textbf{Classifier} & \textbf{France} \\
       \hline
-      \textbf{Nearest Neighbors} & 1.00\\
+      Nearest Neighbors & 1.00\\
       \hline
-      \textbf{Support Vector Machine (Gaussian)} & 0.0\\
+      Support Vector Machine (Gaussian) & 0.96\\
       \hline
-      \textbf{Neural Network} & 0.95\\
+      Neural Network & 0.98\\
       \hline
     \end{tabular}
     }
@@ -2065,7 +2065,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
       \hline
       Nearest Neighbors & 0.89 & 0.87 & 0.85\\
       \hline
-      Support Vector Machine (Gaussian) & 0.0 & 0.0 & 0.0\\
+      Support Vector Machine (Gaussian) & 0.94 & 0.95 & 0.94\\
       \hline
       Neural Network & 0.97 & 0.97 & 0.96\\
       \hline
@@ -2079,11 +2079,16 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   
 \end{itemize}
 
-\subsection{Conclusion}
+\section{Conclusion}
 \begin{frame}
  \begin{itemize}
-  \item Traininig France features possible with 16Go-RAM computer but impossible for bigger country like the USA => possible tranining using cluster-distributed features using Spark MLib or Hadoop XGBoost. 
-  \item Overcome local cloudyness with a finer NDVI using \begin{itshape}Sentinel II\end{itshape} satellite images.
+  \item practical improvment : Get higher dimensional features and train it using cluster-distributed features and Spark MLib or Hadoop XGBoost. 
+  \item theoretical improvment : Overcome local cloudyness with a finer NDVI. For example, indice \href{http://e-cours.univ-paris1.fr/modules/uved/envcal/html/vegetation/indices/qques-indices/indices-effets-atmosphere.html}{GEMI}.
+  
+\[GEMI=\eta(1-0.25\eta)-\frac{R-0.25}{1-R}\]
+
+\[\eta=\frac{2(NIR^2-R^2)+1.5NIR+0.5R}{NIR+R}\]
+
  \end{itemize}
 
 \end{frame}
