@@ -51,7 +51,7 @@ La figure \ref{selection_france} montre le polygone de sélection des scènes su
 \begin{center}
 \includegraphics[scale=0.5]{images/france-selection.png}
 \end{center}
-\caption{Polygone de sélection des scènes $Landsat-8$ pour la France sur l'interface du site de l'$USGS$}
+% \caption{Polygone de sélection des scènes \begin{itshape}Landsat-8\end{itshape} pour la France sur l'interface du site de l'$USGS$}
 \label{selection_france}
 \end{figure}
 
@@ -60,13 +60,13 @@ La période de Mai à Septembre est la plus courte permettant de couvrir tout le
 nuageuse inférieure à 20\%.
 Nous obtenons ainsi 70 scènes \begin{itshape}Landsat-8\end{itshape} chacune correspondant à un couple $path$,$row$ unique.\\
 Les figures \ref{cloud1},\ref{cloud3},\ref{cloud4} et \ref{cloud5} montrent des miniatures couleurs des 4 scènes parmi les 70, ayant une couverture 
-nuageuse supérieure à 10\%
+nuageuse supérieure à 10\%.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.18]{images/LC82000242013271LGN00.jpg}
 \end{center}
-\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $200$,$024$ (region Nord-Pas-de-Calais) - couverture nuageuse de 20.00\% }
+%\caption{Miniature couleur en projection Web Mercator (EPSG:3857) de la zone $200$,$024$ (region Nord-Pas-de-Calais) - couverture nuageuse de 20.00\% }
 \label{cloud1}
 \end{figure}
 
@@ -74,7 +74,7 @@ nuageuse supérieure à 10\%
 \begin{center}
 \includegraphics[scale=0.18]{images/LC82030252013196LGN00.jpg}
 \end{center}
-\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $203$,$025$ (région des îles anglo-normandes) - couverture nuageuse de 18.30\%}
+%\caption{Miniature couleur en projection Web Mercator (EPSG:3857) de la zone $203$,$025$ (région des îles anglo-normandes) - couverture nuageuse de 18.30\%}
 \label{cloud3}
 \end{figure}
 
@@ -82,7 +82,7 @@ nuageuse supérieure à 10\%
 \begin{center}
 \includegraphics[scale=0.18]{images/LC81950262013156LGN00.jpg}
 \end{center}
-\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $195$,$026$ (poînte strasbourgeoise) - couverture nuageuse de 13.00\%}
+%\caption{Miniature couleur en projection Web Mercator (EPSG:3857) de la zone $195$,$026$ (poînte strasbourgeoise) - couverture nuageuse de 13.00\%}
 \label{cloud4}
 \end{figure}
 
@@ -90,7 +90,7 @@ nuageuse supérieure à 10\%
 \begin{center}
 \includegraphics[scale=0.18]{images/LC81950282013204LGN00.jpg}
 \end{center}
-\caption{Miniature couleur en projection Web Mercator (EPSG:$3857$) de la zone $203$,$028$ (frontière franco-italo-suisse) - couverture nuageuse de 12.60\%}
+%\caption{Miniature couleur en projection Web Mercator (EPSG:3857) de la zone $203$,$028$ (frontière franco-italo-suisse) - couverture nuageuse de 12.60\%}
 \label{cloud5}
 \end{figure}
 
@@ -117,9 +117,8 @@ sujet du chapître suivant.
 \section{Principe}\label{principe_geo}
 
 Concrètement le géoréférencement consiste à donner aux points 
-d'une image rectangulaire de prise de vue aérienne, des coordonnées géographiques dans un certain système de coordonnées
-via une transformation géométrique. 
-En effet, un point de l'image de départ, est simplement répéré par ses coordonnées de ligne et de colonne mais n'a aucune caractéristique
+d'une image rectangulaire de prise de vue aérienne, des coordonnées géographiques dans un certain système de coordonnées. 
+En effet, un point de l'image est simplement répéré par ses coordonnées de ligne et de colonne mais n'a aucune caractéristique
 géographique.\\
 Dans le cas de Landsat-8, ces coordonnées sont fournies dans le système \begin{itshape}UTM Mercator\end{itshape}. Et nous allons dans ce chapître, 
 vérifier si le géoréférencement de ces images est suffisamment précis\\
@@ -149,20 +148,21 @@ de la zone $UTM$ (\begin{itshape}Universe Transverse Mercator\end{itshape}) où 
 (par exemple \begin{itshape}EPSG:32631\end{itshape} pour la zone \begin{itshape}UTM\end{itshape} $31N$ contenant la commune de
  \begin{itshape}Thonon-Les-Bains\end{itshape}).\\ 
 Dans la section qui suit, nous proposons une méthode pour vérifier la fiabilité du géoréférencement
- des images du satellite \begin{itshape}LANDSAT-8\end{itshape}.
+ des images du satellite \begin{itshape}Landsat-8\end{itshape}.
  
 \section{Géoréférencement des images Landsat-8}
 
 Le site de l'$USGS$ (\begin{itshape}U.S. Geological Survey\end{itshape}) \cite{landsat8} qui met à disposition les images
-satellitaires de \begin{itshape}LANDSAT-8\end{itshape}, ne précise pas la méthode utilisée pour leur géoréférencement.
+satellitaires de \begin{itshape}Landsat-8\end{itshape}, ne précise pas la méthode utilisée pour leur géoréférencement.
 Mais on peut toutefois vérifier sa fiabilité en comparant une image de ce satellite avec une image de 
 l'$IGN$.\\
 En effet, il suffirait de récupérer une image d'une certaine zone au format \begin{itshape}GeoTIFF\end{itshape}, 
 donc géoréférencé, de l'$IGN$ et de la superposer
-à une image \begin{itshape}LANDSAT-8\end{itshape} contenant la même zone. Toutefois, le géoréférencement de l'image $IGN$ étant différent
-de celui de l'image \begin{itshape}LANDSAT-8\end{itshape}, il faudrait afficher la première dans le géoréférencement de la seconde.\\
+à une image \begin{itshape}Landsat-8\end{itshape} contenant la même zone. Toutefois, le géoréférencement de l'image $IGN$ étant différent
+de celui de l'image \begin{itshape}Landsat-8\end{itshape}, il faudrait afficher la première dans le géoréférencement de la seconde.\\
 Seulement, le site de l'$IGN$ ne propose des images géoréférencées qu'à l'achat, mais nous pouvons contourner cela en récupérant une 
-image non géoréférencé, qu'on géoréférencerait ensuite via un logiciel $SIG$, $QGIS$ en l'occurence.
+carte non géoréférencé, qu'on géoréférencerait ensuite via un logiciel pour les Systèmes d'Information Géopgraphique ($SIG$), 
+$QGIS$ en l'occurence.
 
 \subsection{Création d'une carte géoréférencée de l'IGN}
 
@@ -191,15 +191,13 @@ dont on a indiqué les coordonnées en \begin{itshape}NTF 93/Lambert 93\end{itsh
 \label{ign-points}
 \end{figure}
 
-\clearpage
-
 Le logiciel libre $QGIS$ \cite{QGIS_software} permet de géoréférencer une image ou une carte dans le même système de coordonnées que des points de
 contr\^{o}le préalablement renseignés dans l'outil.\\
 Pour commencer, il faut ouvrir un projet dans la fen\^{e}tre principale et renseigner le système de projection dans lequel on souhaite visualiser
 les images géoréférencées (on parle de \begin{itshape}raster\end{itshape}). On choisit ici le système de projection
 \begin{itshape}EPSG:32631\end{itshape} car c'est celui dans lequel les images \begin{itshape}Landsat-8\end{itshape} (dans la zone $UTM$ 
 de \begin{itshape}Thonon-Les-Bains\end{itshape}) sont projetées et
-sur lequel on projetera notre carte IGN une fois géoréférencé, pour comparaison.\\
+sur lequel on projetera notre carte IGN une fois géoréférencée, pour comparaison.\\
 La figure \ref{qgis-projet} montre la manipulation dans les propriétés du projet.
 
 \begin{figure}[H]
@@ -209,8 +207,6 @@ La figure \ref{qgis-projet} montre la manipulation dans les propriétés du proj
 \caption{Projet $QGIS$ et système de projection}
 \label{qgis-projet}
 \end{figure}
-
-\clearpage
 
 Ensuite, via l'onglet \og Raster > Géoréférencer > Géoréférencer\fg{}, on ouvre 
 une nouvelle fen\^{e}tre dédiée au géoréférencement à partir de laquelle on charge notre carte \ref{qgis-georef} 
@@ -253,7 +249,7 @@ après transformation. Et enfin, on renseigne le système de géoréférencement
  cocher la case \og charger dans QGIS lorsque terminé \fg{} afin d'avoir l'image géoréférencé directement
  projeté dans le système de coordonnées du projet (\begin{itshape}EPSG:32631\end{itshape}).
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{images/georeferencing/qgis-transformation.png}
 \end{center}
@@ -264,7 +260,7 @@ après transformation. Et enfin, on renseigne le système de géoréférencement
 Il ne reste qu'à lancer la géoréférencement via la flèche verte dans la fen\^{e}tre de géoréférencement, cela va afficher
 notre snapshot dans le système de coordonnées \begin{itshape}EPSG:32631\end{itshape} \ref{qgis-resultat}.
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{images/georeferencing/qgis-resultat.png}
 \end{center}
@@ -307,6 +303,7 @@ dans la fen\^{e}tre principale $QGIS$) \ref{qgis_super}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.3]{images/georeferencing/qgis-superposition0.png}
+\includegraphics[scale=0.3]{images/georeferencing/qgis-superposition.png}
 \end{center}
 \caption{Projet $QGIS$ et superposition des rasters IGN et Landsat-8 géoréférencés en EPSG:32631 - commune de Thonon-Les-Bains}
 \label{qgis_super}
@@ -321,7 +318,7 @@ On constate une assez bonne superposition des deux rasters, le géoréférenceme
 
 Cette section présente la manière dont sont récupérées les données de communes françaises. En effet, nous avons besoin pour chacune d'elle  :
 \begin{itemize}
-  \item des longitude et latitude, qu'on convertira en coordonnées géographiques (\begin{itshape}UTM Mercator\end{itshape}) afin de repérer précisemment la commune.
+  \item des longitude et latitude, qu'on convertira en coordonnées géographiques (\begin{itshape}Web Mercator\end{itshape}) afin de repérer précisemment la commune.
   \item de la surface, qui nous permettra d'identifier un périmètre carré de même surface, autour de la commune.
   \item de sa population, ou de sa densité directement.
 \end{itemize}
@@ -338,7 +335,7 @@ Ainsi, on obtient un tableau des métadonnées necessaires à la labélisation d
 {
 \begin{tabular}{|c|c|c|c|c|}
 \hline 
-name & latitude (degrés) & longitude (degrés) & surface (km\textsuperscript{2}) & densité (habs/km\textsuperscript{2}) \\
+nom & latitude (degrés) & longitude (degrés) & surface (km\textsuperscript{2}) & densité (habs/km\textsuperscript{2}) \\
 \hline
 Ozan & 46.391534 & 4.915265 & 6.6 & 98.3\\
 \hline 
@@ -429,7 +426,7 @@ D'où notre tableau final des métadonnées des communes françaises \ref{tab_me
 {
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline 
-city & latitude (degrés) & longitude (degrés) & surface (km\textsuperscript{2}) & densité (habs/km\textsuperscript{2}) & \textbf{densité (categories)}\\
+nom & latitude (degrés) & longitude (degrés) & surface (km\textsuperscript{2}) & densité (habs/km\textsuperscript{2}) & \textbf{densité (categories)}\\
 \hline
 Ozan & 46.391534 & 4.915265 & 6.6 & 98.3 & 1\\
 \hline 
@@ -463,10 +460,14 @@ rouge ($R$) et proche-infrarouge ($PIR$) via la formule :
 
 \[NDVI=\frac{PIR-R}{PIR+R}\]
 
-Typiquement, l'eau, la neige et les nuages refléchissent plus dans le rouge que dans le proche-infrarouge, soit un $NDVI$ négatif\\
-Les sols nus réfléchissent tout autant dans les deux bandes d'où un NDVI nul\\
-En revanche, les sols revétus de végétaux refléchissent bien plus dans le proche infra-rouge, ce qui donne un $NDVI$ positif, et d'autant
+Typiquement :
+\begin{description}
+ \item[-] L'eau, la neige et les nuages refléchissent plus dans le rouge que dans le proche-infrarouge, soit un $NDVI$ négatif\\
+ \item[-] Les sols nus réfléchissent tout autant dans les deux bandes d'où un NDVI nul\\
+ \item[-] En revanche, les sols revétus de végétaux refléchissent bien plus dans le proche infra-rouge, ce qui donne un $NDVI$ positif, et d'autant
 plus positif que la végétation est dense.\\
+\end{description}
+
 Afin de calculer un tel indice sur les images \begin{itshape}Landsat-8\end{itshape}, nous utilisons les bandes géoréférencées $4$ et $5$ 
 qui jouent respectivement les r\^oles du rouge (\begin{itshape}0.85-0.88nm\end{itshape}) et du proche-infrarouge (\begin{itshape}0.64-0.67nm\end{itshape}).\\
 la librairie $gdal$ \cite{dans-gdal} sur $python$ nous permet d'effectuer l'opération de différence normalisée sur des rasters pour produire une image de $NDVI$ géoréférencée ($GeoTIFF$).
@@ -710,7 +711,7 @@ Nous obtenons ainsi des données prêtes pour l'apprentissage automatique.
 Afin de juger de la performance d'un classifieur, on utilisera le score de précision dont la formule est décrite ci-après:\\
 
 \begin{equation}
-précision = \frac{\sum \limits_{\underset{}{i=1}}^{n_{validation}} (y_i = p_i)}{n_{validation}}
+precision = \frac{\sum \limits_{\underset{}{i=1}}^{n_{validation}} (y_i = p_i)}{n_{validation}}
 \end{equation}
 
 avec:
@@ -794,12 +795,14 @@ La figure \ref{smote} donne un aperçu graphique du procédé.
  \end{center}
 \end{figure}
 
+On réitère ainsi le procédé pour plusieurs couples de points de la classe minoritaire jusqu'à atteindre un nombre de points
+égale à ceux de la classe majoritaire.\\
 Cette densification donne plus d'influence aux données de la classe minoritaire lors de l'attribution des $k$ voisins.\\
 
 \subsection{Résultats}
 
 Nous obtenons un score moyen de 94.74\% en cross-validation pour un nombre de voisins $k$ égal à $5$. \\
-Après ré-entrainement du classifieur sur tous les échantillons, on obtient les matrices de confusion \ref{knn_cm} et courbes ROC \ref{knn_roc} suivantes :
+Après ré-entrainement du classifieur avec $k$=5, sur tous les échantillons, on obtient les matrices de confusion \ref{knn_cm} et courbes ROC \ref{knn_roc} suivantes :
 
 \begin{table}[H]
   \begin{center}
@@ -845,11 +848,22 @@ du score en fonction des données utilisées et donc une variance trop grande du
 \subsection{Régularisation}
 
 Ce classifieur cherche pour chaque classe, l'hyperplan qui la sépare des autres avec les marges les plus vastes possibles (on parle d'hyperplan optimal). Au préalable, on projète les données dans un espace de plus grande 
-dimension, potentiellement infini (c'est la cas du noyau gaussien) où les données pourront être linéairement séparables.\\
+dimension, potentiellement infini (c'est la cas du noyau gaussien) où les données pourront être eventuellement linéairement séparables.\\
 Afin de forcer la bonne classification des classes minoritaires, il convient de donner de l'importance à celles-ci en pénalisant leurs mauvaises classifications. On le fait en attribuant un fort paramètre de régularisation 
 aux classes manioritaires lors de la recherche opérationelle de leur hyperplan optimal respectif.\\
 Ainsi, on prendra un paramètre de régularisation $C_{i}$ pour la classe $i$ inversement proportionnel au nombre d'échantillons $n_{i}$ de la classe $i$ : $C_{i} = \frac{n}{n_i}$.\\
+On montre à quel point un fort paramètre de régularisation $C$ est crucial pour bien classer
+une classe minoritaire à travers l'exemple suivant créé via le site de la librairie \begin{itshape}LIBSVM\end{itshape}\cite{libsvm}.\\
 
+
+\begin{figure}[H]
+ \begin{center}
+\includegraphics[scale=0.5]{images/svm/svm_g_001_100.png}
+\includegraphics[scale=0.5]{images/svm/svm_g_001_1000.png}
+ \caption{SVM à noyau gaussien ($\gamma=100$) avec $C=100$ (mauvaise classification) et avec $C=1000$ (bonne classification)}
+ \label{svm_exemple}
+ \end{center}
+\end{figure}
 \subsection{Résultats}
 
 Nous obtenons un score moyen de 84.04\% en cross-validation pour un coefficient de noyau gaussien $\gamma = 0.01$. \\
@@ -892,14 +906,13 @@ Après ré-entrainement du classifieur sur tous les échantillons, on obtient le
 \end{figure}
 
 On note cette fois-ci l'absence de surapprentissage. En effet, la valeur $\gamma=0.01$ utilisée évite la formation de frontière trop complexe, comme nous le montrons dans l'exemple simple
-suivant \ref{svm_exemple} créé via le site de la librairie \begin{itshape}LIBSVM\end{itshape}\cite{libsvm}.\\
-
+suivant \ref{svm_exemple2}.\\
 \begin{figure}[H]
  \begin{center}
 \includegraphics[scale=0.5]{images/svm/svm_g_100.png}
 \includegraphics[scale=0.5]{images/svm/svm_g_001.png}
  \caption{SVM à noyau gaussien avec $\gamma=100$ (sur-apprentissage) et avec $\gamma=0.01$ (pas de sur-apprentissage)}
- \label{svm_exemple}
+ \label{svm_exemple2}
  \end{center}
 \end{figure}
 
@@ -910,7 +923,7 @@ Enfin, on peut aussi comparer la prédiction à la vérité terrain en affichant
 \includegraphics[scale=0.5]{../../data/France/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/France/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur SVM - France}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur SVM - France}
 \label{svm_carte}
 \end{figure}
 
@@ -918,12 +931,12 @@ Enfin, on peut aussi comparer la prédiction à la vérité terrain en affichant
 
 \subsection{Pondération des erreurs de classification}
 
-Un réseau de neurones corrige ses coefficients par rétro-propagation des erreurs qu'il commet, cela de manière itérative sur les données. Afin de tenir compte de la rareté des échantillones de classe minoritaire, 
+Un réseau de neurones corrige ses coefficients par rétro-propagation des erreurs qu'il commet, cela de manière itérative sur les données. Afin de tenir compte de la rareté des échantillons de classe minoritaire, 
 il convient de pondérer les erreurs . Ainsi, on donnera plus de poids aux erreurs liées à la classe minoritaire en attribuant le facteur multiplicatif $w_i=\frac{n_1}{n_i}$ à la classe $i$.\\
 
 \subsection{Résultats}
 
-Nous obtenons un score moyen de 92.26\% en cross-validation pour une couche à $1200$ neurones. \\
+Nous obtenons un score moyen de 90.46\% en cross-validation pour une couche à $1200$ neurones. \\
 Après ré-entrainement du classifieur sur tous les échantillons, on obtient les matrices de confusion \ref{nn_cm} et courbes ROC \ref{nn_roc} suivantes :
 
 \begin{table}[H]
@@ -968,13 +981,13 @@ Après ré-entrainement du classifieur sur tous les échantillons, on obtient le
 \includegraphics[scale=0.5]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur Réseaux de Neurones - France}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur Réseaux de Neurones - France}
 \label{nn_carte}
 \end{figure}
 
-On note là encore que le surapprentissage est évité. Cela en activant l'option dite de \og early stopping \fg{}. En effet, lorsque l'entrainement d'un algorithme se fait de manière itératif, il convient
+On note là encore que le surapprentissage est évité. Cela car on a activé l'option dite de \og early stopping \fg{}. En effet, lorsque l'entrainement d'un algorithme se fait de manière itératif, il convient
 de calculer le score de validation à chaque itération (ou epoch) et stopper l'entrainement dès lors que le score de validation n'augmente plus. Sinon, on laisse le classifieur se spécifier sur les données d'entrainement
-au détriment d'une meilleure généralisation.
+au détriment d'une meilleure généralisation sur les données de validation.
 La figure \ref{early} illustre le procédé.
 
 \begin{figure}[H]
@@ -989,7 +1002,7 @@ La figure \ref{early} illustre le procédé.
 \section{Influence nuageuse}
 
 Les résultats du Réseaux de Neurones montre que la couverture nuageuse a une certaine influence sur la prédiction.
-En effet, on remarque que la region corse, les côtes d'Armor et le Nord-Pas-de-Calais se voient prédire une densité très élevé (catégorie 5/6). Lorsque qu'on 
+En effet, on remarque que la region corse, les côtes d'Armor et le Nord-Pas-de-Calais se voient prédire une densité très élevé (catégorie 5/6). Lorsqu'on 
 affiche d'un côté la couverture nuageuse de chaque échantillon (via l'image de qualité fournit par \begin{itshape}Landsat-8\end{itshape}) et 
 l'erreur de prédiction, on constate une certaine corrélation \ref{nuage}.
 
@@ -1002,7 +1015,34 @@ l'erreur de prédiction, on constate une certaine corrélation \ref{nuage}.
 \label{nuage}
 \end{figure}
 
+Illustrons le phénomène plus en détail, à travers les communes de \begin{itshape}Silvareccio\end{itshape} et \begin{itshape}Porri\end{itshape}.\\
+La première comporte une couverture nuageuse de 49.5\%, de 0\% pour la seconde.\\
+Par ailleurs, la première se voit prédire une densité de catégorie 6 au lieu de 1, la seconde se voir correctement prédire la catégorie 1.\\
+Les figures \ref{Silvareccio} et \ref{Porri} présentent l'image couleur, l'image NDVI et l'histogramme de NDVI pour ces deux communes.
 
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[scale=1.80]{../5_diaporama/images/Silvareccio/08_rgb.png}
+    \includegraphics[scale=1.80]{../5_diaporama/images/Silvareccio/08_ndvi.png}
+    \includegraphics[scale=0.21]{../5_diaporama/images/Silvareccio/08_ndvi_histo.png}
+\end{center}
+\caption{Image couleur, image de NDVI et histogramme de NDVI - Silvareccio, Corse - couverture nuageuse de 49.5\%}
+\label{Silvareccio}
+\end{figure}
+ 
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[scale=1.80]{../5_diaporama/images/Porri/08_rgb.png}
+    \includegraphics[scale=1.80]{../5_diaporama/images/Porri/08_ndvi.png}
+    \includegraphics[scale=0.21]{../5_diaporama/images/Porri/08_ndvi_histo.png}
+\end{center}
+\caption{Image couleur, image de NDVI et histogramme de NDVI - Porri, Corse - couverture nuageuse de 0\%}
+\label{Porri}
+\end{figure} 
+
+On constate que la couverture nuageuse renvoit un NDVI à valeurs proches de 0, soit le NDVI d'un sol nu qui caractérise les villes très denses. Cela peut expliquer la surévaluation de la densité dans un grand nombre
+de petites communes nuageuses.
+ 
 \chapter{Test pour la prédiction de densité de population en fonction du NDVI}
 
 \section{Données de test}
@@ -1101,13 +1141,13 @@ Les tableaux \ref{suisse_data}, \ref{belgique_data} et \ref{pays-bas_data} montr
    \end{table}
    
    
- Par ailleurs, nous avons récupére les données \begin{itshape}Landsat-8\end{itshape} pour ces trois pays, à chaque fois pour l'année correspondante, entre Mai et Septembre. Nous montrons ci-après
- la projection \begin{itshape}Web Mercator\end{itshape} des images récupérées.
+ Par ailleurs, nous avons récupére les données \begin{itshape}Landsat-8\end{itshape} pour ces trois pays, à chaque fois pour l'année correspondante, entre Mai et Septembre, avec une couverture
+ nuageuse inférieur à 20\%. Nous montrons ci-après la projection \begin{itshape}Web Mercator\end{itshape} des images récupérées.
  
  \begin{figure}[H]
  \begin{center}
  \includegraphics[scale=0.60]{../../data/Suisse/covering-selection.png}
- \caption{Projection Web Mercator des images Landsat-8 pour la Suisse}
+ \caption{Projection Web Mercator des images Landsat-8 pour la Suisse - Mai à Septembre 2013}
 \label{suisse_landsat}
 \end{center}
 \end{figure}
@@ -1115,7 +1155,7 @@ Les tableaux \ref{suisse_data}, \ref{belgique_data} et \ref{pays-bas_data} montr
  \begin{figure}[H]
  \begin{center}
  \includegraphics[scale=0.60]{../../data/Belgique/covering-selection.png}
- \caption{Projection Web Mercator des images Landsat-8 pour la Belgique}
+ \caption{Projection Web Mercator des images Landsat-8 pour la Belgique - Mai à Septembre 2015}
 \label{belgique_landsat}
 \end{center}
 \end{figure}
@@ -1123,7 +1163,7 @@ Les tableaux \ref{suisse_data}, \ref{belgique_data} et \ref{pays-bas_data} montr
  \begin{figure}[H]
  \begin{center}
  \includegraphics[scale=0.60]{../../data/Pays-Bas/covering-selection.png}
- \caption{Projection Web Mercator des images Landsat-8 pour les Pays-Bas}
+ \caption{Projection Web Mercator des images Landsat-8 pour les Pays-Bas - Mai à Septembre 2014}
 \label{pays-bas_landsat}
 \end{center}
 \end{figure}
@@ -1176,7 +1216,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Suisse/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Suisse/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Suisse}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Suisse}
 \label{nn_carte_suisse}
 \end{figure}
 
@@ -1202,7 +1242,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
     \hline
     \textbf{5} & 0 & 0 & 1 & 0 & 0 & 0\\
     \hline
-    \textbf{6} & 0 & 0 & 2 & 3 & 0 & 4\\
+    \textbf{6} & 0 & 0 & 2 & 3 & 0 & 2\\
     \hline
   \end{tabular}
   \end{adjustbox}
@@ -1224,7 +1264,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Belgique/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Belgique/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Belgique}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Belgique}
 \label{nn_carte_belgique}
 \end{figure}
 
@@ -1271,7 +1311,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Pays-Bas/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Pays-Bas/test/Nearest_Neighboors_Classification/Nearest_Neighboors_Classification/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Pays-Bas}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de K-plus-proches-voisins - Pays-Bas}
 \label{nn_carte_pays-bas}
 \end{figure}
 
@@ -1321,7 +1361,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Suisse/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Suisse/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Suisse}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Suisse}
 \label{svm_carte_suisse}
 \end{figure}
 
@@ -1368,7 +1408,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Belgique/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Belgique/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Belgique}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Belgique}
 \label{svm_carte_belgique}
 \end{figure}
 
@@ -1416,7 +1456,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Pays-Bas/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Pays-Bas/test/Support_Vector_Gaussian_Classification/Support_Vector_Gaussian_Classification/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Pays-Bas}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de SVM - Pays-Bas}
 \label{svm_carte_pays-bas}
 \end{figure}
 
@@ -1466,7 +1506,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Suisse/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Suisse/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Suisse}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Suisse}
 \label{nn_carte_suisse}
 \end{figure}
 
@@ -1512,7 +1552,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Belgique/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Belgique/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Belgique}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Belgique}
 \label{nn_carte_belgique}
 \end{figure}
 
@@ -1560,7 +1600,7 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 \includegraphics[scale=0.5]{../../data/Pays-Bas/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_ground_truth.png}
 \includegraphics[scale=0.5]{../../data/Pays-Bas/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification.png}
 }
-\caption{Affichage verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Pays-Bas}
+\caption{Carte verité-terrain (à gauche) et prédiction (à droite) pour le classifieur de Réseaux de Neurones - Pays-Bas}
 \label{nn_carte_pays-bas}
 \end{figure}
 
@@ -1568,31 +1608,31 @@ Pour chacun d'eux, nous présenterons les mêmes métriques (matrice de confusio
 
 Dans le tableau suivant \ref{resultats}, nous résumons les résultats de test obtenus :
 
- \begin{table}
+ \begin{table}[H]
     \begin{center}
     \begin{adjustbox}{max width=\textwidth}
     {\scriptsize
-    \begin{tabular}{|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|}
       \hline
       \multicolumn{4}{|c|}{\begin{bf} AUC moyen\end{bf}} \\
       \hline
-      \textbf{Classifieur} & \textbf{Suisse} & \textbf{Belgique} & \textbf{Pays-Bas}\\
+      \textbf{Classifieur} & \textbf{France (train/val)} & \textbf{Suisse (test)} & \textbf{Belgique (test)} & \textbf{Pays-Bas (test)}\\
       \hline
-      K-plus-proches-voisins & 0.89 & 0.87 & 0.85\\
+      K-plus-proches-voisins & 1.00 & 0.89 & 0.87 & 0.85\\
       \hline
-      Support Vector Machine (noyau gaussien) & 0.94 & 0.95 & 0.94\\
+      Support Vector Machine (noyau gaussien)& 0.96 & 0.94 & 0.95 & 0.94\\
       \hline
-      Réseaux de Neurones & 0.97 & 0.97 & 0.96\\
+      Réseaux de Neurones & 0.98 & 0.97 & 0.97 & 0.96\\
       \hline
     \end{tabular}
     }
     \end{adjustbox}
     \label{resultats}
-    \caption{AUC moyenné sur toutes les classes pour chaque classifieur et chaque pays de test}
+    \caption{AUC moyenné sur toutes les classes pour chaque classifieur et chaque pays}
     \end{center}
   \end{table}
   
- Les mauvais résultats obtenues pour le classifieur  de K-plus-proches-voisins confirment le surapprentissage 
+ Les mauvais résultats obtenus pour le classifieur de K-plus-proches-voisins confirment le surapprentissage 
  évoqué précedemment.\\
  Le classifieur qui présente le meilleur resultat en test est le Réseaux de Neurones.
   
@@ -1602,16 +1642,22 @@ Dans le tableau suivant \ref{resultats}, nous résumons les résultats de test o
 Nous avons tenté de définir un modèle permettant d'expliquer la densité de population à partir d'images
 satellitaires. Nous avons procédé à une grande partie de \og feature engineering \fg{} à travers l'extraction 
 du $NDVI$ (indice végétal). Nous avons ensuite définit et entrainé plusieurs classifieurs. Cela en prenant soin à chaque
-fois, de proposer une manière de surmonter le problème de disproportion des classes, problème largement connu ailleurs
-notamment dans le domaine de la santé (malade/sain). Nous avons aussi pris soin de respecter le compromis biais-variance
+fois, de proposer une manière de surmonter le problème de disproportion des classes. Ce problème est largement connu ailleurs
+notamment dans le domaine de la santé (malade/sain) et du marketing numérique. Nous avons aussi pris soin de respecter le compromis biais-variance
 d'un classifieur afin de permettre sa généralisation. Généralisation qui a pu être testé à travers la 
 prédiction de densité sur d'autres térritoires que la France.\\
 Cependant, ce travail peut être amélioré de deux points de vue : 
 \begin{description}
-\item[-] d'un point de vue pratique, il serait intéressant de travauller sur des données plus voluminueuses et migrer 
+\item[-] d'un point de vue pratique, il serait intéressant de travailller sur des données plus voluminueuses et migrer 
 ainsi les features de $NDVI$ sur une architecture distribué.
-\item[-] d'un point de vue théorique en partant sur un calcul plus fin du NDVI, prenant en compte l'influence de 
-l'atmosphère.
+\item[-] d'un point de vue théorique, en partant sur un calcul plus fin du NDVI, prenant en compte l'influence de 
+l'atmosphère. On pourrait surmonter la mauvaise influence des nuages que nous avons mis en évidence précédemment. Dans ce cadre, 
+l'indice GEMI \cite{gemi} est une bonne alternative au NDVI basique utilisée jusqu'ici.
+
+\[GEMI=\eta(1-0.25\eta)-\frac{R-0.25}{1-R}\]
+
+avec \[\eta=\frac{2(NIR^2-R^2)+1.5NIR+0.5R}{NIR+R}\]
+
 \end{description}
 
 \backmatter
