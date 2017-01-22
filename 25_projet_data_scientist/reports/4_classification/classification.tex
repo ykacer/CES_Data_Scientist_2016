@@ -858,12 +858,21 @@ une classe minoritaire à travers l'exemple suivant créé via le site de la lib
 
 \begin{figure}[H]
  \begin{center}
-\includegraphics[scale=0.5]{images/svm/svm_g_001_100.png}
-\includegraphics[scale=0.5]{images/svm/svm_g_001_1000.png}
- \caption{SVM à noyau gaussien ($\gamma=100$) avec $C=100$ (mauvaise classification) et avec $C=1000$ (bonne classification)}
+\includegraphics[scale=0.5]{images/svm/svm_g_1_1.png}
+\includegraphics[scale=0.5]{images/svm/svm_g_1_10.png}
+\includegraphics[scale=0.5]{images/svm/svm_g_1_1000000.png}
+ \caption{SVM à noyau gaussien ($\gamma=1$) avec $C=1$ (mauvaise classification), avec $C=10$ (bonne classification) et avec $C=10^6$ (sur-apprentissage)}
  \label{svm_exemple}
  \end{center}
 \end{figure}
+
+Cet exemple montre que :
+\begin{description}
+ \item[-] Un paramètre $C=1$ qui ne tient pas compte de la disproportion, classifie mal les points minoritaires. En effet, un $C$ faible autorise une trop grande erreur (une trop grande \og slackness \fg{} $\zeta$).
+ \item[-] Un paramètre $C=10$ qui correspond à la disproportion, classifie bien sans surapprentissage.
+ \item[-] Un paramètre $C=10^6$ trop grand donne du surapprentissage car avec un $C$ qui tend vers l'infini, la \og slackness \fg{}  $\zeta$ devient trop faible et la frontière cherche à bien classer tout le monde.
+\end{description}
+ 
 \subsection{Résultats}
 
 Nous obtenons un score moyen de 84.04\% en cross-validation pour un coefficient de noyau gaussien $\gamma = 0.01$. \\
