@@ -403,13 +403,14 @@ Besancon & 47.237829 & 6.024054 & 65.05 & 1797.9 & 1\\
 \begin{itemize}
 {
  \item Compute Normalized Difference Vegetation Indice using bands 4 (Red) and 5 (Near-Infra-Red) for each dataset :
+ {\scriptsize \[NDVI=\frac{NIR-R}{NIR+R}\]}
  \item Values between -1 and 1
  \item $\leq 0$ for water, snow and cloud
  \item $\leq 0.2$ for  ground without vegetation
  \item $\geq 0.2$ for ground vegetation
 }
 \end{itemize}
-{\scriptsize \[NDVI=\frac{NIR-R}{NIR+R}\]}
+
 \begin{columns}
  \begin{column}{0.33\textwidth}
   \begin{overlayarea}{\linewidth}{2cm}
@@ -604,7 +605,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 
 \begin{frame}
 \begin{itemize}
- \item Overcome imbalanced data by oversampling minority classe $C_{i}$, using SMOTE technique (Synthetic Minority Oversampling TEchnique) with a factor $n_{1}/n_{i}$
+ \item Overcome imbalanced data by oversampling minority class $c_{i}$, using SMOTE technique (Synthetic Minority Oversampling TEchnique) with a factor $n_{1}/n_{i}$
       \begin{columns}
       \begin{column}{0.5\textwidth}
       \centering\vfill
@@ -721,7 +722,65 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 \begin{frame}
 \begin{itemize}
 \item Overcome imbalanced data by increasing regularization parameter $C_{i}$ for minority classes $i$ :  $C_{i} = n/n_{i}$
-\item Best cross-validation (stratified 3-folds) of $84.07$\% obtained for $\gamma = 0.01$.
+
+\begin{columns}
+ \begin{column}{0.35\textwidth}
+  \begin{overlayarea}{\linewidth}{2cm}
+    \centering\vfill
+     \includegraphics[scale=0.17]{../4_classification/images/svm/svm_g_1_1.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny $C=1$ - bad classification\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.35\textwidth}
+  \begin{overlayarea}{\linewidth}{2cm}
+    \centering\vfill
+    \includegraphics[scale=0.17]{../4_classification/images/svm/svm_g_1_10.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny  $C=10$ - no overfitting\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.35\textwidth}
+  \begin{overlayarea}{\linewidth}{2cm}
+    \centering\vfill
+    \includegraphics[scale=0.17]{../4_classification/images/svm/svm_g_1_1000000.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny  $C=10^6$ - overfitting\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+
+\item Best cross-validation (stratified 3-folds) of $84.07$\% obtained for $\gamma = 0.01$ (confident value to avoid overfitting).
+
+\begin{columns}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{2cm}
+    \centering\vfill
+     \includegraphics[scale=0.17]{../4_classification/images/svm/svm_g_100.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny $\gamma=100$ - overfitting\par
+  \end{overlayarea}
+ \end{column}
+ \begin{column}{0.5\textwidth}
+  \begin{overlayarea}{\linewidth}{2cm}
+    \centering\vfill
+    \includegraphics[scale=0.17]{../4_classification/images/svm/svm_g_001.png}
+  \end{overlayarea}
+  \begin{overlayarea}{\linewidth}{0.5cm}
+    \centering
+    \tiny  $\gamma=0.01$ - no overfitting\par
+  \end{overlayarea}
+ \end{column}
+\end{columns}
+
 \end{itemize}
 \end{frame}
 \begin{frame}
@@ -824,7 +883,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
 
 \begin{frame}
 \begin{itemize}
- \item Overcome imbalanced data by majoring error by weights to amplify error on minority class : $w_i=\frac{n_1}{n_i}$.
+ \item Overcome imbalanced data by majoring error on minority class using weight: $w_i=\frac{n_1}{n_i}$.
   \item Best cross-validation (stratified 3-folds) of $90.46$\% obtained for :
   {\scriptsize
   \begin{itemize}
@@ -833,7 +892,16 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
     \item Penalization of $0.001$. 
     \end{itemize}
   }
-  \item Early stopping activation to avoid overfitting (i.e. stop iterative training when no more validation error decrease)
+  \item Early stopping activation to avoid overfitting (i.e. stop iterative training when no more validation score improvment)
+  \begin{columns}
+ \begin{column}{\textwidth}
+  \begin{overlayarea}{\linewidth}{4cm}
+    \centering\vfill
+    \includegraphics[scale=0.15]{../4_classification/images/earlystopping.png}
+  \end{overlayarea}
+ \end{column}
+ \end{columns}
+ 
  \end{itemize}
 \end{frame}
 
@@ -932,7 +1000,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
  \begin{column}{0.5\textwidth}
   \begin{overlayarea}{\linewidth}{4cm}
     \centering\vfill
-%     \includegraphics[scale=0.25]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification_error.png}
+     \includegraphics[scale=0.25]{../../data/France/test/Neural_Network_Classification-oversampling/Neural_Network_Classification-oversampling/density_classification_error.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{0.5cm}
     \centering
@@ -1155,7 +1223,7 @@ Besancon & 0 & 0 & ... & 97 & 122 & ... & 0 & 0 & 1797.9 & 1\\
   \begin{column}{0.33\textwidth}
   \begin{overlayarea}{\linewidth}{3cm}
     \centering\vfill
-    \includegraphics[scale=0.20]{i../../data/Suisse/covering-selection.png}
+    \includegraphics[scale=0.20]{../../data/Suisse/covering-selection.png}
   \end{overlayarea}
   \begin{overlayarea}{\linewidth}{1cm}
     \centering
